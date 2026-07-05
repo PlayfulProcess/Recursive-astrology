@@ -108,4 +108,5 @@ is the honest counterweight: much of the working tradition *did* read the chart 
 ## 8. Sources
 
 [@campion2008], [@barton1994], [@beck2007], [@brennan2017], [@neugebauer1959],
-[@ptolemyrobbins1940], [@ptolemyashmand1822], [@valensriley], [@maniliusgoold1977].
+[@ptolemyrobbins1940], [@ptolemyashmand1822], [@valensriley], [@maniliusgoold1977],
+[@web_ecoschemas].

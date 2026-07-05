@@ -54,8 +54,10 @@ and this library presents it as a *view with a lineage*, not as its own verdict 
   *Myths and Marvels of Astronomy* [@proctor1896] shows the school's idiom between Pico and
   the modern test; imported as a PD library at `grammars/proctor-skeptical-astrology/`
   [@web_ecoschemas].
-- Figures for Phase 3: Forer (d. 2000), Gauquelin (d. 1991), Carlson (d. 2013 — verify
-  before use; confidence: low on the death date, which only matters for the naming rule).
+- Figures for Phase 3: Forer (d. 2000), Gauquelin (d. 1991). **Not Carlson** — checked
+  2026-07-05: Shawn Carlson (b. 1960) appears to be living [@web_wp_carlson], so under the
+  naming rule (`CLAUDE.md`: name a school, not a living person) his *study* is cited but no
+  `figures/` entry may be made for him.
 
 ## 4. What this view holds (in its own terms)
 
@@ -95,7 +97,8 @@ history and the creed genuinely overlap.
 
 ## 7. Open questions / corrections owed
 
-- Carlson's death date (for the Phase 3 naming rule) — verify.
+- ~~Carlson's death date (for the Phase 3 naming rule)~~ **Done 2026-07-05:** living —
+  no figures/ entry permitted [@web_wp_carlson].
 - A sourced paragraph on the Mars-effect committee history (Comité Para, CSICOP's "Starbaby"
   episode) if it is ever to be told here — currently omitted rather than half-told.
 - Gauquelin 1955 imprint — publisher recorded as commonly given; verify before load-bearing
@@ -103,4 +106,5 @@ history and the creed genuinely overlap.
 
 ## 8. Sources
 
-[@forer1949], [@carlson1985], [@ertel2009], [@gauquelin1955], [@campion2009].
+[@forer1949], [@carlson1985], [@ertel2009], [@gauquelin1955], [@campion2009],
+[@proctor1896], [@web_ecoschemas], [@web_wp_carlson].

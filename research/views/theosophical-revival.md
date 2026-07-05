@@ -32,11 +32,14 @@ psychological astrology is unthinkable without it.
   shilling manuals, the Theosophical lodge context [@curry1992; @campion2009].
 - 1913: *Esoteric Astrology* states the mature system — the chart read for the soul's
   evolution [@leo1913].
-- 1914 and 1917: Leo is prosecuted under fortune-telling law; the second case ends in
-  conviction and a fine, and the historiography reads his late doctrinal turn — away from
-  concrete prediction, toward "tendencies" and character — as shaped partly by that legal
-  pressure as well as by Theosophical conviction [@curry1992] (case details at
-  confidence: medium — take specifics from Curry, not from lore).
+- 1914 and 1917: Leo is prosecuted under fortune-telling law. Web corroboration
+  (2026-07-05, tertiary [@web_wp_alanleo]): the 1914 case was dismissed; on 16 July 1917 he
+  was convicted and fined (sources disagree on the amount — £5 plus costs vs. £25; the
+  discrepancy itself is recorded here rather than resolved). He died weeks later, 30 August
+  1917. The historiography reads his late doctrinal turn — away from concrete prediction,
+  toward "tendencies" and character — as shaped partly by that legal pressure as well as by
+  Theosophical conviction [@curry1992] (scholarly anchor; the web details remain
+  confidence: medium until checked against Curry's account).
 - Leo dies in 1917; his corpus is public domain, which makes this view unusually quotable for
   a free educational site [@leo1913].
 
@@ -88,10 +91,11 @@ Theosophical conviction — motives the record cannot fully separate. Either way
 
 - Locate (or definitively fail to locate) a printed instance of "character is destiny" in
   Leo's own works — until then the paraphrase flag stays.
-- Exact citations for the 1914 acquittal/1917 conviction (court, charge, fine) from Curry
-  before those details become load-bearing anywhere.
+- Exact citations for the 1914 dismissal/1917 conviction from Curry before those details
+  become load-bearing (web-corroborated 2026-07-05, incl. the 16 July 1917 conviction date,
+  but with a £5-vs-£25 fine discrepancy still standing [@web_wp_alanleo]).
 - Sepharial and the wider revival cast need verification before Phase 3 `figures/` entries.
 
 ## 8. Sources
 
-[@curry1992], [@campion2009], [@leo1913].
+[@curry1992], [@campion2009], [@leo1913], [@web_ecoschemas], [@web_wp_alanleo].

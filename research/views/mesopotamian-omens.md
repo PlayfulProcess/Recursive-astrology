@@ -38,10 +38,11 @@ The personal horoscope appears only at this world's very end.
 - Systematic astronomical observation runs alongside: the Neo-Assyrian court correspondence
   (8th–7th c. BCE) shows scholars reporting omens to the kings, and the Babylonian astronomical
   diaries record observations over many centuries [@rochberg2004; @hungerpingree1999].
-- The earliest surviving personal horoscopes from Babylonia date to c. 410 BCE — the hinge
-  moment when the sky begins to be read for an individual birth rather than for the state
-  [@rochberg2004]. (The conventional date rests on a small corpus of cuneiform horoscope
-  texts; confidence: medium.)
+- The earliest surviving personal horoscopes from Babylonia date to 410 BCE — the two oldest
+  natal texts, from Babylon and Nippur, in Rochberg's edition of the roughly thirty surviving
+  cuneiform horoscopes [@rochberg1998]. This is the hinge moment when the sky begins to be
+  read for an individual birth rather than for the state (verified against the edition's
+  catalogue description 2026-07-05; confidence: high).
 
 ## 3. Key texts & figures
 
@@ -97,8 +98,8 @@ Stated as history, not endorsement.
 
 ## 7. Open questions / corrections owed
 
-- Verify the c. 410 BCE horoscope date against Rochberg's specialist edition of the Babylonian
-  horoscopes (not consulted directly; the claim is carried by [@rochberg2004] at second hand).
+- ~~Verify the c. 410 BCE horoscope date~~ **Done 2026-07-05:** the specialist edition is
+  Rochberg, *Babylonian Horoscopes* (1998) [@rochberg1998]; earliest two texts dated 410 BCE.
 - A Phase 3 `texts/` entry for *Enūma Anu Enlil* should name the modern edition situation
   honestly (piecemeal, specialist) rather than linking a popular substitute.
 - Tablet-count and redaction detail: cite a specialist treatment if a load-bearing claim ever
@@ -106,4 +107,4 @@ Stated as history, not endorsement.
 
 ## 8. Sources
 
-[@rochberg2004], [@kochwestenholz1995], [@hungerpingree1999], [@campion2008].
+[@rochberg2004], [@rochberg1998], [@kochwestenholz1995], [@hungerpingree1999], [@campion2008].

@@ -41,6 +41,27 @@ PD seeds, §5 guardrails), then `research/SCHEMA.md` (the dossier contract).*
   - Grammar enriched: every view item now has a **Research note** section and a
     `metadata._research` pointer. One real correction landed: **Campion Vol. I is "The
     Ancient and Classical Worlds"**, not "The Ancient World".
+- **The schemas/nara reuse check is DONE (same day, second pass).** Both repos were attached
+  and reviewed:
+  - **Three PD voice libraries imported** from `recursive.eco-schemas/schemas/astrology/`,
+    items verbatim, one per voice: `grammars/tetrabiblos-ashmand/` (Ptolemy/Ashmand 1822, PG
+    #70850 verified), `grammars/alan-leo/` (Leo's pre-1917 corpus), and
+    `grammars/proctor-skeptical-astrology/` (Proctor 1896, PG #26556 verified). `check.py`
+    green with 4 grammars; all four render (13/28/38/37 cards). `index.html` takes
+    `?grammar=<slug>`; each voice's `course` in `voices.json` points at its library.
+  - **Still available there for later adoption** (don't re-invent): canonical
+    `grammar_type: "astrology"` grammars (western, jyotish, archetypal-cosmology,
+    human-design) in `recursive.eco-schemas/astrology/`, plus `schemas/astrology/jyotish-vedic.json`
+    and `L1-basic.json`.
+  - **nara** (sibling: the tropical zodiac as the human-subjective sky) — its `course/` is
+    the 0→1 founding course (the Rung 6/7 hand-off this repo instantiates) and its
+    `library/` viewers (cards.html, grammar-loader.js) are candidates for the Phase 4 port.
+    Linked from the README's "Where this connects".
+- **Verification progress on the dossiers:** the 410 BCE Babylonian horoscope date is now
+  verified against Rochberg's *Babylonian Horoscopes* (1998) [@rochberg1998 added]; Leo's
+  1914/1917 trials web-corroborated (a £5-vs-£25 fine discrepancy is recorded, Curry check
+  still owed); and **Shawn Carlson is living** — dropped as a Phase 3 figures candidate per
+  the naming rule.
 
 ## 2. NEXT ACTIONS — in order of value
 
@@ -54,16 +75,15 @@ PD seeds, §5 guardrails), then `research/SCHEMA.md` (the dossier contract).*
    file's PD status **on its own Commons page**; record source + license per image; bring it
    in as the first image-backed grammar. Remember the trap ledger: British Museum = CC
    BY-NC-SA (educational display only, flag clearly); modern reproductions of ancient works
-   are still copyrighted.
-3. **Check the builder's other repos before inventing shapes** (PLAN §4 end):
-   `recursive.eco-schemas` (grammar format already defines `astrology`/`birthchart` types)
-   and `nara` (course/template patterns). Ask the builder to attach them (`add repo …`) —
-   this session only had `recursive-tarot` attached. Consolidate, don't multiply.
-4. **Phase 3 — record grammars** (`figures-of-astrology`, `texts-of-astrology`) — generated
+   are still copyrighted. **⚠ BLOCKED in this environment (2026-07-05): both
+   commons.wikimedia.org and gutenberg.org return 403 through the proxy (curl AND WebFetch).
+   Needs a session whose network policy allows those hosts, or the builder loosens this
+   environment's policy. Do NOT fake per-file verification from search snippets.**
+3. **Phase 3 — record grammars** (`figures-of-astrology`, `texts-of-astrology`) — generated
    from dossiers, tarot's people-grammar pattern (`scripts/build_people_grammar.py` in the
    parent is the model). The dossiers' §3 sections already name the candidate figures and
    flag which death-dates/facts still need verification.
-5. **Phase 4 — port the tarot timeline viewer** pointed at the views (era metadata is
+4. **Phase 4 — port the tarot timeline viewer** pointed at the views (era metadata is
    already on every item; `viewers/dimension-engine.js` in the parent is DOM-free and
    portable).
 

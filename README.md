@@ -113,6 +113,14 @@ grammar's `The record`), never in the short `intention`. Every voice obeys the o
 
 - **The parent project:** [The Recursive Tarot](https://tarot.recursive.eco) — this repo's sibling,
   same creed, and the source of the grammar format and the theme.
+- **The schemas commons:** [recursive.eco-schemas](https://github.com/PlayfulProcess/recursive.eco-schemas)
+  — where the three imported voice libraries come from (Ashmand's Ptolemy, Alan Leo, Proctor),
+  plus canonical `astrology`-type grammars (western, jyotish, archetypal) available for later
+  adoption. Consolidate, don't multiply: check there before inventing a shape.
+- **The sibling sky projects:** [nara](https://github.com/PlayfulProcess/nara) (the tropical
+  zodiac reframed honestly as the human-subjective sky — and home of the 0→1 founding course
+  this repo is itself an instance of) and its objective-sky twin
+  [kali-paradevi](https://github.com/PlayfulProcess/kali-paradevi).
 - **The ladder you're on:** [Ways to Contribute](https://tarot.recursive.eco/pages/course-viewer.html?course=how-to-contribute)
   — Rungs 1–5 tend an existing commons; Rung 6 makes your own grammars; Rung 7 makes your own site.
 - **Go further — the live app:** grammars here can also open in [recursive.eco](https://recursive.eco)
