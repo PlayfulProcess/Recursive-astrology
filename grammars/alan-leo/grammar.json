@@ -1,0 +1,902 @@
+{
+  "name": "Alan Leo's Astrology",
+  "description": "Classical astrological interpretations from Alan Leo (1860-1917), the father of modern astrology. Drawn from Astrology for All, The Art of Synthesis, and How to Judge a Nativity. — Source: the works of Alan Leo (1860–1917): *Astrology for All*, *The Art of Synthesis*, and *How to Judge a Nativity*; public domain (Leo died 1917). Imported verbatim from the recursive.eco-schemas commons; presented here as the Theosophical revival speaking in its own terms — character over event, growth over fate — never as prediction or command.",
+  "grammar_type": "astrology",
+  "author": "Alan Leo (1860-1917)",
+  "source": "Astrology for All, The Art of Synthesis, How to Judge a Nativity",
+  "license": "Public Domain",
+  "items": [
+    {
+      "id": "sign-aries",
+      "name": "Aries",
+      "symbol": "♈",
+      "category": "sign",
+      "subcategory": "fire",
+      "keywords": [
+        "pioneer",
+        "initiative",
+        "courage",
+        "enterprise",
+        "warrior"
+      ],
+      "sort_order": 0,
+      "sections": {
+        "Interpretation": "The pioneer of the zodiac. Aries represents the outrushing of spirit into matter, the primal will to exist. Those born under this sign possess courage, enterprise, and the power to initiate. The Aries nature is direct, frank, and fearless, with strong executive ability. The higher type shows the spiritual warrior, fighting for principle rather than personal gain.",
+        "Light": "The spiritual warrior—courage devoted to principle, leadership that inspires others to action.",
+        "Shadow": "Selfishness, impatience, the lower martial nature that fights for personal gain alone.",
+        "Keywords": "I Am"
+      },
+      "metadata": {
+        "element": "Fire",
+        "quality": "Cardinal",
+        "ruler": "Mars"
+      }
+    },
+    {
+      "id": "sign-taurus",
+      "name": "Taurus",
+      "symbol": "♉",
+      "category": "sign",
+      "subcategory": "earth",
+      "keywords": [
+        "builder",
+        "stability",
+        "patience",
+        "determination",
+        "stewardship"
+      ],
+      "sort_order": 1,
+      "sections": {
+        "Interpretation": "The builder and stabilizer. Taurus represents the desire nature seeking permanent form. Those born here possess determination, patience, and practical ability. The Taurus nature is steady, reliable, and appreciative of beauty and comfort. The higher type transmutes possessiveness into stewardship, using material resources for spiritual purposes.",
+        "Light": "The spiritual steward—using material resources for higher purposes, building forms that serve the soul.",
+        "Shadow": "Possessiveness, materialism, stubborn attachment to forms that have outlived their purpose.",
+        "Keywords": "I Have"
+      },
+      "metadata": {
+        "element": "Earth",
+        "quality": "Fixed",
+        "ruler": "Venus"
+      }
+    },
+    {
+      "id": "sign-gemini",
+      "name": "Gemini",
+      "symbol": "♊",
+      "category": "sign",
+      "subcategory": "air",
+      "keywords": [
+        "messenger",
+        "communicator",
+        "versatility",
+        "curiosity",
+        "expression"
+      ],
+      "sort_order": 2,
+      "sections": {
+        "Interpretation": "The messenger and communicator. Gemini represents the reasoning mind seeking to understand duality. Those born here possess versatility, intellectual curiosity, and the gift of expression. The Gemini nature is alert, adaptable, and forever seeking new knowledge. The higher type unifies the lower and higher mind, becoming a channel for wisdom.",
+        "Light": "The divine messenger—unifying lower and higher mind, channeling wisdom through intellect.",
+        "Shadow": "Superficiality, scattered attention, the lower mind that gathers without synthesizing.",
+        "Keywords": "I Think"
+      },
+      "metadata": {
+        "element": "Air",
+        "quality": "Mutable",
+        "ruler": "Mercury"
+      }
+    },
+    {
+      "id": "sign-cancer",
+      "name": "Cancer",
+      "symbol": "♋",
+      "category": "sign",
+      "subcategory": "water",
+      "keywords": [
+        "mother",
+        "nurturing",
+        "sensitivity",
+        "protection",
+        "memory"
+      ],
+      "sort_order": 3,
+      "sections": {
+        "Interpretation": "The mother of the zodiac. Cancer represents the soul seeking incarnation through feeling and memory. Those born here possess sensitivity, tenacity, and deep protective instincts. The Cancer nature is receptive, nurturing, and connected to the past. The higher type becomes the universal mother, extending care beyond personal attachments.",
+        "Light": "The universal mother—extending nurturing care beyond personal attachments to all who need it.",
+        "Shadow": "Moodiness, clinging to the past, emotional manipulation through guilt or need.",
+        "Keywords": "I Feel"
+      },
+      "metadata": {
+        "element": "Water",
+        "quality": "Cardinal",
+        "ruler": "Moon"
+      }
+    },
+    {
+      "id": "sign-leo",
+      "name": "Leo",
+      "symbol": "♌",
+      "category": "sign",
+      "subcategory": "fire",
+      "keywords": [
+        "king",
+        "creator",
+        "dignity",
+        "generosity",
+        "authority"
+      ],
+      "sort_order": 4,
+      "sections": {
+        "Interpretation": "The king and creator. Leo represents the individualized self seeking expression and recognition. Those born here possess dignity, generosity, and natural authority. The Leo nature is warm, dramatic, and magnanimous when evolved. The higher type rules through love rather than dominion, radiating light that elevates others.",
+        "Light": "The benevolent ruler—leading through love, radiating light that elevates all it touches.",
+        "Shadow": "Pride, arrogance, the need for constant recognition, dominion rather than service.",
+        "Keywords": "I Will"
+      },
+      "metadata": {
+        "element": "Fire",
+        "quality": "Fixed",
+        "ruler": "Sun"
+      }
+    },
+    {
+      "id": "sign-virgo",
+      "name": "Virgo",
+      "symbol": "♍",
+      "category": "sign",
+      "subcategory": "earth",
+      "keywords": [
+        "craftsman",
+        "servant",
+        "analysis",
+        "skill",
+        "improvement"
+      ],
+      "sort_order": 5,
+      "sections": {
+        "Interpretation": "The craftsman and servant. Virgo represents the discriminating mind perfecting form through service. Those born here possess analytical ability, practical skill, and dedication to improvement. The Virgo nature is modest, methodical, and health-conscious. The higher type serves humanity selflessly, finding divinity in the details of daily work.",
+        "Light": "The sacred servant—finding divinity in details, perfecting form as an act of devotion.",
+        "Shadow": "Criticism, worry, perfectionism that paralyzes rather than refines.",
+        "Keywords": "I Analyze"
+      },
+      "metadata": {
+        "element": "Earth",
+        "quality": "Mutable",
+        "ruler": "Mercury"
+      }
+    },
+    {
+      "id": "sign-libra",
+      "name": "Libra",
+      "symbol": "♎",
+      "category": "sign",
+      "subcategory": "air",
+      "keywords": [
+        "harmonizer",
+        "judge",
+        "diplomacy",
+        "justice",
+        "balance"
+      ],
+      "sort_order": 6,
+      "sections": {
+        "Interpretation": "The harmonizer and judge. Libra represents the soul seeking equilibrium through relationship. Those born here possess diplomacy, artistic sense, and the desire for justice. The Libra nature is refined, cooperative, and peace-loving. The higher type achieves inner balance that no longer depends on external harmony, becoming a true peacemaker.",
+        "Light": "The true peacemaker—achieving inner balance that radiates outward, justice tempered by love.",
+        "Shadow": "Indecision, dependence on others for equilibrium, peace-keeping that avoids necessary conflict.",
+        "Keywords": "I Balance"
+      },
+      "metadata": {
+        "element": "Air",
+        "quality": "Cardinal",
+        "ruler": "Venus"
+      }
+    },
+    {
+      "id": "sign-scorpio",
+      "name": "Scorpio",
+      "symbol": "♏",
+      "category": "sign",
+      "subcategory": "water",
+      "keywords": [
+        "transformer",
+        "regenerator",
+        "intensity",
+        "insight",
+        "passion"
+      ],
+      "sort_order": 7,
+      "sections": {
+        "Interpretation": "The transformer and regenerator. Scorpio represents the emotional nature confronting death and rebirth. Those born here possess intensity, resourcefulness, and penetrating insight. The Scorpio nature is passionate, secretive, and powerfully magnetic. The higher type transmutes personal desire into spiritual will, becoming the eagle that soars above the serpent.",
+        "Light": "The eagle—transmuting desire into will, using emotional power for transformation and healing.",
+        "Shadow": "The scorpion—jealousy, revenge, using emotional intensity to manipulate or destroy.",
+        "Keywords": "I Desire"
+      },
+      "metadata": {
+        "element": "Water",
+        "quality": "Fixed",
+        "ruler": "Mars"
+      }
+    },
+    {
+      "id": "sign-sagittarius",
+      "name": "Sagittarius",
+      "symbol": "♐",
+      "category": "sign",
+      "subcategory": "fire",
+      "keywords": [
+        "philosopher",
+        "seeker",
+        "enthusiasm",
+        "optimism",
+        "freedom"
+      ],
+      "sort_order": 8,
+      "sections": {
+        "Interpretation": "The philosopher and seeker. Sagittarius represents the higher mind aspiring toward truth and meaning. Those born here possess enthusiasm, optimism, and love of freedom. The Sagittarian nature is jovial, adventurous, and prophetic. The higher type becomes the true teacher, pointing the way to wisdom while respecting each soul's unique path.",
+        "Light": "The true teacher—pointing toward wisdom while honoring each soul's unique journey.",
+        "Shadow": "Dogmatism, restlessness, the preacher who imposes rather than inspires.",
+        "Keywords": "I Perceive"
+      },
+      "metadata": {
+        "element": "Fire",
+        "quality": "Mutable",
+        "ruler": "Jupiter"
+      }
+    },
+    {
+      "id": "sign-capricorn",
+      "name": "Capricorn",
+      "symbol": "♑",
+      "category": "sign",
+      "subcategory": "earth",
+      "keywords": [
+        "father",
+        "administrator",
+        "endurance",
+        "ambition",
+        "discipline"
+      ],
+      "sort_order": 9,
+      "sections": {
+        "Interpretation": "The father and administrator. Capricorn represents ambition crystallizing into achievement through discipline. Those born here possess endurance, organizational ability, and respect for tradition. The Capricorn nature is serious, responsible, and ambitious. The higher type uses worldly position for spiritual service, becoming the initiate who has mastered matter.",
+        "Light": "The initiate—using mastery of matter for spiritual service, worldly position devoted to higher purpose.",
+        "Shadow": "Cold ambition, materialism, using structure to control rather than to serve.",
+        "Keywords": "I Use"
+      },
+      "metadata": {
+        "element": "Earth",
+        "quality": "Cardinal",
+        "ruler": "Saturn"
+      }
+    },
+    {
+      "id": "sign-aquarius",
+      "name": "Aquarius",
+      "symbol": "♒",
+      "category": "sign",
+      "subcategory": "air",
+      "keywords": [
+        "humanitarian",
+        "reformer",
+        "originality",
+        "independence",
+        "brotherhood"
+      ],
+      "sort_order": 10,
+      "sections": {
+        "Interpretation": "The humanitarian and reformer. Aquarius represents the universal mind working for collective progress. Those born here possess originality, humanitarian ideals, and scientific ability. The Aquarian nature is independent, progressive, and oriented toward the future. The higher type serves humanity through brotherhood, seeing all as equal expressions of the one life.",
+        "Light": "The world server—seeing all as equal expressions of one life, working for humanity's progress.",
+        "Shadow": "Emotional detachment, eccentricity for its own sake, ideas divorced from human feeling.",
+        "Keywords": "I Know"
+      },
+      "metadata": {
+        "element": "Air",
+        "quality": "Fixed",
+        "ruler": "Saturn"
+      }
+    },
+    {
+      "id": "sign-pisces",
+      "name": "Pisces",
+      "symbol": "♓",
+      "category": "sign",
+      "subcategory": "water",
+      "keywords": [
+        "mystic",
+        "redeemer",
+        "imagination",
+        "compassion",
+        "spirituality"
+      ],
+      "sort_order": 11,
+      "sections": {
+        "Interpretation": "The mystic and redeemer. Pisces represents the soul completing its cycle, dissolving separateness through compassion. Those born here possess imagination, sensitivity, and spiritual receptivity. The Piscean nature is gentle, impressionable, and self-sacrificing. The higher type becomes the conscious server, willingly taking on the suffering of others to aid their liberation.",
+        "Light": "The conscious server—willingly bearing others' suffering to aid liberation, redeeming through love.",
+        "Shadow": "Victimhood, escapism, losing self in others' pain without the strength to transform it.",
+        "Keywords": "I Believe"
+      },
+      "metadata": {
+        "element": "Water",
+        "quality": "Mutable",
+        "ruler": "Jupiter"
+      }
+    },
+    {
+      "id": "planet-sun",
+      "name": "Sun",
+      "symbol": "☉",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "individuality",
+        "spirit",
+        "life-force",
+        "authority",
+        "purpose"
+      ],
+      "sort_order": 12,
+      "sections": {
+        "Interpretation": "The Sun represents the immortal Individuality, the divine spark within. It shows what we are becoming through evolution, our essential spiritual nature. In the horoscope, a strong Sun indicates one who can express their true self with power and authority. The Sun is the life-giver, and its position shows where we must shine.",
+        "Keywords": "Individuality"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-moon",
+      "name": "Moon",
+      "symbol": "☽",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "personality",
+        "habits",
+        "instincts",
+        "receptivity",
+        "feelings"
+      ],
+      "sort_order": 13,
+      "sections": {
+        "Interpretation": "The Moon represents the Personality, the sum of past experiences carried into this life. It shows our habits, instincts, and automatic responses—what we have been. The Moon governs the physical body, the public, women, and all matters of common everyday life. Its position shows our receptive, feeling nature.",
+        "Keywords": "Personality"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-mercury",
+      "name": "Mercury",
+      "symbol": "☿",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "mentality",
+        "communication",
+        "learning",
+        "reason",
+        "expression"
+      ],
+      "sort_order": 14,
+      "sections": {
+        "Interpretation": "Mercury represents the rational mind, the link between higher and lower self. It governs communication, learning, and the nervous system. Mercury shows how we think, speak, and process information. Well-aspected, it gives intellectual brilliance; afflicted, it produces worry and nervous disorders.",
+        "Keywords": "Mentality"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-venus",
+      "name": "Venus",
+      "symbol": "♀",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "affection",
+        "love",
+        "harmony",
+        "beauty",
+        "values"
+      ],
+      "sort_order": 15,
+      "sections": {
+        "Interpretation": "Venus represents the love nature, attraction, and the desire for harmony. It governs art, beauty, social relations, and values. Venus shows what we love and find beautiful. Well-aspected, it gives charm and artistic ability; afflicted, it produces excessive pleasure-seeking or difficulty in relationships.",
+        "Keywords": "Affection"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-mars",
+      "name": "Mars",
+      "symbol": "♂",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "energy",
+        "desire",
+        "courage",
+        "action",
+        "assertion"
+      ],
+      "sort_order": 16,
+      "sections": {
+        "Interpretation": "Mars represents the desire nature, courage, and the power to act. It governs physical energy, competition, and the sexual drive. Mars shows how we assert ourselves and fight for what we want. Well-aspected, it gives courage and enterprise; afflicted, it produces anger, accidents, and strife.",
+        "Keywords": "Energy"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-jupiter",
+      "name": "Jupiter",
+      "symbol": "♃",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "expansion",
+        "faith",
+        "growth",
+        "wisdom",
+        "prosperity"
+      ],
+      "sort_order": 17,
+      "sections": {
+        "Interpretation": "Jupiter represents the higher mind, faith, and the principle of growth. It governs philosophy, religion, law, and long journeys. Jupiter shows where we seek meaning and where fortune smiles upon us. Well-aspected, it gives wisdom and prosperity; afflicted, it produces excess, extravagance, and false optimism.",
+        "Keywords": "Expansion"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-saturn",
+      "name": "Saturn",
+      "symbol": "♄",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "limitation",
+        "karma",
+        "discipline",
+        "structure",
+        "lessons"
+      ],
+      "sort_order": 18,
+      "sections": {
+        "Interpretation": "Saturn represents karma, discipline, and the lessons of time. It governs structure, responsibility, and crystallization. Saturn shows where we must work hard and accept limitation. Well-aspected, it gives stability and achievement; afflicted, it produces fear, delay, and depression. Saturn is the great teacher.",
+        "Keywords": "Limitation"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-uranus",
+      "name": "Uranus",
+      "symbol": "♅",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "awakening",
+        "liberation",
+        "change",
+        "originality",
+        "revolution"
+      ],
+      "sort_order": 19,
+      "sections": {
+        "Interpretation": "Uranus represents the higher will, sudden change, and liberation from the past. It governs originality, invention, and revolution. Uranus shows where we break free from convention and express our uniqueness. Its influence is sudden, unexpected, and often disruptive to the status quo.",
+        "Keywords": "Awakening"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "planet-neptune",
+      "name": "Neptune",
+      "symbol": "♆",
+      "category": "planet",
+      "subcategory": null,
+      "keywords": [
+        "illumination",
+        "inspiration",
+        "transcendence",
+        "mysticism",
+        "dreams"
+      ],
+      "sort_order": 20,
+      "sections": {
+        "Interpretation": "Neptune represents the higher love, inspiration, and the dissolution of boundaries. It governs mysticism, dreams, and the unseen realms. Neptune shows where we transcend ordinary consciousness. Well-aspected, it gives spiritual vision; afflicted, it produces confusion, deception, and escapism.",
+        "Keywords": "Illumination"
+      },
+      "metadata": {}
+    },
+    {
+      "id": "house-1",
+      "name": "First House",
+      "symbol": "I",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "self",
+        "appearance",
+        "personality",
+        "approach",
+        "beginnings"
+      ],
+      "sort_order": 22,
+      "sections": {
+        "Interpretation": "The house of the physical body and personal appearance. It represents the mask we wear, our approach to life, and how others see us. Planets here strongly color the personality and physical constitution.",
+        "Keywords": "Self"
+      },
+      "metadata": {
+        "number": 1
+      }
+    },
+    {
+      "id": "house-2",
+      "name": "Second House",
+      "symbol": "II",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "possessions",
+        "money",
+        "values",
+        "security",
+        "resources"
+      ],
+      "sort_order": 23,
+      "sections": {
+        "Interpretation": "The house of money, possessions, and personal values. It shows our attitude toward material security and what we value. The second house reveals our earning capacity and relationship with the material world.",
+        "Keywords": "Possessions"
+      },
+      "metadata": {
+        "number": 2
+      }
+    },
+    {
+      "id": "house-3",
+      "name": "Third House",
+      "symbol": "III",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "communication",
+        "siblings",
+        "learning",
+        "environment",
+        "expression"
+      ],
+      "sort_order": 24,
+      "sections": {
+        "Interpretation": "The house of the concrete mind, communication, and immediate environment. It governs siblings, neighbors, short journeys, and early education. This house shows how we think and express our thoughts.",
+        "Keywords": "Communication"
+      },
+      "metadata": {
+        "number": 3
+      }
+    },
+    {
+      "id": "house-4",
+      "name": "Fourth House",
+      "symbol": "IV",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "home",
+        "family",
+        "roots",
+        "foundations",
+        "security"
+      ],
+      "sort_order": 25,
+      "sections": {
+        "Interpretation": "The house of home, family, and psychological foundations. It represents one parent, our roots, and the end of life. The fourth house shows our deepest private self and sense of security.",
+        "Keywords": "Home"
+      },
+      "metadata": {
+        "number": 4
+      }
+    },
+    {
+      "id": "house-5",
+      "name": "Fifth House",
+      "symbol": "V",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "creativity",
+        "children",
+        "romance",
+        "pleasure",
+        "expression"
+      ],
+      "sort_order": 26,
+      "sections": {
+        "Interpretation": "The house of self-expression, creativity, and pleasure. It governs children, romance, speculation, and amusements. This house shows how we express our creative power and find joy.",
+        "Keywords": "Creativity"
+      },
+      "metadata": {
+        "number": 5
+      }
+    },
+    {
+      "id": "house-6",
+      "name": "Sixth House",
+      "symbol": "VI",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "service",
+        "health",
+        "work",
+        "routine",
+        "duty"
+      ],
+      "sort_order": 27,
+      "sections": {
+        "Interpretation": "The house of health, work, and service. It governs employment, daily routine, and small animals. This house shows our attitude toward duty and the care of the physical body.",
+        "Keywords": "Service"
+      },
+      "metadata": {
+        "number": 6
+      }
+    },
+    {
+      "id": "house-7",
+      "name": "Seventh House",
+      "symbol": "VII",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "partnership",
+        "marriage",
+        "relationships",
+        "others",
+        "contracts"
+      ],
+      "sort_order": 28,
+      "sections": {
+        "Interpretation": "The house of marriage, partnership, and open enemies. It represents our approach to committed relationships and what we seek in others. This house shows how we relate one-to-one.",
+        "Keywords": "Partnership"
+      },
+      "metadata": {
+        "number": 7
+      }
+    },
+    {
+      "id": "house-8",
+      "name": "Eighth House",
+      "symbol": "VIII",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "regeneration",
+        "transformation",
+        "death",
+        "shared resources",
+        "occult"
+      ],
+      "sort_order": 29,
+      "sections": {
+        "Interpretation": "The house of death, transformation, and shared resources. It governs inheritance, the occult, and deep psychological change. This house shows our capacity for rebirth and handling of others' resources.",
+        "Keywords": "Regeneration"
+      },
+      "metadata": {
+        "number": 8
+      }
+    },
+    {
+      "id": "house-9",
+      "name": "Ninth House",
+      "symbol": "IX",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "philosophy",
+        "higher mind",
+        "travel",
+        "religion",
+        "meaning"
+      ],
+      "sort_order": 30,
+      "sections": {
+        "Interpretation": "The house of the higher mind, religion, and long journeys. It governs philosophy, law, publishing, and foreign cultures. This house shows our search for meaning and expansion of consciousness.",
+        "Keywords": "Philosophy"
+      },
+      "metadata": {
+        "number": 9
+      }
+    },
+    {
+      "id": "house-10",
+      "name": "Tenth House",
+      "symbol": "X",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "career",
+        "reputation",
+        "authority",
+        "ambition",
+        "public standing"
+      ],
+      "sort_order": 31,
+      "sections": {
+        "Interpretation": "The house of career, reputation, and public standing. It represents one parent, authority figures, and our ambitions. This house shows our contribution to society and how we're known publicly.",
+        "Keywords": "Career"
+      },
+      "metadata": {
+        "number": 10
+      }
+    },
+    {
+      "id": "house-11",
+      "name": "Eleventh House",
+      "symbol": "XI",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "friendship",
+        "groups",
+        "hopes",
+        "community",
+        "wishes"
+      ],
+      "sort_order": 32,
+      "sections": {
+        "Interpretation": "The house of friends, groups, and hopes. It governs social circles, humanitarian interests, and our wishes for the future. This house shows how we participate in collective endeavors.",
+        "Keywords": "Friendship"
+      },
+      "metadata": {
+        "number": 11
+      }
+    },
+    {
+      "id": "house-12",
+      "name": "Twelfth House",
+      "symbol": "XII",
+      "category": "house",
+      "subcategory": null,
+      "keywords": [
+        "karma",
+        "seclusion",
+        "unconscious",
+        "hidden",
+        "retreat"
+      ],
+      "sort_order": 33,
+      "sections": {
+        "Interpretation": "The house of seclusion, karma, and self-undoing. It governs hospitals, prisons, hidden enemies, and the unconscious. This house shows our hidden strengths and weaknesses, and the soul's need for retreat.",
+        "Keywords": "Karma"
+      },
+      "metadata": {
+        "number": 12
+      }
+    },
+    {
+      "id": "aspect-conjunction",
+      "name": "Conjunction",
+      "symbol": "☌",
+      "category": "aspect",
+      "subcategory": null,
+      "keywords": [
+        "blending",
+        "intensification",
+        "new beginning",
+        "concentration",
+        "union"
+      ],
+      "sort_order": 34,
+      "sections": {
+        "Interpretation": "A blending and intensification of planetary energies. The conjunction unites two principles for good or ill depending on the planets involved. It represents a new beginning, a seed point of concentrated force.",
+        "Keywords": "Blending, intensification, new beginning"
+      },
+      "metadata": {
+        "degrees": 0,
+        "nature": "Variable"
+      }
+    },
+    {
+      "id": "aspect-sextile",
+      "name": "Sextile",
+      "symbol": "⚹",
+      "category": "aspect",
+      "subcategory": null,
+      "keywords": [
+        "opportunity",
+        "talent",
+        "cooperation",
+        "development",
+        "harmony"
+      ],
+      "sort_order": 35,
+      "sections": {
+        "Interpretation": "An aspect of opportunity and talent. The sextile indicates natural abilities that can be developed with effort. It represents harmonious cooperation between planetary principles.",
+        "Keywords": "Opportunity, talent, cooperation"
+      },
+      "metadata": {
+        "degrees": 60,
+        "nature": "Harmonious"
+      }
+    },
+    {
+      "id": "aspect-square",
+      "name": "Square",
+      "symbol": "□",
+      "category": "aspect",
+      "subcategory": null,
+      "keywords": [
+        "friction",
+        "challenge",
+        "action",
+        "growth",
+        "tension"
+      ],
+      "sort_order": 36,
+      "sections": {
+        "Interpretation": "An aspect of friction and challenge. The square creates tension that demands action and growth. It represents obstacles that build character when overcome.",
+        "Keywords": "Friction, challenge, growth"
+      },
+      "metadata": {
+        "degrees": 90,
+        "nature": "Challenging"
+      }
+    },
+    {
+      "id": "aspect-trine",
+      "name": "Trine",
+      "symbol": "△",
+      "category": "aspect",
+      "subcategory": null,
+      "keywords": [
+        "ease",
+        "flow",
+        "talent",
+        "gifts",
+        "harmony"
+      ],
+      "sort_order": 37,
+      "sections": {
+        "Interpretation": "An aspect of ease and natural flow. The trine indicates gifts and talents that express effortlessly. It represents harmony between planetary principles, though it may produce complacency.",
+        "Keywords": "Ease, natural flow, harmony"
+      },
+      "metadata": {
+        "degrees": 120,
+        "nature": "Harmonious"
+      }
+    },
+    {
+      "id": "aspect-opposition",
+      "name": "Opposition",
+      "symbol": "☍",
+      "category": "aspect",
+      "subcategory": null,
+      "keywords": [
+        "awareness",
+        "polarity",
+        "balance",
+        "integration",
+        "tension"
+      ],
+      "sort_order": 38,
+      "sections": {
+        "Interpretation": "An aspect of awareness through polarity. The opposition creates tension between opposing principles that must be balanced. It represents the need to integrate seemingly contradictory energies through relationship.",
+        "Keywords": "Awareness, polarity, integration"
+      },
+      "metadata": {
+        "degrees": 180,
+        "nature": "Challenging"
+      }
+    }
+  ],
+  "_grammar_commons": {
+    "schema_version": "1.0",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": [
+      {
+        "name": "recursive.eco-schemas",
+        "role": "original compilation of the public-domain source into grammar form",
+        "link": "https://github.com/PlayfulProcess/recursive.eco-schemas"
+      },
+      {
+        "name": "Alan Leo: Astrology for All; The Art of Synthesis; How to Judge a Nativity",
+        "role": "source texts (public domain; author d. 1917)"
+      },
+      {
+        "name": "PlayfulProcess",
+        "role": "adopted into The Recursive Astrology as a voice's source library",
+        "link": "https://recursive.eco"
+      }
+    ]
+  }
+}

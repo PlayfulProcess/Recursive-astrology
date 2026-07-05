@@ -42,8 +42,10 @@ is itself part of the record [@campion2008; @brennan2017].
 ## 3. Key texts & figures
 
 - **Ptolemy, *Tetrabiblos*** — the natural-philosophy framing. PD English: the **Ashmand
-  translation (1822)** [@ptolemyashmand1822], on archive.org and sacred-texts. The Robbins
-  Loeb (1940) is the scholarly standard and is **not** PD [@ptolemyrobbins1940].
+  translation (1822)** [@ptolemyashmand1822], on archive.org, sacred-texts, and Project
+  Gutenberg #70850 (verified 2026-07-05). The Robbins Loeb (1940) is the scholarly standard
+  and is **not** PD [@ptolemyrobbins1940]. An interpretation library compiled from the
+  Ashmand text is imported at `grammars/tetrabiblos-ashmand/` [@web_ecoschemas].
 - **Vettius Valens, *Anthologies*** — the practitioner's book. The Mark Riley translation
   circulates free online with the translator's blessing [@valensriley] — the proven pathway
   for quoting Valens without license trouble.

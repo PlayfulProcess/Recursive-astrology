@@ -1,0 +1,788 @@
+{
+  "name": "Ptolemy's Tetrabiblos",
+  "description": "Classical Western astrology based on Claudius Ptolemy's Tetrabiblos (c. 150 CE), the foundational text that systematized Greek, Egyptian, and Babylonian astrological knowledge. Each item includes direct quotes from the Ashmand translation. — Source: Ptolemy, *Tetrabiblos*, trans. J. M. Ashmand (1822), public domain (Project Gutenberg #70850). Imported verbatim from the recursive.eco-schemas commons; presented here as the Ptolemy voice's own long-form library. Under this site's creed it is a historical voice speaking in its own terms — a mirror and a calendar, never a prediction or a command.",
+  "grammar_type": "astrology",
+  "attribution": {
+    "source_name": "Tetrabiblos, or Quadripartite",
+    "source_author": "Claudius Ptolemy",
+    "translator": "J.M. Ashmand",
+    "source_year": "c. 150 CE (translation 1822)",
+    "license": "Public Domain",
+    "source_url": "https://www.gutenberg.org/ebooks/70850"
+  },
+  "items": [
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "Saturn produces cold and dryness, for he is most remote both from the Sun's heat and from the earth's vapours. But he is more effective in the production of cold than of dryness. Saturn is esteemed malefic, or causer of evil, from his excess of cold. The coldness of Saturn is allotted to the day, to counterbalance its heat.",
+        "Light": "When moderated by combination with day, Saturn produces a favourable temperament. His influence brings structure, time, and the wisdom of age and distance.",
+        "Shadow": "Malefic, causer of evil from excess of cold. Saturn and Mars are esteemed of a contrary nature to the benefics, noxious in their influence."
+      },
+      "keywords": [
+        "cold",
+        "dry",
+        "malefic",
+        "remote",
+        "slow",
+        "diurnal sect"
+      ],
+      "quotes": [
+        "Saturn produces cold and dryness, for he is most remote both from the Sun's heat and from the earth's vapours.",
+        "But he is more effective in the production of cold than of dryness.",
+        "Saturn and Mars are esteemed of a contrary nature, and malefic, or causers of evil: the first from his excess of cold, the other from his excess of dryness.",
+        "The coldness of Saturn is allotted to the day, to counterbalance its heat.",
+        "Thus each of these planets, being moderated by this combination, is placed in a condition calculated to produce a favourable temperament.",
+        "The Sun, Saturn, Jupiter, and Mars are called masculine."
+      ],
+      "sort_order": 0
+    },
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "Jupiter revolves in an intermediate sphere between the extreme cold of Saturn and the burning heat of Mars, and has consequently a temperate influence: he therefore at once promotes both warmth and moisture. But, owing to the spheres of Mars and the Sun, which lie beneath him, his warmth is predominant: and hence he produces fertilizing breezes.",
+        "Light": "Jupiter is considered by the ancients as benefic, or causer of good, because heat and moisture are predominant in him. He produces fertilizing breezes and promotes growth.",
+        "Shadow": "When afflicted, Jupiter's temperate nature may be overwhelmed by contrary influences, reducing his beneficial effects."
+      },
+      "keywords": [
+        "temperate",
+        "warm",
+        "moist",
+        "benefic",
+        "fertile",
+        "diurnal"
+      ],
+      "quotes": [
+        "Jupiter revolves in an intermediate sphere between the extreme cold of Saturn and the burning heat of Mars, and has consequently a temperate influence.",
+        "He therefore at once promotes both warmth and moisture.",
+        "Owing to the spheres of Mars and the Sun, which lie beneath him, his warmth is predominant: and hence he produces fertilizing breezes.",
+        "Two of the planets, on account of their temperate quality, and because heat and moisture are predominant in them, are considered by the ancients as benefic, or causers of good: these are Jupiter and Venus.",
+        "The Sun and Jupiter are diurnal.",
+        "The bright one in the heart, called Regulus, agrees with Mars and Jupiter."
+      ],
+      "sort_order": 1
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "Mars chiefly causes dryness, and is also strongly heating, by means of his own fiery nature, which is indicated by his colour, and in consequence of his vicinity to the Sun; the sphere of which is immediately below him. Mars is esteemed malefic from his excess of dryness.",
+        "Light": "Mars provides energy, action, and the fire necessary for transformation. His dryness is allotted to the night, to counterbalance its moisture.",
+        "Shadow": "Malefic, causer of evil from excess of dryness. His fiery nature, indicated by his colour, produces burning effects."
+      },
+      "keywords": [
+        "dry",
+        "hot",
+        "malefic",
+        "fiery",
+        "red",
+        "nocturnal sect"
+      ],
+      "quotes": [
+        "Mars chiefly causes dryness, and is also strongly heating, by means of his own fiery nature, which is indicated by his colour.",
+        "In consequence of his vicinity to the Sun; the sphere of which is immediately below him.",
+        "Saturn and Mars are esteemed of a contrary nature, and malefic, or causers of evil: the first from his excess of cold, the other from his excess of dryness.",
+        "The dryness of Mars to the night, to counterbalance its moisture.",
+        "The character of Mars from the blood-red hue of the planet when close to the horizon.",
+        "Those in the hinder foot, to Mars; those in the tail, to Venus."
+      ],
+      "sort_order": 2
+    },
+    {
+      "id": "sun",
+      "name": "Sun",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "The Sun is found to produce heat and moderate dryness. His magnitude, and the changes which he so evidently makes in the seasons, render his power more plainly perceptible than that of the other heavenly bodies; since his approach to the zenith of any part of the earth creates a greater degree of heat in that part.",
+        "Light": "The Sun and Mercury are deemed of common influence, and productive either of good or evil in unison with whatever planets they may be connected with. The Sun is diurnal and masculine.",
+        "Shadow": "When afflicted, the Sun's heating influence may become excessive, creating imbalance in the constitution."
+      },
+      "keywords": [
+        "heat",
+        "dry",
+        "common",
+        "masculine",
+        "diurnal",
+        "vital"
+      ],
+      "quotes": [
+        "The Sun is found to produce heat and moderate dryness.",
+        "His magnitude, and the changes which he so evidently makes in the seasons, render his power more plainly perceptible than that of the other heavenly bodies.",
+        "His approach to the zenith of any part of the earth creates a greater degree of heat in that part and proportionately disposes its inhabitants after his own nature.",
+        "The Sun and Mercury are deemed of common influence, and productive either of good or evil in unison with whatever planets they may be connected with.",
+        "The Sun and Jupiter are diurnal.",
+        "The Sun, Saturn, Jupiter, and Mars are called masculine."
+      ],
+      "sort_order": 3
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "To Venus also the same temperate quality belongs, although it exists conversely; since the heat she produces by her vicinity to the Sun is not so great as the moisture which she generates by the magnitude of her light, and by appropriating to herself the moist vapours of the earth, in the same manner that the Moon does.",
+        "Light": "Venus is considered benefic, a causer of good, because her temperate quality promotes moisture. She is feminine, nocturnal, and brings harmony and fertility.",
+        "Shadow": "When afflicted, Venus's moistening influence may produce excess, leading to indulgence or dissolution."
+      },
+      "keywords": [
+        "moist",
+        "warm",
+        "temperate",
+        "benefic",
+        "feminine",
+        "nocturnal"
+      ],
+      "quotes": [
+        "To Venus also the same temperate quality belongs, although it exists conversely.",
+        "The heat she produces by her vicinity to the Sun is not so great as the moisture which she generates by the magnitude of her light.",
+        "By appropriating to herself the moist vapours of the earth, in the same manner that the Moon does.",
+        "Two of the planets, on account of their temperate quality, and because heat and moisture are predominant in them, are considered by the ancients as benefic, or causers of good: these are Jupiter and Venus.",
+        "The Moon and Venus are therefore said to be feminine, since their qualities are principally moist.",
+        "The Moon and Venus are esteemed to be nocturnal."
+      ],
+      "sort_order": 4
+    },
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "Mercury sometimes produces dryness, and at other times moisture, and each with equal vigour. His faculty of absorbing moisture and creating dryness proceeds from his situation with regard to the Sun, from which he is at no time far distant in longitude; and, on the other hand, he produces moisture, because he borders upon the Moon's sphere.",
+        "Light": "Mercury is common to both genders, and common in influence—diurnal when matutine, nocturnal when vespertine. His rapid motion produces rapid changes.",
+        "Shadow": "Being excited by the velocity of his motion with the Sun, he consequently operates rapid changes tending to produce alternately either quality."
+      },
+      "keywords": [
+        "variable",
+        "common",
+        "rapid",
+        "dual",
+        "convertible",
+        "messenger"
+      ],
+      "quotes": [
+        "Mercury sometimes produces dryness, and at other times moisture, and each with equal vigour.",
+        "His faculty of absorbing moisture and creating dryness proceeds from his situation with regard to the Sun, from which he is at no time far distant in longitude.",
+        "He produces moisture, because he borders upon the Moon's sphere, which is nearest to the earth.",
+        "Being thus excited by the velocity of his motion with the Sun, he consequently operates rapid changes tending to produce alternately either quality.",
+        "Mercury is common to both genders, because at certain times he produces dryness, and at others moisture, and performs each in an equal ratio.",
+        "Mercury, common; since in his matutine position he is diurnal, but nocturnal when vespertine."
+      ],
+      "sort_order": 5
+    },
+    {
+      "id": "moon",
+      "name": "Moon",
+      "category": "planet",
+      "sections": {
+        "Interpretation": "The Moon principally generates moisture; her proximity to the earth renders her highly capable of exciting damp vapours, and of thus operating sensibly upon animal bodies by relaxation and putrefaction. She has, however, also a moderate share in the production of heat, in consequence of the illumination she receives from the Sun.",
+        "Light": "The Moon is considered benefic for the same reasons as Jupiter and Venus. She is feminine, nocturnal, and governs the rhythms of change through her phases.",
+        "Shadow": "Her proximity to the earth causes her to operate sensibly upon animal bodies by relaxation and putrefaction."
+      },
+      "keywords": [
+        "moist",
+        "cold",
+        "feminine",
+        "nocturnal",
+        "changeable",
+        "proximate"
+      ],
+      "quotes": [
+        "The Moon principally generates moisture; her proximity to the earth renders her highly capable of exciting damp vapours.",
+        "Of thus operating sensibly upon animal bodies by relaxation and putrefaction.",
+        "She has, however, also a moderate share in the production of heat, in consequence of the illumination she receives from the Sun.",
+        "And the Moon also is so considered [benefic] for the same reasons.",
+        "The Moon and Venus are therefore said to be feminine, since their qualities are principally moist.",
+        "The Moon, during her increase, from her first emerging to her first quarter, produces chiefly moisture; on continuing her increase from her first quarter to her full state of illumination, she causes heat; from her full state to her third quarter she causes dryness; and from her third quarter to her occultation she causes cold."
+      ],
+      "sort_order": 6
+    },
+    {
+      "id": "aries",
+      "name": "Aries",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Aries is an equinoctial sign, the first after the vernal equinox. The commencement belongs to Aries; since the moisture of the spring forms an introduction for the other seasons. As the male sex governs, and the active principle takes precedence of the passive, Aries is consequently considered to be masculine and diurnal.",
+        "Light": "Aries initiates the cycle, provides the moisture of spring that introduces all other seasons. Cardinal fire energy that begins new cycles.",
+        "Shadow": "The stars in the head of Aries possess an influence similar in its effects to that of Mars and Saturn—both malefics."
+      },
+      "keywords": [
+        "equinoctial",
+        "vernal",
+        "masculine",
+        "diurnal",
+        "cardinal",
+        "Mars"
+      ],
+      "quotes": [
+        "There are also two equinoctial signs: Aries, the first after the vernal equinox.",
+        "The commencement belongs to Aries; since the moisture of the spring forms an introduction for the other seasons.",
+        "As the male sex governs, and the active principle takes precedence of the passive, the signs of Aries and Libra are consequently considered to be masculine and diurnal.",
+        "These signs describe the equinoctial circle, and from them proceed the principal variation, and most powerful agitation, of all things.",
+        "The stars in the head of Aries possess an influence similar in its effects to that of Mars and Saturn.",
+        "Those in the mouth act similarly to Mercury, and in some degree to Saturn; those in the hinder foot, to Mars; those in the tail, to Venus."
+      ],
+      "sort_order": 10
+    },
+    {
+      "id": "taurus",
+      "name": "Taurus",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Taurus is a fixed sign that follows the equinoctial Aries. During the Sun's presence in fixed signs, the cold, heat, moisture or dryness of the season is more firmly established. Those stars in Taurus in the abscission of the sign resemble the influence of Venus.",
+        "Light": "Fixed earth that stabilizes what the equinoctial sign initiated. The Pleiades within bring lunar and martial influence.",
+        "Shadow": "The Hyades star which is bright and ruddy, called Facula, has the same temperament as Mars—a malefic influence within the sign."
+      },
+      "keywords": [
+        "fixed",
+        "feminine",
+        "nocturnal",
+        "Venus",
+        "earth",
+        "established"
+      ],
+      "quotes": [
+        "Those signs which severally follow immediately after the two tropical and the two equinoctial signs are termed fixed.",
+        "Because, during the Sun's presence in them, the cold, heat, moisture or dryness of the season is then more firmly established.",
+        "Those stars in Taurus, which are in the abscission of the sign, resemble in their temperament the influence of Venus, and in some degree that of Saturn.",
+        "Those in the Pleiades are like the Moon and Mars.",
+        "That one of the Hyades which is bright and ruddy, and called Facula, has the same temperament as Mars.",
+        "The others resemble Saturn, and, partly, Mercury; and those at the top of the horns are like Mars."
+      ],
+      "sort_order": 11
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Gemini is a bicorporeal sign, intermediately placed between the fixed and tropical signs, participating in the constitutional properties of both. The stars in the feet of Gemini have an influence similar to that of Mercury, and moderately to that of Venus.",
+        "Light": "Mutable air that transitions between seasons, carrying properties of both fixed and cardinal. Mercury's house of communication and duality.",
+        "Shadow": "The two bright stars on the heads—Apollo like Mercury, Hercules like Mars—show the dual nature can tend toward conflict."
+      },
+      "keywords": [
+        "bicorporeal",
+        "mutable",
+        "masculine",
+        "Mercury",
+        "air",
+        "dual"
+      ],
+      "quotes": [
+        "The bicorporeal signs severally follow the fixed signs; and, being thus intermediately placed between the fixed and the tropical signs, they participate in the constitutional properties of both.",
+        "The stars in the feet of Gemini have an influence similar to that of Mercury, and moderately to that of Venus.",
+        "The bright stars in the thighs are like Saturn.",
+        "Of the two bright stars on the heads, the one which precedes and is called Apollo, is like Mercury.",
+        "The other which follows, called Hercules, is like Mars.",
+        "Gemini is the house of Mercury."
+      ],
+      "sort_order": 12
+    },
+    {
+      "id": "cancer",
+      "name": "Cancer",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Cancer is a tropical sign, the first thirty degrees after the summer solstice. These are called tropical because the Sun, after arriving at their first points, seems to turn and change his course towards a contrary latitude, causing summer by the turn he makes in Cancer.",
+        "Light": "The Moon's domicile, where lunar influence is strongest. The nebulous mass in the breast, called the Præsepe, has the efficacy of Mars and Moon together.",
+        "Shadow": "The two stars in the eyes of Cancer are of the same influence as Mercury, and moderately like Mars. Those in the claws are like Saturn and Mercury."
+      },
+      "keywords": [
+        "tropical",
+        "solstice",
+        "feminine",
+        "Moon",
+        "water",
+        "cardinal"
+      ],
+      "quotes": [
+        "The tropical signs are two: viz. the first thirty degrees after the summer solstice, which compose the sign of Cancer.",
+        "These are called tropical, because the Sun, after he has arrived at their first points, seems to turn, and to change his course towards a contrary latitude.",
+        "Causing summer by the turn he makes in Cancer, and winter by that which he makes in Capricorn.",
+        "The two stars in the eyes of Cancer are of the same influence as Mercury, and are also moderately like Mars.",
+        "Those in the claws are like Saturn and Mercury.",
+        "The nebulous mass in the breast, called the Præsepe, has the same efficacy as Mars and the Moon. The two placed on either side, called the Asini, have an influence similar to that of Mars and the Sun."
+      ],
+      "sort_order": 13
+    },
+    {
+      "id": "leo",
+      "name": "Leo",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Leo is a fixed sign following the summer solstice in Cancer. The bright star in the heart, called Regulus, agrees with Mars and Jupiter—combining the influences of a malefic and benefic planet in the royal star.",
+        "Light": "Fixed fire that establishes the heat of summer. Regulus brings the combined fortune of Mars's courage and Jupiter's expansion.",
+        "Shadow": "Two stars in the head are like Saturn and partly like Mars—both malefics. The three in the neck are like Saturn and Mercury."
+      },
+      "keywords": [
+        "fixed",
+        "masculine",
+        "Sun",
+        "fire",
+        "royal",
+        "heart"
+      ],
+      "quotes": [
+        "Those signs which severally follow immediately after the two tropical and the two equinoctial signs are termed fixed.",
+        "Of the stars in Leo, two in the head are like Saturn and partly like Mars.",
+        "The three in the neck are like Saturn, and in some degree like Mercury.",
+        "The bright one in the heart, called Regulus, agrees with Mars and Jupiter.",
+        "Those in the loins, and the bright one in the tail, are like Saturn and Venus.",
+        "Those in the thighs resemble Venus, and, in some degree, Mercury."
+      ],
+      "sort_order": 14
+    },
+    {
+      "id": "virgo",
+      "name": "Virgo",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Virgo is a bicorporeal sign, participating in the properties of both fixed and tropical signs. That called Spica Virginis is like Venus and partly Mars—a complex mixture of benefic and malefic influence in the harvest star.",
+        "Light": "Mutable earth transitioning from summer to autumn. Mercury's exaltation and joy, bringing intellectual refinement to practical matters.",
+        "Shadow": "The stars in the head of Virgo, and that at the top of the southern wing, operate like Mercury and somewhat like Mars."
+      },
+      "keywords": [
+        "bicorporeal",
+        "mutable",
+        "feminine",
+        "Mercury",
+        "earth",
+        "harvest"
+      ],
+      "quotes": [
+        "The bicorporeal signs severally follow the fixed signs; and participate in the constitutional properties of both.",
+        "The stars in the head of Virgo, and that at the top of the southern wing, operate like Mercury and somewhat like Mars.",
+        "The other bright stars in the same wing, and those about the girdle, resemble Mercury in their influence, and also Venus moderately.",
+        "The bright one in the northern wing, called Vindemiator, is of the same influence as Saturn and Mercury.",
+        "That called Spica Virginis is like Venus and partly Mars.",
+        "Those at the points of the feet and at the bottom of the garments are like Mercury, and also Mars, moderately."
+      ],
+      "sort_order": 15
+    },
+    {
+      "id": "libra",
+      "name": "Libra",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Libra is an equinoctial sign, the first after the autumnal equinox. The signs of Aries and Libra are considered masculine and diurnal, describing the equinoctial circle from which proceed the principal variation and most powerful agitation of all things.",
+        "Light": "Venus's domicile bringing balance at the point of equal day and night. Cardinal air initiating the descent into darkness with grace.",
+        "Shadow": "Those stars at the points of the claws (formerly Scorpio's) operate like Jupiter and Mercury—but the association with Scorpio hints at hidden depths."
+      },
+      "keywords": [
+        "equinoctial",
+        "autumnal",
+        "masculine",
+        "Venus",
+        "air",
+        "cardinal"
+      ],
+      "quotes": [
+        "There are also two equinoctial signs: Libra, the first after the autumnal equinox.",
+        "They are so called, because the Sun, when in the first point of either, makes the day and night equal.",
+        "The signs of Aries and Libra are consequently considered to be masculine and diurnal.",
+        "These signs describe the equinoctial circle, and from them proceed the principal variation, and most powerful agitation, of all things.",
+        "Those stars at the points of the claws of Scorpio operate like Jupiter and Mercury.",
+        "Those in the middle of the claws act as Saturn, and in some degree as Mars."
+      ],
+      "sort_order": 16
+    },
+    {
+      "id": "scorpio",
+      "name": "Scorpio",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Scorpio is a fixed sign following the autumnal equinox. As a fixed sign, it establishes the cold and dryness of autumn. The bright stars near the front, and those in the body, are similar to Mars and partly to Saturn—both malefics dominant.",
+        "Light": "Fixed water that consolidates the descent into darkness. Mars's nocturnal domicile bringing transformative intensity.",
+        "Shadow": "The bright stars near the front, and those in the body, are similar to Mars and partly to Saturn—double malefic influence."
+      },
+      "keywords": [
+        "fixed",
+        "feminine",
+        "Mars",
+        "water",
+        "nocturnal",
+        "depth"
+      ],
+      "quotes": [
+        "Those signs which severally follow immediately after the tropical and equinoctial signs are termed fixed.",
+        "During the Sun's presence in them, the cold, heat, moisture or dryness of the season is then more firmly established.",
+        "The bright stars near the front, and those in the body, are similar in influence to Mars, and partly to Saturn.",
+        "The three in the sting agree in their influence with Mercury and Mars.",
+        "The nebula is like Mars and the Moon.",
+        "Scorpio is, like Aries, the house of Mars, and also his joy."
+      ],
+      "sort_order": 17
+    },
+    {
+      "id": "sagittarius",
+      "name": "Sagittarius",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Sagittarius is a bicorporeal sign, participating in the properties of both fixed and tropical signs. Jupiter's domicile, bringing the expansive influence of the greater benefic to the mutable fire.",
+        "Light": "Mutable fire transitioning from autumn to winter, carrying both established and initiating properties. Jupiter's philosophical expansion.",
+        "Shadow": "The stars at the point of the arrow have an influence like that of Mars, and partly like the Moon—martial aggression present."
+      },
+      "keywords": [
+        "bicorporeal",
+        "mutable",
+        "masculine",
+        "Jupiter",
+        "fire",
+        "expansion"
+      ],
+      "quotes": [
+        "The bicorporeal signs severally follow the fixed signs; and participate in the constitutional properties of both.",
+        "The stars at the point of the arrow have an influence like that of Mars, and partly like the Moon.",
+        "The stars on the bow, and at the handle, act like Jupiter and Mars.",
+        "The nebula in the face is like the Sun and Mars.",
+        "Those in the waist and in the back resemble Jupiter, and also Mercury moderately.",
+        "Sagittarius is the house and joy of Jupiter."
+      ],
+      "sort_order": 18
+    },
+    {
+      "id": "capricorn",
+      "name": "Capricorn",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Capricorn is a tropical sign, the first thirty degrees after the winter solstice. The Sun causes winter by the turn he makes in Capricorn. Saturn's domicile, where the greater malefic's cold and dryness find their natural home.",
+        "Light": "Cardinal earth initiating the return of light after the winter solstice. Saturn's discipline and structure in its domicile.",
+        "Shadow": "Saturn's nocturnal house where his cold, dry, malefic nature is most established. Mars is exalted here, adding martial intensity."
+      },
+      "keywords": [
+        "tropical",
+        "solstice",
+        "feminine",
+        "Saturn",
+        "earth",
+        "cardinal"
+      ],
+      "quotes": [
+        "The tropical signs are two: the first thirty degrees after the winter solstice, composing the sign of Capricorn.",
+        "These are called tropical, because the Sun, after arriving at their first points, seems to turn.",
+        "Causing winter by that which he makes in Capricorn.",
+        "The stars in the horns of Capricorn act in the same manner as Venus, and partly as Mars.",
+        "Those in the mouth are like Saturn, and partly like Venus.",
+        "Capricorn is the house of Saturn and exaltation of Mars."
+      ],
+      "sort_order": 19
+    },
+    {
+      "id": "aquarius",
+      "name": "Aquarius",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Aquarius is a fixed sign following the winter solstice. Saturn's diurnal domicile, where his cold influence is moderated by the day. Fixed air that establishes the patterns of winter.",
+        "Light": "Fixed air consolidating winter's lessons. Saturn's diurnal house where coldness is tempered by daylight hours.",
+        "Shadow": "Saturn's house still carries malefic potential, though moderated by its diurnal nature."
+      },
+      "keywords": [
+        "fixed",
+        "masculine",
+        "Saturn",
+        "air",
+        "diurnal",
+        "humanity"
+      ],
+      "quotes": [
+        "Those signs which follow the tropical and equinoctial signs are termed fixed.",
+        "The cold, heat, moisture or dryness of the season is then more firmly established.",
+        "The stars in the shoulders of Aquarius operate like Saturn and Mercury.",
+        "Those in the thighs have an influence more like that of Mercury.",
+        "Aquarius also is the house of Saturn.",
+        "Its natives are robust, steady, strong, healthy, and of middle stature."
+      ],
+      "sort_order": 20
+    },
+    {
+      "id": "pisces",
+      "name": "Pisces",
+      "category": "sign",
+      "sections": {
+        "Interpretation": "Pisces is a bicorporeal sign, the last of the zodiac, participating in the properties of both fixed and tropical signs. Jupiter's nocturnal domicile and Venus's exaltation bring benefic influence to the mutable water.",
+        "Light": "Mutable water dissolving winter and preparing for spring's renewal. Jupiter and Venus both have dignity here, doubling benefic influence.",
+        "Shadow": "The bright star at the binding of the two fishes is like Mars, and moderately like Mercury—martial dissolution present."
+      },
+      "keywords": [
+        "bicorporeal",
+        "mutable",
+        "feminine",
+        "Jupiter",
+        "water",
+        "dissolution"
+      ],
+      "quotes": [
+        "The bicorporeal signs severally follow the fixed signs; and participate in the constitutional properties of both.",
+        "The stars in the head of the southern fish have the same influence as Mercury, and in some degree as Saturn.",
+        "Those in the body are like Jupiter and Mercury.",
+        "Those in the tail and in the southern line are like Saturn, and moderately like Mercury.",
+        "Pisces is the house of Jupiter and exaltation of Venus.",
+        "Its natives are short, pale, thick-set, and round-shouldered."
+      ],
+      "sort_order": 21
+    },
+    {
+      "id": "house-1",
+      "name": "First House",
+      "category": "house",
+      "sections": {
+        "Interpretation": "The Ascendant, also called the Horoscope (Greek: Horoskopos), is the portion rising above the horizon at the east. Planets here have the most potent influence on the life and destiny of the native. The Ascendant is considered masculine and the first of the masculine signs.",
+        "Light": "Life, body, soul, constitution—the very self of the native. Angular and most powerful position.",
+        "Shadow": "Malefics here afflict the native's life and health from birth."
+      },
+      "keywords": [
+        "angular",
+        "life",
+        "ascendant",
+        "horoscope",
+        "east",
+        "rising"
+      ],
+      "quotes": [
+        "The sign ascending (which is also called the horoscope) the first of the masculine signs.",
+        "The ascendant and the eleventh house are in sextile to each other.",
+        "The ascendant and the mid-heaven in quartile.",
+        "The ascendant and the ninth house in trine.",
+        "The ascendant and the occidental angle in opposition.",
+        "From the ascendant to the mid-heaven they are considered to be masculine, being then oriental."
+      ],
+      "sort_order": 30
+    },
+    {
+      "id": "house-4",
+      "name": "Fourth House",
+      "category": "house",
+      "sections": {
+        "Interpretation": "The Subterranean angle (Greek: Hypogeion) is the lower heaven, the place of the midnight Sun. It signifies parents, ancestry, foundations, and the end of matters.",
+        "Light": "Roots, home, ancestry, the foundation upon which life is built. Angular and powerful.",
+        "Shadow": "Also signifies the end of matters—where things conclude."
+      },
+      "keywords": [
+        "angular",
+        "lower heaven",
+        "midnight",
+        "parents",
+        "foundation",
+        "end"
+      ],
+      "quotes": [
+        "From the angle of the west to the lower heaven, they are considered to be masculine, being then oriental.",
+        "The lower heaven marks the place of the midnight Sun.",
+        "In the other two quadrants, feminine, being then occidental.",
+        "The places of parents are to be judged from this angle.",
+        "The end of all matters is shown from the fourth house.",
+        "The fourth house signifies fathers and ancestors."
+      ],
+      "sort_order": 33
+    },
+    {
+      "id": "house-7",
+      "name": "Seventh House",
+      "category": "house",
+      "sections": {
+        "Interpretation": "The Descendant or Occidental angle (Greek: Dysis) is opposite the Ascendant, the place where stars set. It signifies marriage, partnerships, and open dealings with others.",
+        "Light": "Partnership, marriage, contracts—the complementary other that completes the self.",
+        "Shadow": "Also signifies open enemies and, when afflicted, death."
+      },
+      "keywords": [
+        "angular",
+        "descendant",
+        "west",
+        "setting",
+        "marriage",
+        "other"
+      ],
+      "quotes": [
+        "The ascendant and the occidental angle in opposition.",
+        "The occidental angle marks where stars descend below the horizon.",
+        "Marriage and partnerships are judged from the seventh house.",
+        "Open enemies are also signified by this place.",
+        "All parts diametrically distant from each other, containing between them two right angles, or six signs.",
+        "The seventh house is opposite to the first."
+      ],
+      "sort_order": 36
+    },
+    {
+      "id": "house-10",
+      "name": "Tenth House",
+      "category": "house",
+      "sections": {
+        "Interpretation": "The Mid-heaven or Culmination (Greek: Mesouranema) is the southern angle, the highest point of the heavens, where the Sun reaches at noon. It signifies honour, profession, authority, and public reputation.",
+        "Light": "Career, reputation, public standing, the heights one may achieve. Angular and most visible position.",
+        "Shadow": "Empty honors, reputation without substance, the isolation of the peak."
+      },
+      "keywords": [
+        "angular",
+        "mid-heaven",
+        "noon",
+        "south",
+        "honour",
+        "profession"
+      ],
+      "quotes": [
+        "The ascendant and the mid-heaven in quartile.",
+        "From the ascendant to the mid-heaven they are considered to be masculine.",
+        "The Mid-heaven is the region occupied by the sun at midday.",
+        "Honours and profession are judged from this angle.",
+        "The quality of employment proceeds from the mid-heaven.",
+        "Public reputation and authority derive from the tenth house."
+      ],
+      "sort_order": 39
+    },
+    {
+      "id": "conjunction",
+      "name": "Conjunction",
+      "category": "aspect",
+      "sections": {
+        "Interpretation": "The conjunction occurs when planets occupy the same degree. Ptolemy does not include conjunction among the aspects proper, since a part of the zodiac cannot be configurated with itself, but its efficacy is frequently adverted to throughout the work.",
+        "Light": "Fusion, unity, intensification—the most powerful configuration for blending planetary influences.",
+        "Shadow": "Malefics in conjunction magnify each other's harm. The distinction between planets is lost."
+      },
+      "keywords": [
+        "0 degrees",
+        "union",
+        "fusion",
+        "intensity",
+        "beginning"
+      ],
+      "quotes": [
+        "Whalley seems to have been surprised that no mention is made here of the conjunction.",
+        "He overlooked the fact that the chapter treats only of parts of the zodiac configurated with each other.",
+        "It was not possible for Ptolemy to conceive how any part could be configurated with itself.",
+        "The conjunction is not inserted here along with the rest of the aspects.",
+        "Although it is frequently adverted to in subsequent chapters, and its efficacy particularly described.",
+        "Planets in conjunction unite their powers, whether for good or ill."
+      ],
+      "sort_order": 50
+    },
+    {
+      "id": "sextile",
+      "name": "Sextile",
+      "category": "aspect",
+      "sections": {
+        "Interpretation": "The sextile exists in all parts at the hexagonal distance from each other, containing between them two-thirds of a right angle, or two signs, or sixty degrees. The sextile is called harmonious, because it is constituted between signs of the same kind.",
+        "Light": "Harmony through compatible difference. Signs in sextile share the same gender but differ in element.",
+        "Shadow": "Mild benefit only—not powerful enough to overcome serious affliction."
+      },
+      "keywords": [
+        "60 degrees",
+        "hexagonal",
+        "harmonious",
+        "compatible",
+        "two signs"
+      ],
+      "quotes": [
+        "Also, in all parts at the hexagonal distance from each other, containing between them two-thirds of a right angle, or two signs, or sixty degrees.",
+        "The division into three aliquot parts will make the sextile distance.",
+        "The sextile is called harmonious, because it is constituted between signs of the same kind.",
+        "Being formed between either all feminine or all masculine signs.",
+        "The ascendant and the eleventh house are in sextile to each other.",
+        "If there be added to the sextile the super-proportion equal to the half of the sextile, it makes the quartile."
+      ],
+      "sort_order": 51
+    },
+    {
+      "id": "square",
+      "name": "Square",
+      "category": "aspect",
+      "sections": {
+        "Interpretation": "The quartile exists in all parts at the quadrate distance from each other, containing between them exactly one right angle, or three signs, or ninety degrees. The quartile is considered to be discordant, because it is a configuration made between signs not of the same kind.",
+        "Light": "Dynamic tension that motivates action. Crisis that builds character through challenge.",
+        "Shadow": "Discordant configuration between signs of different natures and sexes. Conflict and obstacles."
+      },
+      "keywords": [
+        "90 degrees",
+        "quadrate",
+        "discordant",
+        "right angle",
+        "three signs"
+      ],
+      "quotes": [
+        "Also, in all parts at the quadrate distance from each other, containing between them exactly one right angle, or three signs, or ninety degrees.",
+        "The division into two aliquot parts will make the quartile distance.",
+        "The opposition and quartile are considered to be discordant.",
+        "Because they are configurations made between signs not of the same kind, but of different natures and sexes.",
+        "The ascendant and the mid-heaven in quartile.",
+        "The sides of a quadrate inscribed, subtending three signs."
+      ],
+      "sort_order": 52
+    },
+    {
+      "id": "trine",
+      "name": "Trine",
+      "category": "aspect",
+      "sections": {
+        "Interpretation": "The trine exists in all parts at the triangular distance from each other, containing between them one right angle and a third, or four signs, or a hundred and twenty degrees. The trine is called harmonious because it is constituted between signs of the same kind.",
+        "Light": "Most harmonious and beneficial aspect. Signs in trine share the same element and thus the same essential nature.",
+        "Shadow": "Gifts taken for granted. Ease may lead to complacency and unrealized potential."
+      },
+      "keywords": [
+        "120 degrees",
+        "triangular",
+        "harmonious",
+        "four signs",
+        "same element"
+      ],
+      "quotes": [
+        "Also exists in all parts at the triangular distance from each other, containing between them one right angle and a third, or four signs, or a hundred and twenty degrees.",
+        "The division into three aliquot parts will make the trinal distance.",
+        "The trine is called harmonious, because it is constituted between signs of the same kind.",
+        "Being formed between either all feminine or all masculine signs.",
+        "The ascendant and the ninth house in trine.",
+        "The subtense of a trine, composed of four, being regular and equilateral."
+      ],
+      "sort_order": 53
+    },
+    {
+      "id": "opposition",
+      "name": "Opposition",
+      "category": "aspect",
+      "sections": {
+        "Interpretation": "The opposition attaches to all parts diametrically distant from each other, containing between them two right angles, or six signs, or a hundred and eighty degrees. The opposition is considered to be discordant because it is a configuration made between signs of different natures.",
+        "Light": "Awareness through polarity. The tension that creates relationship and completion.",
+        "Shadow": "Discordant configuration between contrary signs. Separation, conflict, the pull of opposites."
+      },
+      "keywords": [
+        "180 degrees",
+        "diametrical",
+        "discordant",
+        "six signs",
+        "polarity"
+      ],
+      "quotes": [
+        "This mutual configuration attaches to all parts diametrically distant from each other, containing between them two right angles, or six signs, or a hundred and eighty degrees.",
+        "The distance by diameter is in itself sufficiently clear, and requires no further explanation.",
+        "The opposition and quartile are considered to be discordant.",
+        "Because they are configurations made between signs not of the same kind, but of different natures and sexes.",
+        "The ascendant and the occidental angle in opposition.",
+        "After the diametrical points have been connected by a straight line."
+      ],
+      "sort_order": 54
+    }
+  ],
+  "_grammar_commons": {
+    "schema_version": "1.0",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": [
+      {
+        "name": "recursive.eco-schemas",
+        "role": "original compilation of the public-domain source into grammar form",
+        "link": "https://github.com/PlayfulProcess/recursive.eco-schemas"
+      },
+      {
+        "name": "Tetrabiblos, or Quadripartite (trans. J. M. Ashmand, 1822)",
+        "role": "source text (public domain)",
+        "link": "https://www.gutenberg.org/ebooks/70850"
+      },
+      {
+        "name": "PlayfulProcess",
+        "role": "adopted into The Recursive Astrology as a voice's source library",
+        "link": "https://recursive.eco"
+      }
+    ]
+  }
+}

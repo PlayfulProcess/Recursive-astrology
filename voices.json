@@ -24,7 +24,7 @@
       "color": "#c08a3e",
       "intention": "Read the sky as the natural philosophy of its time read it — the heavens acting on the sublunary world as heat and moisture and season act, a physics of influence. Take it as Ptolemy himself took it: a conjectural art, not a certainty, and never a decree you must obey.",
       "how": "Read as the Tetrabiblos teaches — the Sun plainly governs the seasons, the Moon the tides and moistures, and the other stars are held to temper the air and the mixtures of bodies by their risings and configurations. The art is second to astronomy and, being of matter, admits of error; the wise reader states tendencies, not fixed outcomes, and knows a foreknown disposition may be tempered by nature and by prudence.",
-      "course": "Long-form home for the argument (where Ptolemy's own hedging, and the modern reading of celestial 'influence' as physics-of-its-age, are set against the record): grammars/historiographies-of-astrology → 'The Hellenistic synthesis' and 'Astrology as the science of its age'."
+      "course": "Long-form home for the argument (where Ptolemy's own hedging, and the modern reading of celestial 'influence' as physics-of-its-age, are set against the record): grammars/historiographies-of-astrology → 'The Hellenistic synthesis' and 'Astrology as the science of its age'. The voice's own library, in its own words: grammars/tetrabiblos-ashmand (public-domain Ashmand 1822 translation, imported from recursive.eco-schemas)."
     },
     {
       "id": "jung",
@@ -34,7 +34,7 @@
       "color": "#d4a017",
       "intention": "Read the chart as a mirror of the psyche — the horoscope as a map of archetypes constellated at a moment, meaningful by correspondence rather than by cause. What you meet in it is a part of yourself asking to be seen; do not obey it, integrate it.",
       "how": "Read as depth psychology reads it — through synchronicity, an acausal connecting principle in which an inner state and an outer symbol coincide meaningfully without one compelling the other. The birth moment mirrors the psyche's constellation; the planets are names for archetypes of the collective unconscious. The chart does not predict the fate; it shows what is pressing toward consciousness and wants integrating. (A lens inspired by the work of C. G. Jung.)",
-      "course": "Long-form home for the argument (synchronicity as correspondence not causation, and the twentieth-century turn from prediction to psychology): grammars/historiographies-of-astrology → 'Humanistic & psychological astrology' and 'Astrology psychologized'."
+      "course": "Long-form home for the argument (synchronicity as correspondence not causation, and the twentieth-century turn from prediction to psychology): grammars/historiographies-of-astrology → 'Humanistic & psychological astrology' and 'Astrology psychologized'. The turn's public-domain ancestor library: grammars/alan-leo (Alan Leo's corpus, d. 1917, imported from recursive.eco-schemas)."
     },
     {
       "id": "skeptical-school",
@@ -44,7 +44,7 @@
       "color": "#6b7a8f",
       "intention": "Read astrology's effects as the work of the reader, not the sky — a tradition of critique in its own right, from Pico della Mirandola to the modern controlled test. Its point is autonomy too: what moves you is your own meaning-making, and knowing that keeps the choice yours.",
       "how": "Read as the critics have read it for five centuries — Pico's 1494 Disputationes arguing the astrologers explain by the stars what is better explained on the ground; the modern test tradition adding the controlled trial and the Forer, or Barnum, effect, in which people accept a vague, flattering description as uniquely their own. On this view a chart's uncanny fit is a mirror the reader supplies — the sky says nothing; the person, and the culture, say it all. Presented here as its own tradition, with its own history, not as a verdict on the rest.",
-      "course": "Long-form home for the argument (the critique from within and without, held to its own record): grammars/historiographies-of-astrology → 'The empirical test tradition' and 'The critique from within and without'."
+      "course": "Long-form home for the argument (the critique from within and without, held to its own record): grammars/historiographies-of-astrology → 'The empirical test tradition' and 'The critique from within and without'. A Victorian document of the school, in its own sardonic idiom: grammars/proctor-skeptical-astrology (Proctor 1896, public domain, imported from recursive.eco-schemas)."
     }
   ]
 }

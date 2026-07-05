@@ -50,6 +50,10 @@ and this library presents it as a *view with a lineage*, not as its own verdict 
 - **Carlson 1985** — *Nature* 318, 419–425 [@carlson1985].
 - **Gauquelin's books** — starting from *L'influence des astres* (1955) [@gauquelin1955].
 - **Ertel 2009** — *Journal of Scientific Exploration* 23(2) [@ertel2009].
+- **A Victorian precursor document** — Richard Proctor's sardonic essay on astrology in
+  *Myths and Marvels of Astronomy* [@proctor1896] shows the school's idiom between Pico and
+  the modern test; imported as a PD library at `grammars/proctor-skeptical-astrology/`
+  [@web_ecoschemas].
 - Figures for Phase 3: Forer (d. 2000), Gauquelin (d. 1991), Carlson (d. 2013 — verify
   before use; confidence: low on the death date, which only matters for the naming rule).
 

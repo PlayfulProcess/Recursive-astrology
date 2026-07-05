@@ -47,6 +47,10 @@ psychological astrology is unthinkable without it.
 - **Leo's popular manuals and *Modern Astrology*** — the mass-market machinery; cite via
   Curry/Campion until individual titles get verified `texts/` entries [@curry1992;
   @campion2009].
+- **The imported Leo library** — `grammars/alan-leo/` compiles interpretations from
+  *Astrology for All*, *The Art of Synthesis*, and *How to Judge a Nativity* (all pre-1917,
+  PD) via the recursive.eco-schemas commons [@web_ecoschemas] — the revival speaking in its
+  own words on this site.
 - Figures for Phase 3: Alan Leo (d. 1917), and around him Sepharial (Walter Gorn Old,
   d. 1929) at confidence: medium pending verification. All dead; naming rule satisfied.
 

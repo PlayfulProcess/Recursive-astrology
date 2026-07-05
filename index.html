@@ -56,6 +56,15 @@
   <p class="note" id="fallback" hidden></p>
 
   <div class="note">
+    <b>The voices' own libraries</b> — three public-domain source grammars, each tradition speaking in its
+    own words (never as prediction or command):
+    <a href="?grammar=tetrabiblos-ashmand">Ptolemy — Tetrabiblos (Ashmand, 1822)</a> ·
+    <a href="?grammar=alan-leo">Alan Leo — the Theosophical revival</a> ·
+    <a href="?grammar=proctor-skeptical-astrology">Proctor — the skeptical Victorian (1896)</a> ·
+    <a href="?grammar=historiographies-of-astrology">back to the historiographies</a>
+  </div>
+
+  <div class="note">
     <b>This whole page is one small HTML file reading one JSON grammar.</b> No backend, no build step.
     The data is the point: <code>grammars/historiographies-of-astrology/grammar.json</code> is the library,
     and every view has an evidence dossier under <code>research/</code>. See
@@ -72,7 +81,9 @@
 </dialog>
 
 <script>
-const GRAMMAR_URL = 'grammars/historiographies-of-astrology/grammar.json';
+const slug = (new URLSearchParams(location.search).get('grammar') || 'historiographies-of-astrology')
+  .replace(/[^a-z0-9-]/g, '');
+const GRAMMAR_URL = `grammars/${slug}/grammar.json`;
 const $ = s => document.querySelector(s);
 let ITEMS = [];
 
