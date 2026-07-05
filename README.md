@@ -1,34 +1,39 @@
-# The Recursive Astrology — a seed
+# The Recursive Astrology
 
-This is a **seed**: a self-contained starter for the astrology counterpart of
-[The Recursive Tarot](https://tarot.recursive.eco). It is the **same creed and method, a different
-domain** — a static, backend-free site that turns a folder of JSON into a browsable library of the
-*historiographical views of astrology*, held honestly to the record and autonomy-preserving
-throughout.
+The astrology counterpart of [The Recursive Tarot](https://tarot.recursive.eco) — the **same creed
+and method, a different domain**. A static, backend-free site that turns a folder of JSON into a
+browsable library of the *historiographical views of astrology*: the eras and stances through which
+humans have read meaning into the sky, each presented faithfully in its own terms and held honestly
+to the record.
 
 Where the tarot library asks you to *relate to the card, never obey it*, this one asks you to **read
 the sky to know yourself, not to be told your fate** — a chart is a mirror and a calendar, never a
 command. And the subject here is not how to cast a chart but the **history of the practice**: the
-five-thousand-year record of humans reading meaning *into* the sky, each tradition presented
-faithfully in its own terms.
+five-thousand-year record of humans reading meaning *into* the sky.
 
-> **This repo is itself a Rung 6/7 move.** In the contribution ladder of the parent project, Rung 6
-> teaches you to make your own *grammars* and Rung 7 to make your own *site* to show them. This seed
-> is a whole commons **founded from** the tarot one — the method taken home and pointed at a new
-> subject. If it grows, it becomes its own repo (`recursive-astrology`-ish), sibling to the tarot.
+> **This repo is itself a Rung 6/7 move.** In the parent project's contribution ladder, Rung 6
+> teaches you to make your own *grammars* and Rung 7 to make your own *site* to show them. This
+> whole commons was **founded from** the tarot one — the method taken home and pointed at a new
+> subject. The founding seed shipped in the parent's PR #36; the roadmap it travels with is
+> [`PLAN.md`](PLAN.md).
 
-## What's in the box
+## What's here
 
 ```
 recursive-astrology/
 ├── index.html                                       reads one grammar and renders it as cards
 ├── theme.css                                        the single source of colour (light only)
-├── voices.json                                      the creed, translated — shared_intention + 3 voices
+├── voices.json                                      the creed — shared_intention + 3 voices
 ├── grammars/
 │   └── historiographies-of-astrology/
 │       └── grammar.json                             the library: 10 views + 3 pattern groupings
+├── research/                                        the evidence wing (dossiers are the source of truth)
+│   ├── SCHEMA.md                                    how a dossier is written
+│   ├── bibliography.bib                             every citable source, one place
+│   └── views/<slug>.md                              one dossier per view, claims cited [@key]
 ├── check.py                                         the pre-commit gate, zero dependencies
-├── CLAUDE.md                                         the rules of this commons (the creed is the spine)
+├── PLAN.md                                          the founding plan & phased roadmap
+├── CLAUDE.md                                        the rules of this commons (the creed is the spine)
 ├── GRAMMAR_FORMAT.md                                the canonical shape of a grammar
 └── README.md                                        this file
 ```
@@ -36,16 +41,16 @@ recursive-astrology/
 Everything is plain HTML, one CSS file, and JSON. No build step, no framework, no server in
 production. GitHub Pages serves it as-is.
 
-**No images, on purpose.** Every item is imageless. Honest sourcing of public-domain star charts and
-plates is a later, separate job — an honest gap beats a wrong picture. See `CLAUDE.md` for the full
-sourcing guardrails (never invent a citation, hedge contested claims, flag paraphrase as paraphrase).
+**No images, on purpose (for now).** Every item is imageless. Honest sourcing of public-domain star
+charts and plates is a later, separate phase (`PLAN.md` §4 — Urania's Mirror first) — an honest gap
+beats a wrong picture. See `CLAUDE.md` for the full sourcing guardrails (never invent a citation,
+hedge contested claims, flag paraphrase as paraphrase).
 
 ## The first hour
 
 **1. See it work (2 min).** Browsers block `file://` fetches, so open it over a tiny local server:
 
 ```bash
-cd recursive-astrology
 python -m http.server 8091
 # now visit http://localhost:8091/
 ```
@@ -61,22 +66,23 @@ tradition's own terms), sometimes `In its own words` (a verifiable line or a fla
 no page numbers). The last three items are **patterns** — they hold no view of their own; they have
 `composite_of: [ids]` and make a historiographical shape visible across several views.
 
-**3. Add a view (20 min).** Copy an existing item, give it a new `id`, and fill the sections for a
-tradition or era you know. Keep the creed: read the record, don't predict; hedge what's contested
-(`metadata.confidence: "low"`); name only sources you're sure of. Reload the page.
+**3. Read a dossier (10 min).** Each view has an evidence file under `research/views/`. The dossier
+is the source of truth; the grammar is the display. Claims are cited `[@key]` into
+`research/bibliography.bib` and confidence-flagged. `research/SCHEMA.md` explains the format.
 
-**4. Check it (1 min).**
+**4. Add or improve a view (20 min).** Copy an existing item, give it a new `id`, and fill the
+sections for a tradition or era you know. Keep the creed: read the record, don't predict; hedge
+what's contested (`metadata.confidence: "low"`); name only sources you're sure of. Reload the page.
+
+**5. Check it (1 min).**
 
 ```bash
 python check.py
 # → OK: all checks passed (1 grammar)
 ```
 
-`check.py` catches the handful of mistakes that stop a grammar from loading. Keep it green.
-
-**5. Put it on the web (15 min).** Create a GitHub repo, push this folder, then **Settings → Pages →
-Deploy from a branch → (your default branch) / root**. In a minute your library is live at
-`https://<you>.github.io/<repo>/`. Share the link.
+`check.py` catches the handful of mistakes that stop a grammar from loading. Keep it green — it must
+pass before every commit.
 
 ## The three voices
 
@@ -99,17 +105,16 @@ grammar's `The record`), never in the short `intention`. Every voice obeys the o
 1. **All colour lives in `theme.css`.** One `:root` of tokens, linked everywhere, light only. Never
    redeclare a colour in a page, never add a dark-mode block. To recolour the whole site, edit that
    one file.
-2. **The data outlives the platform.** The viewer is deliberately thin. If this starter vanished
-   tomorrow, `grammars/*.json` would still be a clean, portable, public record of the subject. That's
-   the point.
+2. **The data outlives the platform.** The viewer is deliberately thin. If this site vanished
+   tomorrow, `grammars/*.json` and `research/` would still be a clean, portable, public record of
+   the subject. That's the point.
 
 ## Where this connects
 
-- **The parent project:** [The Recursive Tarot](https://tarot.recursive.eco) — this seed's sibling,
+- **The parent project:** [The Recursive Tarot](https://tarot.recursive.eco) — this repo's sibling,
   same creed, and the source of the grammar format and the theme.
 - **The ladder you're on:** [Ways to Contribute](https://tarot.recursive.eco/pages/course-viewer.html?course=how-to-contribute)
   — Rungs 1–5 tend an existing commons; Rung 6 makes your own grammars; Rung 7 makes your own site.
-  This whole seed is a Rung 6/7 move: a new commons founded from the tarot one.
 - **Go further — the live app:** grammars here can also open in [recursive.eco](https://recursive.eco)
   for a live oracle, AI readings, and community editing. The parent's
   `docs/RECURSIVE-ECO-INTEGRATION.md` shows how a repo wires to a channel.

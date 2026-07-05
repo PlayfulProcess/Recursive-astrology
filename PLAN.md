@@ -4,6 +4,11 @@
 The builder forks/copies this into a new repo, opens a fresh Claude session there, and pastes the
 prompt in §6. Everything a first session needs is in this folder + this plan.*
 
+> **Status (2026-07-05):** Phase 0 is done — the seed was promoted to the root of
+> [PlayfulProcess/Recursive-astrology](https://github.com/PlayfulProcess/Recursive-astrology)
+> (empty-repo start, path (b)), `check.py` green, paths in this plan rewritten to root.
+> Phase 1 (the research spine) is underway. See `plan/HANDOVER-next-session.md` for live state.
+
 ---
 
 ## 1. What this repo is (one paragraph)
@@ -107,11 +112,11 @@ them or fetch raw if public):**
 
 > You are founding **recursive-astrology** — the astrology counterpart of the recursive-tarot
 > project: same creed, same method, different domain. START by reading, in this order:
-> `seeds/recursive-astrology/PLAN.md` (this plan — it is your roadmap), then the seed's `CLAUDE.md`,
+> `PLAN.md` (this plan — it is your roadmap), then the seed's `CLAUDE.md`,
 > `README.md`, `voices.json`, and `grammars/historiographies-of-astrology/grammar.json`.
 >
 > **Phase 0 — Founding (do first).** Detect the starting shape: (a) if this repo is a fork/copy of
-> recursive-tarot, promote `seeds/recursive-astrology/` to the repo ROOT (git mv its contents up),
+> recursive-tarot, promote the seed folder to the repo ROOT (git mv its contents up),
 > then remove the tarot-specific content (tarot/, viewers/, pages/, course/, research/, print/,
 > recording/, books/, the tarot scripts and docs — keep only what this plan's §2 architecture
 > table names), and rewrite the repo README from the seed's README; (b) if the repo already

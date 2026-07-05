@@ -46,7 +46,7 @@
 <body>
 <div class="wrap">
   <header class="hero">
-    <div class="kicker">A library like this one · starter</div>
+    <div class="kicker">The Recursive Astrology · a library, held to the record</div>
     <h1 id="g-name">Loading…</h1>
     <p class="lede" id="g-desc"></p>
   </header>
@@ -57,9 +57,11 @@
 
   <div class="note">
     <b>This whole page is one small HTML file reading one JSON grammar.</b> No backend, no build step.
-    Edit <code>grammars/historiographies-of-astrology/grammar.json</code> — or drop in a grammar about your own subject —
-    and reload. When it's yours, turn on GitHub Pages and it's live. See <a href="README.md">README.md</a>
-    for the first hour.
+    The data is the point: <code>grammars/historiographies-of-astrology/grammar.json</code> is the library,
+    and every view has an evidence dossier under <code>research/</code>. See
+    <a href="https://github.com/PlayfulProcess/Recursive-astrology#readme">the README</a> for the first hour,
+    and <a href="https://tarot.recursive.eco">The Recursive Tarot</a> for this library's parent — same creed,
+    different domain.
   </div>
 </div>
 
@@ -81,7 +83,7 @@ function firstProse(sections){
 function render(g){
   $('#g-name').textContent = g.name;
   $('#g-desc').textContent = g.description || '';
-  document.title = g.name + ' — starter';
+  document.title = g.name + ' — The Recursive Astrology';
   ITEMS = g.items || [];
   const grid = $('#grid');
   grid.innerHTML = '';

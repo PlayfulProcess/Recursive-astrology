@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Minimal grammar gate for a starter site — run before you commit.
 
-Walks template/grammars/*/grammar.json (or pass paths as args), validates each
+Walks grammars/*/grammar.json (or pass paths as args), validates each
 against the canonical shape in GRAMMAR_FORMAT.md, and fails loud on the three
 mistakes that keep a grammar from loading. Zero dependencies.
 
