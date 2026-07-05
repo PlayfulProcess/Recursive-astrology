@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Recursive Astrology — historiographies of astrology</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  /* Layout only — every colour comes from theme.css (the one source). Do not add colour tokens here. */
+  html,body{margin:0;background:var(--bg);color:var(--ink);color-scheme:light;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  header.hero{padding:14px 0 8px}
+  .kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+  h1{font-family:"Fraunces",Georgia,serif;font-size:30px;margin:6px 0 8px;color:var(--ink)}
+  .lede{color:var(--muted);font-size:15.5px;max-width:70ch}
+  .lede code{background:var(--chip,#f1ece1);padding:1px 5px;border-radius:5px;font-size:.9em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:26px}
+  .card{display:block;text-align:left;background:var(--panel);border:1px solid var(--line);
+    border-radius:13px;padding:15px 16px;cursor:pointer;font:inherit;color:inherit;
+    transition:transform .15s, border-color .15s, box-shadow .15s}
+  .card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 28px rgba(0,0,0,.10)}
+  .card .cat{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .card b{display:block;font-family:"Fraunces",Georgia,serif;font-size:17px;margin:4px 0 6px}
+  .card .snip{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .card .members{font-size:11.5px;color:var(--accent);margin-top:8px}
+  /* detail */
+  dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);
+    max-width:640px;width:calc(100% - 32px);padding:0}
+  dialog::backdrop{background:rgba(20,15,8,.42)}
+  .dhead{padding:20px 22px 4px}
+  .dbody{padding:2px 22px 22px}
+  .dhead .cat{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+  .dhead h2{font-family:"Fraunces",Georgia,serif;margin:6px 0 0;font-size:23px}
+  .sec{margin-top:16px}
+  .sec h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:0 0 4px}
+  .sec p{margin:0;font-size:15px;color:var(--ink)}
+  .close{position:sticky;top:0;float:right;margin:12px 14px 0 0;border:0;background:none;font-size:22px;
+    line-height:1;cursor:pointer;color:var(--muted)}
+  .note{margin-top:34px;padding:16px 18px;border:1px dashed var(--line);border-radius:12px;
+    background:var(--chip,#f7f3ea);font-size:13.5px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">A library like this one · starter</div>
+    <h1 id="g-name">Loading…</h1>
+    <p class="lede" id="g-desc"></p>
+  </header>
+
+  <main id="grid" class="grid" aria-live="polite"></main>
+
+  <p class="note" id="fallback" hidden></p>
+
+  <div class="note">
+    <b>This whole page is one small HTML file reading one JSON grammar.</b> No backend, no build step.
+    Edit <code>grammars/historiographies-of-astrology/grammar.json</code> — or drop in a grammar about your own subject —
+    and reload. When it's yours, turn on GitHub Pages and it's live. See <a href="README.md">README.md</a>
+    for the first hour.
+  </div>
+</div>
+
+<dialog id="detail">
+  <button class="close" aria-label="Close" onclick="detail.close()">×</button>
+  <div class="dhead"><div class="cat" id="d-cat"></div><h2 id="d-name"></h2></div>
+  <div class="dbody" id="d-sections"></div>
+</dialog>
+
+<script>
+const GRAMMAR_URL = 'grammars/historiographies-of-astrology/grammar.json';
+const $ = s => document.querySelector(s);
+let ITEMS = [];
+
+function firstProse(sections){
+  const v = Object.values(sections || {})[0] || '';
+  return v.replace(/[*`_#>]/g,'');
+}
+function render(g){
+  $('#g-name').textContent = g.name;
+  $('#g-desc').textContent = g.description || '';
+  document.title = g.name + ' — starter';
+  ITEMS = g.items || [];
+  const grid = $('#grid');
+  grid.innerHTML = '';
+  ITEMS.forEach((it, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'card';
+    const members = it.composite_of
+      ? `<div class="members">▹ groups ${it.composite_of.length} item${it.composite_of.length>1?'s':''}</div>` : '';
+    btn.innerHTML = `<span class="cat">${it.category || 'item'}</span>`
+      + `<b>${it.name}</b>`
+      + `<span class="snip">${firstProse(it.sections)}</span>${members}`;
+    btn.onclick = () => open(i);
+    grid.appendChild(btn);
+  });
+}
+function mdLite(s){
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>');
+}
+function open(i){
+  const it = ITEMS[i];
+  $('#d-cat').textContent = it.category || '';
+  $('#d-name').textContent = it.name;
+  const body = $('#d-sections');
+  body.innerHTML = '';
+  Object.entries(it.sections || {}).forEach(([label, text]) => {
+    const div = document.createElement('div');
+    div.className = 'sec';
+    div.innerHTML = `<h3>${label}</h3><p>${mdLite(text)}</p>`;
+    body.appendChild(div);
+  });
+  $('#detail').showModal();
+}
+
+fetch(GRAMMAR_URL)
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(render)
+  .catch(err => {
+    const fb = $('#fallback');
+    fb.hidden = false;
+    fb.innerHTML = '<b>Could not load the grammar.</b> Browsers block <code>file://</code> fetches, '
+      + 'so open this over a tiny local server instead: run <code>python -m http.server 8000</code> '
+      + 'in this folder, then visit <code>http://localhost:8000/</code>. (On GitHub Pages it just works.)';
+    $('#g-name').textContent = 'A library like this one';
+  });
+</script>
+</body>
+</html>
