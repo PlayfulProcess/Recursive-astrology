@@ -45,6 +45,15 @@
   /* ── hero CTA row (chart viewer) ── */
   .cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 
+  /* ── three ways in: the site's other pages, up front so they're discoverable ── */
+  .ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:26px 0 0}
+  .way{display:block;background:var(--panel);border:1px solid var(--line);border-radius:13px;
+    padding:17px 18px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s,box-shadow .15s}
+  .way:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 28px rgba(0,0,0,.10)}
+  .way .wicon{color:var(--accent);margin-bottom:8px}
+  .way h3{font-family:"Fraunces",Georgia,serif;font-size:17px;margin:0 0 6px;color:var(--ink)}
+  .way p{font-size:13px;color:var(--muted);margin:0;line-height:1.5}
+
   /* ── gallery: every grammar, browsable with working preview links ── */
   .gallery{margin-top:44px}
   .gallery h2{font-size:21px;margin:0 0 4px;font-family:"Fraunces",Georgia,serif;color:var(--ink)}
@@ -65,6 +74,8 @@
 </style>
 </head>
 <body>
+<script src="site-header.js?v=1"></script>
+<site-header active="home"></site-header>
 <div class="wrap">
   <header class="hero">
     <div class="kicker">The Recursive Astrology · a library, held to the record</div>
@@ -74,6 +85,38 @@
       <a class="eco-chip" href="viewer/astrology-viewer.html">Chart viewer — cast &amp; read your own chart ↗</a>
     </div>
   </header>
+
+  <nav class="ways" aria-label="Ways into this site">
+    <a class="way" href="wheel.html">
+      <svg class="wicon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3v18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4" />
+      </svg>
+      <h3>The Wheel</h3>
+      <p>The twelve houses as a chart-shaped casting — click a house, read your own aspect, never a random draw.</p>
+    </a>
+    <a class="way" href="lenses.html">
+      <svg class="wicon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
+      </svg>
+      <h3>Lenses</h3>
+      <p>Pick one house or planet and read how four traditions treat it, side by side, in order.</p>
+    </a>
+    <a class="way" href="viewer/astrology-viewer.html">
+      <svg class="wicon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M17 4a7 7 0 1 0 3 11 5.6 5.6 0 0 1-3-11z" /><path d="M8.5 4.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z" />
+      </svg>
+      <h3>Chart Viewer</h3>
+      <p>Calculate your own natal chart — planets, houses, aspects — and save it, signed in.</p>
+    </a>
+    <a class="way" href="#all-grammars">
+      <svg class="wicon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="4" width="7" height="7" rx="1.2" /><rect x="13" y="4" width="7" height="7" rx="1.2" />
+        <rect x="4" y="13" width="7" height="7" rx="1.2" /><rect x="13" y="13" width="7" height="7" rx="1.2" />
+      </svg>
+      <h3>All Grammars</h3>
+      <p>Every voice library and casting in this repo, browsable below — with links to Cards, Study, and Tree.</p>
+    </a>
+  </nav>
 
   <main id="grid" class="grid" aria-live="polite"></main>
 
@@ -108,8 +151,8 @@
 
   <section class="gallery" id="all-grammars" aria-labelledby="all-grammars-h">
     <h2 id="all-grammars-h">Browse every grammar</h2>
-    <p class="gsub">Every grammar in this repo, with working preview links — Cards and Study open on
-      <a href="https://recursive.eco">recursive.eco</a>, Play opens the live oracle on
+    <p class="gsub">Every grammar in this repo, with working preview links — Cards, Study, and Tree all open on
+      <a href="https://recursive.eco">recursive.eco</a>, Open in app opens the live oracle on
       <a href="https://flow.recursive.eco">flow.recursive.eco</a>, and Raw JSON is the file itself, right here.
       Want one house or planet read across traditions instead? See <a href="lenses.html">Lenses</a>.</p>
 
@@ -128,6 +171,9 @@
     </div>
   </section>
 </div>
+
+<script src="site-footer.js?v=1"></script>
+<site-footer></site-footer>
 
 <dialog id="detail">
   <button class="close" aria-label="Close" onclick="detail.close()">×</button>
@@ -248,6 +294,7 @@ fetch(GRAMMAR_URL)
       links = [
         chip(`https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=${uuid}`, 'Cards'),
         chip(`https://recursive.eco/pages/study-viewer.html?type=astrology&id=${uuid}`, 'Study'),
+        chip(`https://recursive.eco/pages/tree-viewer.html?type=astrology&id=${uuid}`, 'Tree'),
         chip(`https://flow.recursive.eco/play?id=${uuid}`, 'Open in app'),
         plainLink(rawHref, 'Raw JSON'),
       ].join('');

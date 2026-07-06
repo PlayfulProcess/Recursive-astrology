@@ -1134,7 +1134,19 @@
             position: relative;
         }
 
+        /* Back-to-site strip (plain markup, see body comment) */
+        #ra-backbar {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            padding: 9px 16px; background: #fbf9f3; border-bottom: 1px solid #d8d2c6;
+            font: 600 13px Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+        #ra-backbar a { color: #6b6457; text-decoration: none; }
+        #ra-backbar a:first-child { color: #9a7322; }
+        #ra-backbar a:hover { color: #9a7322; }
+        #ra-backbar .sep { color: #d8d2c6; }
+
         /* Embed mode - hide form elements but KEEP chart wheel */
+        body.embed-mode #ra-backbar,
         body.embed-mode site-header,
         body.embed-mode site-footer,
         body.embed-mode .astro-header,
@@ -1213,6 +1225,7 @@
             background: rgba(139, 92, 246, 0.3);
         }
         /* Hide header elements when loaded in an iframe */
+        body.in-iframe #ra-backbar { display: none !important; }
         body.in-iframe site-header { display: none !important; }
         body.in-iframe .astro-header { display: none !important; }
     </style>
@@ -1227,7 +1240,18 @@
     </script>
 </head>
 <body class="text-white">
-    <!-- Site Header -->
+    <!-- Back to The Recursive Astrology — plain markup, no custom element, so it can never
+         collide with site-shell-inline.js's own <site-header> definition (the platform header
+         below, with Sign In / My Charts, is untouched). Solves "stuck in the chart viewer with
+         no way back to wheel.html / lenses.html / the grammar catalog." -->
+    <div id="ra-backbar" role="navigation" aria-label="Back to The Recursive Astrology">
+        <a href="../index.html">&larr; The Recursive Astrology</a>
+        <span class="sep" aria-hidden="true">&middot;</span>
+        <a href="../wheel.html">Wheel</a>
+        <a href="../lenses.html">Lenses</a>
+        <a href="../index.html#all-grammars">Grammars</a>
+    </div>
+    <!-- Site Header (platform nav — Journal / Create / Library — defined by site-shell-inline.js below) -->
     <site-header></site-header>
 
     <!-- Main Content -->
@@ -1713,7 +1737,7 @@
         </div>
     </div>
 
-    <!-- Site Footer -->
+    <!-- Site Footer (platform footer — defined by site-shell-inline.js below) -->
     <site-footer></site-footer>
 
     <!-- Component Scripts -->
