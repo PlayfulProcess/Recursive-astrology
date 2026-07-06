@@ -2934,7 +2934,11 @@
                     }
                 }
 
-                // Handle grammar selection from parent (Flow app)
+                // Handle grammar selection from parent (Flow app). This is the
+                // fix point for "switching grammars changes nothing on screen":
+                // selectAstrologySchema() now fetches (or serves from cache) the
+                // new grammar AND re-renders any currently-open detail modal —
+                // see selectAstrologySchema / refreshOpenDetailModal below.
                 if (event.data?.type === 'astrology-select-grammar') {
                     const { grammarId, grammarType } = event.data;
                     if (grammarId) {
@@ -4400,21 +4404,79 @@
             updateHouseSelectionUI();
         }
 
+        // Merge schema (grammar) data with built-in defaults — only non-empty
+        // schema values override built-ins (normalization creates empty strings
+        // for missing sections, which would otherwise wipe built-in stories).
+        // Shared by showPlanetDetails / showAspectDetails / showHouseDetails.
+        function mergeNonEmpty(base, override) {
+            if (!override) return { ...base };
+            const result = { ...base };
+            for (const [k, v] of Object.entries(override)) {
+                if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) {
+                    result[k] = v;
+                }
+            }
+            return result;
+        }
+
         function showHouseDetails(houseNumber, sign, house) {
+            // Store for refresh after schema change (grammar switch re-renders
+            // whichever modal is currently open — see refreshOpenDetailModal()).
+            lastDetailShown = { type: 'house', args: [houseNumber, sign, house] };
+
+            // Check for schema overrides - look for this house and its cusp sign
+            // in the currently loaded grammar (mirrors the planet-modal lookup).
+            let schemaHouse = null;
+            let schemaSign = null;
+            if (astrologySchemaItems) {
+                const houses = astrologySchemaItems.houses || astrologySchemaItems.items?.filter(i => i.type === 'house') || [];
+                schemaHouse = houses.find(h =>
+                    h.number === houseNumber ||
+                    parseInt(h.number) === parseInt(houseNumber) ||
+                    h.metadata?.house === houseNumber ||
+                    parseInt(h.name?.match(/(\d+)/)?.[1]) === parseInt(houseNumber)
+                );
+
+                const signNameLower = sign.name?.toLowerCase();
+                const signs = astrologySchemaItems.signs || astrologySchemaItems.items?.filter(i => i.type === 'sign') || [];
+                schemaSign = signs.find(s =>
+                    s.name?.toLowerCase() === signNameLower ||
+                    s.english_name?.toLowerCase() === signNameLower ||
+                    s.metadata?.english_name?.toLowerCase() === signNameLower
+                );
+            }
+            const isFromGrammar = !!(schemaHouse || schemaSign);
+            const mergedHouse = mergeNonEmpty(house, schemaHouse);
+            const mergedSign = mergeNonEmpty(sign, schemaSign);
+
+            // Name the selected grammar so switching is visible on screen even
+            // when it has no entry for this house/sign combination.
+            let schemaIndicator = '';
+            if (loadedGrammars.length > 1) {
+                schemaIndicator = buildCarouselNavHTML();
+            } else if (astrologySchemaItems) {
+                schemaIndicator = isFromGrammar
+                    ? `<div class="text-xs text-gray-500/50 mb-2">Using: ${astrologySchemaItems.name || 'Custom Grammar'}</div>`
+                    : `<div class="text-xs text-gray-500/50 mb-2 italic">No entry for this house in "${astrologySchemaItems.name || 'the selected grammar'}" — showing standard commentary</div>`;
+            }
+
             const content = document.getElementById('planet-modal-content');
             content.innerHTML = `
                 <div class="text-center mb-6">
                     <span class="text-6xl text-blue-400">${houseNumber}</span>
-                    <h2 class="text-2xl font-semibold" style="color: var(--astro-gold);">${house.name}</h2>
-                    <div class="text-purple-400 text-sm mt-1">${house.archetype || ''}</div>
-                    <div class="text-gray-400 text-sm">${house.domain}</div>
+                    <h2 class="text-2xl font-semibold" style="color: var(--astro-gold);">${mergedHouse.name}</h2>
+                    <div class="text-purple-400 text-sm mt-1">${mergedHouse.archetype || ''}</div>
+                    <div class="text-gray-400 text-sm">${mergedHouse.domain}</div>
+                    ${schemaIndicator}
                 </div>
+
+                ${renderGrammarItemImage(schemaHouse) || renderGrammarItemImage(schemaSign)}
 
                 <!-- Sign on Cusp -->
                 <div class="planet-panel mb-4">
                     <div class="text-gray-400 text-sm mb-1">Sign on Cusp</div>
-                    <div class="text-lg">${sign.symbol} ${sign.name}</div>
-                    <div class="text-gray-500 text-sm">${sign.element} • ${sign.modality}</div>
+                    <div class="text-lg">${mergedSign.symbol} ${mergedSign.name}</div>
+                    <div class="text-gray-500 text-sm">${mergedSign.element} • ${mergedSign.modality}</div>
                 </div>
 
                 <!-- Disclaimer -->
@@ -4425,21 +4487,21 @@
                 <!-- House Story -->
                 <div class="mb-4">
                     <h3 class="text-sm uppercase tracking-wide text-purple-400 mb-2">The Domain</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">${house.story || ''}</p>
+                    <p class="text-gray-300 text-sm leading-relaxed">${mergedHouse.story || ''}</p>
                 </div>
 
                 <!-- Sign Lens -->
                 <div class="mb-4">
-                    <h3 class="text-sm uppercase tracking-wide text-purple-400 mb-2">${sign.name} Colors This House</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">${sign.story || ''}</p>
+                    <h3 class="text-sm uppercase tracking-wide text-purple-400 mb-2">${mergedSign.name} Colors This House</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">${mergedSign.story || ''}</p>
                 </div>
 
                 <!-- Reflection -->
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${house.question ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${house.question}</li>` : ''}
-                        ${sign.reframe ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${sign.reframe}</li>` : ''}
+                        ${mergedHouse.question ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${mergedHouse.question}</li>` : ''}
+                        ${mergedSign.reframe ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${mergedSign.reframe}</li>` : ''}
                     </ul>
                 </div>
             `;
@@ -4618,6 +4680,10 @@
         }
 
         function showAspectDetails(p1, p2, aspectInfo, orb) {
+            // Store for refresh after schema change (grammar switch re-renders
+            // whichever modal is currently open — see refreshOpenDetailModal()).
+            lastDetailShown = { type: 'aspect', args: [p1, p2, aspectInfo, orb] };
+
             // Notify parent window in embed mode
             notifyParentOfAspectClick({
                 planet1: p1.name,
@@ -4673,7 +4739,10 @@
                 if (isFromGrammar) {
                     schemaIndicator = `<div class="text-xs text-purple-400/50 mb-2">Using: ${astrologySchemaItems.name || 'Custom Grammar'}</div>`;
                 } else {
-                    schemaIndicator = `<div class="text-xs text-gray-500/50 mb-2 italic">Built-in interpretation — not in grammar</div>`;
+                    // Name the selected grammar even in the fallback case, so a
+                    // grammar switch is visibly reflected even when the newly
+                    // selected grammar has no entry for this aspect.
+                    schemaIndicator = `<div class="text-xs text-gray-500/50 mb-2 italic">No entry for this aspect in "${astrologySchemaItems.name || 'the selected grammar'}" — showing standard commentary</div>`;
                 }
             }
 
@@ -4699,6 +4768,8 @@
                     <div class="text-gray-400 text-sm mt-1">Orb: ${orb.toFixed(1)}°</div>
                     ${schemaIndicator}
                 </div>
+
+                ${renderGrammarItemImage(schemaAspect) || renderGrammarItemImage(schemaP1) || renderGrammarItemImage(schemaP2)}
 
                 <!-- Disclaimer -->
                 <div class="text-xs text-gray-500 italic mb-4 p-3 border border-gray-800 rounded-lg">
@@ -4768,6 +4839,7 @@
             lastPlanetKey = key;
             lastPlanetBody = body;
             lastPlanetInfo = planet;
+            lastDetailShown = { type: 'planet', args: [key, body, planet] };
 
             const signData = ZODIAC_SIGNS.find(s =>
                 s.name.toLowerCase() === body.Sign?.label?.toLowerCase()
@@ -4819,18 +4891,8 @@
 
             }
 
-            // Merge schema data with defaults — only non-empty schema values override built-ins
-            // (normalization creates empty strings for missing sections, which would wipe built-in stories)
-            function mergeNonEmpty(base, override) {
-                if (!override) return { ...base };
-                const result = { ...base };
-                for (const [k, v] of Object.entries(override)) {
-                    if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) {
-                        result[k] = v;
-                    }
-                }
-                return result;
-            }
+            // (mergeNonEmpty is defined once at module scope, above showHouseDetails,
+            // and shared across all three detail modals.)
             const p = mergeNonEmpty(planet, schemaPlanet);
             const sign = mergeNonEmpty(signData, schemaSign);
             const house = mergeNonEmpty(houseData, schemaHouse);
@@ -4848,12 +4910,16 @@
                 return `<span class="text-gray-600 text-[10px] ml-2">${shortGrammarName} · n/a</span>`;
             }
 
-            // Show carousel navigation when multiple grammars are loaded, otherwise show single grammar name
+            // Show carousel navigation when multiple grammars are loaded, otherwise show single grammar name.
+            // Name the grammar even in the "no entry" case, so a grammar switch is
+            // visibly reflected on screen even when it has nothing for this placement.
             let schemaIndicator = '';
             if (loadedGrammars.length > 1) {
                 schemaIndicator = buildCarouselNavHTML();
             } else if (astrologySchemaItems) {
-                schemaIndicator = `<div class="text-xs text-gray-500/50 mb-2">${grammarName}</div>`;
+                schemaIndicator = isFromGrammar
+                    ? `<div class="text-xs text-gray-500/50 mb-2">Using: ${grammarName}</div>`
+                    : `<div class="text-xs text-gray-500/50 mb-2 italic">No entry for this placement in "${grammarName || 'the selected grammar'}" — showing standard commentary</div>`;
             }
 
             // Build schema selector button if options are available
@@ -4875,6 +4941,8 @@
                     ${isRetrograde ? '<div class="text-red-400 text-sm mt-1">℞ Retrograde — inverted, internalized</div>' : ''}
                     ${schemaIndicator}
                 </div>
+
+                ${renderGrammarItemImage(schemaPlanet) || renderGrammarItemImage(schemaSign) || renderGrammarItemImage(schemaHouse)}
 
                 <!-- Placement Summary -->
                 <div class="planet-panel mb-4">
@@ -6534,6 +6602,18 @@
         let astrologySchemaItems = null; // Currently loaded schema data
         let astrologySchemaOptions = []; // Available schema options
         let selectedAstrologySchema = null;
+
+        // In-memory cache of fetched/normalized grammar documents, keyed by the
+        // "type:id" value string (e.g. "user:abc123"). Lets switching back to a
+        // grammar already viewed this session be instant (no re-fetch).
+        const astrologyGrammarCache = new Map();
+        let isGrammarSwitchLoading = false; // true while a (non-cached) grammar fetch is in flight
+
+        // Tracks whichever placement/aspect/house detail modal is currently open,
+        // so that switching grammars (via parent postMessage or the in-viewer
+        // selector) can re-render it in place instead of leaving stale content on
+        // screen. { type: 'planet'|'aspect'|'house', args: [...] } or null.
+        let lastDetailShown = null;
 
         // Multi-grammar carousel state
         let loadedGrammars = []; // Array of { id, name, data } for comparison
@@ -8287,6 +8367,26 @@
             return roles[cat] || null;
         }
 
+        // Render a matched grammar item's image (if it has one) for the
+        // placement/aspect detail modal. Grammars may carry image_url either
+        // top-level or under metadata.image_url (e.g. Wikimedia Special:FilePath
+        // URLs). Capped at ~200px tall, letterboxed, theme-correct via the
+        // existing bg-gray-900/border-gray-800 token mapping. Fails gracefully:
+        // a broken/blocked image just hides itself instead of showing a broken-
+        // image icon.
+        function renderGrammarItemImage(item) {
+            const url = item && (item.image_url || item.metadata?.image_url);
+            if (!url || typeof url !== 'string') return '';
+            const safeUrl = url.replace(/"/g, '&quot;');
+            return `
+                <div class="mb-3 text-center">
+                    <img src="${safeUrl}" alt="" loading="lazy"
+                         style="max-height:200px;max-width:100%;width:auto;object-fit:contain;display:inline-block;border-radius:0.5rem;"
+                         class="border border-gray-800 bg-gray-900 p-1"
+                         onerror="this.parentElement.style.display='none';">
+                </div>`;
+        }
+
         // Normalize astrology data - convert various formats to consistent structure
         // Now supports _category_roles and _section_roles for field-agnostic grammars
         function normalizeAstrologyData(data) {
@@ -8466,19 +8566,35 @@
             return data;
         }
 
-        // Select an astrology schema
+        // Select an astrology schema. Fetches (or serves from the in-memory cache)
+        // the grammar document, THEN re-renders whatever is currently on screen
+        // (an open placement/aspect/house detail modal) so the switch is visible
+        // immediately — this is the fix for "switching grammars changes nothing":
+        // the old code only ever stored the new id/data and never re-rendered.
         async function selectAstrologySchema(val) {
             if (!val) {
                 astrologySchemaItems = null;
                 selectedAstrologySchema = null;
                 selectedAstrologyDocId = null;
+                refreshOpenDetailModal();
                 return;
             }
             selectedAstrologySchema = val;
+
+            // Instant path: we've already loaded this grammar this session.
+            if (astrologyGrammarCache.has(val)) {
+                const cached = astrologyGrammarCache.get(val);
+                astrologySchemaItems = cached.items;
+                selectedAstrologyDocId = cached.docId;
+                refreshOpenDetailModal();
+                return;
+            }
+
             selectedAstrologyDocId = null;
             const [type, id] = val.split(':');
             if (!supabaseClient) return;
 
+            setGrammarSwitchLoading(true);
             try {
                 if (type === 'user') {
                     const { data } = await supabaseClient.from('user_documents').select('document_data').eq('id', id).single();
@@ -8551,7 +8667,44 @@
             } catch (err) {
                 console.error('[Astrology] Exception fetching schema:', err);
                 astrologySchemaItems = null;
+            } finally {
+                // Cache this outcome (including a "not found" null) so switching
+                // back to the same grammar later is instant and doesn't re-hit
+                // Supabase or re-show the "could not be loaded" alert.
+                astrologyGrammarCache.set(val, { items: astrologySchemaItems, docId: selectedAstrologyDocId });
+                setGrammarSwitchLoading(false);
+                refreshOpenDetailModal();
             }
+        }
+
+        // Brief loading state while a (non-cached) grammar is being fetched.
+        // Only visible if a detail modal is currently open — otherwise there is
+        // nothing on screen yet for the new grammar to affect.
+        function setGrammarSwitchLoading(loading) {
+            isGrammarSwitchLoading = loading;
+            const modal = document.getElementById('planet-modal');
+            const content = document.getElementById('planet-modal-content');
+            if (!loading || !modal || !content || !modal.classList.contains('active')) return;
+            content.innerHTML = `
+                <div class="text-center py-10">
+                    <div class="loading-spinner mx-auto mb-3"></div>
+                    <p class="text-gray-400 text-sm">Loading grammar…</p>
+                </div>
+            `;
+        }
+
+        // Re-render whichever detail modal (planet / aspect / house) is currently
+        // open, using the now-current astrologySchemaItems. Called after every
+        // grammar switch — from the parent's postMessage, the in-viewer schema
+        // dropdown, and the compare-grammar selector — so all three paths behave
+        // identically instead of only some of them refreshing the view.
+        function refreshOpenDetailModal() {
+            const modal = document.getElementById('planet-modal');
+            if (!modal || !modal.classList.contains('active') || !lastDetailShown) return;
+            const { type, args } = lastDetailShown;
+            if (type === 'planet') showPlanetDetails(...args);
+            else if (type === 'aspect') showAspectDetails(...args);
+            else if (type === 'house') showHouseDetails(...args);
         }
 
         // Store last planet key for refresh after schema change
@@ -8658,14 +8811,13 @@
 
         // Select schema and refresh the planet detail
         async function selectSchemaAndRefresh(val) {
+            // selectAstrologySchema() now refreshes whichever detail modal is
+            // open on its own (planet, aspect, or house — see
+            // refreshOpenDetailModal), so no separate re-show call is needed here.
             await selectAstrologySchema(val);
             // Close the dropdown
             const dropdown = document.querySelector('.schema-change-dropdown');
             if (dropdown) dropdown.remove();
-            // Refresh the planet modal if we have stored planet data
-            if (lastPlanetKey && lastPlanetBody && lastPlanetInfo) {
-                showPlanetDetails(lastPlanetKey, lastPlanetBody, lastPlanetInfo);
-            }
         }
 
         // Hook into chart calculation to also show HD toggle
