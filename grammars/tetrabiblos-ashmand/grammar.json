@@ -1,6 +1,7 @@
 {
   "name": "Ptolemy's Tetrabiblos",
   "description": "Classical Western astrology based on Claudius Ptolemy's Tetrabiblos (c. 150 CE), the foundational text that systematized Greek, Egyptian, and Babylonian astrological knowledge. Each item includes direct quotes from the Ashmand translation. — Source: Ptolemy, *Tetrabiblos*, trans. J. M. Ashmand (1822), public domain (Project Gutenberg #70850). Imported verbatim from the recursive.eco-schemas commons; presented here as the Ptolemy voice's own long-form library. Under this site's creed it is a historical voice speaking in its own terms — a mirror and a calendar, never a prediction or a command.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ptolemy_16century.jpg?width=800",
   "grammar_type": "astrology",
   "attribution": {
     "source_name": "Tetrabiblos, or Quadripartite",

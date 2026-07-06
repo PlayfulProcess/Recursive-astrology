@@ -1,6 +1,7 @@
 {
   "name": "Alan Leo's Astrology",
   "description": "Classical astrological interpretations from Alan Leo (1860-1917), the father of modern astrology. Drawn from Astrology for All, The Art of Synthesis, and How to Judge a Nativity. — Source: the works of Alan Leo (1860–1917): *Astrology for All*, *The Art of Synthesis*, and *How to Judge a Nativity*; public domain (Leo died 1917). Imported verbatim from the recursive.eco-schemas commons; presented here as the Theosophical revival speaking in its own terms — character over event, growth over fate — never as prediction or command.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800",
   "grammar_type": "astrology",
   "author": "Alan Leo (1860-1917)",
   "source": "Astrology for All, The Art of Synthesis, How to Judge a Nativity",

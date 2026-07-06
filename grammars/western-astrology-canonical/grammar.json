@@ -18,6 +18,7 @@
   },
   "name": "Western Astrology — Canonical",
   "description": "A canonical Western astrology grammar covering planets, signs, houses, and aspects with archetypal interpretations. A living document — contribute at github.com/PlayfulProcess/recursive.eco-schemas — Adopted as this channel's flagship interpretation set. Provenance, honestly: this is a contemporary community-authored synthesis in the psychological register (CC-BY-SA), not a historical text; for the historical registers see the public-domain voice libraries in this repo (grammars/tetrabiblos-ashmand, grammars/alan-leo, grammars/proctor-skeptical-astrology) and the cited dossiers under research/. Under this site's creed every item is a mirror-prompt: a chart is a mirror and a calendar, never a prediction and never a command.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800",
   "grammar_type": "astrology",
   "tags": [
     "archetypal",

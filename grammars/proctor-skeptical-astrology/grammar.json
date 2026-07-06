@@ -1,6 +1,7 @@
 {
   "name": "Proctor's Skeptical Astrology",
   "description": "A critical examination of astrology based on Richard A. Proctor's 'Myths and Marvels of Astronomy' (1896). Presents traditional astrological concepts with sardonic Victorian commentary, exposing logical fallacies while documenting the historical claims. — Source: Richard A. Proctor, *Myths and Marvels of Astronomy* (1896 edition), public domain (Project Gutenberg #26556). Imported verbatim from the recursive.eco-schemas commons; presented here as a Victorian document of the Skeptical School — the critique speaking in its own sardonic idiom, part of the record, not this library's verdict.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Richard_Anthony_Proctor2.jpg?width=800",
   "grammar_type": "astrology",
   "attribution": {
     "source_name": "Myths and Marvels of Astronomy",
