@@ -251,19 +251,6 @@ fetch(GRAMMAR_URL)
 // (for name / description / item count) and renders working preview links.
 // A slug with no UUID yet just gets the Raw JSON link + a "not yet published" note.
 (function(){
-  const MAIN_SLUGS = [
-    'historiographies-of-astrology',
-    'tetrabiblos-ashmand',
-    'alan-leo',
-    'proctor-skeptical-astrology',
-    'western-astrology-canonical',
-  ];
-  const CASTING_SLUGS = [
-    'casting-big-three',
-    'casting-twelve-houses',
-    'casting-single-aspect',
-  ];
-
   function escHtml(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -311,12 +298,11 @@ fetch(GRAMMAR_URL)
     </div>`;
   }
 
-  async function loadIds(){
+  async function loadIdsDoc(){
     try {
       const r = await fetch('ids.json', { cache: 'no-cache' });
       if (!r.ok) return {};
-      const j = await r.json();
-      return j.ids || {};
+      return await r.json();
     } catch (e) { return {}; }
   }
 
@@ -339,7 +325,19 @@ fetch(GRAMMAR_URL)
   }
 
   (async () => {
-    const ids = await loadIds();
+    const idsDoc = await loadIdsDoc();
+    const ids = idsDoc.ids || {};
+    const previewLinks = idsDoc.preview_links || {};
+    // The slug list itself is never hardcoded here — it comes straight from
+    // ids.json._public_now (falling back to every slug with a UUID). A new
+    // grammar just needs a line in ids.json and it appears on this page with
+    // no code change. Castings (position-only spread-grammars) are split into
+    // their own group via preview_links[slug].casting, same source of truth.
+    const slugs = Array.isArray(idsDoc._public_now) && idsDoc._public_now.length
+      ? idsDoc._public_now
+      : Object.keys(ids);
+    const MAIN_SLUGS = slugs.filter(slug => !(previewLinks[slug] && previewLinks[slug].casting));
+    const CASTING_SLUGS = slugs.filter(slug => previewLinks[slug] && previewLinks[slug].casting);
     await Promise.all([
       renderGrid('glib-main', MAIN_SLUGS, ids),
       renderGrid('glib-castings', CASTING_SLUGS, ids),
