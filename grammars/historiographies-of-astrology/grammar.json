@@ -52,7 +52,8 @@
         "stance": "omen-craft",
         "confidence": "medium",
         "_research": "research/views/mesopotamian-omens.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_Tablet_of_Ammisaduqa.jpg?width=800"
     },
     {
       "id": "view-hellenistic-synthesis",
@@ -79,7 +80,8 @@
         "stance": "natural-philosophy",
         "confidence": "medium",
         "_research": "research/views/hellenistic-synthesis.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
     },
     {
       "id": "view-jyotisha",
@@ -105,7 +107,8 @@
         "stance": "natural-philosophy",
         "confidence": "low",
         "_research": "research/views/jyotisha.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navagraha_Mandala.jpg?width=800"
     },
     {
       "id": "view-islamic-golden-age",
@@ -131,7 +134,8 @@
         "stance": "court-science",
         "confidence": "medium",
         "_research": "research/views/islamic-golden-age.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/A_drawing_of_an_astrolabe_Wellcome_L0041186.jpg?width=800"
     },
     {
       "id": "view-medieval-renaissance-court",
@@ -157,7 +161,8 @@
         "stance": "court-science",
         "confidence": "medium",
         "_research": "research/views/medieval-renaissance-court.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "view-decline-demarcation",
@@ -183,7 +188,8 @@
         "stance": "critical",
         "confidence": "medium",
         "_research": "research/views/decline-demarcation.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800"
     },
     {
       "id": "view-theosophical-revival",
@@ -209,7 +215,8 @@
         "stance": "psychological",
         "confidence": "medium",
         "_research": "research/views/theosophical-revival.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Music_of_Gounod_-_Annie_Besant_Thought_Form_-_Project_Gutenberg_eText_16269.jpg?width=800"
     },
     {
       "id": "view-humanistic-psychological",
@@ -264,7 +271,8 @@
         "stance": "critical",
         "confidence": "medium",
         "_research": "research/views/empirical-test-tradition.md"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_mundani_Ptolemaici.jpg?width=800"
     },
     {
       "id": "view-contemporary-resurgence",
@@ -309,7 +317,8 @@
       },
       "metadata": {
         "stance": "cross-cutting"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mysterium_Cosmographicum_solar_system_model.jpg?width=800"
     },
     {
       "id": "pattern-psychologized",
@@ -326,7 +335,8 @@
       },
       "metadata": {
         "stance": "cross-cutting"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "pattern-critique",
@@ -344,7 +354,8 @@
       },
       "metadata": {
         "stance": "cross-cutting"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=800"
     }
   ]
 }

@@ -31,7 +31,8 @@
         "element": "Fire",
         "quality": "Cardinal",
         "ruler": "Mars"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-taurus",
@@ -57,7 +58,8 @@
         "element": "Earth",
         "quality": "Fixed",
         "ruler": "Venus"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-gemini",
@@ -83,7 +85,8 @@
         "element": "Air",
         "quality": "Mutable",
         "ruler": "Mercury"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-cancer",
@@ -109,7 +112,8 @@
         "element": "Water",
         "quality": "Cardinal",
         "ruler": "Moon"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-leo",
@@ -135,7 +139,8 @@
         "element": "Fire",
         "quality": "Fixed",
         "ruler": "Sun"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-virgo",
@@ -161,7 +166,8 @@
         "element": "Earth",
         "quality": "Mutable",
         "ruler": "Mercury"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-libra",
@@ -187,7 +193,8 @@
         "element": "Air",
         "quality": "Cardinal",
         "ruler": "Venus"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-scorpio",
@@ -213,7 +220,8 @@
         "element": "Water",
         "quality": "Fixed",
         "ruler": "Mars"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-sagittarius",
@@ -239,7 +247,8 @@
         "element": "Fire",
         "quality": "Mutable",
         "ruler": "Jupiter"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-capricorn",
@@ -265,7 +274,8 @@
         "element": "Earth",
         "quality": "Cardinal",
         "ruler": "Saturn"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-aquarius",
@@ -291,7 +301,8 @@
         "element": "Air",
         "quality": "Fixed",
         "ruler": "Saturn"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "sign-pisces",
@@ -317,7 +328,8 @@
         "element": "Water",
         "quality": "Mutable",
         "ruler": "Jupiter"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
     },
     {
       "id": "planet-sun",
@@ -337,7 +349,8 @@
         "Interpretation": "The Sun represents the immortal Individuality, the divine spark within. It shows what we are becoming through evolution, our essential spiritual nature. In the horoscope, a strong Sun indicates one who can express their true self with power and authority. The Sun is the life-giver, and its position shows where we must shine.",
         "Keywords": "Individuality"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-moon",
@@ -357,7 +370,8 @@
         "Interpretation": "The Moon represents the Personality, the sum of past experiences carried into this life. It shows our habits, instincts, and automatic responses—what we have been. The Moon governs the physical body, the public, women, and all matters of common everyday life. Its position shows our receptive, feeling nature.",
         "Keywords": "Personality"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-mercury",
@@ -377,7 +391,8 @@
         "Interpretation": "Mercury represents the rational mind, the link between higher and lower self. It governs communication, learning, and the nervous system. Mercury shows how we think, speak, and process information. Well-aspected, it gives intellectual brilliance; afflicted, it produces worry and nervous disorders.",
         "Keywords": "Mentality"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-venus",
@@ -397,7 +412,8 @@
         "Interpretation": "Venus represents the love nature, attraction, and the desire for harmony. It governs art, beauty, social relations, and values. Venus shows what we love and find beautiful. Well-aspected, it gives charm and artistic ability; afflicted, it produces excessive pleasure-seeking or difficulty in relationships.",
         "Keywords": "Affection"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-mars",
@@ -417,7 +433,8 @@
         "Interpretation": "Mars represents the desire nature, courage, and the power to act. It governs physical energy, competition, and the sexual drive. Mars shows how we assert ourselves and fight for what we want. Well-aspected, it gives courage and enterprise; afflicted, it produces anger, accidents, and strife.",
         "Keywords": "Energy"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-jupiter",
@@ -437,7 +454,8 @@
         "Interpretation": "Jupiter represents the higher mind, faith, and the principle of growth. It governs philosophy, religion, law, and long journeys. Jupiter shows where we seek meaning and where fortune smiles upon us. Well-aspected, it gives wisdom and prosperity; afflicted, it produces excess, extravagance, and false optimism.",
         "Keywords": "Expansion"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-saturn",
@@ -457,7 +475,8 @@
         "Interpretation": "Saturn represents karma, discipline, and the lessons of time. It governs structure, responsibility, and crystallization. Saturn shows where we must work hard and accept limitation. Well-aspected, it gives stability and achievement; afflicted, it produces fear, delay, and depression. Saturn is the great teacher.",
         "Keywords": "Limitation"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-uranus",
@@ -477,7 +496,8 @@
         "Interpretation": "Uranus represents the higher will, sudden change, and liberation from the past. It governs originality, invention, and revolution. Uranus shows where we break free from convention and express our uniqueness. Its influence is sudden, unexpected, and often disruptive to the status quo.",
         "Keywords": "Awakening"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "planet-neptune",
@@ -497,7 +517,8 @@
         "Interpretation": "Neptune represents the higher love, inspiration, and the dissolution of boundaries. It governs mysticism, dreams, and the unseen realms. Neptune shows where we transcend ordinary consciousness. Well-aspected, it gives spiritual vision; afflicted, it produces confusion, deception, and escapism.",
         "Keywords": "Illumination"
       },
-      "metadata": {}
+      "metadata": {},
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
     },
     {
       "id": "house-1",
@@ -519,7 +540,8 @@
       },
       "metadata": {
         "number": 1
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-2",
@@ -541,7 +563,8 @@
       },
       "metadata": {
         "number": 2
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-3",
@@ -563,7 +586,8 @@
       },
       "metadata": {
         "number": 3
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-4",
@@ -585,7 +609,8 @@
       },
       "metadata": {
         "number": 4
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-5",
@@ -607,7 +632,8 @@
       },
       "metadata": {
         "number": 5
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-6",
@@ -629,7 +655,8 @@
       },
       "metadata": {
         "number": 6
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-7",
@@ -651,7 +678,8 @@
       },
       "metadata": {
         "number": 7
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-8",
@@ -673,7 +701,8 @@
       },
       "metadata": {
         "number": 8
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-9",
@@ -695,7 +724,8 @@
       },
       "metadata": {
         "number": 9
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-10",
@@ -717,7 +747,8 @@
       },
       "metadata": {
         "number": 10
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-11",
@@ -739,7 +770,8 @@
       },
       "metadata": {
         "number": 11
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "house-12",
@@ -761,7 +793,8 @@
       },
       "metadata": {
         "number": 12
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
     },
     {
       "id": "aspect-conjunction",
@@ -784,7 +817,8 @@
       "metadata": {
         "degrees": 0,
         "nature": "Variable"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "aspect-sextile",
@@ -807,7 +841,8 @@
       "metadata": {
         "degrees": 60,
         "nature": "Harmonious"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "aspect-square",
@@ -830,7 +865,8 @@
       "metadata": {
         "degrees": 90,
         "nature": "Challenging"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "aspect-trine",
@@ -853,7 +889,8 @@
       "metadata": {
         "degrees": 120,
         "nature": "Harmonious"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "aspect-opposition",
@@ -876,7 +913,8 @@
       "metadata": {
         "degrees": 180,
         "nature": "Challenging"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     }
   ],
   "_grammar_commons": {

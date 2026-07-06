@@ -37,7 +37,8 @@
         "The persons signified symbolically by Saturn are grandparents, and other old persons, day labourers, paupers, beggars, clowns, husbandmen of the meaner sort, and especially undertakers, sextons, and gravediggers.",
         "Min is the drenching in the sea so wan, Min is the prison in the derke cote, Min is the strangel and hanging by the throte... My loking is the fader of pestilence."
       ],
-      "sort_order": 0
+      "sort_order": 0,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Saturn.jpg?width=800"
     },
     {
       "id": "jupiter",
@@ -64,7 +65,8 @@
         "The persons represented by Jupiter are judges, counsellors, church dignitaries, from cardinals to curates, scholars, chancellors, barristers, and the highest orders of lawyers, woollendrapers (possibly there may be some astral significance in the woolsack), and clothiers.",
         "When Jupiter is afflicted, however, he denotes quacks and mountebanks, knaves, cheats, and drunkards."
       ],
-      "sort_order": 1
+      "sort_order": 1,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Jupiter.jpg?width=800"
     },
     {
       "id": "mars",
@@ -91,7 +93,8 @@
         "The persons signified by Mars are generals, soldiers, sailors (if he is in a watery sign), surgeons, chemists, doctors, armourers, barbers, curriers, smiths, carpenters, bricklayers, sculptors, cooks, and tailors.",
         "'The influence of Saturn,' says an astrologer, 'may be compared to a lingering but fatal consumption; that of Mars to a burning fever.'"
       ],
-      "sort_order": 2
+      "sort_order": 2,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Mars.jpg?width=800"
     },
     {
       "id": "sun",
@@ -117,7 +120,8 @@
         "The persons signified by the sun are emperors, kings, and titled folk generally, goldsmiths, jewellers, and coiners.",
         "When 'afflicted,' the sun signifies pretenders either to power or knowledge."
       ],
-      "sort_order": 3
+      "sort_order": 3,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800"
     },
     {
       "id": "venus",
@@ -143,7 +147,8 @@
         "Venus is the protectrice of musicians, embroiderers, perfumers, classic modellers, and all who work in elegant attire or administer to the luxuries of the great.",
         "When she is afflicted, she represents 'the lower orders of the votaries of voluptuousness.'"
       ],
-      "sort_order": 4
+      "sort_order": 4,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "mercury",
@@ -170,7 +175,8 @@
         "The persons signified by Mercury are astrologers, philosophers, mathematicians, politicians, merchants, travellers, teachers, poets, artificers, men of science, and all ingenious, clever men.",
         "When he is ill affected, however, he represents pettifoggers, cunning vile persons, thieves, messengers, footmen, and servants."
       ],
-      "sort_order": 5
+      "sort_order": 5,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_mundani_Ptolemaici.jpg?width=800"
     },
     {
       "id": "moon",
@@ -197,7 +203,8 @@
         "She signifies sailors (not as Mars does, the fighting-men of war-ships, but nautical folk generally) and all persons connected with water or any kind of fluid.",
         "Also all who are engaged in inferior and common offices."
       ],
-      "sort_order": 6
+      "sort_order": 6,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mysterium_Cosmographicum_solar_system_model.jpg?width=800"
     },
     {
       "id": "uranus",
@@ -223,7 +230,8 @@
         "He causes the native born under his influence to be of a very eccentric and original disposition, romantic, unsettled, addicted to change, a seeker after novelty.",
         "And in general, let the fair sex remember that Uranus is peculiarly hostile to them, and very evil in love."
       ],
-      "sort_order": 7
+      "sort_order": 7,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "aries",
@@ -251,7 +259,8 @@
         "It is a masculine sign, and is regarded as fortunate.",
         "We may, however, infer generally from their accounts the influences which they assigned to the zodiacal signs."
       ],
-      "sort_order": 10
+      "sort_order": 10,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Aries_and_Musca_Borealis.jpg?width=800"
     },
     {
       "id": "taurus",
@@ -279,7 +288,8 @@
         "It is a feminine sign, and unfortunate.",
         "The signs of the zodiac in the various houses were in the first place to be noted, because not only had these signs special powers in special houses, but the effects of the planets in particular houses varied according to the signs in which the planets were situated."
       ],
-      "sort_order": 11
+      "sort_order": 11,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Taurus.jpg?width=800"
     },
     {
       "id": "gemini",
@@ -307,7 +317,8 @@
         "The sign Gemini was regarded by astrologers as especially associated with the fortunes of London.",
         "And accordingly they tell us that the great fire of London, the plague, the building of London Bridge, and other events interesting to London, all occurred when this sign was in the ascendant, or when special planets were in this sign."
       ],
-      "sort_order": 12
+      "sort_order": 12,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Gemini.jpg?width=800"
     },
     {
       "id": "cancer",
@@ -335,7 +346,8 @@
         "It is a feminine sign, and unfortunate.",
         "The moon, as she circles around the earth, exerts a manifest influence upon terrestrial matter—the tidal wave rising and sinking synchronously with the movements of the moon."
       ],
-      "sort_order": 13
+      "sort_order": 13,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Cancer.jpg?width=800"
     },
     {
       "id": "leo",
@@ -363,7 +375,8 @@
         "I do vengaunce and pleine correction, While I dwell in the signe of the leon.",
         "The influence of a celestial body was supposed to depend on the magnitude of its sphere, in the sense of the old astronomy."
       ],
-      "sort_order": 14
+      "sort_order": 14,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Leo_Major_and_Leo_Minor.jpg?width=800"
     },
     {
       "id": "virgo",
@@ -391,7 +404,8 @@
         "It is a feminine sign, and generally unfortunate.",
         "The Mercurial is busy and prattling. But when well affected, Mercury gives his subjects a strong, vigorous, active mind."
       ],
-      "sort_order": 15
+      "sort_order": 15,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Virgo.png?width=800"
     },
     {
       "id": "libra",
@@ -419,7 +433,8 @@
         "And reigns over Austria, Alsace, Savoy, Portugal, Livonia, India, Ethiopia, Lisbon, Vienna, Frankfort, Antwerp, Charleston, etc.",
         "It is a masculine sign, and fortunate."
       ],
-      "sort_order": 16
+      "sort_order": 16,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Libra.jpg?width=800"
     },
     {
       "id": "scorpio",
@@ -447,7 +462,8 @@
         "It is feminine, and unfortunate.",
         "(It would appear likely, by the way, that astrology was a purely masculine science.)"
       ],
-      "sort_order": 17
+      "sort_order": 17,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Scorpio.jpg?width=800"
     },
     {
       "id": "sagittarius",
@@ -475,7 +491,8 @@
         "And reigns over Arabia Felix, Spain, Hungary, Moravia, Liguria, Narbonne, Cologne, Avignon, etc.",
         "It is masculine, and of course fortunate."
       ],
-      "sort_order": 18
+      "sort_order": 18,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Sagittarius_and_Corona_Australis,_Microscopium,_and_Telescopium.png?width=800"
     },
     {
       "id": "capricorn",
@@ -503,7 +520,8 @@
         "It is feminine, and unfortunate.",
         "The persons signified symbolically by Saturn are grandparents, and other old persons, day labourers, paupers, beggars."
       ],
-      "sort_order": 19
+      "sort_order": 19,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Capricornus.jpg?width=800"
     },
     {
       "id": "aquarius",
@@ -531,7 +549,8 @@
         "It is masculine, and fortunate.",
         "Saturn produces cold and dryness, for he is most remote both from the Sun's heat and from the earth's vapours."
       ],
-      "sort_order": 20
+      "sort_order": 20,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Aquarius,_Piscis_Australis_&_Ballon_Aerostatique.jpg?width=800"
     },
     {
       "id": "pisces",
@@ -559,7 +578,8 @@
         "It is feminine, and therefore, naturally, unfortunate.",
         "The moon comes last in planetary sequence, as nearest to the earth. She is regarded by astrologers as a cold, moist, watery, phlegmatic planet."
       ],
-      "sort_order": 21
+      "sort_order": 21,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Pisces.jpg?width=800"
     },
     {
       "id": "house-1",
@@ -586,7 +606,8 @@
         "The houses were not all of equal potency. The angular houses, which are the first, the fourth, the seventh, and the tenth—lying east, north, west, and south—were first in power, whether for good or evil.",
         "Thus planets of good influence in the native's ascendant, or first house, signified generally a prosperous life."
       ],
-      "sort_order": 30
+      "sort_order": 30,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-2",
@@ -611,7 +632,8 @@
         "The position of the planets in the various houses at some epoch guided the astrologer's opinion as to the fortune of that hour.",
         "It will be easily understood how these houses were dealt with in erecting a scheme of nativity."
       ],
-      "sort_order": 31
+      "sort_order": 31,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-3",
@@ -637,7 +659,8 @@
         "Thoughts of the asker—the third house reveals the nature of inquiry.",
         "The celestial sphere placed as at the moment of the native's birth was divided into twelve parts by great circles supposed to pass through the point overhead."
       ],
-      "sort_order": 32
+      "sort_order": 32,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-4",
@@ -663,7 +686,8 @@
         "Money of brethren, children of private enemies, sickness of friends.",
         "The place of the sun at midnight marks the foundation and ending of all things."
       ],
-      "sort_order": 33
+      "sort_order": 33,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-5",
@@ -689,7 +713,8 @@
         "These three houses (the fifth, sixth, and seventh) followed in order from the fourth.",
         "All sorts of amusements, theatres, banquets, and merry-making belong to the fifth house."
       ],
-      "sort_order": 34
+      "sort_order": 34,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-6",
@@ -715,7 +740,8 @@
         "The sixth house corresponds to the part of the sun's path below the horizon.",
         "Service, labor, and the ailments that come with them fill the sixth house."
       ],
-      "sort_order": 35
+      "sort_order": 35,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-7",
@@ -742,7 +768,8 @@
         "But if at the same epoch a planet of malefic influence was in the seventh house, then the native, though on the whole prosperous, would be unfortunate in marriage.",
         "The angular houses were first in power, whether for good or evil."
       ],
-      "sort_order": 36
+      "sort_order": 36,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-8",
@@ -767,7 +794,8 @@
         "Dead men's goods, castles, treasure hid, the fate of the corpse in the grave.",
         "The eighth house follows the seventh—what marriage shares includes mortality."
       ],
-      "sort_order": 37
+      "sort_order": 37,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-9",
@@ -793,7 +821,8 @@
         "The remaining four houses were called cadents, and were regarded as weakest in influence.",
         "The wisdom sought before worldly achievement resides in the ninth house."
       ],
-      "sort_order": 38
+      "sort_order": 38,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-10",
@@ -820,7 +849,8 @@
         "The angular houses, which are the first, the fourth, the seventh, and the tenth—lying east, north, west, and south—were first in power.",
         "The peak of worldly achievement lies at the midheaven."
       ],
-      "sort_order": 39
+      "sort_order": 39,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-11",
@@ -845,7 +875,8 @@
         "The allies who gather around our public position fill the eleventh house.",
         "Friends, hopes, and benefactors are signified by planets in the eleventh."
       ],
-      "sort_order": 40
+      "sort_order": 40,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "house-12",
@@ -871,7 +902,8 @@
         "Receiving two shillings and sixpence, contrary to an Act made under and provided by the wise and virtuous King James.",
         "The twelfth house, House of Enemies, had caught up with him."
       ],
-      "sort_order": 41
+      "sort_order": 41,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
     },
     {
       "id": "conjunction",
@@ -896,7 +928,8 @@
         "When planets occupy the same degree, their powers unite.",
         "Whether for good or ill, according to the nature of the stars involved."
       ],
-      "sort_order": 50
+      "sort_order": 50,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "sextile",
@@ -921,7 +954,8 @@
         "Mild benefit flows from the sextile, though not enough to overcome serious affliction.",
         "It was natural that the astrologers of old should regard the planetary influences as depending in the main on the position of the celestial bodies."
       ],
-      "sort_order": 51
+      "sort_order": 51,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "square",
@@ -946,7 +980,8 @@
         "Tension that motivates action may arise from the square.",
         "An enemy: a fiend lurks close behind the radiance of thy planet—oh! be warned!"
       ],
-      "sort_order": 52
+      "sort_order": 52,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "trine",
@@ -971,7 +1006,8 @@
         "Natural harmony flows when planets stand in trine.",
         "Thus each of these planets, being moderated by this combination, produces a favourable temperament."
       ],
-      "sort_order": 53
+      "sort_order": 53,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     },
     {
       "id": "opposition",
@@ -996,7 +1032,8 @@
         "A fearful sign stands in the house of life, an enemy: a fiend lurks close behind.",
         "The radiance of thy planet—oh! be warned!"
       ],
-      "sort_order": 54
+      "sort_order": 54,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     }
   ],
   "_grammar_commons": {
