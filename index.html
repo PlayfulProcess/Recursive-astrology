@@ -41,6 +41,27 @@
     background:var(--chip,#f7f3ea);font-size:13.5px;color:var(--muted)}
   .note b{color:var(--ink)}
   a{color:var(--accent)}
+
+  /* ── hero CTA row (chart viewer) ── */
+  .cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+  /* ── gallery: every grammar, browsable with working preview links ── */
+  .gallery{margin-top:44px}
+  .gallery h2{font-size:21px;margin:0 0 4px;font-family:"Fraunces",Georgia,serif;color:var(--ink)}
+  .gallery .gsub{font-size:13px;color:var(--muted);margin:0 0 16px;max-width:70ch}
+  .glabel{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:22px 0 10px}
+  .glabel:first-of-type{margin-top:0}
+  .glib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .glib-card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;
+    display:flex;flex-direction:column;gap:6px}
+  .glib-card .gcat{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .glib-card .gname{font-family:"Fraunces",Georgia,serif;font-size:16.5px;margin:0;color:var(--ink)}
+  .glib-card .gdesc{font-size:13px;color:var(--muted);margin:0;display:-webkit-box;
+    -webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .glib-card .glinks{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .glib-card .gplain{font-size:12px;color:var(--accent);text-decoration:none}
+  .glib-card .gplain:hover{text-decoration:underline}
+  .glib-card .gnote{font-size:11.5px;color:var(--muted);font-style:italic;margin-top:2px}
 </style>
 </head>
 <body>
@@ -49,6 +70,9 @@
     <div class="kicker">The Recursive Astrology · a library, held to the record</div>
     <h1 id="g-name">Loading…</h1>
     <p class="lede" id="g-desc"></p>
+    <div class="cta-row">
+      <a class="eco-chip" href="viewer/astrology-viewer.html">Chart viewer — cast &amp; read your own chart ↗</a>
+    </div>
   </header>
 
   <main id="grid" class="grid" aria-live="polite"></main>
@@ -81,6 +105,27 @@
     and <a href="https://tarot.recursive.eco">The Recursive Tarot</a> for this library's parent — same creed,
     different domain.
   </div>
+
+  <section class="gallery" id="all-grammars" aria-labelledby="all-grammars-h">
+    <h2 id="all-grammars-h">Browse every grammar</h2>
+    <p class="gsub">Every grammar in this repo, with working preview links — Cards and Study open on
+      <a href="https://recursive.eco">recursive.eco</a>, Play opens the live oracle on
+      <a href="https://flow.recursive.eco">flow.recursive.eco</a>, and Raw JSON is the file itself, right here.</p>
+
+    <p class="glabel">Interpretation sets &amp; voice libraries</p>
+    <div class="glib-grid" id="glib-main" aria-live="polite">
+      <p class="gsub">Loading grammars…</p>
+    </div>
+
+    <p class="glabel">Castings — spread-grammars (positions, not interpretations)</p>
+    <p class="gsub" style="margin-top:-6px">These hold chart <em>positions</em> the oracle fills from an
+      aspect of your own chart (never a random draw) — not standalone interpretations, so they read
+      differently from the grammars above. See <a href="wheel.html">the Wheel</a> for the twelve-house
+      casting rendered live.</p>
+    <div class="glib-grid" id="glib-castings" aria-live="polite">
+      <p class="gsub">Loading castings…</p>
+    </div>
+  </section>
 </div>
 
 <dialog id="detail">
@@ -151,6 +196,108 @@ fetch(GRAMMAR_URL)
       + 'in this folder, then visit <code>http://localhost:8000/</code>. (On GitHub Pages it just works.)';
     $('#g-name').textContent = 'A library like this one';
   });
+</script>
+
+<script>
+// ── "Browse every grammar" gallery — client-side only, no build step. ──
+// Fetches ids.json (slug -> recursive.eco UUID) plus each grammar's own JSON
+// (for name / description / item count) and renders working preview links.
+// A slug with no UUID yet just gets the Raw JSON link + a "not yet published" note.
+(function(){
+  const MAIN_SLUGS = [
+    'historiographies-of-astrology',
+    'tetrabiblos-ashmand',
+    'alan-leo',
+    'proctor-skeptical-astrology',
+    'western-astrology-canonical',
+  ];
+  const CASTING_SLUGS = [
+    'casting-big-three',
+    'casting-twelve-houses',
+    'casting-single-aspect',
+  ];
+
+  function escHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function chip(href, label){
+    return `<a class="eco-chip" href="${href}" target="_blank" rel="noopener">${escHtml(label)}</a>`;
+  }
+  function plainLink(href, label){
+    return `<a class="gplain" href="${href}" target="_blank" rel="noopener">${escHtml(label)}</a>`;
+  }
+
+  function renderCard(slug, g, uuid){
+    const rawHref = `grammars/${slug}/grammar.json`;
+    if (!g) {
+      return `<div class="glib-card" data-slug="${escHtml(slug)}">
+        <div class="gcat">grammar</div>
+        <b class="gname">${escHtml(slug)}</b>
+        <p class="gdesc">Could not load this grammar's JSON.</p>
+        <div class="glinks">${plainLink(rawHref, 'Raw JSON')}</div>
+      </div>`;
+    }
+    const name = escHtml(g.name || slug);
+    const fullDesc = g.description || '';
+    const desc = escHtml(fullDesc.slice(0, 160)) + (fullDesc.length > 160 ? '…' : '');
+    const count = Array.isArray(g.items) ? g.items.length : 0;
+    let links;
+    let note = '';
+    if (uuid) {
+      links = [
+        chip(`https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=${uuid}`, 'Cards'),
+        chip(`https://recursive.eco/pages/study-viewer.html?type=astrology&id=${uuid}`, 'Study'),
+        chip(`https://flow.recursive.eco/play?id=${uuid}`, 'Open in app'),
+        plainLink(rawHref, 'Raw JSON'),
+      ].join('');
+    } else {
+      links = plainLink(rawHref, 'Raw JSON');
+      note = '<div class="gnote">Not yet published to recursive.eco</div>';
+    }
+    return `<div class="glib-card" data-slug="${escHtml(slug)}">
+      <div class="gcat">${count} item${count === 1 ? '' : 's'}</div>
+      <b class="gname">${name}</b>
+      <p class="gdesc">${desc}</p>
+      <div class="glinks">${links}</div>
+      ${note}
+    </div>`;
+  }
+
+  async function loadIds(){
+    try {
+      const r = await fetch('ids.json', { cache: 'no-cache' });
+      if (!r.ok) return {};
+      const j = await r.json();
+      return j.ids || {};
+    } catch (e) { return {}; }
+  }
+
+  async function loadGrammar(slug){
+    try {
+      const r = await fetch(`grammars/${slug}/grammar.json`, { cache: 'no-cache' });
+      if (!r.ok) throw new Error(String(r.status));
+      return await r.json();
+    } catch (e) { return null; }
+  }
+
+  async function renderGrid(elId, slugs, ids){
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const cards = await Promise.all(slugs.map(async slug => {
+      const g = await loadGrammar(slug);
+      return renderCard(slug, g, ids[slug]);
+    }));
+    el.innerHTML = cards.join('');
+  }
+
+  (async () => {
+    const ids = await loadIds();
+    await Promise.all([
+      renderGrid('glib-main', MAIN_SLUGS, ids),
+      renderGrid('glib-castings', CASTING_SLUGS, ids),
+    ]);
+  })();
+})();
 </script>
 </body>
 </html>
