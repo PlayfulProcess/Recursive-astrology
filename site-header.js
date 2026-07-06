@@ -3,15 +3,16 @@
  * Shadow DOM so each page's own CSS can't override it. Path-aware so links
  * resolve from both the repo root and the /viewer/ subdir.
  *
- * Usage:  <script src="<path-to>site-header.js?v=1"></script>
+ * Usage:  <script src="<path-to>site-header.js?v=2"></script>
  *         <site-header active="wheel"></site-header>
  * The `active` attribute highlights the matching tab; if omitted it is
  * auto-detected from the filename.
  *
  * Pattern mirrored from recursive-tarot/site-header.js (the family's pattern
- * source) — adapted here: astro branding (crescent + star), this repo's own
- * pages (Home, Wheel, Lenses, Course, Chart Viewer) plus a Grammars dropdown
- * listing every grammar in grammars/*.
+ * source) — adapted here: astro branding (crescent + star), a Views dropdown
+ * (Lenses, Genealogy, Chart Wheel, Chart Viewer, All grammars, Course —
+ * every way to preview this repo's content, mirroring tarot's Views menu)
+ * plus a Grammars dropdown listing every named grammar in grammars/*.
  */
 (function () {
   if (customElements.get('site-header')) return;
@@ -21,12 +22,17 @@
   const _segs = location.pathname.split('/').filter(Boolean);
   const PFX = '../'.repeat(Math.max(0, _segs.length - 1));
 
-  // [key, label, href] — top-level tabs (few enough pages to show flat, not hidden in a menu).
-  const TABS = [
-    ['wheel',  'Wheel',        PFX + 'wheel.html'],
-    ['lenses', 'Lenses',       PFX + 'lenses.html'],
-    ['course', 'Course',       PFX + 'pages/course.html'],
-    ['viewer', 'Chart Viewer', PFX + 'viewer/astrology-viewer.html'],
+  // [key, label, href] — every content VIEW of this repo's data, grouped into
+  // one dropdown (mirrors recursive-tarot's Views menu: Explorer/Cards/Lenses/
+  // Tree + Tree of Life/Timeline/Genealogy). "All grammars" and "Course" are
+  // views of the whole collection, same as tarot's genealogy/timeline.
+  const VIEWS = [
+    ['lenses',    'Lenses',       PFX + 'lenses.html'],
+    ['genealogy', 'Genealogy',    PFX + 'genealogy.html'],
+    ['wheel',     'Chart Wheel',  PFX + 'wheel.html'],
+    ['viewer',    'Chart Viewer', PFX + 'viewer/astrology-viewer.html'],
+    ['all',       'All grammars', PFX + 'index.html#all-grammars'],
+    ['course',    'Course',       PFX + 'pages/course.html'],
   ];
   // Every grammar in grammars/*, in the order they appear on the homepage gallery.
   const GRAMMAR_MENU = [
@@ -47,6 +53,7 @@
     const f = location.pathname.split('/').pop() || 'index.html';
     if (f.startsWith('wheel')) return 'wheel';
     if (f.startsWith('lenses')) return 'lenses';
+    if (f.startsWith('genealogy')) return 'genealogy';
     if (f.startsWith('course')) return 'course';
     if (f.startsWith('astrology-viewer')) return 'viewer';
     if (f === 'index.html' || f === '') return 'home';
@@ -70,6 +77,10 @@
         `<a class="tab ${cls || ''}${key === active ? ' active' : ''}" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}>${label}</a>`;
       const menuItem = ([slug, label]) =>
         `<a class="${active === 'home' && new URLSearchParams(location.search).get('grammar') === slug ? 'on' : ''}" href="${PFX}index.html?grammar=${slug}">${label}</a>`;
+      const viewItem = ([key, label, href]) =>
+        `<a class="${key === active ? 'on' : ''}" href="${href}">${label}</a>`;
+      const VIEW_KEYS = VIEWS.map(v => v[0]);
+      const viewActive = VIEW_KEYS.includes(active);
       root.innerHTML = `
         <style>
           :host{ display:block; position:sticky; top:0; z-index:50;
@@ -107,11 +118,17 @@
           .dd-btn::after{ content:""; display:inline-block; width:5px; height:5px; margin-left:7px;
             border-right:1.4px solid currentColor; border-bottom:1.4px solid currentColor;
             transform:rotate(45deg) translateY(-2px); opacity:.5; }
-          .dd-menu{ position:absolute; top:calc(100% + 8px); right:0; min-width:240px;
-            max-width:min(320px,calc(100vw - 24px)); background:#ffffff; border:1px solid #d8d2c6;
-            border-radius:8px; padding:7px; box-shadow:0 16px 44px -18px rgba(60,45,20,.45); display:none; z-index:60; }
+          .dd-menu{ position:absolute; top:calc(100% + 8px); right:0; min-width:220px;
+            max-width:min(300px,calc(100vw - 16px)); background:#ffffff; border:1px solid #d8d2c6;
+            border-radius:8px; padding:7px; box-shadow:0 16px 44px -18px rgba(60,45,20,.45); display:none; z-index:60;
+            overflow-y:auto; }
+          /* Invisible bridge across the 8px gap: keeps the menu open while the cursor
+             travels from the trigger down to a sub-item (no more disappearing dropdown). */
           .dd-menu::before{ content:""; position:absolute; left:0; right:0; top:-10px; height:10px; }
-          @media (max-width:760px){ .dd-menu{ position:fixed; left:12px; right:12px; top:54px; min-width:0; max-width:none; } }
+          /* Horizontal/vertical clamping is computed in JS (positionMenu, below), not a fixed
+             breakpoint: a left-side trigger (Views) overflows the left edge whenever the panel
+             is wider than the space to its left, which happens at tablet widths (~760–950px)
+             just as much as on phones — a single max-width media query misses that range. */
           .dd:hover .dd-menu, .dd:focus-within .dd-menu, .dd.open .dd-menu{ display:block; }
           .dd.open .dd-btn::after{ transform:rotate(225deg) translateY(2px); opacity:.85; }
           .dd-menu a{ display:block; color:#4a4439; text-decoration:none; font-size:13px;
@@ -120,6 +137,9 @@
           .dd-menu a[href*="recursive.eco"]{ color:#9333ea; }
           .dd-menu a.on{ color:#221f1a; background:#f1ece1; font-weight:600; }
           .dd-menu a.all{ border-top:1px solid #d8d2c6; margin-top:4px; padding-top:9px; font-weight:600; }
+          .dd-cap{ display:block; font-family:Inter,sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:.16em;
+            color:#8a8273; padding:8px 10px 3px; user-select:none; }
+          .dd-cap:first-child{ padding-top:2px; }
           @media (max-width:680px){
             .brand .sub{ display:none; }
             .tab{ padding:5px 8px; font-size:12px; }
@@ -143,7 +163,12 @@
           <span class="spacer"></span>
           <nav aria-label="Site sections">
             <a class="tab${active === 'home' ? ' active' : ''}" href="${PFX}index.html">Home</a>
-            ${TABS.map(tab).join('')}
+            <span class="dd">
+              <a class="tab dd-btn${viewActive ? ' active' : ''}" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="Views menu">Views</a>
+              <span class="dd-menu">
+                ${VIEWS.map(viewItem).join('')}
+              </span>
+            </span>
             <span class="dd">
               <a class="tab dd-btn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="Grammars menu">Grammars</a>
               <span class="dd-menu">
@@ -155,18 +180,43 @@
           </nav>
         </div>`;
 
-      // Dropdown: keyboard + ARIA on top of the hover/focus-within CSS.
+      // Dropdowns: keyboard + ARIA on top of the hover/focus-within CSS. Panels are
+      // right-anchored by default (.dd-menu right:0), which reads fine when the trigger
+      // sits near the right of the nav — but a left-side trigger (Views) has less room
+      // to its left than the panel needs, at tablet widths as much as on phones.
+      // positionMenu() measures the real trigger + panel on every open and clamps
+      // left/top so the panel always stays fully on-screen, at any width. (Pattern
+      // ported from recursive-tarot/site-header.js commit 84934e6, the family's fix
+      // for the same left-edge-overflow bug.)
+      const DD_EDGE = 8; // min gap kept between a panel and the viewport edge
+      const positionMenu = dd => {
+        const menu = dd.querySelector('.dd-menu');
+        if (!menu) return;
+        const ddRect = dd.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+        const vw = window.innerWidth, vh = window.innerHeight;
+        // Natural position mirrors the CSS default (panel's right edge flush with the
+        // trigger's right edge), then clamp so neither edge crosses the viewport.
+        let left = ddRect.right - menuRect.width;
+        left = Math.max(DD_EDGE, Math.min(left, vw - menuRect.width - DD_EDGE));
+        menu.style.left = (left - ddRect.left) + 'px';
+        menu.style.right = 'auto';
+        // Vertical: cap height + let the panel scroll internally rather than running
+        // off the bottom of short viewports (e.g. a phone in landscape).
+        const top = ddRect.bottom + 8;
+        menu.style.maxHeight = Math.max(120, vh - top - DD_EDGE) + 'px';
+      };
       root.querySelectorAll('.dd').forEach(dd => {
         const btn = dd.querySelector('.dd-btn');
         const set = open => btn && btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        dd.addEventListener('mouseenter', () => set(true));
+        dd.addEventListener('mouseenter', () => { set(true); positionMenu(dd); });
         dd.addEventListener('mouseleave', () => set(false));
-        dd.addEventListener('focusin', () => set(true));
+        dd.addEventListener('focusin', () => { set(true); positionMenu(dd); });
         dd.addEventListener('focusout', () => { if (!dd.matches(':focus-within')) set(false); });
         dd.addEventListener('keydown', e => {
           if (e.key === 'Escape') { set(false); btn && btn.focus(); }
           if ((e.key === 'Enter' || e.key === ' ') && e.target === btn) {
-            const first = dd.querySelector('.dd-menu a'); if (first) { e.preventDefault(); set(true); first.focus(); }
+            const first = dd.querySelector('.dd-menu a'); if (first) { e.preventDefault(); set(true); positionMenu(dd); first.focus(); }
           }
         });
         // Touch / no-hover devices: tap the tab to toggle its menu (hover never fires).
@@ -175,7 +225,7 @@
           e.preventDefault();
           const willOpen = !dd.classList.contains('open');
           root.querySelectorAll('.dd.open').forEach(o => { o.classList.remove('open'); const b = o.querySelector('.dd-btn'); if (b) b.setAttribute('aria-expanded', 'false'); });
-          if (willOpen) { dd.classList.add('open'); set(true); }
+          if (willOpen) { dd.classList.add('open'); set(true); positionMenu(dd); }
         });
       });
 
@@ -184,6 +234,15 @@
         if (!e.composedPath().includes(this)) {
           root.querySelectorAll('.dd.open').forEach(o => { o.classList.remove('open'); const b = o.querySelector('.dd-btn'); if (b) b.setAttribute('aria-expanded', 'false'); });
         }
+      });
+
+      // Reposition any currently-open menu on resize/orientation-change (e.g. rotating
+      // a tablet with a dropdown open) — a fixed breakpoint can't react to this either.
+      window.addEventListener('resize', () => {
+        root.querySelectorAll('.dd').forEach(dd => {
+          const menu = dd.querySelector('.dd-menu');
+          if (menu && getComputedStyle(menu).display !== 'none') positionMenu(dd);
+        });
       });
 
       // Auto-hide on scroll down, reveal on scroll up — but never while the nav has keyboard focus.

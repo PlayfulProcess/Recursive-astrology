@@ -1277,21 +1277,7 @@
             position: relative;
         }
 
-        /* Back-to-site strip (plain markup, see body comment) — theme-aware so
-           it matches the body below it instead of always being a light strip
-           glued onto a dark page. */
-        #ra-backbar {
-            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-            padding: 9px 16px; background: var(--v-surface-2); border-bottom: 1px solid var(--v-line);
-            font: 600 13px Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-        }
-        #ra-backbar a { color: var(--v-muted); text-decoration: none; }
-        #ra-backbar a:first-child { color: var(--astro-gold); }
-        #ra-backbar a:hover { color: var(--astro-gold); }
-        #ra-backbar .sep { color: var(--v-line); }
-
         /* Embed mode - hide form elements but KEEP chart wheel */
-        body.embed-mode #ra-backbar,
         body.embed-mode site-header,
         body.embed-mode site-footer,
         body.embed-mode .astro-header,
@@ -1370,7 +1356,6 @@
             background: rgb(var(--v-accent-rgb) / 0.3);
         }
         /* Hide header elements when loaded in an iframe */
-        body.in-iframe #ra-backbar { display: none !important; }
         body.in-iframe site-header { display: none !important; }
         body.in-iframe .astro-header { display: none !important; }
 
@@ -1437,19 +1422,17 @@
     </script>
 </head>
 <body class="text-white">
-    <!-- Back to The Recursive Astrology — plain markup, no custom element, so it can never
-         collide with site-shell-inline.js's own <site-header> definition (the platform header
-         below, with Sign In / My Charts, is untouched). Solves "stuck in the chart viewer with
-         no way back to wheel.html / lenses.html / the grammar catalog." -->
-    <div id="ra-backbar" role="navigation" aria-label="Back to The Recursive Astrology">
-        <a href="../index.html">&larr; The Recursive Astrology</a>
-        <span class="sep" aria-hidden="true">&middot;</span>
-        <a href="../wheel.html">Wheel</a>
-        <a href="../lenses.html">Lenses</a>
-        <a href="../index.html#all-grammars">Grammars</a>
-    </div>
-    <!-- Site Header (platform nav — Journal / Create / Library — defined by site-shell-inline.js below) -->
-    <site-header></site-header>
+    <!-- Site Header — the SAME shared nav as every other page in this repo (Home / Views /
+         Grammars / GitHub), not the recursive.eco-family platform header. Previously this page
+         rendered a bespoke plain-markup "back to the site" strip specifically to dodge a
+         <site-header> custom-element collision with site-shell-inline.js's own platform-nav
+         definition (Journal / Create / Library) below. That collision is now resolved at the
+         source: site-shell-inline.js registers its header under <viewer-shell-header> instead
+         (unused here, kept for its auth logic — see that file's comment), which frees up
+         <site-header> for this repo's own component, loaded the same way index.html/wheel.html/
+         lenses.html/genealogy.html do. -->
+    <script src="../site-header.js?v=2"></script>
+    <site-header active="viewer"></site-header>
 
     <!-- Main Content -->
     <main class="min-h-screen">

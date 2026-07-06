@@ -627,7 +627,18 @@
     });
   }
 
-  // Site Header Component
+  // Site Header Component (recursive.eco platform nav — Journal / Create / Library).
+  // Jul 6 2026: registered as <viewer-shell-header>, NOT <site-header>. This repo's
+  // own site-header.js (repo root) defines <site-header> — the shared nav every other
+  // page uses (Home / Views / Grammars / GitHub) — and astrology-viewer.html now loads
+  // it too, so registering the SAME tag name here a second time would throw
+  // "already defined" and silently kill every statement after it in this file
+  // (SiteFooter/SpiralHeader registration, the signin-modal.js autoload, and the
+  // desktop-auth-link/mobile-auth-link click intercept below all live in this one
+  // script). Nothing in this repo currently instantiates <viewer-shell-header> — it's
+  // kept, renamed rather than deleted, so this class's auth logic (session detection
+  // via RecursiveAuth, sign-in/sign-out wiring, the My Library reveal) stays available
+  // if a future page wants the full platform header again.
   class SiteHeader extends HTMLElement {
     connectedCallback() {
       injectHTML(this, HEADER_HTML, 'header');
@@ -963,7 +974,7 @@
   }
 
   // Register custom elements
-  customElements.define('site-header', SiteHeader);
+  customElements.define('viewer-shell-header', SiteHeader);
   customElements.define('site-footer', SiteFooter);
   customElements.define('spiral-header', SpiralHeader);
 
