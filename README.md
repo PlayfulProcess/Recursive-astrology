@@ -21,22 +21,40 @@ five-thousand-year record of humans reading meaning *into* the sky.
 
 ```
 recursive-astrology/
-├── index.html                                       reads one grammar and renders it as cards
+├── index.html                                       reads any grammar (?grammar=<slug>) as cards
+├── wheel.html                                       the twelve-house casting as an SVG wheel
 ├── theme.css                                        the single source of colour (light only)
 ├── voices.json                                      the creed — shared_intention + 3 voices
 ├── grammars/
-│   └── historiographies-of-astrology/
-│       └── grammar.json                             the library: 10 views + 3 pattern groupings
+│   ├── historiographies-of-astrology/               the record: 10 views + 3 pattern groupings
+│   ├── tetrabiblos-ashmand/                         Ptolemy in his own (PD) words — 28 items
+│   ├── alan-leo/                                    the Theosophical revival, PD — 38 items
+│   ├── proctor-skeptical-astrology/                 the Victorian skeptic, PD — 37 items
+│   ├── western-astrology-canonical/                 the flagship interpretation set — 43 items
+│   ├── casting-big-three/                           casting: Sun · Moon · Ascendant (derived, never random)
+│   ├── casting-twelve-houses/                       casting: the chart wheel (12 house positions)
+│   └── casting-single-aspect/                       casting: any ONE aspect of your chart
 ├── research/                                        the evidence wing (dossiers are the source of truth)
 │   ├── SCHEMA.md                                    how a dossier is written
 │   ├── bibliography.bib                             every citable source, one place
 │   └── views/<slug>.md                              one dossier per view, claims cited [@key]
+├── recursive-eco.json                               the channel manifest (slug: astrology)
+├── ids.json                                         slug → recursive.eco UUID map
+├── docs/
+│   ├── RECURSIVE-ECO-INTEGRATION.md                 the app↔repo contract (ownership, sync, castings)
+│   └── APP-INTEGRATION-TODO.md                      hand-off notes for the recursive.eco side
 ├── check.py                                         the pre-commit gate, zero dependencies
 ├── PLAN.md                                          the founding plan & phased roadmap
 ├── CLAUDE.md                                        the rules of this commons (the creed is the spine)
+├── CLAUDE-AI-INSTRUCTIONS.md                        the standing brief for app-connected sessions
+├── ICONS.md                                         SVG glyph set — never emoji
 ├── GRAMMAR_FORMAT.md                                the canonical shape of a grammar
 └── README.md                                        this file
 ```
+
+**Castings are never random.** Where tarot draws from a shuffled deck, astrology's "deck" is your
+own chart: every casting position derives from an aspect of a given chart (your Sun, your houses,
+one aspect you choose). See `wheel.html` and `grammars/casting-*/`.
 
 Everything is plain HTML, one CSS file, and JSON. No build step, no framework, no server in
 production. GitHub Pages serves it as-is.

@@ -1,5 +1,17 @@
 # HANDOVER — next session (start here)
 
+> **Update 2026-07-06 (tarot-level pass):** the repo is now channel-shaped. Added:
+> `recursive-eco.json` (channel slug `astrology`) + `ids.json` (empty until first app import),
+> `ICONS.md` (SVG-only; crescent+star primary, wheel glyph for castings),
+> `CLAUDE-AI-INSTRUCTIONS.md`, `docs/RECURSIVE-ECO-INTEGRATION.md` (ownership/sync contract),
+> `docs/APP-INTEGRATION-TODO.md` (the four app-side steps), the flagship
+> `western-astrology-canonical` (43 items, adopted from recursive.eco-schemas), and **three
+> castings whose draw is NEVER random** — every position resolves to an aspect of the querent's
+> own chart: `casting-big-three`, `casting-twelve-houses` (rendered by the new `wheel.html`
+> SVG wheel), `casting-single-aspect`. Branch model now mirrors tarot: work on `dev`,
+> publish `dev`→`main`; GitHub Pages is live. `check.py` green with 8 grammars.
+> The ephemeris boundary (real chart calc) is documented, not built — see the integration doc.
+
 *Written 2026-07-05 by the founding session of recursive-astrology. This is the single entry
 point for the next session. Read this, then `PLAN.md` (the founding roadmap — §3 phases, §4
 PD seeds, §5 guardrails), then `research/SCHEMA.md` (the dossier contract).*

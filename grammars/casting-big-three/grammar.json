@@ -1,0 +1,65 @@
+{
+  "name": "The Big Three — a reflection casting",
+  "description": "A three-position casting that mirrors the tarot three-card spread so it works in the oracle from day one — but nothing here is drawn at random: every position resolves to an aspect of YOUR OWN chart (Sun, Moon, Ascendant). The chart is a mirror and a calendar, never a command: each position hands you a prompt about something already yours, and you author what it means. Positions are read against the flagship interpretation set (western-astrology-canonical) or any interpretation grammar the reader chooses (the historical voices work too — Ptolemy, Leo, the skeptics).",
+  "grammar_type": "sequence",
+  "creator_name": "PlayfulProcess",
+  "creator_link": "https://recursive.eco",
+  "tags": ["astrology", "casting", "spread", "big-three", "recursive-eco"],
+  "casting": {
+    "draw": "derived",
+    "from": "western-astrology-canonical",
+    "allow_reversed": false,
+    "requires": ["birth_datetime", "birth_place"],
+    "fallback": "user_entered_placements",
+    "_note": "NEVER random: each position derives from the querent's chart. Sun and Moon sign need only the birth date(time); the Ascendant needs time + place and a real chart calculation (ephemeris — see docs/RECURSIVE-ECO-INTEGRATION.md §ephemeris; the family's engine is the Skyfield backend noted in nara's assets inventory). Data-only fallback: the reader enters placements they already know. Resolution: each position binds to the matching item of the `from` grammar (planet item + the sign it occupies; ascendant → the rising sign + house-1)."
+  },
+  "items": [
+    {
+      "id": "position-sun",
+      "name": "Your Sun",
+      "level": 1,
+      "category": "position",
+      "position": 1,
+      "maps_to": { "kind": "planet-in-sign", "planet": "planet-sun" },
+      "sections": {
+        "Position": "The first mirror: the Sun — where your conscious life points. Resolved from your chart: the sign (and, with a full chart, the house) your Sun occupies.",
+        "Prompt": "Read the Sun item and your Sun-sign item side by side. What in this description is already visibly at work in your life — and what does it invite that you have been postponing? Hold it loosely: you decide what fits."
+      },
+      "keywords": ["sun", "identity", "will"]
+    },
+    {
+      "id": "position-moon",
+      "name": "Your Moon",
+      "level": 1,
+      "category": "position",
+      "position": 2,
+      "maps_to": { "kind": "planet-in-sign", "planet": "planet-moon" },
+      "sections": {
+        "Position": "The second mirror: the Moon — the habits of feeling, what comforts and what unsettles. Resolved from your chart: the sign your Moon occupies.",
+        "Prompt": "Where the Sun position asked what you are building, this one asks what you are protecting. Read your Moon placement as a description of your default weather — then ask: is this weather, or is it a wall? The answer is yours, not the chart's."
+      },
+      "keywords": ["moon", "feeling", "habit"]
+    },
+    {
+      "id": "position-ascendant",
+      "name": "Your Ascendant",
+      "level": 1,
+      "category": "position",
+      "position": 3,
+      "maps_to": { "kind": "angle", "angle": "ascendant", "house": "house-1" },
+      "sections": {
+        "Position": "The third mirror: the Ascendant — the sign rising on the eastern horizon at your birth; the threshold between you and the room. Needs birth time + place (a real chart calculation), or enter it if you already know it.",
+        "Prompt": "The rising sign describes an entrance, not an essence. Read it and ask: what do people meet first in me — and is that a door I open on purpose, or one that swings on its own? Neither answer is wrong; noticing is the reading."
+      },
+      "keywords": ["ascendant", "rising", "threshold"]
+    }
+  ],
+  "_grammar_commons": {
+    "schema_version": "1.0",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": [
+      { "name": "PlayfulProcess", "role": "author", "link": "https://recursive.eco" }
+    ]
+  }
+}

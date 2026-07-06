@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wheel — twelve houses, a chart-shaped casting</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  /* Layout only — every colour comes from theme.css (the one source). Do not add colour tokens here. */
+  html,body{margin:0;background:var(--bg);color:var(--ink);color-scheme:light;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+  header.hero{padding:14px 0 8px}
+  .kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+  h1{font-family:"Fraunces",Georgia,serif;font-size:30px;margin:6px 0 8px;color:var(--ink);display:flex;align-items:center;gap:12px}
+  h1 svg{flex:none;color:var(--accent)}
+  .lede{color:var(--muted);font-size:15.5px;max-width:70ch}
+  .stage{display:flex;justify-content:center;margin:26px 0 8px}
+  svg.wheel{max-width:560px;width:100%;height:auto}
+  .sector{fill:var(--panel);stroke:var(--line);cursor:pointer;transition:fill .15s}
+  .sector:hover,.sector:focus{fill:var(--chip,#f1ece1);outline:none}
+  .hub{fill:none;stroke:var(--line)}
+  .axis{stroke:var(--line);stroke-dasharray:3 4}
+  .num{font-family:"Fraunces",Georgia,serif;font-size:15px;fill:var(--accent);pointer-events:none}
+  .houselabel{font-size:8.5px;fill:var(--muted);pointer-events:none;text-transform:uppercase;letter-spacing:.08em}
+  .anglelabel{font-size:9px;fill:var(--muted)}
+  .creed{font-size:9.5px;fill:var(--muted)}
+  dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);
+    max-width:640px;width:calc(100% - 32px);padding:0}
+  dialog::backdrop{background:rgba(20,15,8,.42)}
+  .dhead{padding:20px 22px 4px}
+  .dbody{padding:2px 22px 22px}
+  .dhead .cat{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+  .dhead h2{font-family:"Fraunces",Georgia,serif;margin:6px 0 0;font-size:23px}
+  .sec{margin-top:16px}
+  .sec h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:0 0 4px}
+  .sec p{margin:0;font-size:15px;color:var(--ink)}
+  .close{position:sticky;top:0;float:right;margin:12px 14px 0 0;border:0;background:none;font-size:22px;
+    line-height:1;cursor:pointer;color:var(--muted)}
+  .note{margin-top:30px;padding:16px 18px;border:1px dashed var(--line);border-radius:12px;
+    background:var(--chip,#f7f3ea);font-size:13.5px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">The Recursive Astrology · a casting, not a prediction</div>
+    <h1>
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3v18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4" />
+      </svg>
+      The Wheel — twelve houses
+    </h1>
+    <p class="lede" id="g-desc">Loading…</p>
+  </header>
+
+  <div class="stage"><svg class="wheel" id="wheel" viewBox="0 0 460 460" role="list"
+    aria-label="The twelve houses of a chart, as a wheel"></svg></div>
+
+  <div class="note">
+    <b>Nothing here is drawn at random — the positions are your own chart.</b> Click a house.
+    Each opens its position prompt from the casting grammar and its meaning from the
+    <a href="index.html?grammar=western-astrology-canonical">flagship interpretation set</a>.
+    Resolving <em>your</em> cusps and planets needs a real chart calculation (birth time + place);
+    until that is wired into the app, the wheel reads honestly as the twelve standing rooms of a
+    life — enter placements you already know, or simply reflect house by house. Data:
+    <code>grammars/casting-twelve-houses/grammar.json</code>. The creed holds on every surface:
+    a chart is a mirror and a calendar, never a command.
+  </div>
+</div>
+
+<dialog id="detail">
+  <button class="close" aria-label="Close" onclick="detail.close()">×</button>
+  <div class="dhead"><div class="cat" id="d-cat"></div><h2 id="d-name"></h2></div>
+  <div class="dbody" id="d-sections"></div>
+</dialog>
+
+<script>
+const $ = s => document.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+const CX = 230, CY = 230, R = 190, R0 = 78, RNUM = 134, RLAB = 208;
+
+let CASTING = null, SET = null;
+
+function pt(radius, deg){ const a = deg * Math.PI / 180; return [CX + radius * Math.cos(a), CY - radius * Math.sin(a)]; }
+
+function sectorPath(a0, a1){
+  const [x0o, y0o] = pt(R, a0), [x1o, y1o] = pt(R, a1);
+  const [x0i, y0i] = pt(R0, a0), [x1i, y1i] = pt(R0, a1);
+  return `M ${x0i} ${y0i} L ${x0o} ${y0o} A ${R} ${R} 0 0 0 ${x1o} ${y1o} L ${x1i} ${y1i} A ${R0} ${R0} 0 0 1 ${x0i} ${y0i} Z`;
+}
+
+function el(tag, attrs, text){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function mdLite(s){
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>');
+}
+
+function openHouse(pos){
+  const it = CASTING.items.find(i => i.position === pos);
+  const houseItem = SET && SET.items.find(i => i.id === `house-${pos}`);
+  $('#d-cat').textContent = `position ${pos} of 12 · derived from your chart, never drawn`;
+  $('#d-name').textContent = it.name;
+  const body = $('#d-sections');
+  body.innerHTML = '';
+  const secs = Object.assign({}, it.sections);
+  if (houseItem) for (const [k, v] of Object.entries(houseItem.sections)) secs[`${houseItem.name} — ${k}`] = v;
+  for (const [label, text] of Object.entries(secs)){
+    const div = document.createElement('div');
+    div.className = 'sec';
+    div.innerHTML = `<h3>${label}</h3><p>${mdLite(text)}</p>`;
+    body.appendChild(div);
+  }
+  $('#detail').showModal();
+}
+
+function draw(){
+  const svg = $('#wheel');
+  svg.innerHTML = '';
+  svg.appendChild(el('circle', {cx: CX, cy: CY, r: R, class: 'hub'}));
+  svg.appendChild(el('circle', {cx: CX, cy: CY, r: R0, class: 'hub'}));
+  CASTING.items.forEach(it => {
+    const n = it.position;
+    const a0 = 180 + (n - 1) * 30, a1 = a0 + 30, mid = a0 + 15;
+    const p = el('path', {d: sectorPath(a0, a1), class: 'sector', tabindex: 0, role: 'listitem',
+      'aria-label': it.name});
+    p.addEventListener('click', () => openHouse(n));
+    p.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openHouse(n); }});
+    svg.appendChild(p);
+    const [nx, ny] = pt(RNUM, mid);
+    svg.appendChild(el('text', {x: nx, y: ny + 5, class: 'num', 'text-anchor': 'middle'}, n));
+    const [lx, ly] = pt(RLAB, mid);
+    const short = it.name.replace(/^\d+\.\s*House of\s*/i, '');
+    svg.appendChild(el('text', {x: lx, y: ly + 3, class: 'houselabel', 'text-anchor': 'middle'}, short));
+  });
+  // the horizon (ASC–DSC) axis, painted over the sectors so it stays visible
+  svg.appendChild(el('line', {x1: CX - R, y1: CY, x2: CX - R0, y2: CY, class: 'axis'}));
+  svg.appendChild(el('line', {x1: CX + R0, y1: CY, x2: CX + R, y2: CY, class: 'axis'}));
+  svg.appendChild(el('text', {x: CX - R + 8, y: CY - 6, class: 'anglelabel', 'text-anchor': 'start'}, 'ASC'));
+  // the creed, in the hub
+  const creed = ['a mirror and a calendar,', 'never a command'];
+  creed.forEach((line, i) => {
+    svg.appendChild(el('text', {x: CX, y: CY - 4 + i * 13, class: 'creed', 'text-anchor': 'middle'}, line));
+  });
+}
+
+Promise.all([
+  fetch('grammars/casting-twelve-houses/grammar.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }),
+  fetch('grammars/western-astrology-canonical/grammar.json').then(r => r.ok ? r.json() : null).catch(() => null),
+]).then(([casting, set]) => {
+  CASTING = casting; SET = set;
+  $('#g-desc').textContent = casting.description;
+  draw();
+}).catch(() => {
+  $('#g-desc').innerHTML = 'Could not load the casting grammar. Browsers block <code>file://</code> fetches — '
+    + 'serve locally (<code>python -m http.server 8091</code>) or view on GitHub Pages.';
+});
+</script>
+</body>
+</html>
