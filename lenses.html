@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lenses — one house or planet, four traditions — The Recursive Astrology</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  /* Layout only — every colour comes from theme.css (the one source). Do not add colour tokens here. */
+  html,body{margin:0;background:var(--bg);color:var(--ink);color-scheme:light;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 18px 80px}
+  header.hero{padding:14px 0 8px}
+  .kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+  h1{font-family:"Fraunces",Georgia,serif;font-size:28px;margin:6px 0 8px;color:var(--ink)}
+  .lede{color:var(--muted);font-size:15px;max-width:72ch}
+
+  .picker{margin-top:22px}
+  .kindrow{display:flex;gap:8px;margin-bottom:14px}
+  .kindbtn{font:inherit;font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;
+    border:1px solid var(--line);background:var(--panel);color:var(--ink-soft);cursor:pointer}
+  .kindbtn.active{background:var(--gold);color:#fff;border-color:var(--gold)}
+
+  .keyrow{display:flex;flex-wrap:wrap;gap:8px}
+  .keybtn{font:inherit;font-size:13px;padding:7px 13px;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+  .keybtn:hover{border-color:var(--accent)}
+  .keybtn.active{background:var(--chip,#faf3e6);border-color:var(--accent);color:var(--ink)}
+
+  .results{margin-top:28px}
+  .results h2{font-family:"Fraunces",Georgia,serif;font-size:21px;margin:0 0 4px}
+  .results .rsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+  .lensgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .lenscard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;min-height:120px}
+  .lenscard .trad{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+  .lenscard .era{font-size:11px;color:var(--muted);margin:1px 0 8px}
+  .lenscard b{display:block;font-family:"Fraunces",Georgia,serif;font-size:16px;margin:0 0 8px}
+  .lenscard .sec{margin-top:9px}
+  .lenscard .sec h4{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 3px}
+  .lenscard .sec p{margin:0;font-size:13.5px;color:var(--ink)}
+  .lenscard .empty{font-size:13px;color:var(--muted);font-style:italic}
+
+  .note{margin-top:34px;padding:16px 18px;border:1px dashed var(--line);border-radius:12px;
+    background:var(--chip,#f7f3ea);font-size:13.5px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">The Recursive Astrology · lenses</div>
+    <h1>One house or planet, four traditions</h1>
+    <p class="lede">Pick a house or a planet and read how four traditions treat the same chart
+      feature, side by side, in chronological order — Ptolemy's 2nd-century natural philosophy,
+      the Victorian skeptic, the Theosophical revival, and today's flagship interpretation set.
+      Evolution across traditions is the point: where a tradition has no entry (the outer
+      planets didn't exist for Ptolemy), the gap is shown honestly, not papered over.
+      Back to <a href="index.html">the library</a>.</p>
+  </header>
+
+  <div class="picker">
+    <div class="kindrow" role="tablist" aria-label="Look up by">
+      <button class="kindbtn active" id="kind-house" data-kind="house">By House</button>
+      <button class="kindbtn" id="kind-planet" data-kind="planet">By Planet</button>
+    </div>
+    <div class="keyrow" id="keyrow" aria-live="polite"></div>
+  </div>
+
+  <section class="results">
+    <h2 id="results-h">Loading…</h2>
+    <p class="rsub" id="results-sub"></p>
+    <div class="lensgrid" id="lensgrid" aria-live="polite"></div>
+  </section>
+
+  <p class="note" id="fallback" hidden></p>
+
+  <div class="note">
+    <b>How this works.</b> Four grammars are fetched client-side —
+    <code>grammars/tetrabiblos-ashmand/grammar.json</code>,
+    <code>grammars/proctor-skeptical-astrology/grammar.json</code>,
+    <code>grammars/alan-leo/grammar.json</code>, and
+    <code>grammars/western-astrology-canonical/grammar.json</code> — and matched by house number
+    or planet name. No backend, no build step. See <a href="index.html">the library</a> for every
+    grammar in this repo, or <a href="viewer/astrology-viewer.html">the chart viewer</a> to cast
+    your own chart.
+  </div>
+</div>
+
+<script>
+const HOUSE_NUMBERS = Array.from({length:12}, (_,i) => i+1);
+const PLANET_NAMES = ['Sun','Moon','Mercury','Venus','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto'];
+const ORDWORDS = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth','eleventh','twelfth'];
+
+// Chronological order: ancient -> Victorian skeptic -> Theosophical revival -> contemporary.
+const TRADITIONS = [
+  { slug: 'tetrabiblos-ashmand', label: 'Ptolemy', era: 'Tetrabiblos, c. 150 CE (Ashmand tr. 1822)' },
+  { slug: 'proctor-skeptical-astrology', label: 'Proctor', era: 'the Victorian skeptic, 1896' },
+  { slug: 'alan-leo', label: 'Alan Leo', era: 'the Theosophical revival' },
+  { slug: 'western-astrology-canonical', label: 'The flagship set', era: 'contemporary' },
+];
+
+const $ = s => document.querySelector(s);
+let GRAMMARS = {}; // slug -> parsed grammar
+let kind = 'house';
+
+function houseNumberFromName(name){
+  const n = String(name || '').toLowerCase().trim();
+  const digit = n.match(/^(\d+)(st|nd|rd|th)\b/);
+  if (digit) return parseInt(digit[1], 10);
+  for (let i = 0; i < ORDWORDS.length; i++){
+    if (n.startsWith(ORDWORDS[i])) return i + 1;
+  }
+  return null;
+}
+
+function findHouseItem(slug, number){
+  const g = GRAMMARS[slug];
+  if (!g) return null;
+  return (g.items || []).find(it => it.category === 'house' && houseNumberFromName(it.name) === number) || null;
+}
+
+function findPlanetItem(slug, planetName){
+  const g = GRAMMARS[slug];
+  if (!g) return null;
+  const target = planetName.toLowerCase();
+  return (g.items || []).find(it => it.category === 'planet' && String(it.name || '').toLowerCase().trim() === target) || null;
+}
+
+function mdLite(s){
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>');
+}
+
+function renderKeyRow(){
+  const row = $('#keyrow');
+  row.innerHTML = '';
+  const keys = kind === 'house' ? HOUSE_NUMBERS : PLANET_NAMES;
+  keys.forEach((k, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'keybtn' + (i === 0 ? ' active' : '');
+    btn.textContent = kind === 'house' ? `House ${k}` : k;
+    btn.dataset.key = k;
+    btn.onclick = () => {
+      row.querySelectorAll('.keybtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render(k);
+    };
+    row.appendChild(btn);
+  });
+}
+
+function render(key){
+  const grid = $('#lensgrid');
+  grid.innerHTML = '';
+  if (kind === 'house') {
+    $('#results-h').textContent = `House ${key}`;
+    $('#results-sub').textContent = 'The same house position, read across four traditions.';
+  } else {
+    $('#results-h').textContent = key;
+    $('#results-sub').textContent = 'The same planet, read across four traditions.';
+  }
+
+  TRADITIONS.forEach(t => {
+    const item = kind === 'house' ? findHouseItem(t.slug, key) : findPlanetItem(t.slug, key);
+    const card = document.createElement('div');
+    card.className = 'lenscard';
+    if (!item) {
+      card.innerHTML = `<div class="trad">${t.label}</div><div class="era">${t.era}</div>
+        <p class="empty">No entry in this tradition${kind === 'planet' ? ' — likely beyond what was known to it' : ''}.</p>`;
+      grid.appendChild(card);
+      return;
+    }
+    const secs = Object.entries(item.sections || {}).map(([label, text]) =>
+      `<div class="sec"><h4>${label}</h4><p>${mdLite(text)}</p></div>`).join('');
+    card.innerHTML = `<div class="trad">${t.label}</div><div class="era">${t.era}</div>
+      <b>${item.name}</b>${secs}`;
+    grid.appendChild(card);
+  });
+}
+
+function setKind(newKind){
+  kind = newKind;
+  $('#kind-house').classList.toggle('active', kind === 'house');
+  $('#kind-planet').classList.toggle('active', kind === 'planet');
+  renderKeyRow();
+  render(kind === 'house' ? HOUSE_NUMBERS[0] : PLANET_NAMES[0]);
+}
+
+$('#kind-house').onclick = () => setKind('house');
+$('#kind-planet').onclick = () => setKind('planet');
+
+Promise.all(TRADITIONS.map(t =>
+  fetch(`grammars/${t.slug}/grammar.json`)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(g => { GRAMMARS[t.slug] = g; })
+    .catch(() => { GRAMMARS[t.slug] = null; })
+)).then(() => {
+  renderKeyRow();
+  render(HOUSE_NUMBERS[0]);
+}).catch(err => {
+  const fb = $('#fallback');
+  fb.hidden = false;
+  fb.innerHTML = '<b>Could not load the grammars.</b> Browsers block <code>file://</code> fetches, '
+    + 'so open this over a tiny local server instead: run <code>python -m http.server 8000</code> '
+    + 'in this folder, then visit <code>http://localhost:8000/lenses.html</code>. '
+    + '(On GitHub Pages it just works.)';
+});
+</script>
+</body>
+</html>
