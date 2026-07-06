@@ -1,6 +1,17 @@
 {
   "_note": "Slug -> recursive.eco grammar UUID (the deckId) for the astrology channel. Used by recursive.eco to bind repo grammars to their live rows and to build per-grammar links. _public_now lists the slugs that are is_public=true on recursive.eco (only public grammars import as channel members). Keep this updated when new grammars are created. Mirrors nara/ids.json and recursive-tarot/tarot/_eco_ids.json.",
-  "_preview_links": "Every grammar renders with no extra hosting: swap <id> for the UUID from `ids`. Play = https://flow.recursive.eco/play?id=<id> | Edit = https://flow.recursive.eco/create/dashboard/unified/new?id=<id> | Cards = https://recursive.eco/pages/grammar-viewer.html?type=custom&id=<id> | Study = https://recursive.eco/pages/study-viewer.html?type=custom&id=<id> | Tree = https://recursive.eco/pages/tree-viewer.html?type=custom&id=<id> | Thumbnails = Cards + &layout=thumbnails",
+  "_preview_links": "Every grammar renders with no extra hosting: swap <id> for the UUID from `ids`. This channel's grammar_type param is 'astrology' (the viewer explicitly supports it — see recursive-eco/apps/landing/pages/grammar-viewer.html). Play = https://flow.recursive.eco/play?id=<id> | Edit = https://flow.recursive.eco/create/dashboard/unified/new?id=<id> | Cards = https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=<id> | Study = https://recursive.eco/pages/study-viewer.html?type=astrology&id=<id> | Tree = https://recursive.eco/pages/tree-viewer.html?type=astrology&id=<id> | Thumbnails = Cards + &layout=thumbnails",
   "_public_now": [],
-  "ids": {}
+  "ids": {},
+  "preview_links": {
+    "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. `raw` always resolves (no UUID needed); `cards`/`study`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
+    "historiographies-of-astrology": { "raw": "grammars/historiographies-of-astrology/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
+    "tetrabiblos-ashmand": { "raw": "grammars/tetrabiblos-ashmand/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
+    "alan-leo": { "raw": "grammars/alan-leo/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
+    "proctor-skeptical-astrology": { "raw": "grammars/proctor-skeptical-astrology/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
+    "western-astrology-canonical": { "raw": "grammars/western-astrology-canonical/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
+    "casting-big-three": { "raw": "grammars/casting-big-three/grammar.json", "cards": null, "study": null, "play": null, "casting": true },
+    "casting-twelve-houses": { "raw": "grammars/casting-twelve-houses/grammar.json", "cards": null, "study": null, "play": null, "casting": true },
+    "casting-single-aspect": { "raw": "grammars/casting-single-aspect/grammar.json", "cards": null, "study": null, "play": null, "casting": true }
+  }
 }
