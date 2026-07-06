@@ -48,6 +48,7 @@
         '<div class="msg" id="raf-msg"></div>'+
         '<div class="links"><a href="https://recursive.eco" target="_blank" rel="noopener">recursive.eco ↗</a> · '+
         '<a href="'+base+'index.html#all-grammars">All grammars</a> · '+
+        '<a href="'+base+'pages/course.html">Course</a> · '+
         '<a href="https://github.com/PlayfulProcess/Recursive-astrology" target="_blank" rel="noopener">the repo</a></div>'+
         '</div>';
       var f=this.querySelector('#raf-news'), msg=this.querySelector('#raf-msg');

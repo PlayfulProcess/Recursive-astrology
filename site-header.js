@@ -10,9 +10,8 @@
  *
  * Pattern mirrored from recursive-tarot/site-header.js (the family's pattern
  * source) — adapted here: astro branding (crescent + star), this repo's own
- * four pages (Home, Wheel, Lenses, Chart Viewer) plus a Grammars dropdown
- * listing every grammar in grammars/*, since this repo has no course/shop/
- * games pages to nav to.
+ * pages (Home, Wheel, Lenses, Course, Chart Viewer) plus a Grammars dropdown
+ * listing every grammar in grammars/*.
  */
 (function () {
   if (customElements.get('site-header')) return;
@@ -26,6 +25,7 @@
   const TABS = [
     ['wheel',  'Wheel',        PFX + 'wheel.html'],
     ['lenses', 'Lenses',       PFX + 'lenses.html'],
+    ['course', 'Course',       PFX + 'pages/course.html'],
     ['viewer', 'Chart Viewer', PFX + 'viewer/astrology-viewer.html'],
   ];
   // Every grammar in grammars/*, in the order they appear on the homepage gallery.
@@ -47,6 +47,7 @@
     const f = location.pathname.split('/').pop() || 'index.html';
     if (f.startsWith('wheel')) return 'wheel';
     if (f.startsWith('lenses')) return 'lenses';
+    if (f.startsWith('course')) return 'course';
     if (f.startsWith('astrology-viewer')) return 'viewer';
     if (f === 'index.html' || f === '') return 'home';
     return 'home';
