@@ -1,17 +1,83 @@
 {
   "_note": "Slug -> recursive.eco grammar UUID (the deckId) for the astrology channel. Used by recursive.eco to bind repo grammars to their live rows and to build per-grammar links. _public_now lists the slugs that are is_public=true on recursive.eco (only public grammars import as channel members). Keep this updated when new grammars are created. Mirrors nara/ids.json and recursive-tarot/tarot/_eco_ids.json.",
   "_preview_links": "Every grammar renders with no extra hosting: swap <id> for the UUID from `ids`. This channel's grammar_type param is 'astrology' (the viewer explicitly supports it — see recursive-eco/apps/landing/pages/grammar-viewer.html). Play = https://flow.recursive.eco/play?id=<id> | Edit = https://flow.recursive.eco/create/dashboard/unified/new?id=<id> | Cards = https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=<id> | Study = https://recursive.eco/pages/study-viewer.html?type=astrology&id=<id> | Tree = https://recursive.eco/pages/tree-viewer.html?type=astrology&id=<id> | Thumbnails = Cards + &layout=thumbnails",
-  "_public_now": [],
-  "ids": {},
+  "_public_now": [
+    "alan-leo",
+    "casting-big-three",
+    "casting-single-aspect",
+    "casting-twelve-houses",
+    "historiographies-of-astrology",
+    "proctor-skeptical-astrology",
+    "tetrabiblos-ashmand",
+    "western-astrology-canonical"
+  ],
+  "ids": {
+    "alan-leo": "6a50ce87-e54b-47f2-9fc5-70b19c06d179",
+    "casting-big-three": "bbcba06e-0a82-4959-ad69-439ac963bd54",
+    "casting-single-aspect": "d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+    "casting-twelve-houses": "90604ab1-c0c1-4e79-abfd-01e784014319",
+    "historiographies-of-astrology": "ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+    "proctor-skeptical-astrology": "7e0a9452-7d34-4ada-a311-229ba13ecbe7",
+    "tetrabiblos-ashmand": "043aae3c-e51b-4822-9828-e3e18ef9229b",
+    "western-astrology-canonical": "a0a21e50-807d-45ff-b2ab-13fbb4ae86be"
+  },
   "preview_links": {
     "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. `raw` always resolves (no UUID needed); `cards`/`study`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
-    "historiographies-of-astrology": { "raw": "grammars/historiographies-of-astrology/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
-    "tetrabiblos-ashmand": { "raw": "grammars/tetrabiblos-ashmand/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
-    "alan-leo": { "raw": "grammars/alan-leo/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
-    "proctor-skeptical-astrology": { "raw": "grammars/proctor-skeptical-astrology/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
-    "western-astrology-canonical": { "raw": "grammars/western-astrology-canonical/grammar.json", "cards": null, "study": null, "play": null, "casting": false },
-    "casting-big-three": { "raw": "grammars/casting-big-three/grammar.json", "cards": null, "study": null, "play": null, "casting": true },
-    "casting-twelve-houses": { "raw": "grammars/casting-twelve-houses/grammar.json", "cards": null, "study": null, "play": null, "casting": true },
-    "casting-single-aspect": { "raw": "grammars/casting-single-aspect/grammar.json", "cards": null, "study": null, "play": null, "casting": true }
+    "historiographies-of-astrology": {
+      "raw": "grammars/historiographies-of-astrology/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+      "play": "https://flow.recursive.eco/play?id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+      "casting": false
+    },
+    "tetrabiblos-ashmand": {
+      "raw": "grammars/tetrabiblos-ashmand/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=043aae3c-e51b-4822-9828-e3e18ef9229b",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=043aae3c-e51b-4822-9828-e3e18ef9229b",
+      "play": "https://flow.recursive.eco/play?id=043aae3c-e51b-4822-9828-e3e18ef9229b",
+      "casting": false
+    },
+    "alan-leo": {
+      "raw": "grammars/alan-leo/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=6a50ce87-e54b-47f2-9fc5-70b19c06d179",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=6a50ce87-e54b-47f2-9fc5-70b19c06d179",
+      "play": "https://flow.recursive.eco/play?id=6a50ce87-e54b-47f2-9fc5-70b19c06d179",
+      "casting": false
+    },
+    "proctor-skeptical-astrology": {
+      "raw": "grammars/proctor-skeptical-astrology/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=7e0a9452-7d34-4ada-a311-229ba13ecbe7",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=7e0a9452-7d34-4ada-a311-229ba13ecbe7",
+      "play": "https://flow.recursive.eco/play?id=7e0a9452-7d34-4ada-a311-229ba13ecbe7",
+      "casting": false
+    },
+    "western-astrology-canonical": {
+      "raw": "grammars/western-astrology-canonical/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=a0a21e50-807d-45ff-b2ab-13fbb4ae86be",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=a0a21e50-807d-45ff-b2ab-13fbb4ae86be",
+      "play": "https://flow.recursive.eco/play?id=a0a21e50-807d-45ff-b2ab-13fbb4ae86be",
+      "casting": false
+    },
+    "casting-big-three": {
+      "raw": "grammars/casting-big-three/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=bbcba06e-0a82-4959-ad69-439ac963bd54",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=bbcba06e-0a82-4959-ad69-439ac963bd54",
+      "play": "https://flow.recursive.eco/play?id=bbcba06e-0a82-4959-ad69-439ac963bd54",
+      "casting": true
+    },
+    "casting-twelve-houses": {
+      "raw": "grammars/casting-twelve-houses/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=90604ab1-c0c1-4e79-abfd-01e784014319",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=90604ab1-c0c1-4e79-abfd-01e784014319",
+      "play": "https://flow.recursive.eco/play?id=90604ab1-c0c1-4e79-abfd-01e784014319",
+      "casting": true
+    },
+    "casting-single-aspect": {
+      "raw": "grammars/casting-single-aspect/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+      "play": "https://flow.recursive.eco/play?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+      "casting": true
+    }
   }
 }
