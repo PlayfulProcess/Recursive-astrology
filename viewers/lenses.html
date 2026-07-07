@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="../theme.css?v=3">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lens prototypes — Recursive Astrology</title>
+<style>
+  :root{
+
+
+
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif}
+  header{padding:14px 18px;border-bottom:1px solid var(--line);background:var(--bg)}
+  .tabrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  #lens-pick{background:var(--panel2);color:var(--text);border:1px solid #cfc8ba;border-radius:8px;padding:7px 11px;font-size:13px;font-weight:600;cursor:pointer}
+  h1{font-size:17px;margin:0 0 3px}
+  .sub{font-size:12px;color:var(--muted)}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  .tab{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:var(--panel);
+    color:var(--text);cursor:pointer;font-size:13px;font-weight:600}
+  .tab.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .deckbtn{margin-left:auto;padding:7px 13px;border:1px solid var(--line);border-radius:8px;
+    background:var(--panel2);color:var(--text);cursor:pointer;font-size:13px;font-weight:600}
+  main{padding:18px;max-width:1340px;margin:0 auto}
+  .ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  select{background:var(--panel2);color:var(--text);border:1px solid #cfc8ba;border-radius:8px;padding:7px 11px;font-size:13px;font-weight:600;cursor:pointer}
+  label.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{background:var(--panel2);color:var(--muted);border:0;padding:6px 11px;font-size:12px;font-weight:600;cursor:pointer}
+  .seg button.on{background:var(--accent2);color:#fff}
+  .loading{color:var(--muted);padding:40px;text-align:center}
+  .legend{font-size:11px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 0}
+  /* "Across the grammars" synthesis banner — content of the emergent entity node */
+  .synth{background:linear-gradient(135deg,rgba(47,93,138,.12),rgba(212,150,90,.06));
+    border:1px solid rgba(181,101,29,.25);border-radius:12px;padding:14px 16px;margin:0 0 16px;font-size:13px;line-height:1.65}
+  .synth .sh{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:7px;font-weight:700}
+  .synth b.md{color:#221f1a}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle;margin-right:4px}
+
+  /* Grammar picker panel */
+  #deckpanel{position:absolute;right:18px;top:58px;z-index:30;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;box-shadow:0 12px 40px rgba(60,45,20,.4);padding:12px;width:340px;max-height:70vh;overflow:auto;display:none}
+  #deckpanel.open{display:block}
+  #deckpanel .pbtns{display:flex;gap:6px;margin-bottom:8px}
+  #deckpanel .pbtns button{flex:1;font-size:11px;padding:5px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;color:var(--text);cursor:pointer}
+  #deckpanel label{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 2px;cursor:pointer}
+  #deckpanel label .yr{color:var(--muted);font-size:11px;margin-left:auto}
+
+  /* Matrix */
+  table.matrix{border-collapse:collapse;font-size:12px}
+  table.matrix th,table.matrix td{border:1px solid var(--line);padding:0}
+  table.matrix th{background:var(--panel);position:sticky;font-weight:600;color:var(--muted)}
+  table.matrix thead th{top:0;z-index:3;padding:8px 6px;white-space:nowrap;vertical-align:bottom}
+  table.matrix tbody th{left:0;z-index:2;text-align:left;padding:6px 10px;background:var(--panel);max-width:230px}
+  table.matrix tbody th .ttl{color:var(--text);font-weight:600}
+  table.matrix tbody th .later-tag{font-size:9px;color:var(--later);border:1px solid rgba(181,101,29,.4);border-radius:4px;padding:0 3px;margin-left:5px}
+  .cell{width:54px;height:32px;display:flex;align-items:center;justify-content:center;font-size:11px}
+
+  /* Synopsis — no inner column scroll (page scrolls); sticky images */
+  .cols{display:flex;flex-wrap:wrap;gap:14px;padding-bottom:8px;align-items:flex-start}
+  .col{flex:0 0 320px;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    overflow-y:auto;max-height:calc(100vh - 132px)}
+  .col h3{margin:0;padding:10px 12px;font-size:13px;background:var(--panel2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+  .col .colimg{height:160px;background:#faf8f3 center/contain no-repeat;position:sticky;top:39px;z-index:1}
+  .col .secs{padding:10px 12px}
+  .sec{margin:0 0 12px}
+  .sec .st{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin:0 0 3px}
+  .sec.later .st{color:var(--later)}
+  .sec .sb{font-size:12.5px;color:#4a4439}
+  .sec .attr{font-size:10px;font-style:italic;color:var(--muted);display:block;margin-bottom:3px}
+  .divider{border:0;border-top:1px dashed rgba(181,101,29,.3);margin:14px 0 10px}
+  .divider-lbl{font-size:10px;color:var(--later);text-transform:uppercase;letter-spacing:.05em}
+  /* Synopsis transpose — section rows, grammar columns */
+  table.synT{border-collapse:collapse;font-size:12px;width:100%}
+  table.synT th,table.synT td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  table.synT thead th{background:var(--panel);position:sticky;top:64px;z-index:3;font-size:11px;white-space:nowrap}
+  table.synT tbody th{background:var(--panel);position:sticky;left:0;z-index:2;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--accent);max-width:140px}
+  table.synT tbody th.later{color:var(--later)}
+  table.synT td{min-width:230px;max-width:340px;font-size:12px;color:#4a4439}
+  table.synT td .attr{font-size:10px;font-style:italic;color:var(--muted);display:block;margin-bottom:3px}
+  table.synT td.empty{color:#d8d2c6;text-align:center}
+
+  .card-open{cursor:pointer;transition:outline .12s}
+  .card-open:hover{outline:2px solid var(--gold);outline-offset:1px}
+  /* Ribbon */
+  .ribbon{position:relative;height:230px;margin:30px 0 10px}
+  .axis{position:absolute;left:0;right:0;top:130px;height:2px;background:linear-gradient(90deg,#d8d2c6,#2f5d8a)}
+  .tick{position:absolute;top:130px}
+  .tick .pt{width:13px;height:13px;border-radius:50%;border:2px solid var(--bg);cursor:pointer;transform:translate(-50%,-50%)}
+  .tick .stem{position:absolute;left:0;width:1px;background:rgba(0,0,0,.10);transform:translateX(-50%)}
+  .tick .lbl{position:absolute;transform:translateX(-50%);font-size:10px;white-space:nowrap;color:var(--text);text-align:center}
+  .tick .yr{font-size:9px;color:var(--muted)}
+  .tick.native .pt{background:var(--native)}
+  .tick.later .pt{background:var(--later)}
+  .tick .thumb{position:absolute;transform:translateX(-50%);width:34px;height:52px;object-fit:cover;border-radius:4px;border:1px solid var(--line)}
+  #ribbon-read{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px;min-height:60px;font-size:13px}
+
+  /* Small multiples */
+  .multiples{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
+  .mtile{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .mtile .mimg{height:190px;background:#faf8f3 center/contain no-repeat}
+  .mtile .mcap{padding:7px 9px;font-size:11px;color:var(--muted)}
+  .mtile .mcap b{color:var(--text);display:block;font-size:12px}
+
+  /* Reader */
+  .reader{max-width:640px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .reader .rimg{height:280px;background:#faf8f3 center/contain no-repeat;margin:18px}
+  .reader .rbody{padding:0 26px 26px}
+  .reader h2{font-size:22px;margin:0 0 4px}
+  .reader .rsec{margin:0 0 16px}
+  .reader .rsec .st{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin:0 0 4px}
+  .reader .rsec.later .st{color:var(--later)}
+  .reader details{border-top:1px dashed rgba(181,101,29,.3);padding-top:10px;margin-top:14px}
+  .reader summary{cursor:pointer;font-size:12px;color:var(--later);text-transform:uppercase;letter-spacing:.04em}
+  .nav{display:flex;justify-content:space-between;padding:14px 26px;border-top:1px solid var(--line)}
+  .nav button{background:var(--panel2);border:1px solid #cfc8ba;color:var(--text);border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600}
+  .attr{font-size:10px;font-style:italic;color:var(--muted);display:block;margin-bottom:4px}
+  b.md{color:#fff}
+</style>
+</head>
+<body>
+<script src="../site-header.js?v=44"></script>
+<site-header active="lenses"></site-header>
+<header>
+  <h1>Lens prototypes <span style="color:var(--muted);font-weight:400">· five ways to see the same data</span></h1>
+  <div class="sub" id="status">Loading every grammar from the collection…</div>
+  <div class="tabrow">
+    <select id="lens-pick" title="Choose a lens"></select>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <button class="deckbtn" id="deckbtn" style="display:none">✦ Grammars ▾</button>
+</header>
+<div id="deckpanel"></div>
+<main id="main"><div class="loading">Loading…</div></main>
+
+<script>
+// ── helpers (shared Section Lens contract) ────────────────────────────────────
+const STOP=new Set(['the','a','an','this','that','these','those','it','its']);
+const lensNorm=s=>String(s).toLowerCase().replace(/['’]s\b/g,'').replace(/[_\-]+/g,' ').replace(/[.:;,]+$/,'').split(/\s+/).filter(w=>w&&!STOP.has(w)).join(' ').trim();
+const lensAttr=t=>{ if(typeof t!=='string')return null; const m=t.trim().match(/^\[([^\]]{3,200})\]/); return m?m[1].trim():null; };
+const attrYear=a=>{ const m=a&&a.match(/\b(1[0-9]{3}|20[0-9]{2})\b/); return m?+m[1]:Infinity; };
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function md(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<b class="md">$1</b>').replace(/\n{2,}/g,'</p><p>').replace(/\n/g,'<br>'); }
+
+// ── Cross-grammar entity key ───────────────────────────────────────────────────
+// Tarot matched cards across decks with a stamped metadata.trump_key/minor_key
+// (deck card NAMES vary by tradition/language). Astrology's voice libraries name
+// their entities identically across grammars — "Saturn" is "Saturn" in Ptolemy,
+// Alan Leo, and the flagship interpretation set — so the normalized item NAME
+// itself is the shared key. Simpler, and it falls straight out of the data.
+const CATEGORY_ORDER={planet:0,sign:1,house:2,aspect:3,position:4,lens:5};
+const PLANET_ORDER=['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto'];
+const SIGN_ORDER=['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
+function entityKey(name){ return lensNorm(String(name||'').replace(/^[0-9]+\.\s*/,'')); }
+function entityOrder(key,category){
+  const catBase=(CATEGORY_ORDER[category]??9)*100;
+  const within = category==='planet' ? PLANET_ORDER.indexOf(key)
+               : category==='sign'   ? SIGN_ORDER.indexOf(key) : -1;
+  return catBase + (within>=0?within:50);
+}
+function cardLabel(key){ return key.replace(/\b\w/g,c=>c.toUpperCase()); }
+
+let DECKS=[];        // [{slug,label,year,branch}] from the collection, sorted by year
+let SELECTED=new Set();  // selected grammar slugs
+let ITEMS=[];        // flat: {deck,label,year,id,name,sections,image,cardKey,cardOrder,category}
+let SECGROUPS=[];
+const SYNTHESIS={};  // no cross-grammar evolution commentary file exists for this repo (yet) — always empty
+function synthHTML(){ return ''; }
+
+// ── load EVERY grammar from the collection (programmatic; new grammars just appear) ──
+async function load(){
+  const col=await (await fetch('../grammars/_collection.json')).json();
+  DECKS=col.grammars.filter(g=>!g.is_meta)
+    .map(g=>({slug:g.slug,label:(g.name||g.slug).split(' — ')[0].slice(0,32),year:g.year||9999,branch:g.branch}))
+    .sort((a,b)=>a.year-b.year);
+  SELECTED=new Set(DECKS.map(d=>d.slug));
+  const out=[];
+  await Promise.all(DECKS.map(async d=>{
+    try{
+      const g=await (await fetch(`../grammars/${d.slug}/grammar.json`)).json();
+      for(const it of (g.items||[])){
+        const secs=it.sections||{};
+        const hasText=Object.values(secs).some(v=>typeof v==='string'&&v.trim());
+        if(!hasText && !it.image_url) continue;
+        const cardKey=entityKey(it.name);
+        if(!cardKey) continue;
+        const cardOrder=entityOrder(cardKey,it.category);
+        out.push({deck:d.slug,label:d.label,year:d.year,id:it.id,name:it.name||it.id,
+          sections:secs,image:it.image_url||'',
+          category:it.category||'other', cardKey, cardOrder});
+      }
+    }catch(e){ console.warn('skip',d.slug,e); }
+  }));
+  ITEMS=out;
+  recomputeSections();
+  document.getElementById('status').textContent=`${DECKS.length} grammars · ${ITEMS.length} items · all loaded from the collection`;
+}
+function recomputeSections(){
+  const m=new Map();
+  for(const it of activeItems()) for(const [k,v] of Object.entries(it.sections)){
+    if(typeof v!=='string'||!v.trim())continue;
+    const key=lensNorm(k); if(!key)continue;
+    let s=m.get(key); if(!s){s={key,count:0,labels:new Map(),attributed:false,year:Infinity};m.set(key,s);}
+    s.count++; s.labels.set(k,(s.labels.get(k)||0)+1);
+    const a=lensAttr(v); if(a){s.attributed=true; s.year=Math.min(s.year,attrYear(a));}
+  }
+  SECGROUPS=[...m.values()].map(s=>({...s,label:[...s.labels].sort((a,b)=>b[1]-a[1])[0][0]})).sort((a,b)=>b.count-a.count);
+}
+const activeDecks=()=>DECKS.filter(d=>SELECTED.has(d.slug));
+const activeItems=()=>ITEMS.filter(i=>SELECTED.has(i.deck));
+const secOf=(it,key)=>{ for(const [k,v] of Object.entries(it.sections)){ if(typeof v==='string'&&v.trim()&&lensNorm(k)===key) return {raw:k,val:v}; } return null; };
+// entities present (by normalized name) across the selected grammars, ordered by category then canonical order
+function cardOptions(){
+  const m=new Map();
+  for(const it of activeItems()) if(it.cardKey){ if(!m.has(it.cardKey)) m.set(it.cardKey,it.cardOrder); }
+  return [...m.entries()].sort((a,b)=>a[1]-b[1]).map(([k])=>k);
+}
+// grouped <optgroup> options for the entity picker, grouped by the category most items share
+function cardOptionsHTML(sel){
+  const keys=cardOptions();
+  const catOf=new Map();
+  for(const it of activeItems()) if(!catOf.has(it.cardKey)) catOf.set(it.cardKey,it.category);
+  const groups={};
+  for(const k of keys){ const c=catOf.get(k)||'other'; (groups[c]=groups[c]||[]).push(k); }
+  const order=Object.keys(groups).sort((a,b)=>(CATEGORY_ORDER[a]??9)-(CATEGORY_ORDER[b]??9));
+  let h='';
+  for(const g of order){ const arr=groups[g]; if(!arr||!arr.length) continue;
+    const label=g.charAt(0).toUpperCase()+g.slice(1)+'s';
+    h+=`<optgroup label="${esc(label)}">`+arr.map(k=>`<option value="${esc(k)}"${k===sel?' selected':''}>${esc(cardLabel(k))}</option>`).join('')+`</optgroup>`; }
+  return h;
+}
+
+// ── grammar picker ───────────────────────────────────────────────────────────────
+function renderDeckPanel(){
+  const p=document.getElementById('deckpanel');
+  p.innerHTML=`<div class="pbtns"><button data-a="all">All</button><button data-a="none">None</button><button data-a="primary">Primary sources</button></div>`+
+    DECKS.map(d=>`<label><input type="checkbox" data-slug="${esc(d.slug)}" ${SELECTED.has(d.slug)?'checked':''}> ${esc(d.label)} <span class="yr">${d.year<9999?d.year:''}</span></label>`).join('');
+  p.querySelectorAll('input').forEach(cb=>cb.onchange=()=>{ cb.checked?SELECTED.add(cb.dataset.slug):SELECTED.delete(cb.dataset.slug); afterDeckChange(); });
+  p.querySelectorAll('.pbtns button').forEach(b=>b.onclick=()=>{
+    if(b.dataset.a==='all') SELECTED=new Set(DECKS.map(d=>d.slug));
+    else if(b.dataset.a==='none') SELECTED=new Set();
+    else SELECTED=new Set(DECKS.filter(d=>d.branch==='primary-sources').map(d=>d.slug));
+    renderDeckPanel(); afterDeckChange();
+  });
+}
+function afterDeckChange(){
+  document.getElementById('deckbtn').textContent=`✦ Grammars (${SELECTED.size}/${DECKS.length}) ▾`;
+  recomputeSections(); render();
+}
+
+// ── VIEW 1: MATRIX ────────────────────────────────────────────────────────────
+function viewMatrix(){
+  const decks=activeDecks(); const rows=SECGROUPS.filter(s=>s.count>=2);
+  const tot={}; decks.forEach(d=>tot[d.slug]=activeItems().filter(i=>i.deck===d.slug).length);
+  let h=`<div class="ctl"><div><b>Matrix</b> — section coverage across every selected grammar (green native · rust later/attributed). Reveals which commentary belongs where.</div></div>
+   <div class="legend"><span><span class="dot" style="background:var(--native)"></span>native</span><span><span class="dot" style="background:var(--later)"></span>later (dated)</span></div>
+   <div style="overflow:auto;margin-top:12px"><table class="matrix"><thead><tr><th>section ↓ &nbsp; grammar →</th>`;
+  decks.forEach(d=>h+=`<th>${esc(d.label).slice(0,16)}<br><span style="font-weight:400">${d.year<9999?d.year:''}</span></th>`);
+  h+=`</tr></thead><tbody>`;
+  for(const s of rows){
+    h+=`<tr><th><span class="ttl">${esc(s.label)}</span>${s.attributed?`<span class="later-tag">${s.year<Infinity?s.year:'later'}</span>`:''}</th>`;
+    for(const d of decks){
+      const n=activeItems().filter(i=>i.deck===d.slug && secOf(i,s.key)).length;
+      const cov=n/(tot[d.slug]||1); const base=s.attributed?'181,101,29':'110,231,183';
+      h+=`<td><div class="cell" style="${n?`background:rgba(${base},${(0.12+cov*0.6).toFixed(2)})`:''}" title="${esc(s.label)} · ${esc(d.label)}: ${n}/${tot[d.slug]||0}">${n||''}</div></td>`;
+    }
+    h+=`</tr>`;
+  }
+  return h+`</tbody></table></div>`;
+}
+
+// ── VIEW 2: SYNOPSIS (by grammar OR transposed by section) ───────────────────────
+let synMode='deck';
+function viewSynopsis(sel){
+  const opts=cardOptions(); const card=opts.includes(sel)?sel:opts[0];
+  const decksWith=activeDecks().map(d=>activeItems().find(i=>i.deck===d.slug && i.cardKey===card)).filter(Boolean);
+  let h=`<div class="ctl"><label class="lbl">Entity</label><select id="syn-sel">${cardOptionsHTML(card)}</select>
+    <span class="seg"><button data-m="deck" class="${synMode==='deck'?'on':''}">By grammar</button><button data-m="section" class="${synMode==='section'?'on':''}">By section</button></span>
+    <span style="color:var(--muted);font-size:12px">${decksWith.length} grammars have this entity</span></div>`;
+  h+=synthHTML(card);
+  if(!decksWith.length) return h+'<p style="color:var(--muted)">No grammar in the current selection has this entity.</p>';
+  const secEntries=it=>Object.entries(it.sections).filter(([k,v])=>typeof v==='string'&&v.trim())
+      .map(([k,v],i)=>{const a=lensAttr(v);return{k,v,i,attributed:!!a,attr:a,year:a?attrYear(a):Infinity};})
+      .sort((a,b)=>(a.attributed-b.attributed)||(a.attributed?(a.year-b.year):(a.i-b.i)));
+
+  if(synMode==='section'){
+    // rows = section groups (native first, later after by year), cols = grammars
+    const groups=[]; const seen=new Set();
+    decksWith.forEach(it=>secEntries(it).forEach(e=>{const key=lensNorm(e.k); if(!seen.has(key)){seen.add(key);groups.push({key,label:e.k,attributed:e.attributed,year:e.year});}}));
+    groups.sort((a,b)=>(a.attributed-b.attributed)||(a.attributed?(a.year-b.year):0));
+    h+=`<div style="overflow:auto"><table class="synT"><thead><tr><th>section ↓ grammar →</th>${decksWith.map(it=>`<th>${esc(it.label).slice(0,18)}<br><span style="color:var(--muted);font-weight:400">${it.year<9999?it.year:''}</span></th>`).join('')}</tr></thead><tbody>`;
+    for(const g of groups){
+      h+=`<tr><th class="${g.attributed?'later':''}">${esc(g.label)}${g.attributed?` <span style="font-size:9px">·${g.year<Infinity?g.year:'later'}</span>`:''}</th>`;
+      for(const it of decksWith){ const s=secOf(it,g.key);
+        if(!s){h+='<td class="empty">—</td>';continue;}
+        const a=lensAttr(s.val); const body=a?s.val.trim().replace(/^\[[^\]]*\]\s*/,''):s.val;
+        h+=`<td>${a?`<span class="attr">${esc(a).slice(0,40)}</span>`:''}<p style="margin:0">${md(body.slice(0,700))}${body.length>700?'…':''}</p></td>`;
+      }
+      h+=`</tr>`;
+    }
+    return h+`</tbody></table></div>`;
+  }
+  // by grammar (columns) — no inner scroll; sticky image+header
+  h+=`<div class="cols">`;
+  for(const it of decksWith){
+    let body='',dividerDone=false;
+    for(const e of secEntries(it)){
+      if(e.attributed&&!dividerDone){body+=`<hr class="divider"><div class="divider-lbl">later interpretations</div>`;dividerDone=true;}
+      const bv=e.attr?e.v.trim().replace(/^\[[^\]]*\]\s*/,''):e.v;
+      body+=`<div class="sec ${e.attributed?'later':''}"><div class="st">${esc(e.k)}</div>${e.attr?`<span class="attr">${esc(e.attr)}</span>`:''}<div class="sb"><p>${md(bv)}</p></div></div>`;
+    }
+    h+=`<div class="col"><h3>${esc(it.label)} · ${it.year<9999?it.year:''}</h3>${it.image?`<div class="colimg card-open" data-od="${it.deck}|${esc(it.id)}" title="Open this item in the Cards viewer" style="background-image:url('${esc(it.image)}')"></div>`:''}<div class="secs">${body}</div></div>`;
+  }
+  return h+`</div>`;
+}
+
+// ── VIEW 3: PROVENANCE RIBBON (with label-collision dodging) ───────────────────
+function viewRibbon(sel){
+  const opts=cardOptions(); const card=opts.includes(sel)?sel:(opts.includes('saturn')?'saturn':opts[0]);
+  const pts=[];
+  for(const d of activeDecks()){
+    const it=activeItems().find(i=>i.deck===d.slug && i.cardKey===card); if(!it)continue;
+    pts.push({year:d.year,kind:'native',label:d.label,img:it.image,deck:d.slug,id:it.id,text:`**${d.label}** (${d.year<9999?d.year:'undated'}) — this entity as treated in this grammar.`});
+    for(const [k,v] of Object.entries(it.sections)){
+      const a=lensAttr(v); if(!a)continue; const y=attrYear(a); if(y===Infinity)continue;
+      if(pts.some(p=>p.kind==='later'&&p.year===y&&p.src===k))continue;
+      pts.push({year:y,kind:'later',label:k,src:k,attr:a,text:v.trim().replace(/^\[[^\]]*\]\s*/,'')});
+    }
+  }
+  pts.sort((a,b)=>a.year-b.year||(a.kind==='native'?-1:1));
+  const yrs=pts.map(p=>p.year); const min=Math.min(...yrs,150),max=Math.max(...yrs,2026);
+  const X=y=>((y-min)/(max-min||1))*92+4;
+  // collision dodge: stack labels into lanes when x positions are within 7%
+  let lastX=-99, lane=0;
+  pts.forEach(p=>{ const x=X(p.year); if(x-lastX<7){ lane++; } else { lane=0; } p._lane=lane; p._x=x; lastX=x; });
+  window._ribbonPts=pts;
+  let ticks='';
+  pts.forEach((p,i)=>{
+    const labY=22+p._lane*30;            // dodge downward
+    ticks+=`<div class="tick ${p.kind}" style="left:${p._x.toFixed(1)}%">
+      ${p.kind==='native'&&p.img?`<img class="thumb card-open" src="${esc(p.img)}" data-od="${p.deck}|${esc(p.id)}" title="Open this item in the Cards viewer" style="top:-68px">`:''}
+      <div class="stem" style="top:7px;height:${labY-7}px"></div>
+      <div class="pt" data-i="${i}"></div>
+      <div class="lbl" style="top:${labY}px">${esc((p.kind==='later'?p.label:p.label)).slice(0,16)}<div class="yr">${p.year}</div></div></div>`;
+  });
+  let h=`<div class="ctl"><label class="lbl">Entity</label><select id="rib-sel">${cardOptionsHTML(card)}</select>
+    <span style="color:var(--muted);font-size:12px">— one entity's whole record: each grammar's treatment (blue) + each dated commentary (rust). Click a point. Undated grammars sit at the right edge.</span></div>
+    ${synthHTML(card)}
+    <div class="ribbon"><div class="axis"></div>${ticks}</div>
+    <div id="ribbon-read"><span style="color:var(--muted)">Click a point on the timeline to read that layer.</span></div>`;
+  return h;
+}
+
+// ── VIEW 4: SMALL MULTIPLES ───────────────────────────────────────────────────
+function viewMultiples(sel){
+  const opts=cardOptions(); const card=opts.includes(sel)?sel:opts[0];
+  let tiles='';
+  for(const d of activeDecks()){
+    const matches=activeItems().filter(i=>i.deck===d.slug && i.cardKey===card);
+    const it=matches.find(m=>m.image)||matches[0]; if(!it)continue;
+    tiles+=`<div class="mtile card-open" data-od="${it.deck}|${esc(it.id)}" title="Open this item in the Cards viewer"><div class="mimg" style="background-image:url('${esc(it.image||'')}')"></div><div class="mcap"><b>${esc(d.label)}</b>${d.year<9999?d.year:''} · ${esc(it.name).slice(0,30)}</div></div>`;
+  }
+  return `<div class="ctl"><label class="lbl">Entity</label><select id="mul-sel">${cardOptionsHTML(card)}</select>
+    <span style="color:var(--muted);font-size:12px">— the same entity interpreted by every selected tradition.</span></div><div class="multiples">${tiles||'<span style="color:var(--muted)">No images.</span>'}</div>`;
+}
+
+// ── VIEW 5: READER ────────────────────────────────────────────────────────────
+let readerDeck=null, readerIdx=0;
+function viewReader(){
+  const decks=activeDecks(); if(!decks.length) return '<p style="color:var(--muted)">No grammars selected.</p>';
+  if(!readerDeck||!SELECTED.has(readerDeck)) readerDeck=decks[0].slug;
+  const list=activeItems().filter(i=>i.deck===readerDeck);
+  if(readerIdx>=list.length)readerIdx=0; if(readerIdx<0)readerIdx=list.length-1;
+  const it=list[readerIdx]||{};
+  const entries=Object.entries(it.sections||{}).filter(([k,v])=>typeof v==='string'&&v.trim())
+    .map(([k,v],i)=>{const a=lensAttr(v);return{k,v,i,attributed:!!a,attr:a,year:a?attrYear(a):Infinity};})
+    .sort((a,b)=>(a.attributed-b.attributed)||(a.attributed?(a.year-b.year):(a.i-b.i)));
+  const native=entries.filter(e=>!e.attributed), later=entries.filter(e=>e.attributed);
+  const secHtml=e=>{const bv=e.attr?e.v.trim().replace(/^\[[^\]]*\]\s*/,''):e.v;
+    return `<div class="rsec ${e.attributed?'later':''}"><div class="st">${esc(e.k)}</div>${e.attr?`<span class="attr">${esc(e.attr)}</span>`:''}<div><p>${md(bv)}</p></div></div>`;};
+  return `<div class="ctl"><label class="lbl">Grammar</label><select id="rd-deck">${decks.map(d=>`<option value="${d.slug}"${d.slug===readerDeck?' selected':''}>${esc(d.label)}</option>`).join('')}</select>
+    <span style="color:var(--muted);font-size:12px">— one entity per spread; later layers in an expander.</span></div>
+   <div class="reader">${it.image?`<div class="rimg card-open" data-od="${it.deck}|${esc(it.id)}" title="Open this item in the Cards viewer" style="background-image:url('${esc(it.image)}')"></div>`:''}
+     <div class="rbody"><h2>${esc(it.name||'—')}</h2><div class="sub" style="color:var(--muted);margin-bottom:14px">${esc(readerDeck.replace(/-/g,' '))} · ${readerIdx+1} / ${list.length}</div>
+       ${native.map(secHtml).join('')}${later.length?`<details open><summary>${later.length} later interpretation${later.length>1?'s':''} ▾</summary>${later.map(secHtml).join('')}</details>`:''}</div>
+     <div class="nav"><button id="rd-prev">← Prev</button><button id="rd-next">Next →</button></div></div>`;
+}
+
+// ── tabs + plumbing ───────────────────────────────────────────────────────────
+const VIEWS=[['ribbon','Provenance ribbon',s=>viewRibbon(s)],['synopsis','Synopsis',s=>viewSynopsis(s)],
+ ['multiples','Small multiples',s=>viewMultiples(s)],['matrix','Matrix',()=>viewMatrix()],['reader','Reader',()=>viewReader()]];
+let cur='ribbon';
+function render(arg){
+  document.getElementById('main').innerHTML=VIEWS.find(v=>v[0]===cur)[2](arg);
+  const on=(id,ev,fn)=>{const e=document.getElementById(id);if(e)e[ev]=fn;};
+  on('syn-sel','onchange',e=>render(e.target.value));
+  on('mul-sel','onchange',e=>render(e.target.value));
+  on('rib-sel','onchange',e=>render(e.target.value));
+  document.querySelectorAll('.seg button[data-m]').forEach(b=>b.onclick=()=>{synMode=b.dataset.m;render(document.getElementById('syn-sel')?.value);});
+  if(cur==='ribbon') document.querySelectorAll('.tick .pt').forEach(pt=>pt.onclick=()=>{
+    const p=window._ribbonPts[+pt.dataset.i];
+    document.getElementById('ribbon-read').innerHTML=`<div style="font-size:11px;color:var(--${p.kind==='later'?'later':'native'});text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">${p.year} · ${esc(p.label)}</div>${p.attr?`<span class="attr">${esc(p.attr)}</span>`:''}<p>${md(p.text.slice(0,1200))}${p.text.length>1200?'…':''}</p></div>`;
+  });
+  if(cur==='reader'){ on('rd-deck','onchange',e=>{readerDeck=e.target.value;readerIdx=0;render();});
+    on('rd-prev','onclick',()=>{readerIdx--;render();}); on('rd-next','onclick',()=>{readerIdx++;render();}); }
+}
+function buildTabs(){
+  document.getElementById('tabs').innerHTML=VIEWS.map(v=>`<span class="tab ${v[0]===cur?'on':''}" data-v="${v[0]}">${v[1]}</span>`).join('');
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{cur=t.dataset.v;buildTabs();render();});
+  const pick=document.getElementById('lens-pick');   // dropdown mirrors the tabs (handy on mobile)
+  if(pick){ pick.innerHTML=VIEWS.map(v=>`<option value="${v[0]}"${v[0]===cur?' selected':''}>${v[1]}</option>`).join('');
+    pick.onchange=e=>{cur=e.target.value;buildTabs();render();}; }
+}
+(async function(){
+  await load();
+  buildTabs(); renderDeckPanel();
+  const db=document.getElementById('deckbtn'); db.style.display=''; db.textContent=`✦ Grammars (${SELECTED.size}/${DECKS.length}) ▾`;
+  db.onclick=()=>document.getElementById('deckpanel').classList.toggle('open');
+  // Deep-link: ?card=<entity-key> lands on that entity in the Synopsis
+  const deep=new URLSearchParams(location.search).get('card');
+  if(deep && cardOptions().includes(deep)){ cur='synopsis'; buildTabs(); render(deep); }
+  else render();
+})();
+// Click any item in a lens to open its full detail in the Cards viewer (shared code, deep-linked).
+document.addEventListener('click', e=>{ const t=e.target.closest('[data-od]'); if(!t)return;
+  const [deck,id]=t.dataset.od.split('|'); if(!deck||!id)return;
+  window.open('cards.html?src=' + encodeURIComponent('../grammars/'+deck+'/grammar.json') + '&item='+encodeURIComponent(id),'_blank','noopener'); });
+</script>
+
+<script src="../site-footer.js"></script>
+<site-footer base="../"></site-footer>
+</body>
+</html>

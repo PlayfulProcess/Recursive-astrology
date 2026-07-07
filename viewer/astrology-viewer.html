@@ -55,18 +55,21 @@
         /* Critical fallback for Tailwind classes - ensures page works if CDN fails */
         .hidden { display: none !important; }
 
-        /* Astrology Viewer Theme - matching tarot viewer */
+        /* Astrology Viewer Theme - matching the site's blue chrome (Jul 2026 port) */
         /* ============================================================
            THEME TOKENS — light/dark aware, driven by [data-theme] on <html>
            (set by the script above). Light values echo the astro site's own
-           theme.css palette (paper + restrained gold) so the viewer matches
+           theme.css palette (paper + restrained blue accent) so the viewer matches
            index/wheel/lenses instead of being a bespoke dark box; dark
-           values keep this viewer's original near-black/gold treatment,
-           tuned for contrast. Chrome purple (buttons, checkboxes, panel
-           borders) folds into the gold accent for consistency; aspect/
-           element legend colors (red/green/blue/violet/yellow) keep their
-           hue since they're domain content, not chrome — only their shade
-           changes per theme for readability.
+           values keep this viewer's original near-black treatment, tuned for
+           contrast, with the accent switched from gold to a lighter blue.
+           --astro-gold / --astro-purple / --astro-purple-dark are CHROME
+           tokens (buttons, checkboxes, panel borders) — names kept for now to
+           avoid touching ~40 call sites, but their VALUES are blue, not gold
+           or purple. --astro-blue is a separate, unrelated token: one of the
+           aspect/element legend colors (red/green/blue/violet/yellow), which
+           keep their hue since they're domain content, not chrome — only
+           their shade changes per theme for readability.
            NOTE: the Human Design bodygraph sub-view (search "Human Design
            Bodygraph" below) intentionally keeps a fixed dark "instrument
            panel" look in both themes — its raw SVG fills are out of scope
@@ -76,9 +79,9 @@
             color-scheme: light;
             --astro-bg-dark: #f4f1ea;
             --astro-bg-light: #ffffff;
-            --astro-gold: #9a7322;
-            --astro-purple: #9a7322;
-            --astro-purple-dark: #7c5b18;
+            --astro-gold: #2f5d8a;
+            --astro-purple: #2f5d8a;
+            --astro-purple-dark: #1f4468;
             --astro-blue: #2f5f8a;
             --astro-teal: #3f7a6e;
 
@@ -141,9 +144,9 @@
             color-scheme: dark;
             --astro-bg-dark: #0a0a0f;
             --astro-bg-light: #1a1a2e;
-            --astro-gold: #d4af37;
-            --astro-purple: #d4af37;
-            --astro-purple-dark: #b8912a;
+            --astro-gold: #6f9fd8;
+            --astro-purple: #6f9fd8;
+            --astro-purple-dark: #4a76ad;
             --astro-blue: #3b82f6;
             --astro-teal: #14b8a6;
 
@@ -1459,7 +1462,7 @@
          (unused here, kept for its auth logic — see that file's comment), which frees up
          <site-header> for this repo's own component, loaded the same way index.html/wheel.html/
          lenses.html/genealogy.html do. -->
-    <script src="../site-header.js?v=2"></script>
+    <script src="../site-header.js?v=44"></script>
     <site-header active="viewer"></site-header>
 
     <!-- Main Content -->

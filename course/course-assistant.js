@@ -69,9 +69,9 @@
     <style>
       :host{ all:initial }
       .fab{ position:fixed; right:18px; bottom:18px; z-index:9998; font-family:Inter,system-ui,sans-serif;
-        background:#9a7322; color:#fff; border:none; border-radius:999px; padding:12px 18px; font-size:14px;
+        background:#2f5d8a; color:#fff; border:none; border-radius:999px; padding:12px 18px; font-size:14px;
         font-weight:600; cursor:pointer; box-shadow:0 10px 28px -10px rgba(60,45,20,.6) }
-      .fab:hover{ background:#7c5b18 }
+      .fab:hover{ background:#1f4468 }
       .panel{ position:fixed; right:18px; bottom:18px; z-index:9999; width:min(420px,calc(100vw - 24px));
         height:min(560px,calc(100vh - 24px)); background:#fbf9f3; border:1px solid #d8d2c6; border-radius:14px;
         display:none; flex-direction:column; overflow:hidden; box-shadow:0 24px 60px -20px rgba(60,45,20,.55);
@@ -83,18 +83,18 @@
       .hd button:hover{ background:#f1ece1; color:#221f1a }
       .log{ flex:1; overflow:auto; padding:13px; display:flex; flex-direction:column; gap:11px }
       .msg{ font-size:13.5px; line-height:1.55; max-width:90% }
-      .msg.u{ align-self:flex-end; background:#9a7322; color:#fff; padding:8px 11px; border-radius:12px 12px 3px 12px }
+      .msg.u{ align-self:flex-end; background:#2f5d8a; color:#fff; padding:8px 11px; border-radius:12px 12px 3px 12px }
       .msg.a{ align-self:flex-start; color:#221f1a }
       .msg.a :first-child{ margin-top:0 } .msg.a :last-child{ margin-bottom:0 }
-      .msg.a p{ margin:.4em 0 } .msg.a a{ color:#8a6414 }
+      .msg.a p{ margin:.4em 0 } .msg.a a{ color:#1f4468 }
       .msg.sys{ align-self:center; color:#6b6457; font-size:12px; text-align:center; max-width:100% }
-      .msg.sys a{ color:#8a6414 }
+      .msg.sys a{ color:#1f4468 }
       .msg.err{ align-self:flex-start; color:#a3402d; font-size:12.5px }
       .ft{ border-top:1px solid #e7e1d5; padding:10px; background:#fff }
       .ft form{ display:flex; gap:7px }
       .ft textarea{ flex:1; resize:none; height:38px; padding:8px 10px; border:1px solid #d8d2c6; border-radius:8px;
         background:#fbf9f3; font-family:inherit; font-size:13.5px }
-      .ft .send{ background:#9a7322; color:#fff; border:none; border-radius:8px; padding:0 14px; font-weight:600; cursor:pointer }
+      .ft .send{ background:#2f5d8a; color:#fff; border:none; border-radius:8px; padding:0 14px; font-weight:600; cursor:pointer }
       .ft .send:disabled{ background:#d8d2c6; cursor:default }
     </style>
     <button class="fab" id="fab">✦ Ask about this chapter</button>

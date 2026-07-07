@@ -26,7 +26,7 @@
   .raf input::placeholder{color:var(--faint)}
   .raf button{font-family:var(--sans);font-weight:600;font-size:14px;padding:10px 20px;border:0;
     border-radius:8px;background:var(--gold);color:#fff;cursor:pointer}
-  .raf button:hover{background:#7c5b18}.raf button:disabled{opacity:.6;cursor:default}
+  .raf button:hover{background:#1f4468}.raf button:disabled{opacity:.6;cursor:default}
   .raf .msg{font-family:var(--sans);font-size:13px;margin-top:8px;min-height:1em}
   .raf .links{font-family:var(--sans);font-size:12.5px;color:var(--mut);margin-top:20px}
   .raf .links a{color:var(--gold);text-decoration:none;margin:0 7px}.raf .links a:hover{text-decoration:underline}
