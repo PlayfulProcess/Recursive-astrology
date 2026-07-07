@@ -46,6 +46,8 @@
     ['casting-big-three',             'Casting — The Big Three'],
     ['casting-twelve-houses',         'Casting — The Twelve Houses'],
     ['casting-single-aspect',         'Casting — One Aspect'],
+    ['planetary-myths',               'Planetary Myths — many readings'],
+    ['trika-lens',                    'The Trika Lens — three doors'],
   ];
   const TOOLS = [
     ['github', 'GitHub ↗', 'https://github.com/PlayfulProcess/Recursive-astrology', 't-github', true],
