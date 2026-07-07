@@ -34,6 +34,7 @@
     ['all',       'All grammars', PFX + 'index.html#all-grammars'],
     ['course',    'History of Astrology', PFX + 'pages/course.html'],
     ['reading',   'The Right Size (a reading)', PFX + 'pages/course-viewer.html?course=the-right-size'],
+    ['three-doors','Three Doors — the Trika lens', PFX + 'pages/course-viewer.html?course=three-doors'],
   ];
   // Every grammar in grammars/*, in the order they appear on the homepage gallery.
   const GRAMMAR_MENU = [
