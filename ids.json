@@ -20,7 +20,8 @@
     "proctor-skeptical-astrology": "7e0a9452-7d34-4ada-a311-229ba13ecbe7",
     "tetrabiblos-ashmand": "043aae3c-e51b-4822-9828-e3e18ef9229b",
     "western-astrology-canonical": "a0a21e50-807d-45ff-b2ab-13fbb4ae86be",
-    "trika-lens": "1484e8ef-5f2c-439c-aa73-bc69f56724ad"
+    "trika-lens": "1484e8ef-5f2c-439c-aa73-bc69f56724ad",
+    "planetary-myths": "5d664bbf-309d-451a-8ccc-e123cf5fccd1"
   },
   "preview_links": {
     "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. `raw` always resolves (no UUID needed); `cards`/`study`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
