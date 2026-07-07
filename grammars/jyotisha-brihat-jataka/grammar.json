@@ -1,0 +1,458 @@
+{
+  "name": "Jyotiṣa — The Bṛhat Jātaka",
+  "description": "The nine grahas and twelve rāśis as taught in Varāhamihira's Bṛhat Jātaka (c. 6th century CE), a foundational Sanskrit text of Hindu predictive astrology, in the 1885 English translation by N. Chidambaram Iyer (public domain; Foster Press, Madras). Honest framing, per this library's creed: Jyotiṣa, as transmitted in this one 1885 translation, summarized — not the whole of a living, plural, continuously-practiced tradition, and not this library's verdict on it. The single biggest thing a Western reader owes this lens is the ayanāṁśa: Jyotiṣa reads a SIDEREAL zodiac, referenced to the fixed stars, where the tropical zodiac this site otherwise uses is referenced to the equinox. The two zodiacs currently sit roughly 24° apart — a gap growing slowly every year from precession — and that disagreement between two honest ways of drawing a circle around the sky is itself the content here, not a bug to explain away. See grammars/historiographies-of-astrology (item view-jyotisha) and research/views/jyotisha.md for the fuller historiographical dossier, including the contested transmission question this grammar does not adjudicate.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navagraha_Mandala.jpg?width=800",
+  "grammar_type": "astrology",
+  "attribution": {
+    "source_name": "Bṛhat Jātaka",
+    "source_author": "Varāhamihira (c. 6th century CE)",
+    "translator": "N. Chidambaram Iyer",
+    "source_year": "c. 6th century CE (translation 1885)",
+    "license": "Public Domain",
+    "source_url": "https://archive.org/details/wg1079"
+  },
+  "tags": [
+    "astrology",
+    "jyotisha",
+    "jyotiṣa",
+    "vedic",
+    "sidereal",
+    "history",
+    "recursive-eco"
+  ],
+  "items": [
+    {
+      "id": "graha-surya",
+      "name": "Sūrya (the Sun)",
+      "category": "planet",
+      "sort_order": 0,
+      "sections": {
+        "In the text": "Chapter II of the Bṛhat Jātaka (\"Definitions and Elementary Planetary Principles\") gives the Sun a place among the Kālapuruṣa correspondences — the scheme that maps the nine grahas onto the body and rank of a cosmic \"Time-Person\": the Sun and Moon are its kings, and the Sun and Moon together are called the \"kings\" of the planetary hierarchy, with Mars as general, Mercury as first prince, Jupiter and Venus as counsellors, and Saturn as servant. The Sun is said to be strong in bones and to preside over copper colour. (Paraphrase of Chapter II, stanza-level material, via the chestofbooks.com mirror of the Chidambaram Iyer 1885 translation; confidence: ○ — search-triangulated this session, not independently re-fetched from the primary page.)",
+        "What this lens reads": "In tropical astrology the Sun anchors the whole zodiac (0° Aries is defined by the Sun's position at the equinox); in Jyotiṣa the Sun is one king among grahas measured against the fixed stars, roughly 24° behind its tropical degree today. Same star, two honest coordinate systems — the gap between them is the thing worth noticing, not a discrepancy to resolve."
+      },
+      "keywords": ["surya", "sun", "kalapurusha", "king", "bones", "copper"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Sūrya / Ravi",
+        "kalapurusha_role": "king (soul)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via https://chestofbooks.com/new-age/astrology/Brihat-Jataka/Chapter-II-Definitions-And-Elementary-Planetary-Principles.html"
+      }
+    },
+    {
+      "id": "graha-chandra",
+      "name": "Candra (the Moon)",
+      "category": "planet",
+      "sort_order": 1,
+      "sections": {
+        "In the text": "Chapter II describes the Moon-native's body as \"well rounded,\" full of wind and phlegm, intelligent, and of sweet speech; white is the colour Candra presides over. In the Kālapuruṣa scheme the Moon is mind (manas) and, with the Sun, one of the two \"kings\" among the grahas. (Paraphrase with short quoted phrases from Chapter II via the chestofbooks.com mirror of the 1885 Chidambaram Iyer translation; confidence: ○.)",
+        "What this lens reads": "Where the tropical Western literature (see grammars/western-astrology-canonical, grammars/alan-leo) reads the Moon as feeling and instinct, this text reads it as manas — mind itself, the faculty that receives and processes, not merely emotion. The Sanskrit vocabulary carves the psyche differently than the Greek-derived one does; that's a real difference in what a chart is claimed to show, not just a translation gap."
+      },
+      "keywords": ["chandra", "moon", "manas", "mind", "phlegm", "white"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Candra / Soma",
+        "kalapurusha_role": "king (mind)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "graha-kuja",
+      "name": "Kuja (Mars)",
+      "category": "planet",
+      "sort_order": 2,
+      "sections": {
+        "In the text": "Chapter II assigns Mars (Kuja, also Aṅgāraka — \"the red-hot one\/coal-man\") blood-red as his colour, consistent across the classical Sanskrit tradition (rakta varṇa, \"blood-coloured\"). In the Kālapuruṣa scheme Mars is bala, strength — the general among the grahas, ranked directly under the two royal luminaries. (Paraphrase; confidence: ○.)",
+        "What this lens reads": "Mars-as-general is a specific, martial-bureaucratic image — a planetary hierarchy modeled on a royal court, not a modern psychological 'drive.' Worth sitting with before assuming every tradition's Mars means the same private thing it means in a Sun-sign column."
+      },
+      "keywords": ["kuja", "angaraka", "mars", "general", "blood-red", "strength"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Kuja / Aṅgāraka / Maṅgala",
+        "kalapurusha_role": "general (strength)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "graha-budha",
+      "name": "Budha (Mercury)",
+      "category": "planet",
+      "sort_order": 3,
+      "sections": {
+        "In the text": "Chapter II describes the Budha-native as having gurgling speech, fond of joking, and a mixture of air, phlegm, and bile; green is his colour. In the Kālapuruṣa scheme Mercury is vāk, speech, and holds the rank of \"first prince\" — directly below the general and the two kings. (Paraphrase with quoted phrases; confidence: ○.)",
+        "What this lens reads": "Speech as Mercury's Kālapuruṣa portfolio lines up closely with the Greco-Roman Hermes/Mercury-as-messenger image (see grammars/tetrabiblos-ashmand) — one of the places where two unrelated traditions converge on a similar reading of the same fast-moving point of light, for reasons worth wondering about rather than assuming."
+      },
+      "keywords": ["budha", "mercury", "speech", "prince", "green", "joking"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Budha",
+        "kalapurusha_role": "first prince (speech)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "graha-guru",
+      "name": "Guru (Jupiter)",
+      "category": "planet",
+      "sort_order": 4,
+      "sections": {
+        "In the text": "Chapter II lists several names for Jupiter — Jīva, Aṅgirā, Suraguru, Vācaspati, Ijya — and describes him as corpulent in body, with golden locks and eyes, of moral character, and phlegmatic. In the Kālapuruṣa scheme Jupiter (with Venus) is a counsellor, and separately Jupiter is named as knowledge and health. (Paraphrase with quoted phrases via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Suraguru\" — teacher of the gods — is doing real work: Jupiter here is specifically wisdom-as-counsel to a king, an image close to but not identical with the Hellenistic Jupiter's temperate, benefic warmth (compare grammars/tetrabiblos-ashmand's Jupiter). Two traditions independently landing on 'the wise, generous, expansive one' for the same slow bright planet is worth noticing without over-claiming why."
+      },
+      "keywords": ["guru", "jupiter", "jiva", "brihaspati", "counsellor", "knowledge"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Guru / Bṛhaspati / Jīva",
+        "kalapurusha_role": "counsellor (knowledge, health)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "graha-sukra",
+      "name": "Śukra (Venus)",
+      "category": "planet",
+      "sort_order": 5,
+      "sections": {
+        "In the text": "Chapter II describes the Śukra-native as joyful, charming in physique, with beautiful and brilliant eyes, a poet by temperament, phlegmatic and windy in constitution, with curly hair. In the Kālapuruṣa scheme Venus (with Jupiter) is a counsellor, and separately is named as kāma, desire. (Paraphrase with quoted phrases via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "Śukra as poet-counsellor-of-desire is a specific and slightly different Venus than the Greco-Roman goddess-of-love image this site's other libraries carry (compare grammars/tetrabiblos-ashmand, grammars/alan-leo): still beauty and pleasure, but folded into a royal-court advisory role rather than a domestic or purely erotic one. Notably, in the received Sanskrit tradition Śukra is also a masculine figure (sage/preceptor of the asuras) — a reminder that 'Venus' the Roman name and Śukra the Sanskrit graha are not simply the same god in different languages."
+      },
+      "keywords": ["sukra", "venus", "poet", "desire", "counsellor", "beauty"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Śukra",
+        "kalapurusha_role": "counsellor (desire)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "graha-sani",
+      "name": "Śani (Saturn)",
+      "category": "planet",
+      "sort_order": 6,
+      "sections": {
+        "In the text": "Chapter II gives Saturn several names — Kona, Manda (\"the slow one\"), Sūryaputra (\"son of the Sun\"), Asita (\"the black one\") — and describes him as lazy, with eyes of a golden colour, a thin and tall body, large teeth, stiff hair, and a windy constitution; black is his colour. In the Kālapuruṣa scheme Saturn is named as śoka, sorrow, and holds the rank of servant — the lowest of the nine. (Paraphrase with quoted phrases via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "Saturn-as-servant-and-sorrow is a harsher placement than the tropical tradition's 'great teacher' softening (see grammars/western-astrology-canonical) — worth sitting with as a genuinely different value judgment on the same slow, distant planet, not a translation quirk. 'Sūryaputra,' son of the Sun, also ties Śani into a specific mythological genealogy this grammar doesn't unpack further; see the Vedic-myth cross-references in grammars/planetary-myths."
+      },
+      "keywords": ["sani", "saturn", "manda", "servant", "sorrow", "black"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Śani / Manda",
+        "kalapurusha_role": "servant (sorrow)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter II, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "graha-rahu",
+      "name": "Rāhu (the ascending lunar node)",
+      "category": "planet",
+      "sort_order": 7,
+      "sections": {
+        "In the text": "Rāhu is one of the two chāyā grahas (\"shadow planets\") of Jyotiṣa — not a physical body but the Moon's ascending node, the point where the Moon's path crosses the Sun's. Sanskrit names recorded for Rāhu include Tamas (\"darkness\"), Agu, and Asura; the mythic frame is the severed head of an asura who drank a portion of the gods' amṛta (nectar of immortality) and was decapitated by Viṣṇu for the theft, the head living on to periodically swallow the Sun or Moon — the tradition's own account of eclipses. Held at low confidence: this session found solid material on Rāhu's names and myth, but not a specific Chapter-II-level graha-description passage from the Chidambaram Iyer translation itself (confidence: ◆ — plausible and consistent with the wider tradition, but not pinned to this exact translation's text this session).",
+        "What this lens reads": "The nodes have no Western planetary counterpart at all in the tropical tradition this site otherwise carries — they are Jyotiṣa's own invention for handling eclipses astrologically, and a place where this lens genuinely adds a category the others don't have, rather than just relabeling a shared planet."
+      },
+      "keywords": ["rahu", "node", "shadow-planet", "eclipse", "tamas"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Rāhu",
+        "kalapurusha_role": "chāyā graha (shadow point, no body rank)",
+        "confidence": "low",
+        "_source": "General Jyotiṣa reference material, search-triangulated; not pinned to a specific Chidambaram Iyer Chapter II passage this session"
+      }
+    },
+    {
+      "id": "graha-ketu",
+      "name": "Ketu (the descending lunar node)",
+      "category": "planet",
+      "sort_order": 8,
+      "sections": {
+        "In the text": "Ketu is the second chāyā graha, the descending node — the same severed-asura body from the waist down, in the eclipse myth that pairs with Rāhu (see graha-rahu). One recorded name is Śikhin (\"the crested/flagged one,\" evoking a comet's tail). As with Rāhu, this session's search found the mythic and nomenclature material solidly but did not locate a specific graha-description passage from Chapter II of the Chidambaram Iyer translation naming Ketu directly — flagged honestly rather than invented (confidence: ◆).",
+        "What this lens reads": "Rāhu and Ketu, always exactly opposite each other in the sky, read together as one severed body split by a boundary — a vivid, non-Western way of representing that eclipses are structurally paired (a lunar eclipse near one node, a solar eclipse near the same node roughly two weeks later)."
+      },
+      "keywords": ["ketu", "node", "shadow-planet", "eclipse", "shikhin"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Ketu",
+        "kalapurusha_role": "chāyā graha (shadow point, no body rank)",
+        "confidence": "low",
+        "_source": "General Jyotiṣa reference material, search-triangulated; not pinned to a specific Chidambaram Iyer Chapter II passage this session"
+      }
+    },
+    {
+      "id": "rasi-mesha",
+      "name": "Meṣa (Aries)",
+      "category": "sign",
+      "sort_order": 10,
+      "sections": {
+        "In the text": "Chapter I (\"Definitions and Elementary Zodiacal Principles\") of the Bṛhat Jātaka gives Meṣa the colour red, classes it among the quadruped (catuṣpada) signs, and — as a movable (cara) sign along with Karka, Tulā, and Makara — associates its trigon (with Siṃha and Dhanu) with the eastern direction. It is counted among the signs said to rise \"with their feet.\" (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "The classificatory apparatus here — quadruped/biped/aquatic, movable/fixed/common, directional trigons — runs strikingly parallel to Ptolemy's Tetrabiblos (compare grammars/tetrabiblos-ashmand's Aries), right down to shared categories like 'quadruped.' Whether that is convergent technical reasoning about the same visible zodiac or a trace of the historical transmission the Jyotiṣa dossier flags as contested (research/views/jyotisha.md) is an open question this grammar doesn't resolve."
+      },
+      "keywords": ["mesha", "aries", "red", "quadruped", "movable", "east"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Meṣa",
+        "western_equivalent": "Aries",
+        "rasi_lord": "Mars (Kuja)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-vrishabha",
+      "name": "Vṛṣabha (Taurus)",
+      "category": "sign",
+      "sort_order": 11,
+      "sections": {
+        "In the text": "Chapter I gives Vṛṣabha the colour white, classes it among the quadruped signs and, separately, among the fixed (sthira) signs; its southern-direction association is noted alongside Kanyā and Makara. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "A fixed earth sign carrying steadiness is a reading Jyotiṣa and the tropical tradition arrive at by the same structural logic (fixed quality + earth trigon) even though the underlying zodiac is measured differently — a case where the technique, not just the story, travels."
+      },
+      "keywords": ["vrishabha", "taurus", "white", "quadruped", "fixed", "south"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Vṛṣabha",
+        "western_equivalent": "Taurus",
+        "rasi_lord": "Venus (Śukra)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-mithuna",
+      "name": "Mithuna (Gemini)",
+      "category": "sign",
+      "sort_order": 12,
+      "sections": {
+        "In the text": "Chapter I gives Mithuna the colour of a parrot (green), classes it among the biped (dvipada) signs and among the common/dual (dvisvabhāva) signs (along with Kanyā, Dhanu, and Mīna), and places its trigon in the western direction. Unusually, Mithuna is noted as an exception among the otherwise \"night\"-rising signs. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Mithuna\" means a pair/couple in Sanskrit — the same twin-image the Greek Dídymoi (Gemini) carries, on an unrelated etymology. Two traditions independently seeing a pair of figures in the same patch of sky is a small, concrete instance of humans converging on similar readings from the actual star pattern (Castor and Pollux), not from shared doctrine."
+      },
+      "keywords": ["mithuna", "gemini", "parrot-green", "biped", "common", "west"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Mithuna",
+        "western_equivalent": "Gemini",
+        "rasi_lord": "Mercury (Budha)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-karka",
+      "name": "Karka (Cancer)",
+      "category": "sign",
+      "sort_order": 13,
+      "sections": {
+        "In the text": "Chapter I gives Karka the colour of the pāṭalā (trumpet flower), classes it among the aquatic (jalacara) signs and among the movable signs, with its trigon read toward the northern direction. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "An aquatic, movable, northern-trigon sign for the Moon's own house lines up with the tropical Cancer's watery, lunar, cardinal reading (compare grammars/tetrabiblos-ashmand) — again, shared structural logic rather than shared doctrine."
+      },
+      "keywords": ["karka", "cancer", "aquatic", "movable", "north", "moon-house"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Karka",
+        "western_equivalent": "Cancer",
+        "rasi_lord": "Moon (Candra)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-simha",
+      "name": "Siṃha (Leo)",
+      "category": "sign",
+      "sort_order": 14,
+      "sections": {
+        "In the text": "Chapter I gives Siṃha the colour \"black-white,\" classes it among the quadruped signs and among the fixed signs, sharing Meṣa's eastern-trigon association. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "Fire-trigon and fixed together read as the Sun's own house holding its heat steady rather than igniting and moving on — the same functional logic (fixed = a quality established, not just begun) that Ptolemy applies to Leo in the Hellenistic register (grammars/tetrabiblos-ashmand)."
+      },
+      "keywords": ["simha", "leo", "fixed", "quadruped", "east", "sun-house"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Siṃha",
+        "western_equivalent": "Leo",
+        "rasi_lord": "Sun (Sūrya)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-kanya",
+      "name": "Kanyā (Virgo)",
+      "category": "sign",
+      "sort_order": 15,
+      "sections": {
+        "In the text": "Chapter I gives Kanyā a variegated colour, classes it among the biped signs, the common/dual signs, and shares Vṛṣabha and Makara's southern-trigon association. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Kanyā\" — maiden — is a direct semantic cousin of the Greco-Roman Virgo (also \"maiden\"/\"virgin\"), on the same unrelated-etymology logic as Mithuna/Gemini above: different words, same figure read into roughly the same stretch of sky."
+      },
+      "keywords": ["kanya", "virgo", "biped", "common", "south", "maiden"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Kanyā",
+        "western_equivalent": "Virgo",
+        "rasi_lord": "Mercury (Budha)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-tula",
+      "name": "Tulā (Libra)",
+      "category": "sign",
+      "sort_order": 16,
+      "sections": {
+        "In the text": "Chapter I gives Tulā a black colour, classes it among the biped signs, the movable signs (with Meṣa, Karka, Makara), and shares Mithuna and Kumbha's western-trigon association. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Tulā\" means balance/scale in Sanskrit — the same image as the Greco-Roman Libra, the one zodiac sign in both traditions represented by an object rather than a person or animal. Whether this is a shared inheritance or an independent invention (both cultures having scales as a common tool) is exactly the kind of question the transmission dossier (research/views/jyotisha.md) holds open rather than settles."
+      },
+      "keywords": ["tula", "libra", "biped", "movable", "west", "scale"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Tulā",
+        "western_equivalent": "Libra",
+        "rasi_lord": "Venus (Śukra)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-vrishchika",
+      "name": "Vṛścika (Scorpio)",
+      "category": "sign",
+      "sort_order": 17,
+      "sections": {
+        "In the text": "Chapter I gives Vṛścika a gold colour and, notably, marks it as the only centipede (śatapada, \"hundred-footed\") sign in the whole zodiac — a distinct classificatory category from quadruped, biped, or aquatic. It is a fixed sign, sharing the northern-trigon association with Karka and Mīna. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "A scorpion needs its own animal category (\"hundred-footed\") that no other sign shares — a small, concrete example of how far this classification scheme's own internal logic diverges from a simple biped/quadruped split, on a sign both traditions independently image as a scorpion or stinging creature."
+      },
+      "keywords": ["vrishchika", "scorpio", "centipede", "fixed", "north", "gold"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Vṛścika",
+        "western_equivalent": "Scorpio",
+        "rasi_lord": "Mars (Kuja)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-dhanu",
+      "name": "Dhanu (Sagittarius)",
+      "category": "sign",
+      "sort_order": 18,
+      "sections": {
+        "In the text": "Chapter I gives Dhanu the colour of paddy husk and treats it as a split sign: its second half is classed quadruped, its first half biped — a half-and-half classification shared with Makara (split the other way). It is a common/dual sign, sharing the eastern-trigon association with Meṣa and Siṃha. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Dhanu\" means bow — an archer, same as the Greco-Roman Sagittarius's centaur-archer, and the same half-human/half-animal duality shows up independently in the sign's own classification scheme (half biped, half quadruped) as well as in its symbol. A striking convergence, held here as fact-plus-question, not proof of either shared or separate origin."
+      },
+      "keywords": ["dhanu", "sagittarius", "archer", "common", "east", "half-biped"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Dhanu",
+        "western_equivalent": "Sagittarius",
+        "rasi_lord": "Jupiter (Guru)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-makara",
+      "name": "Makara (Capricorn)",
+      "category": "sign",
+      "sort_order": 19,
+      "sections": {
+        "In the text": "Chapter I gives Makara a white-red colour and, like Dhanu, splits its classification: the first half aquatic, matching Karka and Mīna, the second half quadruped, matching Meṣa, Vṛṣabha, and Siṃha. It is a movable sign, sharing the southern-trigon association with Vṛṣabha and Kanyā. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "Makara is imaged as a crocodile-fish hybrid (the traditional makara creature) — and, tellingly, its own textual classification splits it half-aquatic, half-land, mirroring the hybrid symbol in the technical scheme itself rather than only in the artwork. Compare the Western sea-goat image for Capricorn (grammars/tetrabiblos-ashmand): two traditions, two different hybrid sea-creatures, same zodiac position."
+      },
+      "keywords": ["makara", "capricorn", "sea-creature", "movable", "south", "half-aquatic"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Makara",
+        "western_equivalent": "Capricorn",
+        "rasi_lord": "Saturn (Śani)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-kumbha",
+      "name": "Kumbha (Aquarius)",
+      "category": "sign",
+      "sort_order": 20,
+      "sections": {
+        "In the text": "Chapter I gives Kumbha the colour of a mongoose and classes it among the biped signs and the fixed signs, sharing the western-trigon association with Mithuna and Tulā. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Kumbha\" means water-pot — the water-bearer image, close kin to the Greco-Roman Aquarius's water-carrier, yet classed here as a biped (human-form) sign rather than an aquatic one: the vessel is watery, the bearer is not, a small but real reminder that these classification schemes track the sign's imagined body, not its symbolic association."
+      },
+      "keywords": ["kumbha", "aquarius", "water-bearer", "biped", "fixed", "west"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Kumbha",
+        "western_equivalent": "Aquarius",
+        "rasi_lord": "Saturn (Śani)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    },
+    {
+      "id": "rasi-meena",
+      "name": "Mīna (Pisces)",
+      "category": "sign",
+      "sort_order": 21,
+      "sections": {
+        "In the text": "Chapter I gives Mīna the colour of a fish and classes it among the aquatic signs and the common/dual signs, sharing the northern-trigon association with Karka and Vṛścika. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)",
+        "What this lens reads": "\"Mīna\" simply means fish — the plainest possible name for the same paired-fish image the Greco-Roman Pisces carries. The final sign in both traditions' twelve-fold wheel, closing the same circle by two independently-arrived-at routes."
+      },
+      "keywords": ["meena", "pisces", "fish", "aquatic", "common", "north"],
+      "metadata": {
+        "school": "jyotisha",
+        "era_view": "view-jyotisha",
+        "sanskrit_name": "Mīna",
+        "western_equivalent": "Pisces",
+        "rasi_lord": "Jupiter (Guru)",
+        "confidence": "low",
+        "_source": "Bṛhat Jātaka, trans. N. Chidambaram Iyer (1885), Chapter I, via chestofbooks.com"
+      }
+    }
+  ],
+  "_grammar_commons": {
+    "schema_version": "1.0",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": [
+      {
+        "name": "Bṛhat Jātaka of Varāhamihira, trans. N. Chidambaram Iyer (1885, Foster Press, Madras)",
+        "role": "source text (public domain)",
+        "link": "https://archive.org/details/wg1079"
+      },
+      {
+        "name": "chestofbooks.com",
+        "role": "accessible online mirror of the Chidambaram Iyer translation consulted this session (WebFetch to archive.org and to chestofbooks.com both returned HTTP 403 via the session's proxy; content here is reconstructed from WebSearch snippet triangulation across this mirror and corroborating secondary sources — see research/why-astrology/06-genealogy-grammars.md)",
+        "link": "https://chestofbooks.com/new-age/astrology/Brihat-Jataka/index.html"
+      },
+      {
+        "name": "PlayfulProcess",
+        "role": "compiled as a recursive.eco grammar for The Recursive Astrology, Jul 2026",
+        "link": "https://recursive.eco"
+      }
+    ]
+  }
+}

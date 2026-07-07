@@ -12,8 +12,10 @@
   "appendixSectionOrder": ["About this pattern", "Why it matters"],
   "companions": {
     "_note": "chapter item id -> array of grammar slugs (from ids.json) offered as 'Read the primary source' links. Chapters not listed here simply show no companion — an honest gap (no primary-source grammar yet in this repo), not a hidden fallback.",
+    "view-mesopotamian-omens": ["mesopotamian-omens"],
     "view-hellenistic-synthesis": ["tetrabiblos-ashmand"],
-    "view-medieval-renaissance-court": ["western-astrology-canonical"],
+    "view-jyotisha": ["jyotisha-brihat-jataka"],
+    "view-medieval-renaissance-court": ["western-astrology-canonical", "renaissance-lilly"],
     "view-theosophical-revival": ["alan-leo"],
     "view-decline-demarcation": ["proctor-skeptical-astrology"],
     "view-empirical-test-tradition": ["proctor-skeptical-astrology"],
