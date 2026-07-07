@@ -97,7 +97,11 @@
   </main>
 </div>
 
-<script src="../course/course-assistant.js?v=1"></script>
+<!-- Jul 7 2026: the hand-rolled course chat widget (course/course-assistant.js, a
+     pattern-copy of recursive-tarot's) is replaced by the ONE shared recursive.eco
+     assistant sidebar — ../assistant.js at the bottom of this page — matching how
+     recursive.eco's own course viewer mounts it (same star FAB, same tabs, same
+     credits). The old widget file stays in the repo one round for easy rollback. -->
 <script>
 const $ = s => document.querySelector(s);
 const params = new URLSearchParams(location.search);
@@ -251,6 +255,7 @@ main();
 </script>
 
 <script src="../site-footer.js?v=1"></script>
+<script src="../assistant.js" defer></script>
 <site-footer base="../"></site-footer>
 </body>
 </html>
