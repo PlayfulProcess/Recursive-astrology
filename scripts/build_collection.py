@@ -54,6 +54,7 @@ BRANCH_OF = {
     "casting-twelve-houses":          "castings",
     "the-right-size":                 "readings",
     "three-doors":                    "readings",
+    "astro-of-all-astros":            "synthesis",  # generated meta-voice — see scripts/build_meta_astro.py
 }
 
 # slug -> (sortable year, display label, provenance). Only the primary-source voice

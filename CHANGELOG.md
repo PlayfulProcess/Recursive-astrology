@@ -1,5 +1,43 @@
 # Changelog — The Recursive Astrology
 
+## July 7, 2026 (2) — "Astro of All Astros": a generated meta-voice grammar
+
+Proves out the Oracle Trinity design (`docs/DESIGN-oracle-trinity.md`, "Astro of all Astros" /
+"the same mechanism as Tarot of All Tarots + the lenses matcher") as an actual artifact, not
+just a plan.
+
+- **New generator** `scripts/build_meta_astro.py`, mirroring
+  `recursive-tarot/scripts/build_meta_grammar.py`'s pattern (generated projection over the
+  repo's own grammar files, idempotent, `_do_not_hand_edit`). Reads all six voice grammars
+  (`western-astrology-canonical`, `tetrabiblos-ashmand`, `renaissance-lilly`,
+  `jyotisha-brihat-jataka`, `alan-leo`, `planetary-myths`), canonicalizes each source item's
+  planet/sign/house identity (name matching + `metadata.planet`/`metadata.sign`/
+  `metadata.western_equivalent` + the same id-pattern house-number heuristic
+  `astrology.types.ts`'s `extractHouseNumber` uses, kept in sync on purpose), and produces
+  one item per shared entity — 7 classical planets + 12 signs + 12 houses (aspects excluded;
+  out of scope for this pass) — with a `sections` entry per source that actually covers that
+  entity: `"Canonical"`, `"Ptolemy (Tetrabiblos)"`, `"Lilly (1647)"`, `"Jyotiṣa (Bṛhat Jātaka)"`,
+  `"Alan Leo"`, `"Planetary Myths"`. No fabricated coverage — e.g. Lilly (planets only) never
+  gets a sign/house section; Jyotiṣa (planets + signs) never gets a house section.
+- **New output** `grammars/astro-of-all-astros/grammar.json` — 31 items total (7 planets ×
+  6/6 sources, 12 signs × 4/6 sources — Lilly + Planetary Myths don't cover signs, 12 houses ×
+  2–3/6 sources — only Canonical, Ptolemy, and Alan Leo cover houses in this repo today).
+  `grammar_type: "astrology"`, `category: "planet"/"sign"/"house"` + matching
+  `metadata.planet`/`metadata.sign`/`metadata.house` on every item, so it reads as a
+  first-class astro voice everywhere the app/viewers already look for one (unlike the tarot
+  companion task this same day, which needed a caveat — this grammar's items get the
+  *category* the matcher expects, not metadata alone). `_generated: true` +
+  `_rebuild_note` pointing back at the generator; `_sources` records which six grammars fed it
+  and their display names, for traceability.
+- **Registered in the collection**: added `astro-of-all-astros` → `synthesis` branch in
+  `scripts/build_collection.py`'s `BRANCH_OF` (cosmetic — it would have landed in
+  `synthesis` by default anyway via the glob, since the script has no hardcoded slug list to
+  fall out of date) and reran the script — `grammars/_collection.json` now lists 16 grammars
+  (267 items total, up from 15/236). No site-header edit needed: `site-header.js`'s Grammars
+  dropdown fetches `_collection.json` live and groups by branch, so the new voice already
+  appears there and in every ported viewer (`cards.html`, `explorer.html`, `lenses.html`,
+  `tree-viewer.html`, `timeline.html`) without any hardcoded menu to touch.
+
 ## July 7, 2026 — The Great Port: tarot's viewers, homepage, and header, adapted for astrology
 
 Ported the whole "family pattern" from `recursive-tarot` (the flagship sibling site) into

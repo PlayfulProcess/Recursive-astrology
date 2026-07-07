@@ -26,6 +26,7 @@
       "id": "synthesis",
       "name": "Synthesis — surveys, flagship interpretations, and readings",
       "deck_slugs": [
+        "astro-of-all-astros",
         "historiographies-of-astrology",
         "planetary-myths",
         "trika-lens",
@@ -65,6 +66,19 @@
       "provenance": "record",
       "year": 1900,
       "year_label": "c. 1900 (Theosophical revival)"
+    },
+    {
+      "slug": "astro-of-all-astros",
+      "name": "Astro of All Astros — every voice, one placement",
+      "type": "astrology",
+      "branch": "synthesis",
+      "is_meta": false,
+      "default_preview": "cards",
+      "items": 31,
+      "cover_image_url": null,
+      "blurb": "A generated meta-voice grammar aggregating every interpretation grammar in this repo into one navigable set: one item per planet, sign, and house, each carrying every voice's own reading of that place…",
+      "path": "grammars/astro-of-all-astros/grammar.json",
+      "provenance": "living"
     },
     {
       "slug": "casting-big-three",
