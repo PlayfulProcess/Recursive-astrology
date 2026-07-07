@@ -32,7 +32,8 @@
     ['wheel',     'Chart Wheel',  PFX + 'wheel.html'],
     ['viewer',    'Chart Viewer', PFX + 'viewer/astrology-viewer.html'],
     ['all',       'All grammars', PFX + 'index.html#all-grammars'],
-    ['course',    'Course',       PFX + 'pages/course.html'],
+    ['course',    'History of Astrology', PFX + 'pages/course.html'],
+    ['reading',   'The Right Size (a reading)', PFX + 'pages/course-viewer.html?course=the-right-size'],
   ];
   // Every grammar in grammars/*, in the order they appear on the homepage gallery.
   const GRAMMAR_MENU = [

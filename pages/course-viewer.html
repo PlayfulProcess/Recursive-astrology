@@ -105,12 +105,24 @@ const params = new URLSearchParams(location.search);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const mdLite = s => esc(s).replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/`(.+?)`/g, '<code>$1</code>');
 
+// Multi-course (Jul 2026): ?course=<slug> picks the manifest + source grammar.
+// Default (no param) stays the original History of Astrology course, so every
+// existing link keeps working. A course's manifest names its own sourceGrammar,
+// so adding a course = one manifest + one grammar, no viewer edit.
+const COURSES = {
+  'history-of-astrology': { manifest: '../course/manifest.json' },
+  'the-right-size':       { manifest: '../course/the-right-size.manifest.json' },
+};
 async function main(){
   let manifest, grammar, ids;
+  const courseSlug = new URLSearchParams(location.search).get('course') || 'history-of-astrology';
+  const course = COURSES[courseSlug] || COURSES['history-of-astrology'];
   try {
-    [manifest, grammar, ids] = await Promise.all([
-      fetch('../course/manifest.json').then(r => { if(!r.ok) throw new Error('manifest '+r.status); return r.json(); }),
-      fetch('../grammars/historiographies-of-astrology/grammar.json').then(r => { if(!r.ok) throw new Error('grammar '+r.status); return r.json(); }),
+    manifest = await fetch(course.manifest).then(r => { if(!r.ok) throw new Error('manifest '+r.status); return r.json(); });
+    // The manifest names its source grammar; fall back to the history grammar for the default course.
+    const grammarSlug = manifest.sourceGrammar || 'historiographies-of-astrology';
+    [grammar, ids] = await Promise.all([
+      fetch('../grammars/'+grammarSlug+'/grammar.json').then(r => { if(!r.ok) throw new Error('grammar '+r.status); return r.json(); }),
       fetch('../ids.json').then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
   } catch (err) {
