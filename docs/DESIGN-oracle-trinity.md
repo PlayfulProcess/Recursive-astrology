@@ -61,3 +61,23 @@ caster spreads/texts that are not-exactly-iching, offered wherever they play wel
 3. HD bridge keys (hexagram number + zodiac degree on gate items).
 4. Astro-of-all-astros meta-voice; then aspects/dignities commented grammars (the richness lane).
 5. Offering-role plumbing (tools row field) only when inference genuinely fails in practice.
+
+## Refinement (builder, same day): keys live on ITEMS; the dropdown queries affordances
+
+- **Voice inference is ITEM-level metadata** — already true in the app (astro matches
+  metadata.planet/sign/house). So the Golden Dawn deck becomes an astro voice by ADDING
+  astro keys to its items (each card already has decan/planet correspondences in Book T) —
+  the same grammar reads as tarot AND as astro. Grammar-level "type" only for spreads
+  (a shape fact), item-level keys for everything matchable. I Ching likewise: hexagram
+  number on items.
+- **How HD-in-the-iching-repo appears in the astro dropdown**: the picker must stop
+  filtering by channel and instead query "public grammars whose items answer THIS oracle's
+  keys" (planet/sign/degree for astro; hexagram number for iching). Channel = where it's
+  offered; affordance = where it can speak. One indexed query (or a summary-column flag
+  maintained by trigger) makes this cheap.
+- **Personal chart grammars (the synastry path)**: a chart saved as a grammar — items =
+  placements/aspects, keyed like any voice (metadata.planet/sign/house + degree). Make one
+  for me, my husband, my daughter → the oracle lists all three as SOURCES; casting another
+  person's journey auto-fills their aspects (chart×chart = synastry for free, because both
+  sides speak the same item keys). "Save reading as grammar" already points this direction;
+  the chart-as-grammar is its completion.
