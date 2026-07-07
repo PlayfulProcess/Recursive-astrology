@@ -390,5 +390,8 @@
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=800"
     }
-  ]
+  ],
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800",
+  "_recursive_eco_url": "https://flow.recursive.eco/play?id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=ddffc0fa-7f05-49d1-82db-f2d636cf178e"
 }
