@@ -115,6 +115,21 @@
             --v-air-rgb: 138 100 20;
             --v-water-rgb: 47 95 138;
 
+            /* Chart-wheel internals (SVG fills/strokes + zoom tiles). Light values are
+               tuned for the paper panel: a warm paper glow behind the wheel instead of a
+               grey veil, white planet/hub chips, and ink-strength cusp/aspect colors.
+               Dark values (in the dark block below) are byte-equal to what the wheel
+               hardcoded before, so dark rendering is unchanged. */
+            --v-wheel-bg: rgba(255, 253, 246, 0.6);
+            --v-chip-bg: #ffffff;
+            --v-cusp-minor: rgba(124, 58, 149, 0.3);
+            --v-wheel-violet-rgb: 109 51 158;
+            --v-teal-rgb: 63 122 110;
+            --v-aspect-minor: rgba(124, 58, 149, 0.4);
+            --v-zoom-bg: #fffdf6;
+            --v-zoom-ink: #7a5a12;
+            --v-zoom-border: rgba(154, 115, 34, 0.4);
+
             --v-danger: rgb(var(--v-danger-rgb));
             --v-success: rgb(var(--v-success-rgb));
             --v-info: rgb(var(--v-info-rgb));
@@ -164,6 +179,19 @@
             --v-earth-rgb: 34 197 94;
             --v-air-rgb: 234 179 8;
             --v-water-rgb: 59 130 246;
+
+            /* Chart-wheel internals — byte-equal to the wheel's original hardcoded dark
+               colors (rgba(10,10,15,...) chips, violet 167/139/250, teal 20/184/166,
+               zoom tiles = black wash + gold), so dark mode renders exactly as before. */
+            --v-wheel-bg: rgba(10, 10, 15, 0.3);
+            --v-chip-bg: rgba(10, 10, 15, 0.95);
+            --v-cusp-minor: rgba(139, 92, 246, 0.25);
+            --v-wheel-violet-rgb: 167 139 250;
+            --v-teal-rgb: 20 184 166;
+            --v-aspect-minor: rgba(139, 92, 246, 0.3);
+            --v-zoom-bg: rgba(0, 0, 0, 0.55);
+            --v-zoom-ink: rgba(212, 175, 55, 0.85);
+            --v-zoom-border: rgba(212, 175, 55, 0.3);
         }
 
         body {
@@ -340,9 +368,9 @@
             width: 28px;
             height: 28px;
             border-radius: 6px;
-            background: rgb(var(--v-wash-rgb) / 0.55);
-            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
-            color: rgb(var(--v-accent-rgb) / 0.85);
+            background: var(--v-zoom-bg);
+            border: 1px solid var(--v-zoom-border);
+            color: var(--v-zoom-ink);
             font-size: 16px;
             cursor: pointer;
             display: flex;
@@ -3615,7 +3643,7 @@
                 // Angular houses (1, 4, 7, 10) get thicker lines
                 const isAngular = [1, 4, 7, 10].includes(house.num);
                 const strokeWidth = isAngular ? 2 : 1;
-                const strokeColor = isAngular ? 'rgba(212, 175, 55, 0.7)' : 'rgba(139, 92, 246, 0.25)';
+                const strokeColor = isAngular ? 'rgb(var(--v-accent-rgb) / 0.7)' : 'var(--v-cusp-minor)';
 
                 svg += `<line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}"
                               stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`;
@@ -3629,7 +3657,7 @@
                 const numPos = getPoint(numAngle, (innerR + zodiacInnerR) / 2 - 15);
                 svg += `<text x="${numPos.x}" y="${numPos.y}"
                               text-anchor="middle" dominant-baseline="middle"
-                              fill="rgba(167, 139, 250, 0.6)" font-size="12">${house.num}</text>`;
+                              fill="rgb(var(--v-wheel-violet-rgb) / 0.6)" font-size="12">${house.num}</text>`;
             });
 
             // === ASPECT LINES ===
@@ -3678,12 +3706,12 @@
 
                     let color, dash = '';
                     switch(aspect.aspect) {
-                        case 'conjunction': color = 'rgba(212, 175, 55, 0.6)'; break;
-                        case 'opposition': color = 'rgba(239, 68, 68, 0.5)'; break;
-                        case 'trine': color = 'rgba(34, 197, 94, 0.5)'; break;
-                        case 'square': color = 'rgba(239, 68, 68, 0.4)'; dash = '4,2'; break;
-                        case 'sextile': color = 'rgba(59, 130, 246, 0.5)'; break;
-                        default: color = 'rgba(139, 92, 246, 0.3)'; dash = '2,2';
+                        case 'conjunction': color = 'rgb(var(--v-accent-rgb) / 0.6)'; break;
+                        case 'opposition': color = 'rgb(var(--v-danger-rgb) / 0.5)'; break;
+                        case 'trine': color = 'rgb(var(--v-success-rgb) / 0.5)'; break;
+                        case 'square': color = 'rgb(var(--v-danger-rgb) / 0.4)'; dash = '4,2'; break;
+                        case 'sextile': color = 'rgb(var(--v-info-rgb) / 0.5)'; break;
+                        default: color = 'var(--v-aspect-minor)'; dash = '2,2';
                     }
 
                     svg += `<line class="aspect-line" data-planet1="${aspect.planet1}" data-planet2="${aspect.planet2}"
@@ -3702,7 +3730,7 @@
                     // Planet group with click handler
                     svg += `<g class="planet-clickable" data-planet-key="${key}" style="cursor:pointer">`;
                     svg += `<circle cx="${pos.x}" cy="${pos.y}" r="12"
-                                  fill="rgba(10, 10, 15, 0.95)" stroke="rgba(212, 175, 55, 0.5)" stroke-width="1.5"/>`;
+                                  fill="var(--v-chip-bg)" stroke="rgb(var(--v-accent-rgb) / 0.5)" stroke-width="1.5"/>`;
                     svg += `<text x="${pos.x}" y="${pos.y}"
                                   text-anchor="middle" dominant-baseline="middle"
                                   fill="var(--astro-gold)" font-size="13" pointer-events="none">${planet.symbol}</text>`;
@@ -3710,7 +3738,7 @@
                     // Retrograde indicator
                     if (isRetrograde) {
                         svg += `<text x="${pos.x + 10}" y="${pos.y - 8}"
-                                      fill="#ef4444" font-size="8" pointer-events="none">R</text>`;
+                                      fill="var(--v-danger)" font-size="8" pointer-events="none">R</text>`;
                     }
                     svg += `</g>`;
                 });
@@ -3719,7 +3747,7 @@
             // === TRANSIT PLANETS (outer ring) ===
             if (hasTransits && currentTransits?.planets) {
                 // Draw transit ring
-                svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 2}" fill="none" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1" stroke-dasharray="4,4"/>`;
+                svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 2}" fill="none" stroke="rgb(var(--v-teal-rgb) / 0.3)" stroke-width="1" stroke-dasharray="4,4"/>`;
 
                 const transitPlanetsList = Object.entries(currentTransits.planets)
                     .map(([key, planet]) => ({
@@ -3750,10 +3778,10 @@
 
                     // Transit planet circle and symbol (teal color)
                     svg += `<circle cx="${pos.x}" cy="${pos.y}" r="10"
-                                  fill="rgba(10, 10, 15, 0.95)" stroke="rgba(20, 184, 166, 0.6)" stroke-width="1.5"/>`;
+                                  fill="var(--v-chip-bg)" stroke="rgb(var(--v-teal-rgb) / 0.6)" stroke-width="1.5"/>`;
                     svg += `<text x="${pos.x}" y="${pos.y}"
                                   text-anchor="middle" dominant-baseline="middle"
-                                  fill="#14b8a6" font-size="11">${planetData.symbol}</text>`;
+                                  fill="var(--astro-teal)" font-size="11">${planetData.symbol}</text>`;
                 });
 
                 // Draw transit-to-natal aspect lines
@@ -3765,12 +3793,12 @@
                         const tAngle = toChartAngle(aspect.transitLon);
                         const tPos = getPoint(tAngle, transitR);
 
-                        let color = 'rgba(20, 184, 166, 0.3)';
+                        let color = 'rgb(var(--v-teal-rgb) / 0.3)';
                         let dash = '3,3';
-                        if (aspect.aspect === 'conjunction') { color = 'rgba(20, 184, 166, 0.5)'; dash = ''; }
-                        else if (aspect.aspect === 'trine') { color = 'rgba(34, 197, 94, 0.4)'; }
-                        else if (aspect.aspect === 'sextile') { color = 'rgba(59, 130, 246, 0.4)'; }
-                        else if (aspect.aspect === 'square' || aspect.aspect === 'opposition') { color = 'rgba(239, 68, 68, 0.3)'; }
+                        if (aspect.aspect === 'conjunction') { color = 'rgb(var(--v-teal-rgb) / 0.5)'; dash = ''; }
+                        else if (aspect.aspect === 'trine') { color = 'rgb(var(--v-success-rgb) / 0.4)'; }
+                        else if (aspect.aspect === 'sextile') { color = 'rgb(var(--v-info-rgb) / 0.4)'; }
+                        else if (aspect.aspect === 'square' || aspect.aspect === 'opposition') { color = 'rgb(var(--v-danger-rgb) / 0.3)'; }
 
                         svg += `<line x1="${natalPos.x}" y1="${natalPos.y}" x2="${tPos.x}" y2="${tPos.y}"
                                       stroke="${color}" stroke-width="1" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
@@ -3780,7 +3808,7 @@
 
             // === CENTER CIRCLE ===
             svg += `<circle cx="${cx}" cy="${cy}" r="${innerR}"
-                          fill="rgba(10, 10, 15, 0.95)" stroke="rgba(212, 175, 55, 0.6)" stroke-width="2"/>`;
+                          fill="var(--v-chip-bg)" stroke="rgb(var(--v-accent-rgb) / 0.6)" stroke-width="2"/>`;
 
             // ASC indicator on left
             const ascPos = getPoint(180, innerR + 5);
@@ -3794,9 +3822,9 @@
             // Center text
             const ascSign = ZODIAC_SIGNS[Math.floor(ascDegree / 30)];
             const ascDegInSign = ascDegree % 30;
-            svg += `<text x="${cx}" y="${cy - 12}" text-anchor="middle" fill="rgba(212, 175, 55, 0.9)" font-size="11">Ascendant</text>`;
+            svg += `<text x="${cx}" y="${cy - 12}" text-anchor="middle" fill="rgb(var(--v-accent-rgb) / 0.9)" font-size="11">Ascendant</text>`;
             svg += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="var(--astro-gold)" font-size="14" font-weight="bold">${ascSign?.symbol || ''} ${Math.floor(ascDegInSign)}°${Math.floor((ascDegInSign % 1) * 60)}'</text>`;
-            svg += `<text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="rgba(167, 139, 250, 0.7)" font-size="10">${ascSign?.name || ''}</text>`;
+            svg += `<text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="rgb(var(--v-wheel-violet-rgb) / 0.7)" font-size="10">${ascSign?.name || ''}</text>`;
 
             // === RENDER ===
             chartWheel.innerHTML = `
@@ -3813,7 +3841,7 @@
                         </defs>
 
                         <!-- Background -->
-                        <circle cx="${cx}" cy="${cy}" r="${outerR + 5}" fill="rgba(10, 10, 15, 0.3)"/>
+                        <circle cx="${cx}" cy="${cy}" r="${outerR + 5}" fill="var(--v-wheel-bg)"/>
 
                         <!-- Chart content -->
                         ${svg}
