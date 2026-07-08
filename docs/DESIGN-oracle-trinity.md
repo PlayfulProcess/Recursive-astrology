@@ -56,10 +56,12 @@ is the grammar + its offered role. Eastern seeds in recursive.eco-schemas → co
 caster spreads/texts that are not-exactly-iching, offered wherever they play well.
 
 ## Order of work
-1. Fix now: exclude readings from the astro interpretation picker (affordance inference).
-2. AstroCaster toggle (reuse castThroughSpread + TarotOracle's inline loop).
+1. DONE: exclude readings from the astro interpretation picker (affordance inference).
+2. SUPERSEDED (builder ruling, Jul 2026): the AstroCaster/Frame does NOT live in flow.
+   Flow is the minimum common denominator; frames are this repo's own instrument —
+   see docs/DESIGN-wheel-frames.md. The flow implementation is removed.
 3. HD bridge keys (hexagram number + zodiac degree on gate items).
-4. Astro-of-all-astros meta-voice; then aspects/dignities commented grammars (the richness lane).
+4. DONE: Astro-of-all-astros meta-voice. Next: aspects/dignities commented grammars.
 5. Offering-role plumbing (tools row field) only when inference genuinely fails in practice.
 
 ## Refinement (builder, same day): keys live on ITEMS; the dropdown queries affordances
