@@ -55,6 +55,7 @@ BRANCH_OF = {
     "the-right-size":                 "readings",
     "three-doors":                    "readings",
     "astro-of-all-astros":            "synthesis",  # generated meta-voice — see scripts/build_meta_astro.py
+    "archetypal-pairs":                "synthesis",  # hand-authored, after Tarnas — see docs/DESIGN-archetypal.md
 }
 
 # slug -> (sortable year, display label, provenance). Only the primary-source voice

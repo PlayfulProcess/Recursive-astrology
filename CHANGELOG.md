@@ -1,5 +1,62 @@
 # Changelog — The Recursive Astrology
 
+## July 8, 2026 (2) — Archetypal Astrology: planetary pairs, after Tarnas (`archetypal.html`)
+
+New grammar + its own dedicated UI, per the builder's direction: "Archetypal astrology of
+Richard Tarnas gets its own UI (just planets relationships) ... it is itself a meta grammar
+of just the planets over time coming from different grammars — since his impetus was to
+find what is common across all traditions by looking at what the traditions themselves kept
+agreeing to look at (planetary relationships)."
+
+- **`grammars/archetypal-pairs/grammar.json`** (25 items) — new grammar, `branch: synthesis`.
+  - **3 authored base items** for the outer planets the classical/historical voice grammars
+    in this repo lack (`planet-uranus`, `planet-neptune`, `planet-pluto`), each with an
+    "Archetype" section written from Tarnas's characterizations (Uranus: the Promethean;
+    Neptune: dissolution/the oceanic; Pluto: the underworld drive), framed explicitly as
+    interpretation, not Tarnas's own words.
+  - **7 thin local stubs** for the classical planets (Sun…Saturn) — carry only
+    `metadata.source_grammars` provenance + a one-line pointer to
+    `western-astrology-canonical`, so `composite_of` below resolves *locally* per
+    `GRAMMAR_FORMAT.md`'s hard rule and `check.py`'s enforcement of it. No content is
+    duplicated; the real multi-voice reading stacks live in the UI (see below). This is the
+    "Base items ... copies the entity item(s) ... records provenance in
+    `metadata.source_grammars`" pattern from `docs/DESIGN-wheel-frames.md`, its first use.
+  - **15 authored pair items** (`category: "archetypal-pair"`, `composite_of: [planet-a,
+    planet-b]`): the 10 outer/social-planet complexes Tarnas actually treats in *Cosmos and
+    Psyche* (Saturn–Pluto, Uranus–Pluto, Jupiter–Uranus, Uranus–Neptune, Saturn–Neptune,
+    Saturn–Uranus, Jupiter–Saturn, Jupiter–Neptune, Jupiter–Pluto, Neptune–Pluto) plus 5
+    personal-planet pairs (Sun–Saturn, Sun–Pluto, Venus–Mars, Moon–Saturn, Mercury–Uranus).
+    Each has "The complex" (~100-150 words), "In history" (2-3 real correlations, "Tarnas
+    correlates..."; the 5 personal pairs honestly note that fast personal-planet cycles fall
+    outside the book's own historical dataset instead of inventing a citation), and "A
+    question."
+  - **Honesty frame** — non-negotiable, present in the grammar `description`, a
+    `_synthesis_note`, a dedicated `_honesty_frame` field, AND visible on the UI: "Inspired
+    by Richard Tarnas's archetypal astrology (*Cosmos and Psyche*, 2006; *The Passion of the
+    Western Mind*). These readings are PlayfulProcess's interpretation, written with an AI
+    from its knowledge of his work — NOT Tarnas's words, not his endorsement. Go to the
+    source: https://cosmosandpsyche.com/" (verified findable via search this session).
+- **`archetypal.html`** — new page. Ten planets (Sun…Pluto) on a ring; tap two → a chord
+  line highlights between them and the reading stacks below: (a) the pair's authored
+  complex from `archetypal-pairs` if one exists, or an honest "no authored complex yet — the
+  parents speak below" note if not; (b) each parent planet's own entry from *every other*
+  voice grammar in the repo (Planetary Myths, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Canonical),
+  matched live via `grammars/_collection.json` — the same cross-grammar matcher
+  `viewers/lenses.html` uses. **This live parent-stacking IS the meta layer** — no second
+  generator script, per the design note in `docs/DESIGN-archetypal.md`.
+  Mobile-first (verified at 390px with Playwright): ring renders, labels don't clip at the
+  viewBox edge (dynamic text-anchor by angle), tapping Saturn+Pluto renders the authored
+  synthesis + 20 voice cards (10 traditions × 2 planets), tapping an unauthored pair
+  (Mars–Neptune) renders the honest gap note.
+- **Wired in**: `ids.json` (`_public_now` + a placeholder UUID, `preview_links` entry),
+  `scripts/build_collection.py` (`BRANCH_OF["archetypal-pairs"] = "synthesis"`, re-run —
+  `grammars/_collection.json` now 17 grammars / 304 items), `site-header.js` Views menu
+  ("Archetypal — planet pairs", `?v=45`), `index.html` gallery card. `astro-of-all-astros`
+  intentionally NOT extended to include this grammar — it's not a per-entity voice, it's its
+  own synthesis; the design note explains why.
+- Validated every grammar in the repo with `python3 check.py` (17/17 pass, including the new
+  one) both before and after wiring.
+
 ## July 8, 2026 — Lilly's twelve zodiac signs, sourced (`grammars/renaissance-lilly/`)
 
 Fills the gap the Jul 7 session flagged: `renaissance-lilly` covered only the seven

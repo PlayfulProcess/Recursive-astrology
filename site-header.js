@@ -48,11 +48,12 @@
     ['tree',     'Tree',     PFX + 'viewers/tree-viewer.html'],
   ];
   const COLLECTION_VIEWS = [
-    ['timeline',  'Timeline',     PFX + 'viewers/timeline.html'],
-    ['genealogy', 'Genealogy',    PFX + 'genealogy.html'],
-    ['wheel',     'Chart Wheel',  PFX + 'wheel.html'],
-    ['viewer',    'Chart Viewer', PFX + 'viewer/astrology-viewer.html'],
-    ['all',       'All grammars', PFX + 'index.html#all-grammars'],
+    ['timeline',   'Timeline',                   PFX + 'viewers/timeline.html'],
+    ['genealogy',  'Genealogy',                  PFX + 'genealogy.html'],
+    ['wheel',      'Chart Wheel',                PFX + 'wheel.html'],
+    ['archetypal', 'Archetypal — planet pairs',  PFX + 'archetypal.html'],
+    ['viewer',     'Chart Viewer',                PFX + 'viewer/astrology-viewer.html'],
+    ['all',        'All grammars',                PFX + 'index.html#all-grammars'],
   ];
   // Courses — each a course-viewer ?course=… except the flagship, which has its
   // own chapter-list page (pages/course.html).
@@ -74,6 +75,7 @@
     if (f.startsWith('timeline')) return 'timeline';
     if (f.startsWith('genealogy')) return 'genealogy';
     if (f.startsWith('wheel')) return 'wheel';
+    if (f.startsWith('archetypal')) return 'archetypal';
     if (f.startsWith('astrology-viewer')) return 'viewer';
     if (f.startsWith('course-viewer') || f.startsWith('course')) return 'course';
     if (f === 'index.html' || f === '') return 'home';

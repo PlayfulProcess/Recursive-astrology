@@ -16,7 +16,8 @@
     "jyotisha-brihat-jataka",
     "mesopotamian-omens",
     "renaissance-lilly",
-    "astro-of-all-astros"
+    "astro-of-all-astros",
+    "archetypal-pairs"
   ],
   "ids": {
     "alan-leo": "6a50ce87-e54b-47f2-9fc5-70b19c06d179",
@@ -33,7 +34,8 @@
     "jyotisha-brihat-jataka": "a1b2c3d4-1111-4a01-9e01-aa0000000001",
     "mesopotamian-omens": "a1b2c3d4-2222-4a02-9e02-aa0000000002",
     "renaissance-lilly": "a1b2c3d4-3333-4a03-9e03-aa0000000003",
-    "astro-of-all-astros": "a1b2c3d4-4444-4a04-9e04-aa0000000004"
+    "astro-of-all-astros": "a1b2c3d4-4444-4a04-9e04-aa0000000004",
+    "archetypal-pairs": "a1b2c3d4-5555-4a05-9e05-aa0000000005"
   },
   "preview_links": {
     "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. `raw` always resolves (no UUID needed); `cards`/`study`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
@@ -100,6 +102,14 @@
       "tree": "https://recursive.eco/pages/tree-viewer.html?type=astrology&id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
       "play": "https://flow.recursive.eco/play?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
       "casting": true
+    },
+    "archetypal-pairs": {
+      "raw": "grammars/archetypal-pairs/grammar.json",
+      "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
+      "study": "https://recursive.eco/pages/study-viewer.html?type=astrology&id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
+      "tree": "https://recursive.eco/pages/tree-viewer.html?type=astrology&id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
+      "play": "https://flow.recursive.eco/play?id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
+      "casting": false
     }
   }
 }

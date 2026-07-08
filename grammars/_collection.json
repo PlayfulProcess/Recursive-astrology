@@ -26,6 +26,7 @@
       "id": "synthesis",
       "name": "Synthesis — surveys, flagship interpretations, and readings",
       "deck_slugs": [
+        "archetypal-pairs",
         "astro-of-all-astros",
         "historiographies-of-astrology",
         "planetary-myths",
@@ -66,6 +67,19 @@
       "provenance": "record",
       "year": 1900,
       "year_label": "c. 1900 (Theosophical revival)"
+    },
+    {
+      "slug": "archetypal-pairs",
+      "name": "Archetypal Astrology — planetary pairs, after Tarnas",
+      "type": "astrology",
+      "branch": "synthesis",
+      "is_meta": false,
+      "default_preview": "cards",
+      "items": 25,
+      "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800",
+      "blurb": "Archetypal Astrology — the planets in relationship, not sign by sign but pair by pair. Richard Tarnas's whole method began from a plain observation: every tradition that ever read the sky agreed on th…",
+      "path": "grammars/archetypal-pairs/grammar.json",
+      "provenance": "living"
     },
     {
       "slug": "astro-of-all-astros",
