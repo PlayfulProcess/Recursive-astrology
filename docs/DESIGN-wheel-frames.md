@@ -71,10 +71,66 @@ mature, we revisit what migrates back.
 
 ## Order of work (here, not flow)
 
-1. Frame modes on wheel.html (All Houses first — it's the one the homepage already promises),
+1. ✅ Frame modes on wheel.html (All Houses first — it's the one the homepage already promises),
    highlight + hover-meaning + stacked meanings below, multi-voice stacking via the existing
-   lenses matcher (entity keys).
+   lenses matcher (entity keys). Done — see Round 1 below.
 2. Save-as-grammar (two-step scope/destination) writing grammar JSON downloads first;
    publish-loop integration after.
 3. Emergence authoring in the stack ("add your reading of House 1 in Taurus" → composite_of).
 4. Load-a-frame-grammar-back (private frames as wheel sources).
+
+## Round 1 (Jul 8 2026): the All Houses frame on wheel.html
+
+Built the first frame mode per the order-of-work above, following `archetypal.html`'s
+just-fixed "live multi-voice matcher" pattern (`contentBearing()`, `extractEra()`, the
+per-entity stack) but keyed on **houses** instead of planets.
+
+- **Frame mechanism**: a `FRAME_MODES` array (`{key, label, hint, selects()}`), rendered as
+  pill buttons in a new `.framebar` above the wheel. `selects()` returns which house
+  positions (1–12) the frame highlights — for "All Houses" that's all twelve; a future frame
+  (Big Three, One Aspect) plugs in as another array entry with its own `selects()`, no
+  rewrite needed. "All Houses" is ON by default (matches the homepage's "Frame" card, which
+  already promises this); "No frame" restores the exact pre-existing click behavior.
+- **Highlight**: framed sectors get `.sector.framed` — `fill:var(--chip,#f1ece1)` (the same
+  fallback value this file already used for its own hover state) + `stroke:var(--accent)`.
+  No new colour literals; both tokens and the fallback hex already existed in this file.
+  Native `<title>` elements give a hover tooltip for free — no extra hover UI was built (see
+  "Deviations" below).
+- **Tap → every voice**: `findHouseItem()` matches by `id === 'house-N'` (the convention
+  every voice grammar with house content already follows) with a `metadata.house` loose-
+  equality fallback. `renderHouseVoiceStack()` stacks a `.vcard2` per tradition (era-sorted,
+  oldest first — `extractEra()` ported verbatim from `archetypal.html`), an honest "No entry
+  for House N in this voice" when a grammar lacks it, and — the specific bug this session's
+  archetypal Round 2 had just fixed — `TRADITIONS` starts `null`, never `[]`, so a tap before
+  the `grammars/_collection.json` fetch resolves renders a "Loading every voice…" card, never
+  a silently blank grid. The stack is appended inside the existing house dialog (below the
+  casting position + flagship-set sections that were already there), gated on
+  `frameSelects(pos)` so "No frame" mode is byte-identical to the pre-existing dialog.
+- **Loading-race refresh**: if a visitor taps a framed house before `TRADITIONS` resolves,
+  then the fetch completes while that dialog is still open, `loadTraditions()` rebuilds the
+  open dialog's body in place (`buildHouseDialogBody(OPEN_HOUSE)`) rather than leaving the
+  stale "Loading…" card stuck until the next click.
+- **Found and fixed in passing**: `wheel.html`'s `mdLite()` only handled single-asterisk
+  emphasis, not `**bold**`. Harmless before (no house content used double-asterisk markdown),
+  but `astro-of-all-astros`'s aggregated house entries do (`**Story:** ...`), so once that
+  voice joined the stack its text showed literal asterisks. Ported the `**` rule from
+  `archetypal.html`'s `mdLite` (same fix, same reason).
+- **Playwright-verified** at 390×844 (headless Chromium, local `python3 -m http.server`):
+  wheel renders 12 sectors, all 12 carry `.framed` under the default "All Houses" pill;
+  tapping a framed house opens the dialog with 5 stacked voice cards (Ptolemy, Proctor, Alan
+  Leo, Astro-of-all-astros, Western Astrology Canonical — the 5 grammars in this repo that
+  actually carry `category:"house"` items); toggling to "No frame" removes both the highlight
+  and the stack (dialog reverts to the original position + flagship-set-only content);
+  toggling back restores it. **Race condition reproduced deterministically** by routing
+  `grammars/**` fetches through an artificial 2.5s delay and tapping while `TRADITIONS` was
+  still `null`: the dialog showed the honest "Loading every voice…" card, then refreshed
+  in-place to the real 5-card stack once the delay-throttled fetch resolved — no blank grid at
+  any point. No console/page errors from this page's own code; the only network failures were
+  the sandbox's expected blocks on `fonts.googleapis.com` and `recursive.eco`'s assistant
+  launcher script (both external, not fetched by this feature).
+- **Deviations from spec / left out of scope**: "Hover or tap a highlighted house" is
+  satisfied by tap/click (primary, works on both mouse and touch) plus a native `<title>`
+  hover tooltip naming the house — a full custom hover-preview popover was not built, to keep
+  the dialog (the existing, already-accessible interaction) as the single source of the
+  meaning rather than adding a second UI surface that could drift from it. Save-as-grammar and
+  emergence-authoring (order-of-work items 2–3) are untouched, per this round's scope.
