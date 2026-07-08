@@ -32,6 +32,33 @@ Author the course as a single `course/<slug>.mdx` (source of truth). Voice: **fi
 - **Verify** with Playwright at 390×844 against a local `python3 -m http.server`: the course renders, TOC works, no page errors, and the default course still loads.
 - **Review for flow:** read the whole thing start to finish and check it doesn't contradict itself or repeat a sibling course. This step is not optional.
 
+## Voice guardrails (added Jul 8 2026 — read before touching any published course prose)
+
+Learned from a live editing pass on "How the Cards Can Work." Apply these on every future
+edit to any course in the family (tarot, astro, I Ching, and whatever comes after):
+
+- **Thesis first, short.** The subtitle and the opening paragraph must fit in two or three
+  sentences a reader can hold before diving in. If the opening runs past ~120 words before
+  it makes its point, cut it down.
+- **Fate is pattern, not prediction — say so plainly, once.** The house thesis, for every
+  practice this project reads (tarot, astrology, I Ching): *a reading doesn't tell you your
+  fate — it might help you create it.* Never write command-shaped absolutes about what a
+  reader must or must never do with a reading ("never obey," "gate not fate," etc.) — state
+  the honest relationship once, plainly, and move on.
+- **Don't open on a borrowed hero.** Ground the opening in the recursive.eco idea itself —
+  we make belief in order to make meaning; a meaning is at best a map, never the whole
+  territory; when the map cracks (not a failure — just where an old map stopped fitting), we
+  make belief again, truer for having crashed — *before* reaching for an external authority
+  (Tolkien, Tarnas, Wallis, whoever). The authority earns their place later, in their own
+  section, credited and linked to the source — never as the reason the reader should start
+  caring in the first place.
+- **Cut throat-clearing.** Delete meta-narration like "here is the shape of it, so you can
+  see where we're headed before we walk through it line by line" — say the thing; don't
+  announce that you're about to say the thing.
+- **Honesty is a chapter, not the opening line.** "There is no evidence X predicts anything"
+  belongs in its own honest section (Phase 1's research discipline, above) — stated once,
+  squarely. Don't lead the whole piece with a negative claim; warmth and thesis come first.
+
 ## The principle under all of it
 
 > The metaphysics we cannot know; the relating we can.
