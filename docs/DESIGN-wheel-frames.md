@@ -8,8 +8,11 @@ which is being REMOVED from recursive-eco per the same ruling.
 > **The flow app is the minimum common denominator. The open-source repo is where
 > individuality comes to life — like private and public life.** Once a pattern matures it may
 > migrate back into flow (as tarot spreads did), but the frames belong HERE, with a UI that is
-> fairly flexible, in the astro repo. Flow keeps chart data + aspects + AI journaling, and
-> **redirects** people to this site for the wheel — never an embedded preview of it.
+> fairly flexible, in the astro repo. Flow keeps chart data + aspects + AI journaling, plus the
+> **embedded wheel iframe served FROM this site** (builder correction, Jul 8 2026: the wheel
+> stays embedded in flow **because the AI reads the wheel image** — `requestChartImage` hands a
+> screenshot to the assistant as visual context; flow fetches the UI from this open-source repo,
+> it never reimplements it). What flow does NOT get is the frame instrument below.
 
 ## Frames are hardcoded UI, not grammars
 
@@ -59,9 +62,12 @@ the AI and the UI:
 ## What flow keeps (minimum common denominator)
 
 Birth-data entry, the aspects/placements list, Select-for-AI-context, the placement detail +
-Interpret-with-AI, save-reading — the journaling loop. The wheel itself: a redirect card to
-this site ("Open your chart in The Recursive Astrology ↗", purple eco-redirect), params
-carried so the chart opens ready. If frames mature here, we revisit what migrates back.
+Interpret-with-AI, save-reading — the journaling loop. The wheel itself: the **embedded iframe
+of this site's viewer** (astro.recursive.eco), because the AI reads the wheel image
+(`requestChartImage`) — plus the "Open Full Viewer ↗" link for the full experience here.
+Flow embeds, it never reimplements: the wheel UI has exactly one home, this repo. The frame
+instrument (highlightings, stacked meanings, save-as-grammar) stays HERE only; if frames
+mature, we revisit what migrates back.
 
 ## Order of work (here, not flow)
 
