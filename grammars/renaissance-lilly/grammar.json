@@ -137,6 +137,26 @@
         "confidence": "medium",
         "_source": "William Lilly, Christian Astrology (1647), Book I, 'Of the Moon: Her Nature and Signification'"
       }
+    },
+    {
+      "id": "b894189e-f211-47db-8af1-27431bb4bde1",
+      "name": "Aries",
+      "keywords": [],
+      "sections": {
+        "What Lilly reads": "",
+        "Lilly's own words": ""
+      },
+      "sort_order": 7
+    },
+    {
+      "id": "5185dde0-d27b-4e8c-bc61-aaf2381901a8",
+      "name": "Taurus",
+      "category": "sign",
+      "keywords": ["taurus", "earth", "fixed", "zodiac"],
+      "sections": {
+        "Summary": "Taurus is traditionally associated with stability, perseverance, sensuality, and an appreciation for material comfort. It is an Earth sign with a fixed quality, often linked to stubbornness and a strong will. Ruled by Venus, it also connects to beauty and pleasure.\n\n*Draft item: Further research is needed to align this description with William Lilly's specific text.*"
+      },
+      "sort_order": 8
     }
   ],
   "_grammar_commons": {
@@ -160,5 +180,7 @@
         "link": "https://recursive.eco"
       }
     ]
-  }
+  },
+  "_recursive_eco_url": "https://flow.recursive.eco/play?id=a1b2c3d4-3333-4a03-9e03-aa0000000003",
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=a1b2c3d4-3333-4a03-9e03-aa0000000003"
 }
