@@ -1,5 +1,38 @@
 # Changelog — The Recursive Astrology
 
+## July 8, 2026 — Lilly's twelve zodiac signs, sourced (`grammars/renaissance-lilly/`)
+
+Fills the gap the Jul 7 session flagged: `renaissance-lilly` covered only the seven
+planets; the app's own AI (no web research) had tried to fill signs and produced one
+generic, unsourced "Taurus" draft. This pass adds all twelve signs as William Lilly
+actually describes them in *Christian Astrology* (1647), Book I.
+
+- **12 new items** in `grammars/renaissance-lilly/grammar.json` (`sign-aries` …
+  `sign-pisces`, `category: "sign"`, `metadata.sign` canonical-cased), each with an
+  "In the text" section (the sourced quote/summary, book+chapter ref, confidence marker)
+  and a "What this lens reads" one-liner comparing Lilly's formula to
+  `western-astrology-canonical`'s light/shadow archetypes (and occasionally Ptolemy/
+  Jyotiṣa). These `id`/`name`/`metadata.sign` values match the app's canonical shape, so
+  they supersede the two AI-drafted placeholder items cleanly on next reindex rather than
+  duplicating.
+- **WebFetch was 403'd on every source again this session** (archive.org, skyscript.co.uk,
+  sacred-texts.com, astroamerica.com) — same session-wide proxy block as Jul 7. All twelve
+  quotes rest on WebSearch synthesis, each cross-corroborated via at least two independently
+  worded queries. **9 of 12 signs: medium confidence** (Aries, Taurus, Gemini, Cancer, Leo,
+  Virgo, Libra, Sagittarius, Pisces — identical wording surfaced across independent secondary
+  mirrors). **3 of 12: low/○** (Scorpio — only a short paraphrase locatable, presented as
+  "summarized from," not quoted; Capricorn and Aquarius — full formula from a single
+  secondary source, with the constituent facts but not the whole sentence independently
+  corroborated). Full per-sign table in `research/why-astrology/06-genealogy-grammars.md`
+  §3b.
+- **`grammars/astro-of-all-astros/grammar.json` regenerated** — Lilly now covers signs
+  (12/12, up from the Jul 7 build's 4/6 sources on signs), so every sign item in the
+  meta-voice grammar gains a `"Lilly (1647)"` section alongside Canonical/Ptolemy/Jyotiṣa/
+  Alan Leo. `grammars/_collection.json` regenerated too (16 grammars, 279 items, up from
+  267 — the +12 Lilly sign items).
+- Validated with `python3 -c "import json;json.load(...)"` before and after both generator
+  runs.
+
 ## July 7, 2026 (2) — "Astro of All Astros": a generated meta-voice grammar
 
 Proves out the Oracle Trinity design (`docs/DESIGN-oracle-trinity.md`, "Astro of all Astros" /

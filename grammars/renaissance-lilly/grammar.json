@@ -1,6 +1,6 @@
 {
   "name": "William Lilly's Christian Astrology",
-  "description": "The seven classical planets as William Lilly (1602–1681) describes them in Christian Astrology (1647), the most influential English-language astrology text of the Renaissance/early-modern court-and-university tradition, and the single book most responsible for the survival of horary and natal technique into the modern revival. Each item carries a short excerpt drawn from Lilly's original 1647 text where the archaic spelling could be confirmed via a source reproducing it verbatim, and from Zadkiel's 1852 abridgment (An Introduction to Astrology, itself public domain, hosted at sacred-texts.com) where that is what this session's search could confirm — each quote is labeled with which. Under this library's creed: a historical voice speaking in its own vivid, moralizing, occasionally superstitious terms, presented faithfully — never as prediction or command, and never smoothed into modern psychological language it doesn't use. See grammars/historiographies-of-astrology (item view-medieval-renaissance-court) and research/views/medieval-renaissance-court.md for the fuller historiographical dossier; this grammar is the primary-source voice library that dossier points toward, in the spirit of grammars/tetrabiblos-ashmand and grammars/alan-leo.",
+  "description": "The seven classical planets and the twelve zodiac signs as William Lilly (1602–1681) describes them in Christian Astrology (1647), the most influential English-language astrology text of the Renaissance/early-modern court-and-university tradition, and the single book most responsible for the survival of horary and natal technique into the modern revival. Each item carries a short excerpt or, where only a paraphrase could be safely corroborated (marked ○), a summary drawn from Lilly's original 1647 text where the archaic spelling could be confirmed via a source reproducing it verbatim, and from Zadkiel's 1852 abridgment (An Introduction to Astrology, itself public domain, hosted at sacred-texts.com) where that is what this session's search could confirm — each quote is labeled with which. Under this library's creed: a historical voice speaking in its own vivid, moralizing, occasionally superstitious terms, presented faithfully — never as prediction or command, and never smoothed into modern psychological language it doesn't use. See grammars/historiographies-of-astrology (item view-medieval-renaissance-court) and research/views/medieval-renaissance-court.md for the fuller historiographical dossier; this grammar is the primary-source voice library that dossier points toward, in the spirit of grammars/tetrabiblos-ashmand and grammars/alan-leo.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800",
   "grammar_type": "astrology",
   "attribution": {
@@ -28,7 +28,14 @@
         "Lilly's own words": "\"Saturn is the supreamest or highest of all the Planets... he is not very bright or glorious, but is of a Pale, Wan, or Leaden, Ashy colour, and slow in motion.\" On who he signifies: \"In general Saturn signifies Husbandmen, Clowns, Beggars, Day-labourers, Old men, Fathers, Grand-fathers, Monks, Jesuits, Sectarists...\" among many other lowly and solitary trades. (Quoted from Christian Astrology, 1647, Book I, retaining Lilly's own spelling; confidence: ○ — corroborated across multiple secondary reproductions of the 1647 text this session, not independently re-fetched from a primary scan.)",
         "What Lilly reads": "Saturn as slow, pale, and socially low — the planet of age, poverty, and solitary labour rather than the 'great teacher' softening later 20th-century astrology gives him (see grammars/western-astrology-canonical). Lilly's Saturn is unambiguously the era's grimmest planet, not yet rehabilitated."
       },
-      "keywords": ["saturn", "lilly", "pale", "leaden", "husbandmen", "old-age"],
+      "keywords": [
+        "saturn",
+        "lilly",
+        "pale",
+        "leaden",
+        "husbandmen",
+        "old-age"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
@@ -45,7 +52,14 @@
         "Lilly's own words": "Of the well-placed Jupiterian person: \"Magnanimous, Faithfull, Bashfull, Aspiring in an honourable way at high matters, in all his actions a Lover of fair Dealing, desiring to benefit all men, doing Glorious things, Honourable and Religious, of sweet and affable Conversation, wonderfully indulgent to his Wife and Children, reverencing Aged men, a great Reliever of the Poor, full of Charity and Godlinesse, Liberal, hating all Sordid actions, Just, Wise, Prudent, Thankfull, Vertuous.\" (Quoted from Christian Astrology, 1647, Book I, retaining Lilly's own spelling; confidence: medium — reproduced consistently across multiple secondary sources this session as verbatim 1647 text.)",
         "What Lilly reads": "This is the era's most unreserved character portrait — Jupiter as moral excellence itself, virtue catalogued almost as a checklist. Compare Ptolemy's cooler, physics-of-temperature Jupiter (grammars/tetrabiblos-ashmand) and Alan Leo's spiritualized Jupiter (grammars/alan-leo): three centuries apart, three quite different registers for 'the benefic.'"
       },
-      "keywords": ["jupiter", "lilly", "magnanimous", "charity", "virtuous", "benefic"],
+      "keywords": [
+        "jupiter",
+        "lilly",
+        "magnanimous",
+        "charity",
+        "virtuous",
+        "benefic"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
@@ -62,7 +76,14 @@
         "Lilly's own words": "\"Mars is a masculine, nocturnal planet, in nature hot and dry, choleric and fiery; the lesser infortune, author of quarrels, strifes, and contentions.\" Physically: \"martialists generally are of middle stature, their bodies strong, their bones large, rather lean than fat; their complexion of a brown, ruddy colour, their visage round, their hair red or sandy... sharp, hazel, piercing eyes; a bold confident countenance.\" On sickness: \"Mars causes all hurts by iron, the shingles, and such other diseases as arise by too much choler, anger, or passion.\" (Quoted from Christian Astrology, 1647, Book I; confidence: medium — corroborated across multiple secondary reproductions this session.)",
         "What Lilly reads": "Mars-as-choler is the era's own humoral medicine speaking through the planet: hot, dry, red, quick to anger, prone to iron-wounds and inflammation. This is a physiological Mars as much as a psychological one, in a way pre-modern medicine and astrology genuinely shared one vocabulary for."
       },
-      "keywords": ["mars", "lilly", "choleric", "ruddy", "infortune", "humoral"],
+      "keywords": [
+        "mars",
+        "lilly",
+        "choleric",
+        "ruddy",
+        "infortune",
+        "humoral"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
@@ -79,7 +100,14 @@
         "Lilly's own words": "\"He signifies kings, princes, emperors, &c.; dukes, marquisses, earls, barons, lieutenants, deputy lieutenants of counties, magistrates, gentlemen in general, courtiers, desirers of honour and preferment.\" (From Zadkiel's 1852 abridgment, An Introduction to Astrology, Chapter VIII, 'Of the Sun, His General and Particular Significations' — a public-domain modernized-spelling reprint tradition of Lilly's material, not a claim that these are Lilly's exact 1647 words; confidence: ○.)",
         "What Lilly reads": "The Sun's significations here are an unbroken ladder of rank — king down through every grade of gentleman and courtier — with no separate psychological or emotional register at all. In this text the Sun IS social position; nothing about 'identity' or 'ego' in the modern sense the tropical-canonical library uses (compare grammars/western-astrology-canonical)."
       },
-      "keywords": ["sun", "lilly", "kings", "rank", "honour", "courtiers"],
+      "keywords": [
+        "sun",
+        "lilly",
+        "kings",
+        "rank",
+        "honour",
+        "courtiers"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
@@ -96,7 +124,14 @@
         "Lilly's own words": "A well-placed Venerian person is \"a pretty, compleat, handsome Man or Woman\" (if Oriental) or, if Occidental, of shorter stature yet \"very decent and comely in Shape and Form, wel liked of all\" — with \"a stedfast eye, and full of amorous enticements.\" Venus governs \"Musitions, Gamesters, Silk-men, Mercers, Linnen-Drapers, Painters, Jewellers, Players, Lapidaries, Embroiderers, Women-tailors, Wives, Mothers, Virgins, Choristers, Fidlers, Pipers.\" Her diseases are \"principally in the Matrix and members of Generation... venereal diseases... Priapisme, impotency in generation, Hernias and the Diabetes.\" (Quoted from Christian Astrology, 1647, Book I, retaining Lilly's own spelling, with the 'amorous enticements' phrase corroborated via the 1852 Zadkiel abridgment; confidence: ○.)",
         "What Lilly reads": "Venus's trade-list — musicians, silk-men, painters, jewellers, wives, choristers — reads almost as an occupational census of beauty-and-pleasure work in 17th-century London, a very concrete, tradesman's-eye-view Venus quite unlike the abstract 'love and harmony' of later psychological astrology (compare grammars/western-astrology-canonical)."
       },
-      "keywords": ["venus", "lilly", "amorous", "musicians", "beauty", "generation"],
+      "keywords": [
+        "venus",
+        "lilly",
+        "amorous",
+        "musicians",
+        "beauty",
+        "generation"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
@@ -113,7 +148,14 @@
         "Lilly's own words": "Mercury \"rules the animal spirit: he is author of subtilty, tricks, devices, perjury, &c.\" — his nature convertible, taking on the quality of whatever planet he associates with, fittingly for a planet Lilly elsewhere treats as neither wholly masculine nor feminine, neither fully fortunate nor unfortunate. (Quoted from Christian Astrology, 1647, Book I; confidence: ○.)",
         "What Lilly reads": "'Author of subtilty, tricks, devices, perjury' is a considerably darker Mercury than the Hellenistic 'common, convertible' planet (grammars/tetrabiblos-ashmand) or the Vedic Budha's speech-and-cleverness portfolio (grammars/jyotisha-brihat-jataka) — Lilly's 17th-century English Mercury leans hard toward the trickster and the liar, a moralizing gloss the other two traditions' texts don't emphasize as strongly."
       },
-      "keywords": ["mercury", "lilly", "subtlety", "trickery", "convertible", "animal-spirit"],
+      "keywords": [
+        "mercury",
+        "lilly",
+        "subtlety",
+        "trickery",
+        "convertible",
+        "animal-spirit"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
@@ -130,12 +172,333 @@
         "Lilly's own words": "A Moon-dominant person appears \"in a great and full body, soft and phlegmatic, of colour like a black obscure cloud, having a swelling countenance, with eyes red and full of water, a bald head, and teeth like a wilde boar.\" (Quoted from Christian Astrology, 1647, Book I; confidence: ○ — corroborated across secondary reproductions this session.)",
         "What Lilly reads": "This is a startlingly unflattering physical portrait next to the gentler, nurturing Moon of later astrology (compare grammars/western-astrology-canonical) — swelling, watery-eyed, boar-toothed. Lilly's Moon-native description reads more like a period medical case-note on phlegmatic humoral excess than a psychological temperament sketch; the vividness is the point of reading him at all."
       },
-      "keywords": ["moon", "lilly", "phlegmatic", "swelling", "watery-eyes", "humoral"],
+      "keywords": [
+        "moon",
+        "lilly",
+        "phlegmatic",
+        "swelling",
+        "watery-eyes",
+        "humoral"
+      ],
       "metadata": {
         "school": "renaissance-court-astrology",
         "era_view": "view-medieval-renaissance-court",
         "confidence": "medium",
         "_source": "William Lilly, Christian Astrology (1647), Book I, 'Of the Moon: Her Nature and Signification'"
+      }
+    },
+    {
+      "id": "sign-aries",
+      "name": "Aries",
+      "category": "sign",
+      "sort_order": 7,
+      "sections": {
+        "In the text": "“Aries is a Masculine, Diurnall Sign, moveable, Cardinall, Equinoctiall; in nature fiery, hot and dry, cholerick, bestial, luxurious, intemperate and violent: the diurnall house of Mars of the Fiery Triplicity, and of the East.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Aries; confidence: medium — identical wording corroborated across two independent secondary reproductions this session, chronosspeaks.com's Lilly sign digest and renaissanceastrology.com's Aries page.)",
+        "What this lens reads": "Lilly's Aries is a humoral-physical formula — masculine, hot, dry, choleric, prone to violence and excess — not yet the modern 'Pioneer' light/shadow archetype (compare grammars/western-astrology-canonical); virtue and vice both sit inside the same hot, dry temperament rather than a separate moral register."
+      },
+      "keywords": [
+        "aries",
+        "lilly",
+        "cardinal",
+        "fiery",
+        "choleric",
+        "bestial",
+        "mars",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Aries",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Aries (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-taurus",
+      "name": "Taurus",
+      "category": "sign",
+      "sort_order": 8,
+      "sections": {
+        "In the text": "“Taurus is an Earthly, Cold, Dry, Melancholy, Feminine, Nocturnal, Fixed, Domestical or Beastial Sign, of the Earthly Triplicity, and South, the Night-house of Venus.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Taurus; confidence: medium — corroborated across chronosspeaks.com's Lilly sign digest and a second independent secondary reproduction this session.)",
+        "What this lens reads": "Lilly's Taurus is 'melancholy' and 'domestical/beastial' — a fixed-earth, cold-and-dry temperament rooted in the home and the beast-yard, not the sensuous 'Builder' of pleasure and stability that the modern light/shadow grammar gives it (compare grammars/western-astrology-canonical); this supersedes the app's earlier generic AI-drafted 'Taurus' item, which had no primary-source grounding."
+      },
+      "keywords": [
+        "taurus",
+        "lilly",
+        "earthly",
+        "melancholy",
+        "fixed",
+        "venus",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Taurus",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Taurus (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-gemini",
+      "name": "Gemini",
+      "category": "sign",
+      "sort_order": 9,
+      "sections": {
+        "In the text": "“Gemini is an aerial, hot, moyst, sanguine, Diurnal, common or double-bodied human Sign; the diurnall house of Mercury of the aery triplicity, Western, Masculine.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Gemini, with two OCR-mangled words in the secondary mirrors — 'dounle' and 'Mascu1ine' — silently corrected to 'double' and 'Masculine' for legibility; confidence: medium — the same wording surfaced across two independent reproductions this session.)",
+        "What this lens reads": "Lilly's Gemini is a 'common or double-bodied human Sign' under Mercury — the mutable, airy, sanguine formula that later psychological astrology keeps almost unchanged as 'the Messenger' (compare grammars/western-astrology-canonical), one of the closer continuities across this library rather than a sharp break."
+      },
+      "keywords": [
+        "gemini",
+        "lilly",
+        "aerial",
+        "sanguine",
+        "common",
+        "mercury",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Gemini",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Gemini (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-cancer",
+      "name": "Cancer",
+      "category": "sign",
+      "sort_order": 10,
+      "sections": {
+        "In the text": "“Cancer is the onely house of the Moon, and is the first Sign of the Watry or Northern Triplicity, is Watry, Cold, Moyst, Flegmatick, Feminine, Nocturnal, Moveable, a Solstice Sign mute and slow of Voyce, Fruitful, Northern.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Cancer; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)",
+        "What this lens reads": "'Mute and slow of Voyce' and 'Flegmatick' is Lilly's Cancer speaking the era's humoral medicine as much as its astrology, a fruitful but wordless watery sign quite unlike the nurturing, emotionally expressive Cancer of later astrology (compare grammars/western-astrology-canonical) and Jyotiṣa's own watery, Moon-ruled Karkaṭa (grammars/jyotisha-brihat-jataka)."
+      },
+      "keywords": [
+        "cancer",
+        "lilly",
+        "watery",
+        "phlegmatic",
+        "moon",
+        "solstice",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Cancer",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Cancer (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-leo",
+      "name": "Leo",
+      "category": "sign",
+      "sort_order": 11,
+      "sections": {
+        "In the text": "“Leo is the onely house of the Sun, by nature, Fiery, Hot, Dry, Cholerick, Diurnal, Commanding, Bestial, Barren, of the East and Fiery Triplicity, Masculine.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Leo; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)",
+        "What this lens reads": "'Commanding, Bestial, Barren' packs Leo's whole 17th-century meaning into one adjective string — rulership and animality in the same breath, and barren rather than fertile — a much harsher formula than the warm, generous 'Sovereign' Leo of the modern light/shadow grammar (compare grammars/western-astrology-canonical)."
+      },
+      "keywords": [
+        "leo",
+        "lilly",
+        "fiery",
+        "commanding",
+        "bestial",
+        "barren",
+        "sun",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Leo",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Leo (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-virgo",
+      "name": "Virgo",
+      "category": "sign",
+      "sort_order": 12,
+      "sections": {
+        "In the text": "“Virgo is an earthly, cold, melancholly, barren, feminine, nocturnal, Southern Sign; the house and exaltation of Mercury, of the earthly triplicity.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Virgo; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)",
+        "What this lens reads": "Lilly's Virgo is again marked 'barren' (as Leo is) — fertility/barrenness is a load-bearing category for him that modern astrology has almost entirely dropped in favour of psychological traits like discernment and service (compare grammars/western-astrology-canonical)."
+      },
+      "keywords": [
+        "virgo",
+        "lilly",
+        "earthly",
+        "melancholy",
+        "barren",
+        "mercury",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Virgo",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Virgo (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-libra",
+      "name": "Libra",
+      "category": "sign",
+      "sort_order": 13,
+      "sections": {
+        "In the text": "“Libra is a Sign aeriall, hot and moyst, Sanguine, Masculine, Moveable, Equinoctiall, Cardinall, Humane, Diurnall, of the Aeriall Triplicity, and Western, the chief House of Venus.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Libra, with two OCR-mangled words in the secondary mirrors — 'Aerinall' and 'Diumnall' — silently corrected to 'Aeriall' and 'Diurnall' for legibility; confidence: medium — the same wording surfaced across two independent reproductions this session.)",
+        "What this lens reads": "Lilly's Libra is 'Humane' — one of only a few signs he calls out as specifically human-bodied and civilized — sitting under Venus as a cardinal air sign, a formula close enough to the modern 'Diplomat' (compare grammars/western-astrology-canonical) that Libra is one of the more stable signs across four centuries of this tradition."
+      },
+      "keywords": [
+        "libra",
+        "lilly",
+        "aerial",
+        "sanguine",
+        "cardinal",
+        "venus",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Libra",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Libra (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-scorpio",
+      "name": "Scorpio",
+      "category": "sign",
+      "sort_order": 14,
+      "sections": {
+        "In the text": "Summarized from Christian Astrology, 1647, Book I, the chapter on Scorpio: a cold, watery, nocturnal, phlegmatic, northern, feminine sign of the watery triplicity, called the house and joy of Mars. (Confidence: ○ — this phrase surfaced identically across two independent secondary sources this session, but it is noticeably shorter than the full elemental/quality/triplicity formula Lilly gives the other eleven signs, so it reads as a condensed paraphrase of the 1647 chapter opening rather than a full verbatim sentence; treated as summary, not direct quotation.)",
+        "What this lens reads": "Even in paraphrase, 'the house and joy of Mars' plus 'cold, watery... phlegmatic' gives a Scorpio defined by Mars's rulership and a wet, withdrawn humoral temperament — not yet the psychological 'intensity and transformation' register of later astrology (compare grammars/western-astrology-canonical)."
+      },
+      "keywords": [
+        "scorpio",
+        "lilly",
+        "watery",
+        "phlegmatic",
+        "mars",
+        "nocturnal",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Scorpio",
+        "confidence": "low",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Scorpio (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-sagittarius",
+      "name": "Sagittarius",
+      "category": "sign",
+      "sort_order": 15,
+      "sections": {
+        "In the text": "“Sagittarius is of the fiery triplicity, East, in nature fiery, hot, dry, Masculine, Cholericke, Diurnall, Common, by-corporall or double-bodied, the House and Joy of Jupiter.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Sagittarius; confidence: medium — the full formula surfaced via chronosspeaks.com's Lilly sign digest, and a second, separately worded search this session independently corroborated the constituent facts — fiery triplicity, masculine, diurnal, double-bodied, Jupiter's house — without reproducing the exact sentence.)",
+        "What this lens reads": "'By-corporall or double-bodied' places Sagittarius among Lilly's three mutable signs sharing that label with Gemini and Pisces — a structural, not psychological, classification — while 'the House and Joy of Jupiter' does the work later astrology assigns to 'the Philosopher/Explorer' archetype (compare grammars/western-astrology-canonical)."
+      },
+      "keywords": [
+        "sagittarius",
+        "lilly",
+        "fiery",
+        "masculine",
+        "double-bodied",
+        "jupiter",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Sagittarius",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Sagittarius (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-capricorn",
+      "name": "Capricorn",
+      "category": "sign",
+      "sort_order": 16,
+      "sections": {
+        "In the text": "“Capricorn is the House of Saturn, and is Nocturnal, Cold, Dry, Melancholly, Earthly, Feminine, Solsticall, Cardinall, Moveable, Domesticall, Four-footed, Southern; the exaltation of Mars.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Capricorn; confidence: ○ — this full sentence was located via only one secondary reproduction this session; a second, differently worded search independently corroborated the two load-bearing facts inside it — Capricorn as Saturn's nocturnal house, and Mars's exaltation there — but did not reproduce the whole sentence, so the exact phrasing rests on a single source.)",
+        "What this lens reads": "'Four-footed' and 'Domesticall' are the kind of concrete, animal-taxonomy descriptor modern astrology drops entirely in favour of 'the Achiever' or 'the Sea-Goat' as pure symbol (compare grammars/western-astrology-canonical); Lilly's Capricorn is still half zoological classification."
+      },
+      "keywords": [
+        "capricorn",
+        "lilly",
+        "earthly",
+        "melancholy",
+        "saturn",
+        "cardinal",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Capricorn",
+        "confidence": "low",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Capricorn (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-aquarius",
+      "name": "Aquarius",
+      "category": "sign",
+      "sort_order": 17,
+      "sections": {
+        "In the text": "“Aquarius is an aieriall, hot and moyst Sign, of the aiery Triplicity, diurnal, Sanguine, fixed, rationall, humane, masculine, the principall house of Saturn, and house wherein he most rejoyceth.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Aquarius; confidence: ○ — this full sentence was located via only one secondary reproduction this session; a second, differently worded search independently corroborated that Aquarius is Saturn's day-house and the sign in which Saturn 'rejoyceth,' but did not reproduce the whole sentence, so the exact phrasing rests on a single source.)",
+        "What this lens reads": "'Rationall, humane' plus Saturn's special 'joy' there gives Lilly's Aquarius an intellectual, humane cast that survives remarkably intact into the modern 'Visionary'/humanitarian Aquarius (compare grammars/western-astrology-canonical) — one of the signs where the 1647 formula and the 21st-century archetype rhyme rather than clash."
+      },
+      "keywords": [
+        "aquarius",
+        "lilly",
+        "aerial",
+        "sanguine",
+        "fixed",
+        "saturn",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Aquarius",
+        "confidence": "low",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Aquarius (exact chapter title not independently confirmed this session)"
+      }
+    },
+    {
+      "id": "sign-pisces",
+      "name": "Pisces",
+      "category": "sign",
+      "sort_order": 18,
+      "sections": {
+        "In the text": "“Pisces is of the Watry Triplicity, Northern, cold Sign, moyst, Flegmatick, feminine, nocturnal, the house of Jupiter, and exaltation of Venus, a Bycorporeal, common or double-bodied Sign, an idle, effeminate, sickly Sign, representing a party of no action.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Pisces; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)",
+        "What this lens reads": "'Idle, effeminate, sickly... a party of no action' is about as unflattering as this library's Lilly voice gets — a moralized reading of passivity that the modern 'Mystic/Dreamer' Pisces (compare grammars/western-astrology-canonical) reframes as spiritual receptivity rather than a character flaw."
+      },
+      "keywords": [
+        "pisces",
+        "lilly",
+        "watery",
+        "phlegmatic",
+        "jupiter",
+        "double-bodied",
+        "sign"
+      ],
+      "metadata": {
+        "school": "renaissance-court-astrology",
+        "era_view": "view-medieval-renaissance-court",
+        "sign": "Pisces",
+        "confidence": "medium",
+        "_source": "William Lilly, Christian Astrology (1647), Book I, the chapter on Pisces (exact chapter title not independently confirmed this session)"
       }
     }
   ],

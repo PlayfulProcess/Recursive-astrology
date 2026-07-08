@@ -47,7 +47,34 @@ This session's WebFetch tool returned HTTP 403 on **every** URL attempted — ar
 
 **Confidence by item:** Saturn, Jupiter, Mars, Venus, and the Moon — medium (quotes corroborated across multiple independent secondary reproductions of what appears to be verbatim 1647 text). Mercury and the Sun — low (Mercury's quote is short and single-sourced; the Sun's quote comes only from the 1852 Zadkiel abridgment, not confirmed against 1647 phrasing this session).
 
-**Honest note on scope:** Lilly's *Christian Astrology* is a three-book, several-hundred-page treatise covering houses, aspects, horary technique, and nativities far beyond planetary significations. This grammar deliberately covers only the seven planets (matching the task's brief and this repo's existing pattern in `grammars/tetrabiblos-ashmand` and `grammars/alan-leo`, which are similarly planet/sign-scoped voice libraries, not full-book digitizations). A future session could add a houses or aspects companion grammar from the same source if that becomes useful for the course.
+**Honest note on scope (as of Jul 7 2026):** Lilly's *Christian Astrology* is a three-book, several-hundred-page treatise covering houses, aspects, horary technique, and nativities far beyond planetary significations. This grammar deliberately covered only the seven planets at first (matching that day's task brief and this repo's existing pattern in `grammars/tetrabiblos-ashmand` and `grammars/alan-leo`, which are similarly planet/sign-scoped voice libraries, not full-book digitizations). **Update Jul 8 2026: the twelve zodiac signs were added in a follow-up pass — see "3b" below.** A houses or aspects companion grammar from the same source remains a possible future addition.
+
+### 3b. Renaissance / Early Modern — the twelve signs (added Jul 8 2026)
+
+**Same method, same limitation carried forward:** WebFetch returned HTTP 403 again this session on every URL tried (archive.org, skyscript.co.uk, sacred-texts.com, astroamerica.com) — consistent with Jul 7's finding that this is a session-wide proxy block, not per-domain. Every sign quote below rests on WebSearch's search-grounded synthesis, cross-corroborated by running each sign through at least two independently worded queries and checking that the returned wording matched across independent secondary mirrors — never a direct page refetch. This grammar's opening per-sign "quality formula" (masculine/feminine, diurnal/nocturnal, elemental nature, triplicity, planetary house) is the first sentence of each of Lilly's twelve sign chapters in Book I — the same structural slot Lilly gives every sign, which is why the wording keeps a consistent shape across all twelve items.
+
+**Primary mirror used for cross-corroboration:** [chronosspeaks.com/william-lilly-on-the-signs](https://www.chronosspeaks.com/william-lilly-on-the-signs/), a single-page digest that appears to reproduce Lilly's per-sign opening sentences in sequence, preserving archaic spelling ("Diurnall," "Cholericke," "aieriall," "Solsticall"). Cross-checked against [renaissanceastrology.com](https://www.renaissanceastrology.com/aries.html) (per-sign pages), [sacred-texts.com/astro/aia/aia18.htm](https://sacred-texts.com/astro/aia/aia18.htm) (Zadkiel's abridgment chapter on the twelve signs), and general WebSearch snippet triangulation for the remainder.
+
+**Confidence by sign** (see `grammars/renaissance-lilly/grammar.json` `metadata.confidence` on each `sign-*` item for the authoritative per-item marker):
+
+| Sign | Confidence | Basis |
+|---|---|---|
+| Aries | medium ✔~ | Full formula corroborated identically across chronosspeaks.com + renaissanceastrology.com |
+| Taurus | medium ✔~ | Full formula corroborated across two independent secondary reproductions |
+| Gemini | medium ✔~ | Full formula corroborated across two independent secondary reproductions (two OCR typos silently corrected: "dounle"→"double," "Mascu1ine"→"Masculine") |
+| Cancer | medium ✔~ | Full formula corroborated identically across two independent secondary reproductions |
+| Leo | medium ✔~ | Full formula corroborated identically across two independent secondary reproductions |
+| Virgo | medium ✔~ | Full formula corroborated identically across two independent secondary reproductions |
+| Libra | medium ✔~ | Full formula corroborated across two independent secondary reproductions (two OCR typos silently corrected: "Aerinall"→"Aeriall," "Diumnall"→"Diurnall") |
+| Scorpio | **low (○)** | Only a short, condensed phrase was locatable — noticeably shorter than the other eleven signs' full formula, so it is presented as a **summary**, not a direct quote |
+| Sagittarius | medium | Full formula found via one clean source; a second, differently-worded query independently corroborated every constituent fact (fiery triplicity, masculine, diurnal, double-bodied, Jupiter's house) without reproducing the whole sentence |
+| Capricorn | **low (○)** | Full formula found via only one secondary reproduction this session; a second query corroborated the two load-bearing facts (Saturn's nocturnal house, Mars's exaltation) but not the full sentence — single-source risk flagged honestly |
+| Aquarius | **low (○)** | Same situation as Capricorn: one full-sentence source, a second query corroborating only the surrounding facts (Saturn's day-house, "rejoyceth" there) |
+| Pisces | medium ✔~ | Full formula corroborated identically across two independent secondary reproductions |
+
+**Honest gap:** none of the twelve items draw on Lilly's fuller per-sign material on diseases, countries, cities, colors, or physical body-parts that Book I's sign chapters also cover (per the task brief's own description of what those chapters contain) — this pass captured the load-bearing "nature and quality" sentence that opens each chapter (masculine/feminine, hot/cold/moist/dry, triplicity, ruling planet), which is also the sentence `scripts/build_meta_astro.py` needs to give Lilly parity with the other sign-covering voices (`western-astrology-canonical`, `tetrabiblos-ashmand`, `jyotisha-brihat-jataka`, `alan-leo`) in `grammars/astro-of-all-astros/`. A future session with working WebFetch could extend each item with the disease/country/color material for a fuller chapter digest.
+
+**Superseding the in-app AI drafts:** the app's copy of this grammar had accumulated two generic, non-sourced AI-drafted items ("Aries," "Taurus") added in-app by the builder as acknowledged placeholders. This pass's `sign-aries` and `sign-taurus` (plus the other ten signs) use the same `id`/`name`/`metadata.sign` shape the app's reindex expects, so they supersede those drafts cleanly rather than creating duplicates.
 
 ## 4. The excluded node — `sun-sign-naylor`
 
@@ -68,3 +95,4 @@ This session's WebFetch tool returned HTTP 403 on **every** URL attempted — ar
 - sacred-texts.com's *Introduction to Astrology* (Zadkiel/Lilly abridgment).
 - therealsamizdat.com's category pages excerpting Thompson (1900).
 - Wikipedia articles on the *Bṛhat Jātaka*, *Venus tablet of Ammisaduqa*, William Lilly, Rāhu/Ketu, Nabû, Ninurta — used only for orientation and cross-checking, never as the sole source for a load-bearing quote.
+- **(Added Jul 8 2026, for the twelve zodiac signs):** chronosspeaks.com's "William Lilly on the Signs" single-page digest; renaissanceastrology.com's per-sign pages (aries.html, taurus.html, gemini.html, libra.html, scorpio.html, pisces.html); sacred-texts.com's *Introduction to Astrology*, Chapter XV ("The Nature, Place, Countries, General Description, and Diseases Signified by the Twelve Signs") — Zadkiel/Lilly abridgment; Internet Archive listing `christian-astrology-1647` and `skyscript.co.uk/CA.html` (Deborah Houlding's annotated retype) consulted for context but returned 403 on direct fetch, same as Jul 7.
