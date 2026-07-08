@@ -133,6 +133,52 @@ better than a script would.
   sandbox's expected network block on the external Google Fonts / recursive.eco assistant
   requests, not this page's logic).
 
+## Round 2 (Jul 8 2026): single-planet tap, and why the wheel looked broken
+
+Builder report: "the tarnas wheel is not really working... when I click mars, I would like
+the synthesis to be tarnas but something like the tarot lenses to pop up — how every grammar
+sees it." Two real bugs, one design gap:
+
+1. **A loading-race bug.** `TRADITIONS` started as `[]` (empty array), not `null`. If a
+   visitor tapped a planet before the 17-grammar `Promise.all` fetch resolved (very plausible
+   on mobile), `renderParentStack()` read the still-empty array and rendered a completely
+   empty `.vgrid` — the "— every voice" heading with nothing beneath it, exactly what the
+   screenshot showed. Fixed: `TRADITIONS` now starts `null`; `renderParentStack()` renders an
+   explicit "Loading every voice…" card while `null`, so the UI can never look silently blank.
+   Verified with Playwright: tapping immediately on `domcontentloaded` (before network idle)
+   now shows the loading card, then the real content once the fetch settles.
+2. **A federation gap in the Jyotiṣa voice**, unrelated to this page but surfaced by it: all
+   9 `jyotisha-brihat-jataka` planet items use Sanskrit names ("Sūrya (the Sun)") and carried
+   no `metadata.planet` at all, so the matcher (`category === 'planet'` + `metadata.planet`,
+   the same one `viewers/lenses.html` uses) could never find them — Jyotiṣa silently dropped
+   out of every "every voice" stack site-wide, not just here. Fixed the *grammar*, not the
+   matcher (per this project's "fix the grammar, not the app" rule): added
+   `metadata.planet: "Sun"` etc. to the 7 graha items with a Western-planet equivalent
+   (`graha-surya`→Sun … `graha-sani`→Saturn); left `graha-rahu`/`graha-ketu` (the lunar nodes)
+   alone since they have no slot on the 10-planet Western wheel this matcher serves.
+3. **The design gap the builder actually asked to close**: tapping *one* planet showed
+   nothing — the stage only rendered once two planets were selected. Now `SELECTED.length ===
+   1` renders `renderSingleSynthesis(name)` (a new `.synth` box, "The archetype, after
+   Tarnas," pulled from that planet's own item in `archetypal-pairs`) directly above that
+   planet's existing `renderParentStack(name)` — the "how every grammar sees it" lens stack,
+   unchanged. Tapping a second planet still adds the complex-between-them and both stacks, as
+   before. This meant the 7 personal-planet items (`planet-sun` … `planet-saturn`), which
+   previously carried only a `"See also"` provenance stub, needed real single-planet
+   "Archetype" content to make the single-tap experience honest rather than a gap note on
+   every ordinary planet tap. Authored 7 short entries (Sun through Saturn) in the same voice
+   and length as the existing Uranus/Neptune/Pluto entries, each closing with an explicit
+   caveat: Tarnas's own signature method is planetary *pairs* and outer-planet historical
+   correlation, so a solo personal-planet portrait draws on the broader archetypal-astrology
+   tradition his framework grows from (Rudhyar's humanistic astrology foremost) rather than
+   his own direct writing — held as PlayfulProcess's synthesis, same honesty frame as
+   everything else on this page. `check.py` still passes on all 17 grammars.
+
+UI copy updated to match (pickhint, empty-state placeholder, "How this works" note all now
+describe the one-tap and two-tap behaviors). Playwright-reverified: single-tap Mars shows the
+archetype box + "Mars — every voice" with real cards (not the pair section); tapping Saturn
+second adds the complex-between-them and "Saturn — every voice"; the race-condition case
+(tap before network settles) shows the loading card, never a blank grid.
+
 ## Wiring
 
 - `ids.json` — `_public_now` + `ids.archetypal-pairs` (placeholder UUID until this grammar

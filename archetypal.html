@@ -99,27 +99,28 @@
     his endorsement.</b> Go to the source: <a href="https://cosmosandpsyche.com/" target="_blank" rel="noopener">cosmosandpsyche.com ↗</a>
   </div>
 
-  <p class="pickhint">Tap <b>two planets</b> on the ring to read the archetypal complex between them.</p>
+  <p class="pickhint">Tap <b>one planet</b> to read its archetype and hear every voice in this library; tap a <b>second</b> to read the complex between them.</p>
   <div class="stage-ring"><svg class="ring" id="ring" viewBox="0 0 400 400" role="list"
     aria-label="The ten planets, tap two to read the complex between them"></svg></div>
   <div class="selrow" id="selrow"></div>
 
   <div class="stage" id="stage">
-    <p class="placeholder">Tap any two planets above — the relationship between them is where Tarnas's
-      whole method starts. Every tradition that ever read the sky agreed on planetary relationships
-      mattering, even when they disagreed about everything else.</p>
+    <p class="placeholder">Tap a planet above to read its archetype and hear every voice in this library
+      answer for it. Tap a second planet and the relationship between them — the place Tarnas's whole
+      method actually starts — reads too.</p>
   </div>
 
   <div class="note">
-    <b>How this works.</b> Tapping two planets looks up their pair in
+    <b>How this works.</b> Tapping <b>one</b> planet looks up its own archetype in
     <a href="viewers/cards.html?src=../grammars/archetypal-pairs/grammar.json">Archetypal Astrology —
-    planetary pairs</a> (hand-authored, not generated) and stacks it above each planet's own entries from
-    every other voice grammar in this repo — Planetary Myths, Ptolemy's Tetrabiblos, Lilly's Christian
-    Astrology, the Jyotiṣa Bṛhat Jātaka, Alan Leo, and the Canonical synthesis — read live from
+    planetary pairs</a> (hand-authored, not generated) and stacks every other voice grammar's entry for
+    that planet beneath it — Planetary Myths, Ptolemy's Tetrabiblos, Lilly's Christian Astrology, the
+    Jyotiṣa Bṛhat Jātaka, Alan Leo, and the Canonical synthesis — read live from
     <code>grammars/_collection.json</code>, the same cross-grammar matching the
-    <a href="viewers/lenses.html">Lenses</a> viewer uses. This <em>is</em> the meta layer: not a second
-    generator script, but the parents' many voices stacking beneath the pair's own synthesis, live, on
-    every load. See <a href="docs/DESIGN-archetypal.md">docs/DESIGN-archetypal.md</a>.
+    <a href="viewers/lenses.html">Lenses</a> viewer uses. Tapping a <b>second</b> planet adds the complex
+    between the two, from the same hand-authored grammar, above both stacks. This <em>is</em> the meta
+    layer: not a second generator script, but the parents' many voices stacking beneath their own or their
+    pair's synthesis, live, on every load. See <a href="docs/DESIGN-archetypal.md">docs/DESIGN-archetypal.md</a>.
   </div>
 </div>
 
@@ -136,7 +137,7 @@ const PLANETS = [
 const CX = 200, CY = 200, R = 138;
 let SELECTED = [];      // up to 2 planet names, in tap order
 let PAIRS = null;       // archetypal-pairs/grammar.json
-let TRADITIONS = [];    // every public astrology grammar with planet items
+let TRADITIONS = null;  // every public astrology grammar with planet items; null = still loading
 
 function pt(deg){ const a = (deg - 90) * Math.PI / 180; return [CX + R * Math.cos(a), CY + R * Math.sin(a)]; }
 function el(tag, attrs, text){
@@ -277,6 +278,29 @@ function findPairItem(name1, name2){
     it.metadata.planets.includes(name1) && it.metadata.planets.includes(name2)) || null;
 }
 
+// The single-planet entry in archetypal-pairs itself (Uranus/Neptune/Pluto are
+// authored in full; Sun–Saturn carry a shorter synthesis plus the "See also"
+// pointer to their canonical full entry — see docs/DESIGN-archetypal.md).
+function findTarnasPlanetItem(name){
+  if (!PAIRS) return null;
+  const items = PAIRS.items || [];
+  return items.find(it => it.category === 'planet' && (it.metadata || {}).planet === name) || null;
+}
+
+function renderSingleSynthesis(name){
+  const item = findTarnasPlanetItem(name);
+  const archetype = item && item.sections && item.sections['Archetype'];
+  if (!archetype){
+    return `<div class="gapnote"><b>No authored archetype yet for ${esc(name)}.</b>
+      The parent still speaks below, from every voice in this library.</div>`;
+  }
+  return `<div class="synth">
+    <div class="stag">The archetype, after Tarnas</div>
+    <h2>${esc(name)}</h2>
+    <div class="sec"><p>${mdLite(archetype)}</p></div>
+  </div>`;
+}
+
 function renderPairSynthesis(item, name1, name2){
   if (!item){
     return `<div class="gapnote"><b>No authored complex yet for ${esc(name1)}–${esc(name2)}.</b>
@@ -295,6 +319,10 @@ function renderPairSynthesis(item, name1, name2){
 }
 
 function renderParentStack(name){
+  if (TRADITIONS === null){
+    return `<p class="plabelh">${esc(name)} — every voice</p><div class="vgrid">
+      <div class="vcard2"><p class="empty">Loading every voice…</p></div></div>`;
+  }
   const cards = TRADITIONS.map(t => {
     const item = findPlanetItem(t.grammar, name);
     if (!item || !contentBearing(item)) {
@@ -310,10 +338,15 @@ function renderParentStack(name){
 
 function renderStage(){
   const stage = $('#stage');
-  if (SELECTED.length < 2){
-    stage.innerHTML = '<p class="placeholder">Tap any two planets above — the relationship between them '
-      + 'is where Tarnas\'s whole method starts. Every tradition that ever read the sky agreed on planetary '
-      + 'relationships mattering, even when they disagreed about everything else.</p>';
+  if (SELECTED.length === 0){
+    stage.innerHTML = '<p class="placeholder">Tap a planet above to read its archetype and hear every '
+      + 'voice in this library answer for it. Tap a second planet and the relationship between them — '
+      + 'the place Tarnas\'s whole method actually starts — reads too.</p>';
+    return;
+  }
+  if (SELECTED.length === 1){
+    const [a] = SELECTED;
+    stage.innerHTML = renderSingleSynthesis(a) + renderParentStack(a);
     return;
   }
   const [a, b] = SELECTED;
