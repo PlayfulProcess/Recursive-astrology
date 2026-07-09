@@ -56,6 +56,8 @@ BRANCH_OF = {
     "three-doors":                    "readings",
     "astro-of-all-astros":            "synthesis",  # generated meta-voice — see scripts/build_meta_astro.py
     "archetypal-pairs":                "synthesis",  # hand-authored, after Tarnas — see docs/DESIGN-archetypal.md
+    "aspects-commented":               "synthesis",  # multi-voice compilation (Ptolemy + Lilly + Canonical), not a single primary source
+    "dignities-rulerships":            "synthesis",  # lens compilation of the traditional dignities table
 }
 
 # slug -> (sortable year, display label, provenance). Only the primary-source voice

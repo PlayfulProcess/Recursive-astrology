@@ -1,5 +1,58 @@
 # Changelog — The Recursive Astrology
 
+## July 9, 2026 — Astro enrichment lane: aspects + dignities commented grammars
+
+The parked "astro enrichment lane" from the builder's I Ching plan (recursive-starter
+`docs/PLAN-iching-channel.md` §5): aspects and dignities/rulerships now have their own
+commented grammars, same PD-source discipline as `renaissance-lilly`.
+
+**New grammar `grammars/aspects-commented/grammar.json`** — the five classical (Ptolemaic)
+aspects, each an item with three clearly-labeled commentary sections: `Ptolemy (Tetrabiblos)`
+(Ashmand 1822 PD quotes reused verbatim from this repo's already-verified
+`tetrabiblos-ashmand` aspect items), `Lilly (1647)` (the "imperfect enmity" / "perfect
+hatred" / "arguments of Love, Unity and Friendship" doctrine — corroborated this session only
+via a secondary reproduction, so marked ○; unverifiable wording is paraphrased and marked
+low-confidence, never fabricated), and a contemporary `Canonical` synthesis in the
+western-astrology-canonical register. The Ptolemy/Lilly sections use the lens `[attribution]`
+prefix so the Provenance Ribbon dates them (1822/1647). Matcher keys documented in the
+grammar description: `category:'aspect'`, `metadata.aspect` (capitalized, matching
+western-astrology-canonical), `metadata.angle`, `metadata.nature` ('soft'/'hard'/'neutral'),
+`metadata.orb` (contemporary convention, explicitly NOT a traditional claim — Ptolemy is
+sign-based, Lilly puts orbs on planets/moieties). Description carries the reality note: orbs
+and minor aspects vary by tradition; five classical ones to start; contributors welcome.
+
+**New grammar `grammars/dignities-rulerships/grammar.json`** — essential dignities as a lens:
+7 planet items (domicile(s), exaltation + traditional degree, detriment, fall; sections
+`Dignities table` / `What dignity means` (Lilly's +5/+4/+3/+2/+1, −5/−4 scoring + the "lord
+of his own house" doctrine via Zadkiel's 1852 PD abridgment) / `Canonical`) and 12 sign items
+stating the same table from the sign's side (`metadata.sign`), with modern outer-planet
+co-rulerships (Uranus/Neptune/Pluto) ONLY in Canonical sections, clearly marked as modern
+additions. `metadata.planet` on every planet item → federates automatically into lenses,
+wheel, and archetypal stacks. Machine-readable dignity keys ride in metadata
+(domicile[]/exaltation/exaltation_degree/detriment[]/fall; ruler/modern_co_ruler on signs).
+**Exaltation-degree verification**: direct fetches of primary scans were network-blocked this
+session (proxy 403 on archive.org/gutenberg/wikipedia), so the degrees (Sun 19° Aries, Moon
+3° Taurus, Mercury 15° Virgo, Venus 27° Pisces [some tables 28°], Mars 28° Capricorn, Jupiter
+15° Cancer, Saturn 21° Libra) were cross-checked via multiple independently-phrased web
+searches whose results (Wikipedia's Exaltation article, renaissanceastrology.com, al-Biruni's
+Book of Instruction and Dorotheus's Carmen as reported by secondary scholarship) all agree;
+the only variance found anywhere is Venus 27° vs 28°, noted honestly in the grammar. Sign
+statements double-anchored to already-verified in-repo quotes (Ptolemy: "Capricorn is the
+house of Saturn and exaltation of Mars", "Pisces is the house of Jupiter and exaltation of
+Venus"; Lilly: Virgo "the house and exaltation of Mercury").
+
+**Wiring**: both registered in `scripts/build_collection.py` (synthesis branch — multi-voice
+compilations, not single primary sources), `_collection.json` regenerated (19 grammars, 328
+items); both added to `ids.json` `_public_now` + `ids` (new UUIDs
+`dee46a22-3848-433e-a793-8c7a2206e8cb` aspects, `1ab72d9f-f283-475e-951a-1841215e1274`
+dignities) + `preview_links` — the orchestrator inserts the Supabase rows. `check.py` passes
+on all 19. **Playwright-verified** (chromium, local server): lenses.html picker lists both
+new voices; Synopsis on Saturn stacks the dignities card ("Domicile: Capricorn, Aquarius ·
+Exaltation: Libra (21°)") with the picker highlighting it as having Saturn; Synopsis on
+Square stacks the aspects-commented column incl. Lilly's "imperfect enmity"; archetypal.html
+single-tap on Saturn auto-discovers the dignities voice in the every-voice stack — 10/10
+checks pass.
+
 ## July 9, 2026 — Assistant/header z-index fix + grammar picker on `wheel.html` and `lenses.html`
 
 **Bug fix: the site's own sticky header was painting over the assistant panel's top content.**

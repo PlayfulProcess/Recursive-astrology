@@ -27,7 +27,9 @@
       "name": "Synthesis — surveys, flagship interpretations, and readings",
       "deck_slugs": [
         "archetypal-pairs",
+        "aspects-commented",
         "astro-of-all-astros",
+        "dignities-rulerships",
         "historiographies-of-astrology",
         "planetary-myths",
         "trika-lens",
@@ -82,6 +84,19 @@
       "provenance": "living"
     },
     {
+      "slug": "aspects-commented",
+      "name": "The Aspects, Commented — Ptolemy · Lilly · Canonical",
+      "type": "astrology",
+      "branch": "synthesis",
+      "is_meta": false,
+      "default_preview": null,
+      "items": 5,
+      "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800",
+      "blurb": "The five classical (Ptolemaic) aspects — conjunction, sextile, square, trine, opposition — each as an item carrying tradition-sourced commentary from two public-domain voices plus a contemporary synth…",
+      "path": "grammars/aspects-commented/grammar.json",
+      "provenance": "living"
+    },
+    {
       "slug": "astro-of-all-astros",
       "name": "Astro of All Astros — every voice, one placement",
       "type": "astrology",
@@ -131,6 +146,19 @@
       "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800",
       "blurb": "The chart-shaped casting: the twelve houses as twelve fixed positions on the wheel — the richer target the three-position casting graduates into. Nothing is drawn at random: the positions ARE your cha…",
       "path": "grammars/casting-twelve-houses/grammar.json",
+      "provenance": "living"
+    },
+    {
+      "slug": "dignities-rulerships",
+      "name": "Essential Dignities & Rulerships — the traditional scheme, planet by planet and sign by sign",
+      "type": "astrology",
+      "branch": "synthesis",
+      "is_meta": false,
+      "default_preview": null,
+      "items": 19,
+      "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800",
+      "blurb": "Essential dignities and rulerships as a LENS grammar: the seven classical planets, each carrying its domicile(s), exaltation (with the traditional degree), detriment, and fall — and the twelve signs, …",
+      "path": "grammars/dignities-rulerships/grammar.json",
       "provenance": "living"
     },
     {

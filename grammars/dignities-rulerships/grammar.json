@@ -1,0 +1,464 @@
+{
+  "name": "Essential Dignities & Rulerships — the traditional scheme, planet by planet and sign by sign",
+  "description": "Essential dignities and rulerships as a LENS grammar: the seven classical planets, each carrying its domicile(s), exaltation (with the traditional degree), detriment, and fall — and the twelve signs, each stating its ruler, exaltation, detriment, and fall from the sign's side, so sign queries answer too. The scheme tabled here is the one Ptolemy and Lilly share. MATCHER KEYS: planet items carry category:'planet' + metadata.planet ('Sun'…'Saturn'); sign items carry category:'sign' + metadata.sign — the same convention grammars/western-astrology-canonical uses, so this grammar federates automatically into every 'every voice' stack (lenses, wheel, archetypal). Machine-readable dignity keys ride along in metadata: domicile[], exaltation, exaltation_degree, detriment[], fall on planet items; ruler, exaltation, exaltation_degree, detriment, fall (and modern_co_ruler where one exists) on sign items. PROVENANCE, honestly: the domicile/detriment scheme and the exaltation SIGNS are in Ptolemy (Tetrabiblos Book I — the houses of the planets, and the exaltations, with reasons but NO degrees) and in Lilly's table of essential dignities (Christian Astrology, 1647); the exaltation DEGREES are older than either English edition — the Dorotheus/al-Biruni lineage descending from Babylonian practice — and were cross-checked this session against multiple independent listings (Wikipedia's 'Exaltation (astrology)' article; al-Biruni's Book of Instruction and Dorotheus's Carmen Astrologicum as reported by secondary scholarship; renaissanceastrology.com's exaltation-degrees page): Sun 19° Aries, Moon 3° Taurus, Mercury 15° Virgo, Venus 27° Pisces (some sources give 28°), Mars 28° Capricorn, Jupiter 15° Cancer, Saturn 21° Libra — all sources consulted agree, with only the Venus 27°/28° variation noted. The strength-scoring point system quoted in the 'What dignity means' sections is Lilly's: domicile +5, exaltation +4, triplicity +3, term +2, face +1; detriment −5, fall −4; a planet with no essential dignity at all is 'peregrine.' Modern outer-planet co-rulerships (Uranus–Aquarius, Neptune–Pisces, Pluto–Scorpio) appear ONLY in the Canonical sections and are clearly marked as modern additions — they are not part of the traditional scheme. Triplicity, term, and face sub-rulers are NOT tabled here (they genuinely differ by tradition — Dorothean vs Ptolemaic triplicities, Egyptian vs Ptolemaic terms); contributors welcome to add them as their own clearly-sourced layer.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800",
+  "grammar_type": "astrology",
+  "creator_name": "PlayfulProcess",
+  "tags": ["astrology", "dignities", "rulerships", "exaltation", "lilly", "ptolemy", "lens", "recursive-eco"],
+  "items": [
+    {
+      "id": "dig-sun",
+      "name": "Sun",
+      "symbol": "☉",
+      "category": "planet",
+      "sort_order": 0,
+      "sections": {
+        "Dignities table": "Domicile: Leo · Exaltation: Aries (19°) · Detriment: Aquarius · Fall: Libra",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647; general doctrine quoted via Zadkiel's 1852 abridgment] Essential dignity is placement-strength, and Lilly scores it: domicile +5, exaltation +4, triplicity +3, term +2, face +1; detriment −5, fall −4; a planet with no dignity at all is 'peregrine' — a wanderer. In its own house a planet \"represents a man in such a condition as that he is lord of his own house, estate, and fortune\"; exalted, \"a person of haughty condition, arrogant, assuming more to himself than his due\" — dignity is strength, not niceness. So the Sun in Leo commands from home ground; exalted at 19° Aries it blazes at its most assertive (and most self-important); in Aquarius (detriment) and Libra (fall) the royal claim is a guest in signs that answer to Saturn. (Scoring corroborated across multiple independent sources this session; the two quoted phrases rest on Zadkiel's public-domain abridgment of Lilly; confidence: medium.)",
+        "Canonical": "Modern astrology keeps the Sun's rulership of Leo unchanged — no discovered planet ever claimed it. The exaltation-in-Aries / fall-in-Libra axis is usually read psychologically now: identity most radiant where it initiates, most diffuse where it defers."
+      },
+      "keywords": ["sun", "leo", "aries", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Sun",
+        "domicile": ["Leo"],
+        "exaltation": "Aries",
+        "exaltation_degree": 19,
+        "detriment": ["Aquarius"],
+        "fall": "Libra",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked against multiple independent listings Jul 2026"
+      }
+    },
+    {
+      "id": "dig-moon",
+      "name": "Moon",
+      "symbol": "☽",
+      "category": "planet",
+      "sort_order": 1,
+      "sections": {
+        "Dignities table": "Domicile: Cancer · Exaltation: Taurus (3°) · Detriment: Capricorn · Fall: Scorpio",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] By Lilly's scoring (domicile +5, exaltation +4; detriment −5, fall −4, with triplicity, term, and face as the lesser dignities of +3/+2/+1) the Moon is strongest at home in Cancer, where her tides are her own, and exalted at 3° Taurus — the zodiac's most changeable body given its steadiest ground. In Capricorn (detriment) her nurture is rationed by rule; in Scorpio (fall) her instinct runs to extremes. (Placements: high confidence, heavily cross-corroborated; the reading is this compiler's gloss on the shared table, not Lilly's wording.)",
+        "Canonical": "Modern astrology keeps the Moon's rulership of Cancer unchanged. The exaltation at 3° Taurus is among the oldest attested of all the degrees — Dorotheus's Carmen already carries it — and is usually read now as feeling finding safety in the body and the ordinary."
+      },
+      "keywords": ["moon", "cancer", "taurus", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Moon",
+        "domicile": ["Cancer"],
+        "exaltation": "Taurus",
+        "exaltation_degree": 3,
+        "detriment": ["Capricorn"],
+        "fall": "Scorpio",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); exaltation degree per the Dorotheus/al-Biruni lineage (Dorotheus: Moon in three degrees of Taurus), cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-mercury",
+      "name": "Mercury",
+      "symbol": "☿",
+      "category": "planet",
+      "sort_order": 2,
+      "sections": {
+        "Dignities table": "Domicile: Gemini, Virgo · Exaltation: Virgo (15°) · Detriment: Sagittarius, Pisces · Fall: Pisces",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] Mercury is the scheme's singular case: exalted in a sign he also rules — Lilly's own chapter calls Virgo \"the house and exaltation of Mercury\" (wording verified in this repo's grammars/renaissance-lilly) — so at 15° Virgo he can hold domicile and exaltation at once, +9 in Lilly's arithmetic, the strongest essential placement the table allows. The mirror is just as singular: in Pisces he is in detriment AND fall together, doubly debilitated. (Placements: high confidence; the Virgo quote is verified; the rest is gloss on the shared table.)",
+        "Canonical": "Modern astrology keeps Mercury's rulership of both Gemini and Virgo — no outer planet took either. The Virgo/Pisces axis is the tradition's cleanest teaching case: analysis exalted where it discriminates, undone where everything dissolves."
+      },
+      "keywords": ["mercury", "gemini", "virgo", "pisces", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Mercury",
+        "domicile": ["Gemini", "Virgo"],
+        "exaltation": "Virgo",
+        "exaltation_degree": 15,
+        "detriment": ["Sagittarius", "Pisces"],
+        "fall": "Pisces",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647 — 'the house and exaltation of Mercury', verified via grammars/renaissance-lilly); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-venus",
+      "name": "Venus",
+      "symbol": "♀",
+      "category": "planet",
+      "sort_order": 3,
+      "sections": {
+        "Dignities table": "Domicile: Taurus, Libra · Exaltation: Pisces (27°) · Detriment: Scorpio, Aries · Fall: Virgo",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] By Lilly's scoring Venus rules from two homes — earthy Taurus and airy Libra — and is exalted at 27° Pisces (the one degree where the old tables genuinely waver: some sources give 28°), where sympathy is boundless. Lilly's own Pisces chapter states the placement — Pisces as \"the house of Jupiter, and exaltation of Venus\" (verified in grammars/renaissance-lilly). In Scorpio and Aries (detriment) her arts serve Mars's ends; in Virgo (fall) the tradition reads her as most out of place — affection under analysis. (Placements: high confidence; the 27°/28° variance is noted honestly.)",
+        "Canonical": "Modern astrology keeps Venus ruling Taurus and Libra. The exaltation in Pisces reads now as love universalized past the personal; the fall in Virgo as the old scheme's warning about perfecting what wants to be enjoyed."
+      },
+      "keywords": ["venus", "taurus", "libra", "pisces", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Venus",
+        "domicile": ["Taurus", "Libra"],
+        "exaltation": "Pisces",
+        "exaltation_degree": 27,
+        "detriment": ["Scorpio", "Aries"],
+        "fall": "Virgo",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Pisces is the house of Jupiter and exaltation of Venus', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647, verified via grammars/renaissance-lilly); degree 27° per most listings, 28° in some — cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-mars",
+      "name": "Mars",
+      "symbol": "♂",
+      "category": "planet",
+      "sort_order": 4,
+      "sections": {
+        "Dignities table": "Domicile: Aries, Scorpio · Exaltation: Capricorn (28°) · Detriment: Libra, Taurus · Fall: Cancer",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] Mars rules day-Aries and night-Scorpio, and is exalted at 28° Capricorn — both Ptolemy and Lilly state the sign: \"Capricorn is the house of Saturn and exaltation of Mars\" (Ashmand, verified via grammars/tetrabiblos-ashmand), and Lilly's Capricorn chapter says the same (verified via grammars/renaissance-lilly). The old reading: choler disciplined into strategy — the soldier under command. In Libra and Taurus (detriment) the blade is a guest in Venus's houses; in Cancer (fall) heat drowns in moisture, force turned moody. (Placements: high confidence.)",
+        "Canonical": "Modern astrology keeps Mars ruling Aries, and after Pluto's discovery (1930) most modern astrologers give Scorpio to Pluto — a MODERN addition, with Mars retained as traditional or co-ruler. The exaltation in Capricorn still reads as aggression at its most effective: aimed, patient, structural."
+      },
+      "keywords": ["mars", "aries", "scorpio", "capricorn", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Mars",
+        "domicile": ["Aries", "Scorpio"],
+        "exaltation": "Capricorn",
+        "exaltation_degree": 28,
+        "detriment": ["Libra", "Taurus"],
+        "fall": "Cancer",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Capricorn is the house of Saturn and exaltation of Mars', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647, verified via grammars/renaissance-lilly); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-jupiter",
+      "name": "Jupiter",
+      "symbol": "♃",
+      "category": "planet",
+      "sort_order": 5,
+      "sections": {
+        "Dignities table": "Domicile: Sagittarius, Pisces · Exaltation: Cancer (15°) · Detriment: Gemini, Virgo · Fall: Capricorn",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] The greater benefic rules fiery Sagittarius by day and watery Pisces by night, and is exalted at 15° Cancer — generosity nourished, expansion given a home to grow in. By Lilly's scoring (+5 domicile, +4 exaltation) a well-placed Jupiter is the chart's most reliable fortune; in Gemini and Virgo (detriment) breadth is chopped into Mercury's particulars, and in Capricorn (fall) bounty is put on Saturn's budget. (Placements: high confidence, cross-corroborated; the reading is gloss on the shared table.)",
+        "Canonical": "Modern astrology keeps Jupiter ruling Sagittarius, and after Neptune's discovery (1846) most modern astrologers give Pisces to Neptune — a MODERN addition, with Jupiter retained as traditional or co-ruler. Exaltation in Cancer still reads as growth rooted in belonging."
+      },
+      "keywords": ["jupiter", "sagittarius", "pisces", "cancer", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Jupiter",
+        "domicile": ["Sagittarius", "Pisces"],
+        "exaltation": "Cancer",
+        "exaltation_degree": 15,
+        "detriment": ["Gemini", "Virgo"],
+        "fall": "Capricorn",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); exaltation degree per the Dorotheus/al-Biruni lineage (al-Biruni: Jupiter 15th degree of Cancer), cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-saturn",
+      "name": "Saturn",
+      "symbol": "♄",
+      "category": "planet",
+      "sort_order": 6,
+      "sections": {
+        "Dignities table": "Domicile: Capricorn, Aquarius · Exaltation: Libra (21°) · Detriment: Cancer, Leo · Fall: Aries",
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] Saturn rules the two signs opposite the luminaries' homes — Capricorn against the Moon's Cancer, Aquarius against the Sun's Leo (Ptolemy's own stated logic: the coldest, farthest planet given the signs farthest from the lights) — and is exalted at 21° Libra: the weigher exalted in the sign of the scales, severity refined into judgment. By Lilly's scoring a dignified Saturn is not warm but it is SOLID: the man who is \"lord of his own house, estate, and fortune,\" however plainly he lives. In Cancer and Leo (detriment) his economy is a guest of the lights; in Aries (fall) deliberation is asked to sprint. (Placements: high confidence; al-Biruni and Dorotheus both carry the 21° Libra degree.)",
+        "Canonical": "Modern astrology keeps Saturn ruling Capricorn, and after Uranus's discovery (1781) most modern astrologers give Aquarius to Uranus — a MODERN addition, with Saturn retained as traditional or co-ruler. The exaltation in Libra survives intact in modern practice: limits at their best when they are fair."
+      },
+      "keywords": ["saturn", "capricorn", "aquarius", "libra", "exaltation", "domicile", "dignity"],
+      "metadata": {
+        "planet": "Saturn",
+        "domicile": ["Capricorn", "Aquarius"],
+        "exaltation": "Libra",
+        "exaltation_degree": 21,
+        "detriment": ["Cancer", "Leo"],
+        "fall": "Aries",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); exaltation degree per the Dorotheus/al-Biruni lineage (both carry Saturn 21° Libra), cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-aries",
+      "name": "Aries",
+      "symbol": "♈",
+      "category": "sign",
+      "sort_order": 7,
+      "sections": {
+        "Dignities table": "Ruler: Mars · Exaltation: Sun (19°) · Detriment: Venus · Fall: Saturn",
+        "Canonical": "Mars's diurnal house, unchanged in modern practice. The Sun exalted here reads as identity at its most initiating; Venus in detriment and Saturn in fall as the sign where accommodation and deliberation are hardest to sustain."
+      },
+      "keywords": ["aries", "mars", "sun", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Aries",
+        "ruler": "Mars",
+        "exaltation": "Sun",
+        "exaltation_degree": 19,
+        "detriment": "Venus",
+        "fall": "Saturn",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647 — 'the diurnall house of Mars', verified via grammars/renaissance-lilly); Sun's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-taurus",
+      "name": "Taurus",
+      "symbol": "♉",
+      "category": "sign",
+      "sort_order": 8,
+      "sections": {
+        "Dignities table": "Ruler: Venus · Exaltation: Moon (3°) · Detriment: Mars · Fall: — (no classical planet falls here)",
+        "Canonical": "Venus's nocturnal house, unchanged in modern practice. The Moon exalted at 3° Taurus is among the oldest degrees in the whole table — feeling given firm ground. Mars in detriment: force blunted by the sign's patience."
+      },
+      "keywords": ["taurus", "venus", "moon", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Taurus",
+        "ruler": "Venus",
+        "exaltation": "Moon",
+        "exaltation_degree": 3,
+        "detriment": "Mars",
+        "fall": null,
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); Moon's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-gemini",
+      "name": "Gemini",
+      "symbol": "♊",
+      "category": "sign",
+      "sort_order": 9,
+      "sections": {
+        "Dignities table": "Ruler: Mercury · Exaltation: — (none in the classical seven-planet scheme) · Detriment: Jupiter · Fall: — (no classical planet falls here)",
+        "Canonical": "Mercury's diurnal house — Ptolemy's own words, \"Gemini is the house of Mercury\" (verified via grammars/tetrabiblos-ashmand) — unchanged in modern practice. Jupiter in detriment: the big picture scattered into particulars. No classical planet is exalted or falls here."
+      },
+      "keywords": ["gemini", "mercury", "ruler", "detriment", "dignity", "sign"],
+      "metadata": {
+        "sign": "Gemini",
+        "ruler": "Mercury",
+        "exaltation": null,
+        "exaltation_degree": null,
+        "detriment": "Jupiter",
+        "fall": null,
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Gemini is the house of Mercury', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647)"
+      }
+    },
+    {
+      "id": "dig-cancer",
+      "name": "Cancer",
+      "symbol": "♋",
+      "category": "sign",
+      "sort_order": 10,
+      "sections": {
+        "Dignities table": "Ruler: Moon · Exaltation: Jupiter (15°) · Detriment: Saturn · Fall: Mars",
+        "Canonical": "The Moon's only house, unchanged in modern practice. Jupiter exalted here reads as generosity rooted in care; Saturn in detriment and Mars in fall as the sign where austerity and aggression both lose their footing in feeling."
+      },
+      "keywords": ["cancer", "moon", "jupiter", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Cancer",
+        "ruler": "Moon",
+        "exaltation": "Jupiter",
+        "exaltation_degree": 15,
+        "detriment": "Saturn",
+        "fall": "Mars",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); Jupiter's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-leo",
+      "name": "Leo",
+      "symbol": "♌",
+      "category": "sign",
+      "sort_order": 11,
+      "sections": {
+        "Dignities table": "Ruler: Sun · Exaltation: — (none in the classical seven-planet scheme) · Detriment: Saturn · Fall: — (no classical planet falls here)",
+        "Canonical": "The Sun's only house, unchanged in modern practice. Saturn in detriment: restraint out of place in the sign of display. No classical planet is exalted or falls here."
+      },
+      "keywords": ["leo", "sun", "saturn", "ruler", "detriment", "dignity", "sign"],
+      "metadata": {
+        "sign": "Leo",
+        "ruler": "Sun",
+        "exaltation": null,
+        "exaltation_degree": null,
+        "detriment": "Saturn",
+        "fall": null,
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647)"
+      }
+    },
+    {
+      "id": "dig-virgo",
+      "name": "Virgo",
+      "symbol": "♍",
+      "category": "sign",
+      "sort_order": 12,
+      "sections": {
+        "Dignities table": "Ruler: Mercury · Exaltation: Mercury (15°) · Detriment: Jupiter · Fall: Venus",
+        "Canonical": "The scheme's singular sign: Lilly's own chapter calls Virgo \"the house and exaltation of Mercury\" (verified via grammars/renaissance-lilly) — the only place a classical planet rules AND is exalted at once. Mercury's rulership is unchanged in modern practice. Jupiter in detriment, Venus in fall: breadth and pleasure both submitted to analysis."
+      },
+      "keywords": ["virgo", "mercury", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Virgo",
+        "ruler": "Mercury",
+        "exaltation": "Mercury",
+        "exaltation_degree": 15,
+        "detriment": "Jupiter",
+        "fall": "Venus",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Lilly, Christian Astrology 1647 — 'the house and exaltation of Mercury', verified via grammars/renaissance-lilly; Ptolemy, Tetrabiblos I — 'Mercury's exaltation and joy', verified via grammars/tetrabiblos-ashmand); degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-libra",
+      "name": "Libra",
+      "symbol": "♎",
+      "category": "sign",
+      "sort_order": 13,
+      "sections": {
+        "Dignities table": "Ruler: Venus · Exaltation: Saturn (21°) · Detriment: Mars · Fall: Sun",
+        "Canonical": "Venus's diurnal house, unchanged in modern practice. Saturn exalted here — the tradition's picture of judgment at its fairest — survives intact in modern astrology. Mars in detriment, the Sun in fall: force and self-assertion both asked to defer in the sign of the other."
+      },
+      "keywords": ["libra", "venus", "saturn", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Libra",
+        "ruler": "Venus",
+        "exaltation": "Saturn",
+        "exaltation_degree": 21,
+        "detriment": "Mars",
+        "fall": "Sun",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647); Saturn's degree per the Dorotheus/al-Biruni lineage (both carry 21° Libra), cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-scorpio",
+      "name": "Scorpio",
+      "symbol": "♏",
+      "category": "sign",
+      "sort_order": 14,
+      "sections": {
+        "Dignities table": "Ruler: Mars · Exaltation: — (none in the classical seven-planet scheme) · Detriment: Venus · Fall: Moon",
+        "Canonical": "Mars's nocturnal house — Ptolemy: \"Scorpio is, like Aries, the house of Mars, and also his joy\" (verified via grammars/tetrabiblos-ashmand). MODERN ADDITION, clearly marked: after 1930 most modern astrologers assign Scorpio to Pluto, with Mars as traditional or co-ruler. Venus in detriment, the Moon in fall: affection and instinct both pulled into the sign's extremes."
+      },
+      "keywords": ["scorpio", "mars", "pluto", "ruler", "modern co-ruler", "dignity", "sign"],
+      "metadata": {
+        "sign": "Scorpio",
+        "ruler": "Mars",
+        "modern_co_ruler": "Pluto",
+        "exaltation": null,
+        "exaltation_degree": null,
+        "detriment": "Venus",
+        "fall": "Moon",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647); Pluto co-rulership is a post-1930 modern convention"
+      }
+    },
+    {
+      "id": "dig-sagittarius",
+      "name": "Sagittarius",
+      "symbol": "♐",
+      "category": "sign",
+      "sort_order": 15,
+      "sections": {
+        "Dignities table": "Ruler: Jupiter · Exaltation: — (none in the classical seven-planet scheme) · Detriment: Mercury · Fall: — (no classical planet falls here)",
+        "Canonical": "Jupiter's diurnal house, unchanged in modern practice. Mercury in detriment: particulars lost in the big picture — the exact mirror of Jupiter's detriment in Gemini. No classical planet is exalted or falls here."
+      },
+      "keywords": ["sagittarius", "jupiter", "mercury", "ruler", "detriment", "dignity", "sign"],
+      "metadata": {
+        "sign": "Sagittarius",
+        "ruler": "Jupiter",
+        "exaltation": null,
+        "exaltation_degree": null,
+        "detriment": "Mercury",
+        "fall": null,
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647)"
+      }
+    },
+    {
+      "id": "dig-capricorn",
+      "name": "Capricorn",
+      "symbol": "♑",
+      "category": "sign",
+      "sort_order": 16,
+      "sections": {
+        "Dignities table": "Ruler: Saturn · Exaltation: Mars (28°) · Detriment: Moon · Fall: Jupiter",
+        "Canonical": "Saturn's nocturnal house — stated by both source voices: Ptolemy, \"Capricorn is the house of Saturn and exaltation of Mars\" (verified via grammars/tetrabiblos-ashmand), and Lilly's Capricorn chapter likewise (verified via grammars/renaissance-lilly). Rulership unchanged in modern practice. Mars exalted at 28°: aggression at its most effective — aimed, patient, structural. The Moon in detriment, Jupiter in fall: feeling and bounty both put on a budget."
+      },
+      "keywords": ["capricorn", "saturn", "mars", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Capricorn",
+        "ruler": "Saturn",
+        "exaltation": "Mars",
+        "exaltation_degree": 28,
+        "detriment": "Moon",
+        "fall": "Jupiter",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647 — verified via grammars/renaissance-lilly); Mars's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026"
+      }
+    },
+    {
+      "id": "dig-aquarius",
+      "name": "Aquarius",
+      "symbol": "♒",
+      "category": "sign",
+      "sort_order": 17,
+      "sections": {
+        "Dignities table": "Ruler: Saturn · Exaltation: — (none in the classical seven-planet scheme) · Detriment: Sun · Fall: — (no classical planet falls here)",
+        "Canonical": "Saturn's diurnal house — Ptolemy: \"Aquarius also is the house of Saturn\" (verified via grammars/tetrabiblos-ashmand). MODERN ADDITION, clearly marked: after 1781 most modern astrologers assign Aquarius to Uranus, with Saturn as traditional or co-ruler. The Sun in detriment: the singular self de-centered in the sign of the collective."
+      },
+      "keywords": ["aquarius", "saturn", "uranus", "ruler", "modern co-ruler", "dignity", "sign"],
+      "metadata": {
+        "sign": "Aquarius",
+        "ruler": "Saturn",
+        "modern_co_ruler": "Uranus",
+        "exaltation": null,
+        "exaltation_degree": null,
+        "detriment": "Sun",
+        "fall": null,
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647); Uranus co-rulership is a post-1781 modern convention"
+      }
+    },
+    {
+      "id": "dig-pisces",
+      "name": "Pisces",
+      "symbol": "♓",
+      "category": "sign",
+      "sort_order": 18,
+      "sections": {
+        "Dignities table": "Ruler: Jupiter · Exaltation: Venus (27°) · Detriment: Mercury · Fall: Mercury",
+        "Canonical": "Jupiter's nocturnal house — stated by both source voices: Ptolemy, \"Pisces is the house of Jupiter and exaltation of Venus\" (verified via grammars/tetrabiblos-ashmand), and Lilly, \"the house of Jupiter, and exaltation of Venus\" (verified via grammars/renaissance-lilly). MODERN ADDITION, clearly marked: after 1846 most modern astrologers assign Pisces to Neptune, with Jupiter as traditional or co-ruler. Mercury is BOTH in detriment and in fall here — the table's sharpest debility, analysis dissolved. Venus exalted at 27° (some tables 28°): love universalized past the personal."
+      },
+      "keywords": ["pisces", "jupiter", "neptune", "venus", "mercury", "ruler", "exaltation", "dignity", "sign"],
+      "metadata": {
+        "sign": "Pisces",
+        "ruler": "Jupiter",
+        "modern_co_ruler": "Neptune",
+        "exaltation": "Venus",
+        "exaltation_degree": 27,
+        "detriment": "Mercury",
+        "fall": "Mercury",
+        "confidence": "high",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647 — verified via grammars/renaissance-lilly); Venus 27° per most listings, 28° in some — cross-checked Jul 2026; Neptune co-rulership is a post-1846 modern convention"
+      }
+    }
+  ],
+  "_grammar_commons": {
+    "schema_version": "1.0",
+    "license": "CC-BY-SA-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": [
+      {
+        "name": "Claudius Ptolemy, Tetrabiblos, trans. J. M. Ashmand (1822)",
+        "role": "source text (public domain) — domicile/exaltation-sign statements quoted verbatim via grammars/tetrabiblos-ashmand in this repo, where they were verified against the Gutenberg #70850 text",
+        "link": "https://www.gutenberg.org/ebooks/70850"
+      },
+      {
+        "name": "William Lilly, Christian Astrology (1647)",
+        "role": "source text (public domain) — table of essential dignities and the +5/+4/+3/+2/+1 (−5/−4) scoring; sign-chapter wording verified via grammars/renaissance-lilly in this repo",
+        "link": "https://archive.org/details/christian-astrology-1647"
+      },
+      {
+        "name": "Zadkiel (ed.), An Introduction to Astrology (1852 abridgment of Lilly)",
+        "role": "supplementary source (public domain) for Lilly's general dignity doctrine ('lord of his own house, estate, and fortune'; the exalted significator as 'a person of haughty condition'), located this session via sacred-texts.com's reproduction of ch. XVII, 'Of the Essential Dignities of the Planets'",
+        "link": "https://sacred-texts.com/astro/aia/aia20.htm"
+      },
+      {
+        "name": "PlayfulProcess",
+        "role": "compiled as a recursive.eco grammar for The Recursive Astrology, Jul 2026; exaltation degrees cross-checked against multiple independent listings (Wikipedia 'Exaltation (astrology)'; al-Biruni and Dorotheus as reported by secondary scholarship; renaissanceastrology.com) — direct fetches of primary scans were network-blocked this session, so degree verification rests on the agreement of several independent secondary listings, noted honestly here"
+      }
+    ]
+  }
+}
