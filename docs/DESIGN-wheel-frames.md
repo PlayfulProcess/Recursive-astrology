@@ -134,3 +134,58 @@ per-entity stack) but keyed on **houses** instead of planets.
   the dialog (the existing, already-accessible interaction) as the single source of the
   meaning rather than adding a second UI surface that could drift from it. Save-as-grammar and
   emergence-authoring (order-of-work items 2–3) are untouched, per this round's scope.
+
+## Round 2 (Jul 9 2026): the reader picks which grammars stack — `grammar-picker.js`
+
+Builder: *"in the astro viewers I want the flexibility to pull different grammars. we could
+recon grammars with houses and render there and highlight the ones for which they populate.
+maybe we can multiselect and stack several grammars."* Round 1 stacked EVERY house-bearing
+grammar automatically, with no reader control — this round gives the reader the wheel.
+
+- **New shared module, `grammar-picker.js`** (repo root — the same "plain shared `<script>`,
+  no bundler" pattern `site-header.js`/`icons.js`/`site-footer.js` already use, since this
+  repo has no build step). It owns three things Round 1 had hardcoded inline in `wheel.html`:
+  loading `grammars/_collection.json` + every `grammar.json` once, detecting what each
+  grammar "has" (`house`/`planet`/`sign` — via `category` OR `metadata.<shape>`, the exact
+  same data-shape inference `findHouseItem`/`findPlanetItem` already used, never a
+  `document_type` or slug check — see CLAUDE.md's "grammar types are dead code"), and
+  rendering the picker UI itself: a chip checklist, live multi-select, `localStorage`-backed
+  per-viewer persistence.
+- **Highlight, don't hide.** Chips for grammars that populate the current view (`shape:
+  'house'` on `wheel.html`) render full-ink and get the "on" highlight treatment when
+  selected; chips for grammars that don't are shown de-emphasized (dimmed, italic) but
+  never removed from the list — the family's honesty convention (show the gap, don't erase
+  it) applied to the picker itself, not just to the per-entity "No entry for House N in this
+  voice" cards Round 1 already had.
+- **`wheel.html`** now sources `TRADITIONS` from the picker's live selection instead of an
+  unconditional "every house-bearing grammar" fetch. Default selection = every house-bearing
+  grammar (so a reader who never touches the picker sees the exact same 5-voice stack Round 1
+  shipped — no regression), narrowed live from there. The picker's `onChange` also refreshes
+  an already-open house dialog in place, reusing Round 1's loading-race refresh path
+  (`buildHouseDialogBody(OPEN_HOUSE)`).
+- **`viewers/lenses.html`** already had its own working live multi-select (the "Grammars"
+  deck panel) from before this round — its gap was purely "highlight which populate the
+  current view." Added `currentEntityKey` tracking (resolved from whichever entity-scoped
+  lens — Synopsis/Ribbon/Small-multiples — is active; `null` for Matrix/Reader, which aren't
+  about one entity) and a `dp-has`/`dp-gap` class in the existing panel, not a second
+  picker implementation — `lenses.html`'s data model (a flat `ITEMS` list keyed by
+  `cardKey`) doesn't map cleanly onto `grammar-picker.js`'s per-grammar "shapes" concept, so
+  reusing the shared module here would have forced an awkward abstraction rather than a
+  clean fit; the two pickers share the same *convention* (highlight what populates, dim
+  what doesn't, never hide) without sharing code that doesn't actually overlap.
+- **`archetypal.html` intentionally untouched.** The builder's request said "viewers"
+  generally, but `archetypal.html`'s all-grammars-always-on stacking is its own explicit
+  design (see `docs/DESIGN-archetypal.md`) and wasn't called out as broken; `wheel.html` was
+  named directly as the safe, clearly-requested target. A picker for `archetypal.html`
+  (`shape: 'planet'`) is a natural drop-in with `grammar-picker.js` already built, if a
+  future round wants it.
+- **Playwright-verified** at 390×844: `wheel.html`'s picker lists all 17 grammars, exactly 5
+  highlighted as house-bearing (cross-checked against the page's own loaded data — matched
+  exactly); default selection stacks 5 voice cards (byte-identical to Round 1); selecting
+  exactly 2 grammars stacks exactly 2 cards; deselecting one and reopening a house shows 1 —
+  live, no page reload. `lenses.html`'s highlight for the entity "Saturn" matched the page's
+  own `ITEMS` computation exactly (8 of 17 grammars); unchecking one has-Saturn grammar
+  live-dropped the Synopsis view from 8 columns to 7, no reload. Found and fixed in passing:
+  `lenses.html`'s deck-panel toggle button only flipped the panel's `open` CSS class without
+  rebuilding its contents, so opening the panel after picking a new entity showed stale
+  (unhighlighted) markup from page load — now rebuilds on open.

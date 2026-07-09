@@ -48,6 +48,13 @@
   #deckpanel .pbtns button{flex:1;font-size:11px;padding:5px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;color:var(--text);cursor:pointer}
   #deckpanel label{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 2px;cursor:pointer}
   #deckpanel label .yr{color:var(--muted);font-size:11px;margin-left:auto}
+  /* Highlight which grammars actually have the currently-viewed entity — same
+     "show gaps, don't hide them" convention as grammar-picker.js: has-entity
+     stays full ink, no-entity is visible but de-emphasized, never removed. */
+  #deckpanel .dp-hint{font-size:11px;color:var(--muted);margin:0 0 8px;font-style:italic}
+  #deckpanel label.dp-has span.dp-label{font-weight:600;color:var(--text)}
+  #deckpanel label.dp-gap{opacity:.55}
+  #deckpanel label.dp-gap span.dp-label{font-style:italic}
 
   /* Matrix */
   table.matrix{border-collapse:collapse;font-size:12px}
@@ -167,6 +174,13 @@ let DECKS=[];        // [{slug,label,year,branch}] from the collection, sorted b
 let SELECTED=new Set();  // selected grammar slugs
 let ITEMS=[];        // flat: {deck,label,year,id,name,sections,image,cardKey,cardOrder,category}
 let SECGROUPS=[];
+// The entity the reader is currently looking at, whenever the active lens view is
+// entity-scoped (Synopsis/Ribbon/Small multiples all resolve to one `card`); null
+// for Matrix/Reader, which aren't about a single entity. Drives the "which
+// grammars actually populate this" highlight in the grammar picker below —
+// builder's ask: "recon grammars with houses [entities] and highlight the ones
+// for which they populate."
+let currentEntityKey=null;
 const SYNTHESIS={};  // no cross-grammar evolution commentary file exists for this repo (yet) — always empty
 function synthHTML(){ return ''; }
 
@@ -234,10 +248,26 @@ function cardOptionsHTML(sel){
 }
 
 // ── grammar picker ───────────────────────────────────────────────────────────────
+// Which decks actually have the currently-viewed entity — data-shape inference
+// (does any item in this deck share the entity's cardKey?), never a slug/type check.
+function decksWithCurrentEntity(){
+  if(!currentEntityKey) return null;
+  const has=new Set(ITEMS.filter(i=>i.cardKey===currentEntityKey).map(i=>i.deck));
+  return has;
+}
 function renderDeckPanel(){
   const p=document.getElementById('deckpanel');
+  const hasSet=decksWithCurrentEntity();
+  const hint = hasSet
+    ? `<p class="dp-hint">${hasSet.size} of ${DECKS.length} grammars have “${esc(cardLabel(currentEntityKey))}” — those are highlighted below.</p>`
+    : '';
   p.innerHTML=`<div class="pbtns"><button data-a="all">All</button><button data-a="none">None</button><button data-a="primary">Primary sources</button></div>`+
-    DECKS.map(d=>`<label><input type="checkbox" data-slug="${esc(d.slug)}" ${SELECTED.has(d.slug)?'checked':''}> ${esc(d.label)} <span class="yr">${d.year<9999?d.year:''}</span></label>`).join('');
+    hint+
+    DECKS.map(d=>{
+      const has = hasSet ? hasSet.has(d.slug) : null;
+      const cls = has===null ? '' : (has ? 'dp-has' : 'dp-gap');
+      return `<label class="${cls}" data-slug="${esc(d.slug)}"><input type="checkbox" data-slug="${esc(d.slug)}" ${SELECTED.has(d.slug)?'checked':''}> <span class="dp-label">${esc(d.label)}</span> <span class="yr">${d.year<9999?d.year:''}</span></label>`;
+    }).join('');
   p.querySelectorAll('input').forEach(cb=>cb.onchange=()=>{ cb.checked?SELECTED.add(cb.dataset.slug):SELECTED.delete(cb.dataset.slug); afterDeckChange(); });
   p.querySelectorAll('.pbtns button').forEach(b=>b.onclick=()=>{
     if(b.dataset.a==='all') SELECTED=new Set(DECKS.map(d=>d.slug));
@@ -406,6 +436,16 @@ function render(arg){
   });
   if(cur==='reader'){ on('rd-deck','onchange',e=>{readerDeck=e.target.value;readerIdx=0;render();});
     on('rd-prev','onclick',()=>{readerIdx--;render();}); on('rd-next','onclick',()=>{readerIdx++;render();}); }
+
+  // Track the entity currently in view — only Synopsis/Ribbon/Small-multiples are
+  // entity-scoped (each resolves to one `card` via its own <select>); Matrix/Reader
+  // aren't about a single entity, so the picker's highlight clears for those.
+  const entitySelectId = cur==='synopsis' ? 'syn-sel' : cur==='ribbon' ? 'rib-sel' : cur==='multiples' ? 'mul-sel' : null;
+  const nextEntityKey = entitySelectId ? (document.getElementById(entitySelectId)?.value || null) : null;
+  if (nextEntityKey !== currentEntityKey) {
+    currentEntityKey = nextEntityKey;
+    if (document.getElementById('deckpanel').classList.contains('open')) renderDeckPanel();
+  }
 }
 function buildTabs(){
   document.getElementById('tabs').innerHTML=VIEWS.map(v=>`<span class="tab ${v[0]===cur?'on':''}" data-v="${v[0]}">${v[1]}</span>`).join('');
@@ -418,7 +458,16 @@ function buildTabs(){
   await load();
   buildTabs(); renderDeckPanel();
   const db=document.getElementById('deckbtn'); db.style.display=''; db.textContent=`✦ Grammars (${SELECTED.size}/${DECKS.length}) ▾`;
-  db.onclick=()=>document.getElementById('deckpanel').classList.toggle('open');
+  db.onclick=()=>{
+    const panel=document.getElementById('deckpanel');
+    const opening=!panel.classList.contains('open');
+    panel.classList.toggle('open');
+    // Rebuild on open so the highlight reflects whatever entity is currently in
+    // view — the panel's last render could be stale (e.g. built at page load,
+    // before any entity was picked) since render() only refreshes it in place
+    // while it's already open.
+    if(opening) renderDeckPanel();
+  };
   // Deep-link: ?card=<entity-key> lands on that entity in the Synopsis
   const deep=new URLSearchParams(location.search).get('card');
   if(deep && cardOptions().includes(deep)){ cur='synopsis'; buildTabs(); render(deep); }

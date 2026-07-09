@@ -1,5 +1,74 @@
 # Changelog — The Recursive Astrology
 
+## July 9, 2026 — Assistant/header z-index fix + grammar picker on `wheel.html` and `lenses.html`
+
+**Bug fix: the site's own sticky header was painting over the assistant panel's top content.**
+Builder reported (screenshot on a course page, mid-chat-response) the header covering the
+first lines of the assistant's reply while scrolling. Root cause, confirmed by reading the
+actual shared source (`recursive-eco/apps/landing/js/assistant-launcher.js`, fetched via the
+GitHub API since `recursive.eco` is network-blocked from this sandbox): `.rec-assistant-shell`
+is `z-index:45` — LOWER than this site's own sticky `<site-header>` (`site-header.js`,
+`z-index:50`). Both are `position:fixed`/`sticky` elements competing directly at the document
+root, so the bigger number simply wins — no stacking-context trap, no missing
+`scroll-margin-top`. `site-header.js` also **auto-hides on scroll-down and reveals on
+scroll-up** (a normal reading gesture), which re-plants the header at `top:0` while the
+assistant panel (fixed, unaffected by page scroll) is open — that's the exact moment the
+header's opaque background paints over the panel's top ~129px.
+- **Reproduced deterministically** with Playwright: a repro page with the real
+  `site-header.js` + the real `.rec-assistant-shell`/`.rec-open` CSS (values copied from the
+  fetched source), scrolled down then up (triggering the reveal), then
+  `document.elementFromPoint()` at the overlap band's midpoint returned `SITE-HEADER` before
+  the fix and the assistant's own message `DIV` after — the same coordinate-overlap technique
+  `TourRunner.tsx`'s `?tour-debug=1` uses in the sibling flow app.
+- **Fix** (`assistant.js`): after loading the shared launcher, inject one override rule —
+  `.rec-assistant-shell{z-index:2147483000!important}` — forcing the panel to always sit above
+  any page chrome regardless of the shared launcher's current or future z-index. The proper
+  long-term fix is bumping the z-index in the shared launcher itself (it's meant to be the
+  topmost layer on every recursive.eco family site) — that file lives in the private
+  `recursive-eco` repo and needs its own session/approval; this is the safe, self-contained
+  stopgap on this repo's side. (`recursive-tarot`'s own header is also `z-index:50` — worth a
+  matching stopgap there if/when it adopts this same shared launcher.)
+
+**Feature: a user-curated, multi-select grammar picker for the "every voice" stack.**
+Builder: *"in the astro viewers I want the flexibility to pull different grammars. we could
+recon grammars with houses and render there and highlight the ones for which they populate.
+maybe we can multiselect and stack several grammars."* Before this, `wheel.html` (and
+`archetypal.html`) auto-loaded and stacked EVERY public grammar with no reader control.
+- **New shared module `grammar-picker.js`** (repo root, alongside `site-header.js`/`icons.js`
+  — no bundler, so a plain shared `<script>` is this family's existing pattern for
+  cross-page code): loads `grammars/_collection.json` + every `grammar.json` once, detects
+  what each grammar "has" (`house`/`planet`/`sign` — by `category` OR `metadata.<shape>`,
+  the same data-shape inference `findHouseItem`/`findPlanetItem` already use — never a
+  `document_type`/slug check), and renders a chip checklist: chips that populate the
+  current view stay full-ink and highlighted when selected; chips that don't are shown
+  de-emphasized (dimmed, italic) but **never hidden** — the family's honesty convention is
+  to show gaps, not hide them. Every toggle fires `onChange` immediately — no page reload,
+  no "Load" button. Selection persists per-viewer via `localStorage`.
+- **`wheel.html`**: replaced its hardcoded `loadTraditions()` (fetch-all, filter by
+  `category==='house'`, stack unconditionally) with `GrammarPicker.create({shape:'house', ...})`.
+  Default selection = every house-bearing grammar (byte-identical stack to before: 5 voices —
+  Ptolemy, Proctor, Alan Leo, Astro-of-all-astros, Western Astrology Canonical), so nothing
+  regresses for a reader who never touches the picker; narrowing the selection now narrows
+  the stack live, including while a house dialog is later reopened.
+- **`viewers/lenses.html`**: it already had its own working live multi-select ("Grammars"
+  panel) — the gap was purely "highlight which ones populate the current view." Added
+  `currentEntityKey` tracking (the entity resolved by whichever entity-scoped lens —
+  Synopsis/Ribbon/Small-multiples — is active; null for Matrix/Reader, which aren't
+  entity-scoped) and a `dp-has`/`dp-gap` highlight in the existing deck panel, plus a count
+  line ("8 of 17 grammars have 'Saturn'"). Fixed in passing: the deck-button click handler
+  only toggled the panel's `open` class without rebuilding it, so opening the panel after
+  picking a new entity showed stale (unhighlighted) content — now rebuilds on open.
+  `archetypal.html` intentionally left untouched per the builder's explicit "always on"
+  every-voice design for that page.
+- **Playwright-verified** at 390×844 (headless Chromium, local `python3 -m http.server`):
+  `wheel.html` picker lists all 17 grammars, exactly 5 highlighted as house-bearing
+  (cross-checked against the page's own data, matched); default selection stacks 5 voice
+  cards (no regression); selecting 2 stacks 2; deselecting one and reopening a house shows 1
+  — live, no navigation. `lenses.html`'s picker highlight for "Saturn" matched the page's own
+  `ITEMS` data exactly (8 of 17); unchecking one has-Saturn grammar dropped the Synopsis
+  column count from 8 to 7 live, no reload. No console/page errors from either page's own
+  code (only the sandbox's expected network blocks on the assistant launcher script).
+
 ## July 8, 2026 (2) — Archetypal Astrology: planetary pairs, after Tarnas (`archetypal.html`)
 
 New grammar + its own dedicated UI, per the builder's direction: "Archetypal astrology of

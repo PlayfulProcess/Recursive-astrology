@@ -70,6 +70,7 @@
 </head>
 <body>
 <script src="site-header.js?v=45"></script>
+<script src="grammar-picker.js?v=1"></script>
 <site-header active="wheel"></site-header>
 <div class="wrap">
   <header class="hero">
@@ -91,6 +92,8 @@
   </div>
   <p class="frame-hint" id="frame-hint"></p>
 
+  <div id="grammar-picker"></div>
+
   <div class="stage"><svg class="wheel" id="wheel" viewBox="0 0 460 460" role="list"
     aria-label="The twelve houses of a chart, as a wheel"></svg></div>
 
@@ -103,12 +106,13 @@
     life — enter placements you already know, or simply reflect house by house. Data:
     <code>grammars/casting-twelve-houses/grammar.json</code>. The creed holds on every surface:
     a chart is a mirror and a calendar, never a command.
-    <b>The All Houses frame</b> (on by default — glowing sectors) also stacks every OTHER public
-    astrology grammar's own entry for the house you tap — Alan Leo, Ptolemy's Tetrabiblos, the
-    Victorian skeptic Proctor, the generated Astro-of-all-astros synthesis — read live from
-    <code>grammars/_collection.json</code>, matched by house number the same way
-    <a href="archetypal.html">Archetypal Astrology</a> matches planets. See
-    <a href="docs/DESIGN-wheel-frames.md">docs/DESIGN-wheel-frames.md</a>.
+    <b>The All Houses frame</b> (on by default — glowing sectors) also stacks whichever grammars
+    you pick above (every house-bearing voice, by default — Alan Leo, Ptolemy's Tetrabiblos, the
+    Victorian skeptic Proctor, the generated Astro-of-all-astros synthesis) for the house you tap —
+    read live from <code>grammars/_collection.json</code>, matched by house number the same way
+    <a href="archetypal.html">Archetypal Astrology</a> matches planets. The picker highlights which
+    grammars actually have house content and lets you narrow the stack to just the voices you want.
+    See <a href="docs/DESIGN-wheel-frames.md">docs/DESIGN-wheel-frames.md</a>.
   </div>
 </div>
 
@@ -194,35 +198,13 @@ function mdLite(s){
 }
 
 // ── voice matching — the same cross-grammar approach archetypal.html uses for planets,
-// keyed on houses: load the collection index, fetch every public grammar, and read house
-// items by id `house-N` (the convention every voice grammar in this repo follows) or, as
-// a fallback, `metadata.house` (some grammars store it as a string, some as a number, so
-// compare loosely). A "content-bearing" entry has a real section beyond a thin provenance
-// stub — inferred from the DATA shape, never from a slug check (see docs/DESIGN-archetypal.md).
-function contentBearing(item){
-  const keys = Object.keys(item.sections || {});
-  return keys.some(k => k !== 'See also');
-}
-
-function extractEra(g){
-  const attr = g.attribution || {};
-  const rawYearStr = attr.source_year || null;
-  let year = null, eraLabel = null, voiceLabel = attr.source_author || null;
-  if (rawYearStr) {
-    const ce = rawYearStr.match(/c\.\s*(\d{1,4})\s*CE/i);
-    if (ce) year = parseInt(ce[1], 10);
-    else { const y = rawYearStr.match(/(\d{3,4})/); if (y) year = parseInt(y[1], 10); }
-    eraLabel = rawYearStr;
-  }
-  if (year == null && g.author) {
-    const range = g.author.match(/(\d{4})\s*-\s*(\d{4})/);
-    if (range) { year = parseInt(range[2], 10); eraLabel = `${range[1]}–${range[2]}`; }
-    if (!voiceLabel) voiceLabel = g.author.replace(/\s*\([^)]*\)\s*/g, '').trim();
-  }
-  if (!voiceLabel) voiceLabel = (g.creator_name && g.creator_name !== 'PlayfulProcess') ? g.creator_name : (g.name || '').split(/[—-]/)[0].trim();
-  if (year == null) { year = Infinity; eraLabel = eraLabel || 'contemporary'; }
-  return { year, eraLabel, voiceLabel };
-}
+// keyed on houses: read house items by id `house-N` (the convention every voice grammar
+// in this repo follows) or, as a fallback, `metadata.house` (some grammars store it as a
+// string, some as a number, so compare loosely). A "content-bearing" entry has a real
+// section beyond a thin provenance stub (docs/DESIGN-archetypal.md). Collection loading +
+// shape detection + the multi-select picker itself live in grammar-picker.js, shared with
+// any other viewer that stacks "every voice" for an entity — see that file's header.
+const { contentBearing } = GrammarPicker;
 
 function findHouseItem(grammar, n){
   const items = grammar.items || [];
@@ -312,36 +294,26 @@ function draw(){
   });
 }
 
-async function loadJSON(path){
-  const r = await fetch(path, { cache: 'no-cache' });
-  if (!r.ok) throw new Error(String(r.status));
-  return r.json();
-}
-
-// Loads independently of CASTING/SET below — if a visitor taps a highlighted house before
-// this resolves, renderHouseVoiceStack() shows an honest "Loading every voice…" card (never
-// a silently blank grid — the exact race archetypal.html's Round 2 fixed, same pattern here).
-async function loadTraditions(){
-  try {
-    const col = await loadJSON('grammars/_collection.json');
-    const slugs = (col.grammars || []).map(g => g.slug);
-    const loaded = await Promise.all(slugs.map(async slug => {
-      try { return { slug, g: await loadJSON(`grammars/${slug}/grammar.json`) }; }
-      catch (e) { return { slug, g: null }; }
-    }));
-    TRADITIONS = loaded
-      .filter(({ g }) => g && Array.isArray(g.items) && g.items.some(it => it.category === 'house'))
-      .map(({ slug, g }) => ({ slug, grammar: g, ...extractEra(g) }))
-      .sort((x, y) => x.year - y.year || x.voiceLabel.localeCompare(y.voiceLabel));
-  } catch (e) {
-    TRADITIONS = [];
-  }
-  // if the dialog is already open on a framed house, refresh its stack in place
-  if (OPEN_HOUSE != null && $('#detail').open) buildHouseDialogBody(OPEN_HOUSE);
-}
-
 renderFramePills();
-loadTraditions();
+
+// Grammar picker (grammar-picker.js): loads every public grammar once, detects
+// which ones actually carry house content, and lets the reader multi-select
+// which voices stack in the "every voice" section of the house dialog — live,
+// no page reload. TRADITIONS mirrors the picker's current selection; if a
+// visitor taps a framed house before the picker's first load resolves,
+// renderHouseVoiceStack() shows an honest "Loading every voice…" card (never
+// a silently blank grid — the exact race archetypal.html's Round 2 fixed,
+// same pattern here), and every onChange (including that first load) refreshes
+// an already-open dialog in place.
+const grammarPicker = GrammarPicker.create({
+  mount: $('#grammar-picker'),
+  shape: 'house',
+  storageKey: 'wheel-grammar-picker-v1',
+  onChange(chosen){
+    TRADITIONS = chosen;
+    if (OPEN_HOUSE != null && $('#detail').open) buildHouseDialogBody(OPEN_HOUSE);
+  }
+});
 
 Promise.all([
   fetch('grammars/casting-twelve-houses/grammar.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }),
