@@ -47,17 +47,52 @@ edit to any course in the family (tarot, astro, I Ching, and whatever comes afte
   the honest relationship once, plainly, and move on.
 - **Don't open on a borrowed hero.** Ground the opening in the recursive.eco idea itself —
   we make belief in order to make meaning; a meaning is at best a map, never the whole
-  territory; when the map cracks (not a failure — just where an old map stopped fitting), we
-  make belief again, truer for having crashed — *before* reaching for an external authority
-  (Tolkien, Tarnas, Wallis, whoever). The authority earns their place later, in their own
-  section, credited and linked to the source — never as the reason the reader should start
-  caring in the first place.
+  territory; when a map stops serving us (not a failure — just a map meeting new territory),
+  we draw a new one, not truer, just better suited to where we actually are now — *before*
+  reaching for an external authority (Tolkien, Tarnas, Wallis, whoever). The authority earns
+  their place later, in their own section, credited and linked to the source — never as the
+  reason the reader should start caring in the first place. (Correction, Jul 9 2026: an
+  earlier version of this rule said "truer for having crashed" — the builder caught that this
+  still smuggles in a claim of progress/solidity the map metaphor is supposed to avoid. A new
+  map isn't truer than the old one; it's just what currently serves. Don't say "solid" and
+  "not solid" about the same belief in the same paragraph, either — pick one honest frame
+  (a map, never solid, always partial) and hold it.)
 - **Cut throat-clearing.** Delete meta-narration like "here is the shape of it, so you can
   see where we're headed before we walk through it line by line" — say the thing; don't
   announce that you're about to say the thing.
 - **Honesty is a chapter, not the opening line.** "There is no evidence X predicts anything"
   belongs in its own honest section (Phase 1's research discipline, above) — stated once,
   squarely. Don't lead the whole piece with a negative claim; warmth and thesis come first.
+
+## Post-draft audit checklist (added Jul 9 2026)
+
+Once a course reads as finished, run this pass before calling it done — these are the specific
+failure modes a live editing session on "How the Cards Can Work" caught after the fact:
+
+- **Absolutist statements.** Grep your own draft for "never," "always," "cannot," "impossible,"
+  "the only," "no one has ever." For each hit, ask: is this actually warranted, or is it a
+  rhetorical flourish that oversells the claim? "There is no reliable evidence X" is fine and
+  sourced; "X cannot happen" usually isn't earned by the evidence you actually have. Prefer
+  the honest, weaker claim — "no one has shown it" — over the stronger, false-precise one
+  ("it's impossible") unless you can actually source the stronger claim.
+- **Feeling tags.** Watch for adverbs and asides that tell the reader how to react instead of
+  just presenting the thing — "remarkably," "strikingly," "beautifully," "it's worth noting
+  that," "importantly." If the fact is genuinely striking, the reader will feel that without
+  being told to. Cut the tag; keep the fact.
+- **Don't assume a source's self-awareness.** Don't claim a cited author "knew" or "didn't
+  know" what they were doing, or attribute intent beyond what the text itself supports. Say
+  what the text argues, not what was going on in the writer's head.
+- **Don't invent authority through age.** Avoid rhetorical moves that treat "ancient" as a
+  synonym for "wise" or "true" (the tarot-Egyptian-origin myth is the canonical example of
+  this going wrong — a fabricated 18th-century backstory, not history). Age is not evidence.
+- **A list of examples isn't a numbered sequence.** If a source names several things without
+  claiming they're ordered or exhaustive (Tolkien's gifts of fantasy are the recurring case),
+  don't impose false rigor — "not a closed list, not a strict sequence" is more honest than
+  building an argument on an order the source didn't actually assert.
+- **One negative-then-positive pass per critique, not a back-and-forth.** When rebutting a
+  common criticism (e.g. "fiction/fantasy is just escapism, and escapism is cowardly"), state
+  the critique once, then land the reframe once. Don't alternate between the negative and
+  positive framing more than that — it reads as flip-flopping, not as argument.
 
 ## The principle under all of it
 
