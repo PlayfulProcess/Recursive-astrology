@@ -1,5 +1,20 @@
 # Changelog — The Recursive Astrology
 
+## July 11, 2026 — Grammar format docs consolidation
+
+`GRAMMAR_FORMAT.md` re-synced from the canonical `recursive.eco-schemas` copy
+(which gained `ref_item_id`, `performance.words`, and `_category_roles`/
+`_section_roles` documentation this round — all three were already-shipped,
+undocumented fields; `_category_roles`/`_section_roles` in particular are the
+exact custom-Vedic-category-name mechanism this repo's astrology viewer reads).
+The header note is now standardized: *"Mirrored copy — canonical version lives
+in recursive.eco-schemas; if they differ, that one wins."* (Previously pointed
+at `recursive-tarot` as authoritative — repointed to `recursive.eco-schemas`,
+where the format doc actually originates and is kept current.) Also synced the
+one added line in `docs/HOW-TO-WRITE-A-COURSE.md` (identical across
+tarot/astrology/starter): courses should link to `GRAMMAR_FORMAT.md` for field
+shapes, not restate them.
+
 ## July 9, 2026 — Astro enrichment lane: aspects + dignities commented grammars
 
 The parked "astro enrichment lane" from the builder's I Ching plan (recursive-starter

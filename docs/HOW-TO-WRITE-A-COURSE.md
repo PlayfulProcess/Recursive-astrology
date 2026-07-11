@@ -26,6 +26,8 @@ Synthesize the dossiers into **one-sentence thesis** + a **section outline**, an
 ### 3. Write the prose — in the builder's voice
 Author the course as a single `course/<slug>.mdx` (source of truth). Voice: **first-person, warm, humble, literary, willing to argue against itself, no AI-ish bullet sprawl.** Read the builder's own writing (her books repo, prior courses) to match register and borrow her load-bearing ideas *in her words* ("you just relate; the moon is relationship"; "right size" between hubris and despair). Close the loop: the final section should call back to the opening image so the whole reads as one gesture.
 
+**If a course needs to explain a grammar JSON field's shape** (what `composite_of` means, what `sections` are, what `ref_document_id` does), **don't restate it from memory** — link to [`GRAMMAR_FORMAT.md`](https://github.com/PlayfulProcess/recursive.eco-schemas/blob/main/GRAMMAR_FORMAT.md) and show only the minimal example the course's narrative actually needs. A restated field table drifts out of sync with the real schema the moment the schema changes; a link never does.
+
 ### 4. Deliver + verify + review
 - **Tarot:** the course-viewer renders MDX directly (`?course=<slug>`). Regenerate the compiled anthology + grammar mirrors (`scripts/course_to_grammar.py`, `scripts/build_reading_course.py`).
 - **Astro:** the course-viewer is grammar-driven. Convert the MDX into `grammars/<slug>/grammar.json` (each `##` section → one chapter item, prose in a `Reading` section), add `course/<slug>.manifest.json` naming its `sourceGrammar`, and register it in the `COURSES` map in `pages/course-viewer.html` + the Views menu in `site-header.js`. Default course (no `?course=`) must keep working.

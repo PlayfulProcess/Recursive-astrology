@@ -48,7 +48,7 @@ recursive-astrology/
 ├── CLAUDE.md                                        the rules of this commons (the creed is the spine)
 ├── CLAUDE-AI-INSTRUCTIONS.md                        the standing brief for app-connected sessions
 ├── ICONS.md                                         SVG glyph set — never emoji
-├── GRAMMAR_FORMAT.md                                the canonical shape of a grammar
+├── GRAMMAR_FORMAT.md                                mirrored grammar-JSON reference (canonical: recursive.eco-schemas)
 └── README.md                                        this file
 ```
 
