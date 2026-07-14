@@ -1025,7 +1025,10 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            z-index: 2147483647; /* Maximum z-index to ensure it's above fullscreen */
+            /* Above .css-fullscreen (9000) so detail popups always stack ON TOP
+               of a fullscreened chart. Both are ordinary body descendants, so
+               plain z-index ordering does the job — no reparenting, no 2^31 hack. */
+            z-index: 10000;
             display: none;
             align-items: center;
             justify-content: center;
@@ -1033,16 +1036,82 @@
             overflow-y: auto;
         }
 
-        /* When fullscreen is active, modal needs to be in the fullscreen container */
-        :fullscreen .modal-overlay,
-        :-webkit-full-screen .modal-overlay {
-            position: fixed;
-            z-index: 2147483647;
-        }
-
         .modal-overlay.active {
             display: flex;
         }
+
+        /* CSS-based fullscreen — replaces the native Fullscreen API.
+           Native fullscreen (a) doesn't work on non-video elements on iOS and
+           (b) creates a top-layer stacking context that hid body-level detail
+           modals behind the chart regardless of z-index. A fixed full-viewport
+           overlay has neither problem and works identically inside the flow
+           iframe. */
+        .css-fullscreen {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 9000 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            width: auto !important;
+            background: var(--v-stage-grad, linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%));
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 1rem;
+        }
+        /* Hide a container's own "enter fullscreen" affordance while it IS
+           fullscreen — the shared top-right X is the exit. */
+        .css-fullscreen .fs-enter-btn { display: none !important; }
+
+        /* Shared "exit fullscreen" X, pinned top-right (the official app pattern). */
+        .fs-close-btn {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9100;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid var(--v-line, rgba(255, 255, 255, 0.18));
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .fs-close-btn.active { display: flex; }
+        .fs-close-btn:hover { background: rgba(0, 0, 0, 0.75); transform: scale(1.08); }
+
+        /* Prev/next navigation arrows for the detail popup (planet/house/aspect).
+           Same interaction language as the flow app's tarot card modal: arrows
+           flank the content, X top-right closes, Esc/backdrop/swipe also close. */
+        .modal-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10001;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgb(var(--v-accent-rgb) / 0.85);
+            border: 1px solid var(--v-line, rgba(255, 255, 255, 0.18));
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .modal-nav:hover { background: rgb(var(--v-accent-rgb) / 1); transform: translateY(-50%) scale(1.08); }
+        .modal-nav-prev { left: 10px; }
+        .modal-nav-next { right: 10px; }
+        #planet-modal.has-nav.active .modal-nav { display: flex; }
 
         .modal-content {
             background: var(--v-modal-grad);
@@ -1695,7 +1764,7 @@
                         </div>
 
                         <div id="chart-wheel-container" class="hidden relative">
-                            <button onclick="toggleChartWheelFullscreen()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-sm px-2 py-1 bg-gray-900/80 rounded z-10" title="Toggle fullscreen">⛶</button>
+                            <button onclick="toggleChartWheelFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
                             <div class="zoom-controls">
                                 <button onclick="chartZoom(-1)" title="Zoom out">−</button>
                                 <button onclick="chartZoomReset()" title="Reset zoom">⟲</button>
@@ -1714,11 +1783,11 @@
                             <div id="chart-wheel"></div>
                         </div>
                         <div id="hd-mandala-container" class="hidden relative">
-                            <button onclick="toggleMandalaFullscreen()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-sm px-2 py-1 bg-gray-900/80 rounded z-10" title="Toggle fullscreen">⛶</button>
+                            <button onclick="toggleMandalaFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
                             <div id="hd-mandala" style="max-width: 500px; margin: 0 auto;"></div>
                         </div>
                         <div id="hd-bodygraph-container" class="hidden relative">
-                            <button onclick="toggleBodygraphFullscreen()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-sm px-2 py-1 bg-gray-900/80 rounded z-10" title="Toggle fullscreen">⛶</button>
+                            <button onclick="toggleBodygraphFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
                             <!-- Legend Mode Toggle -->
                             <div id="bodygraph-legend-toggle" class="flex justify-center gap-2 mb-3">
                                 <button onclick="setBodygraphLegendMode('activation')" class="bodygraph-legend-btn active text-xs px-3 py-1.5 rounded-full border transition-colors" data-mode="activation">By Activation</button>
@@ -1749,7 +1818,7 @@
                         <!-- Embed Header (only visible in embed mode) -->
                         <div class="embed-header">
                             <span class="chart-name" id="embed-chart-name">Birth Chart</span>
-                            <button onclick="toggleFullscreen()" title="Toggle fullscreen">⛶ Fullscreen</button>
+                            <button class="fs-enter-btn" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Enter fullscreen"><svg width="16" height="16" style="vertical-align:-2px" aria-hidden="true"><use href="icons.svg#expand"/></svg> Fullscreen</button>
                         </div>
 
                         <!-- Transit Toggle -->
@@ -1911,6 +1980,12 @@
 
     <!-- Planet Details Modal -->
     <div id="planet-modal" class="modal-overlay">
+        <button class="modal-nav modal-nav-prev" onclick="navigateDetail(-1)" aria-label="Previous item" title="Previous (←)">
+            <svg width="22" height="22" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
+        </button>
+        <button class="modal-nav modal-nav-next" onclick="navigateDetail(1)" aria-label="Next item" title="Next (→)">
+            <svg width="22" height="22" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+        </button>
         <div class="modal-content">
             <button class="modal-close" onclick="closePlanetModal()">&times;</button>
             <div id="planet-modal-content"></div>
@@ -4520,11 +4595,10 @@
                 </div>
             `;
 
-            // If in fullscreen, move modal into the fullscreen element
+            // Fullscreen is CSS-based, so the modal (z-index 10000) stacks above
+            // the fullscreened chart (z-index 9000) with no reparenting needed.
             const planetModal = document.getElementById('planet-modal');
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(planetModal);
-            }
+            updateDetailNavButtons();
             planetModal.classList.add('active');
         }
 
@@ -4840,11 +4914,10 @@
                 </div>
             `;
 
-            // If in fullscreen, move modal into the fullscreen element
+            // Fullscreen is CSS-based, so the modal (z-index 10000) stacks above
+            // the fullscreened chart (z-index 9000) with no reparenting needed.
             const planetModal = document.getElementById('planet-modal');
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(planetModal);
-            }
+            updateDetailNavButtons();
             planetModal.classList.add('active');
         }
 
@@ -5027,20 +5100,116 @@
                 </div>` : ''}
             `;
 
-            // If in fullscreen, move modal into the fullscreen element
+            // Fullscreen is CSS-based, so the modal (z-index 10000) stacks above
+            // the fullscreened chart (z-index 9000) with no reparenting needed.
             const planetModal = document.getElementById('planet-modal');
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(planetModal);
-            }
+            updateDetailNavButtons();
             planetModal.classList.add('active');
         }
 
         function closePlanetModal() {
             const modal = document.getElementById('planet-modal');
             modal.classList.remove('active');
-            // Move modal back to body if it was in a fullscreen element
-            if (modal.parentElement !== document.body) {
-                document.body.appendChild(modal);
+        }
+
+        // ============================================================
+        // DETAIL POPUP PREV/NEXT NAVIGATION
+        // ------------------------------------------------------------
+        // Step through sibling items (planets / houses / aspects) without
+        // closing the popup — same interaction as the flow app's tarot card
+        // modal. `lastDetailShown` records the open item; we rebuild the
+        // sibling list from the live horoscope and re-open the neighbour.
+        // ============================================================
+        function getNavPlanetKeys(h) {
+            if (!h?.CelestialBodies) return [];
+            return Object.keys(h.CelestialBodies).filter(k => h.CelestialBodies[k]?.Sign);
+        }
+
+        function getNavAspects(h) {
+            let aspects = [];
+            if (Array.isArray(h?.Aspects)) {
+                aspects = h.Aspects;
+            } else if (h?.Aspects?.points) {
+                Object.keys(h.Aspects.points).forEach(pointKey => {
+                    const pointAspects = h.Aspects.points[pointKey];
+                    if (Array.isArray(pointAspects)) {
+                        pointAspects.forEach(a => {
+                            if (a?.aspectedPointKey) {
+                                aspects.push({ planet1: pointKey, planet2: a.aspectedPointKey, aspect: a.aspectKey || 'unknown', orb: a.orb || 0 });
+                            }
+                        });
+                    }
+                });
+            }
+            const seen = new Set();
+            const uniq = aspects.filter(a => {
+                const key = [a.planet1, a.planet2].sort().join('-');
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+            const order = ['conjunction', 'opposition', 'square', 'trine', 'sextile', 'quincunx', 'semisextile'];
+            uniq.sort((a, b) => order.indexOf(a.aspect) - order.indexOf(b.aspect));
+            return uniq.map(a => ({
+                p1: PLANETS[a.planet1?.toLowerCase()] || { name: a.planet1, symbol: '?' },
+                p2: PLANETS[a.planet2?.toLowerCase()] || { name: a.planet2, symbol: '?' },
+                aspectInfo: ASPECTS[a.aspect?.toLowerCase()] || { name: a.aspect, symbol: '●' },
+                orb: a.orb || 0
+            }));
+        }
+
+        // How many siblings the currently-open detail can step through.
+        function detailSiblingCount() {
+            if (!lastDetailShown) return 0;
+            const h = currentChart?.horoscope;
+            if (!h) return 0;
+            if (lastDetailShown.type === 'planet') return getNavPlanetKeys(h).length;
+            if (lastDetailShown.type === 'house') return (h.Houses || []).length || 12;
+            if (lastDetailShown.type === 'aspect') return getNavAspects(h).length;
+            return 0;
+        }
+
+        // Show/hide the arrows depending on whether there's more than one sibling.
+        function updateDetailNavButtons() {
+            const modal = document.getElementById('planet-modal');
+            if (!modal) return;
+            modal.classList.toggle('has-nav', detailSiblingCount() > 1);
+        }
+
+        function navigateDetail(dir) {
+            if (!lastDetailShown) return;
+            const h = currentChart?.horoscope;
+            if (!h) return;
+            const { type, args } = lastDetailShown;
+
+            if (type === 'planet') {
+                const keys = getNavPlanetKeys(h);
+                if (keys.length < 2) return;
+                const i = keys.indexOf(args[0]);
+                if (i < 0) return;
+                const k = keys[(i + dir + keys.length) % keys.length];
+                const body = h.CelestialBodies[k];
+                const planet = PLANETS[k.toLowerCase()] || { name: k, symbol: '⚫' };
+                showPlanetDetails(k, body, planet);
+            } else if (type === 'house') {
+                const houses = h.Houses || [];
+                const count = houses.length || 12;
+                if (count < 2) return;
+                const n = args[0];
+                const nn = ((n - 1 + dir + count) % count) + 1;
+                const hd = houses[nn - 1];
+                const sign = ZODIAC_SIGNS.find(s => s.name.toLowerCase() === hd?.Sign?.label?.toLowerCase())
+                    || { symbol: '?', name: hd?.Sign?.label || 'Unknown' };
+                const house = HOUSES[nn] || {};
+                showHouseDetails(nn, sign, house);
+            } else if (type === 'aspect') {
+                const list = getNavAspects(h);
+                if (list.length < 2) return;
+                const curKey = [args[0]?.name, args[1]?.name].sort().join('|');
+                const i = list.findIndex(a => [a.p1.name, a.p2.name].sort().join('|') === curKey);
+                if (i < 0) return;
+                const a = list[(i + dir + list.length) % list.length];
+                showAspectDetails(a.p1, a.p2, a.aspectInfo, a.orb);
             }
         }
 
@@ -6020,105 +6189,115 @@
             toggleIcon.textContent = '▼';
         }
 
-        // Fullscreen toggle for embed mode - uses fullscreen API to expand within iframe
-        function toggleFullscreen() {
-            const elem = document.documentElement;
+        // ============================================================
+        // CSS-BASED FULLSCREEN (replaces the native Fullscreen API)
+        // ------------------------------------------------------------
+        // Why not the Fullscreen API: (1) element.requestFullscreen() is a
+        // no-op on non-video elements in iOS Safari (the builder tests on her
+        // phone inside the flow iframe); (2) a native-fullscreen element lives
+        // in the browser "top layer", so ANY modal appended to document.body
+        // renders behind it regardless of z-index — that was the "details
+        // hidden behind the chart" bug. A fixed full-viewport overlay has
+        // neither problem: the detail modal (z-index 10000) simply stacks above
+        // the fullscreened container (z-index 9000) by ordinary rules.
+        let cssFsContainer = null;
 
-            // Check if already in fullscreen
-            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        function isCssFullscreen() { return !!cssFsContainer; }
 
-            if (isFullscreen) {
-                // Exit fullscreen
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            } else {
-                // Enter fullscreen - this works within iframes that allow fullscreen
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                } else {
-                    // Fallback: notify parent to handle fullscreen or open in new tab
-                    if (isEmbedMode && window.parent !== window) {
-                        // Ask parent to toggle fullscreen on the iframe
-                        window.parent.postMessage({
-                            type: 'astrology-request-fullscreen',
-                            chartId: currentChartId
-                        }, '*');
-                    }
-                }
+        function getFsCloseBtn() {
+            let btn = document.getElementById('fs-close-btn');
+            if (!btn) {
+                btn = document.createElement('button');
+                btn.id = 'fs-close-btn';
+                btn.className = 'fs-close-btn';
+                btn.setAttribute('aria-label', 'Exit fullscreen');
+                btn.title = 'Exit fullscreen (Esc)';
+                btn.innerHTML = '<svg width="24" height="24" aria-hidden="true"><use href="icons.svg#close"/></svg>';
+                btn.addEventListener('click', exitCssFullscreen);
+                document.body.appendChild(btn);
+            }
+            return btn;
+        }
+
+        function enterCssFullscreen(container, onEnter) {
+            if (!container) return;
+            if (cssFsContainer && cssFsContainer !== container) exitCssFullscreen();
+            cssFsContainer = container;
+            container.classList.add('css-fullscreen');
+            getFsCloseBtn().classList.add('active');
+            // In embed mode, let the parent grow the iframe so the overlay fills
+            // the phone screen rather than just the iframe box (parent toggles).
+            if (isEmbedMode && window.parent !== window) {
+                window.parent.postMessage({ type: 'astrology-request-fullscreen', chartId: currentChartId, state: 'enter' }, '*');
+            }
+            if (onEnter) { try { onEnter(); } catch (e) { console.warn('fullscreen onEnter failed', e); } }
+        }
+
+        function exitCssFullscreen() {
+            if (!cssFsContainer) return;
+            const container = cssFsContainer;
+            cssFsContainer = null;
+            container.classList.remove('css-fullscreen');
+            const btn = document.getElementById('fs-close-btn');
+            if (btn) btn.classList.remove('active');
+            resetFullscreenSizing();
+            if (isEmbedMode && window.parent !== window) {
+                window.parent.postMessage({ type: 'astrology-request-fullscreen', chartId: currentChartId, state: 'exit' }, '*');
             }
         }
 
-        // Listen for fullscreen changes to update button text
-        document.addEventListener('fullscreenchange', updateFullscreenButton);
-        document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+        // Undo the inline sizing the per-view onEnter callbacks apply.
+        function resetFullscreenSizing() {
+            const bodygraph = document.getElementById('hd-bodygraph');
+            const bodygraphContainer = document.getElementById('hd-bodygraph-container');
+            const wheel = document.getElementById('chart-wheel');
+            const mandala = document.getElementById('hd-mandala');
+            if (bodygraph) { bodygraph.style.maxWidth = '400px'; bodygraph.style.height = 'auto'; }
+            if (bodygraphContainer) { bodygraphContainer.style.background = ''; }
+            if (wheel) { wheel.style.maxWidth = ''; wheel.style.height = ''; wheel.style.margin = ''; }
+            if (mandala) { mandala.style.maxWidth = '500px'; mandala.style.height = 'auto'; }
+        }
 
-        function updateFullscreenButton() {
-            const btn = document.querySelector('.embed-header button');
-            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-            if (btn) {
-                btn.textContent = isFullscreen ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
-            }
+        // Embed-header button → fullscreen the chart wheel (what the reader taps).
+        function toggleFullscreen() {
+            const container = document.getElementById('chart-wheel-container');
+            if (isCssFullscreen()) { exitCssFullscreen(); return; }
+            const wheel = document.getElementById('chart-wheel');
+            enterCssFullscreen(container, () => {
+                if (wheel) {
+                    wheel.style.maxWidth = 'min(95vmin, 1500px)';
+                    wheel.style.height = 'min(95vh, 1500px)';
+                    wheel.style.margin = 'auto';
+                }
+            });
         }
 
         // Fullscreen toggle for bodygraph
         function toggleBodygraphFullscreen() {
             const container = document.getElementById('hd-bodygraph-container');
             const bodygraph = document.getElementById('hd-bodygraph');
-
-            const isFullscreen = document.fullscreenElement;
-
-            if (isFullscreen) {
-                document.exitFullscreen();
-                bodygraph.style.maxWidth = '400px';
-                bodygraph.style.height = 'auto';
-                container.style.display = '';
-                container.style.alignItems = '';
-                container.style.justifyContent = '';
-                container.style.background = '';
-            } else {
-                container.requestFullscreen().then(() => {
-                    // Make container a flex container to center the bodygraph
-                    container.style.display = 'flex';
-                    container.style.alignItems = 'center';
-                    container.style.justifyContent = 'center';
-                    container.style.background = 'var(--v-stage-grad, linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%))';
-                    // Scale bodygraph to fit screen while maintaining aspect ratio (400x580)
-                    bodygraph.style.maxWidth = 'min(95vw, calc(95vh * 0.69))'; // aspect ratio 400/580 ≈ 0.69
-                    bodygraph.style.height = 'min(95vh, calc(95vw * 1.45))';   // aspect ratio 580/400 ≈ 1.45
-                }).catch(err => {
-                    console.warn('Fullscreen not available:', err);
-                });
-            }
+            if (isCssFullscreen()) { exitCssFullscreen(); return; }
+            enterCssFullscreen(container, () => {
+                if (bodygraph) {
+                    bodygraph.style.maxWidth = 'min(95vw, calc(95vh * 0.69))'; // aspect 400/580 ≈ 0.69
+                    bodygraph.style.height = 'min(95vh, calc(95vw * 1.45))';   // aspect 580/400 ≈ 1.45
+                }
+            });
         }
 
         // Fullscreen toggle for astrology wheel
         function toggleChartWheelFullscreen() {
             const container = document.getElementById('chart-wheel-container');
             const wheel = document.getElementById('chart-wheel');
-
-            const isFullscreen = document.fullscreenElement;
-
-            if (isFullscreen) {
-                document.exitFullscreen();
-            } else {
-                container.requestFullscreen().then(() => {
-                    // Scale wheel to ~250% of original (600px base -> 1500px)
+            if (isCssFullscreen()) { exitCssFullscreen(); return; }
+            enterCssFullscreen(container, () => {
+                if (wheel) {
+                    // Scale wheel up to fill the fullscreen overlay.
                     wheel.style.maxWidth = 'min(95vmin, 1500px)';
                     wheel.style.height = 'min(95vh, 1500px)';
                     wheel.style.margin = 'auto';
-                }).catch(err => {
-                    console.warn('Fullscreen not available:', err);
-                });
-            }
+                }
+            });
         }
 
         // === CHART ZOOM / PAN ===
@@ -6292,50 +6471,16 @@
         function toggleMandalaFullscreen() {
             const container = document.getElementById('hd-mandala-container');
             const mandala = document.getElementById('hd-mandala');
-
-            const isFullscreen = document.fullscreenElement;
-
-            if (isFullscreen) {
-                document.exitFullscreen();
-            } else {
-                container.requestFullscreen().then(() => {
-                    // Scale mandala to ~250% of original (500px base -> 1250px)
+            if (isCssFullscreen()) { exitCssFullscreen(); return; }
+            enterCssFullscreen(container, () => {
+                if (mandala) {
+                    // Scale mandala up to fill the fullscreen overlay.
                     mandala.style.maxWidth = 'min(95vmin, 1250px)';
                     mandala.style.height = 'min(95vh, 1250px)';
                     mandala.style.margin = 'auto';
-                }).catch(err => {
-                    console.warn('Fullscreen not available:', err);
-                });
-            }
+                }
+            });
         }
-
-        // Reset sizes when exiting fullscreen
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                const bodygraphContainer = document.getElementById('hd-bodygraph-container');
-                const bodygraph = document.getElementById('hd-bodygraph');
-                const wheel = document.getElementById('chart-wheel');
-                const mandala = document.getElementById('hd-mandala');
-                if (bodygraph) {
-                    bodygraph.style.maxWidth = '400px';
-                    bodygraph.style.height = 'auto';
-                }
-                if (bodygraphContainer) {
-                    bodygraphContainer.style.display = '';
-                    bodygraphContainer.style.alignItems = '';
-                    bodygraphContainer.style.justifyContent = '';
-                    bodygraphContainer.style.background = '';
-                }
-                if (wheel) {
-                    wheel.style.maxWidth = '';
-                    wheel.style.height = '';
-                }
-                if (mandala) {
-                    mandala.style.maxWidth = '500px';
-                    mandala.style.height = 'auto';
-                }
-            }
-        });
 
         function formatDegree(decimal) {
             if (typeof decimal !== 'number') return '0°0\'';
@@ -6397,20 +6542,49 @@
             return '?';
         }
 
-        // Close modal on escape
+        // Keyboard: Esc closes the open detail (else exits fullscreen); arrows step items.
         document.addEventListener('keydown', (e) => {
+            const planetModal = document.getElementById('planet-modal');
+            const detailOpen = planetModal && planetModal.classList.contains('active');
             if (e.key === 'Escape') {
+                const wasDetailOpen = detailOpen;
                 closePlanetModal();
                 closeSigninModal();
+                // Only exit fullscreen if no popup was open (Esc drills out one level).
+                if (!wasDetailOpen && isCssFullscreen()) exitCssFullscreen();
+            } else if (detailOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                e.preventDefault();
+                navigateDetail(e.key === 'ArrowLeft' ? -1 : 1);
             }
         });
 
-        // Close modal on overlay click
-        document.getElementById('planet-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'planet-modal') {
-                closePlanetModal();
-            }
-        });
+        // Close modal on overlay click; horizontal swipe steps items (mobile).
+        (function wireDetailModalGestures() {
+            const modal = document.getElementById('planet-modal');
+            modal.addEventListener('click', (e) => {
+                if (e.target.id === 'planet-modal') {
+                    closePlanetModal();
+                }
+            });
+            let touchStartX = 0, touchStartY = 0, touchActive = false;
+            modal.addEventListener('touchstart', (e) => {
+                if (e.touches.length !== 1) { touchActive = false; return; }
+                touchActive = true;
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            modal.addEventListener('touchend', (e) => {
+                if (!touchActive) return;
+                touchActive = false;
+                const t = e.changedTouches[0];
+                const dx = t.clientX - touchStartX;
+                const dy = t.clientY - touchStartY;
+                // Mostly-horizontal swipe past the threshold → navigate.
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                    navigateDetail(dx < 0 ? 1 : -1); // swipe left → next
+                }
+            }, { passive: true });
+        })();
 
         // Close sign-in modal on overlay click
         document.getElementById('signin-modal').addEventListener('click', (e) => {
@@ -7945,10 +8119,7 @@
                 ${interp}
             </div>`;
 
-            // If in fullscreen, move modal into the fullscreen element
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(modal);
-            }
+            // Fullscreen is CSS-based — the modal stacks above by z-index alone.
             modal.classList.add('active');
         }
 
@@ -8004,19 +8175,12 @@
                 </div>` : ''}
             </div>`;
 
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(modal);
-            }
             modal.classList.add('active');
         }
 
         function closeGateModal() {
             const modal = document.getElementById('gate-modal');
             modal.classList.remove('active');
-            // Move modal back to body if it was in a fullscreen element
-            if (modal.parentElement !== document.body) {
-                document.body.appendChild(modal);
-            }
         }
 
         // Close gate modal on escape

@@ -43,6 +43,11 @@
     <path d="M6 18L18 6M6 6l12 12"/>
   </symbol>
 
+  <!-- Expand / enter fullscreen (four corner arrows) -->
+  <symbol id="expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/>
+  </symbol>
+
   <!-- Copy / duplicate -->
   <symbol id="copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>

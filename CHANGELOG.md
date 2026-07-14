@@ -1,5 +1,45 @@
 # Changelog — The Recursive Astrology
 
+## July 14, 2026 — Chart viewer: CSS fullscreen, X-close, item detail prev/next
+
+Three long-standing bugs in `viewer/astrology-viewer.html` (the chart viewer the app
+embeds as an iframe in the Astro oracle tab, tested on phone), fixed at the root in this
+repo — earlier flow-side attempts couldn't help because the UI lives here.
+
+**1 — Detail popup now renders ON TOP of a fullscreen chart (stacking-context fix).**
+The chart previously went fullscreen via the native Fullscreen API. A natively-fullscreened
+element lives in the browser *top layer*, so any modal appended to `document.body` renders
+*behind* it no matter how high its z-index — hence the desperate `z-index: 2147483647` and
+the "reparent the modal into `document.fullscreenElement`" hacks, neither of which was
+robust (and native `requestFullscreen()` is a no-op on non-video elements on iOS Safari
+anyway). Replaced the native Fullscreen API with a **CSS-based fullscreen**: the container
+gets `position: fixed; inset: 0; z-index: 9000`, and detail modals sit at `z-index: 10000`,
+so ordinary stacking puts the popup above the chart with **no reparenting**. All four
+entry points (chart wheel, HD mandala, HD bodygraph, embed-header) now use it; the dead
+`:fullscreen .modal-overlay` rule, the `2147483647` values, and every `document.fullscreenElement`
+reparent block are gone.
+
+**2 — "Exit Fullscreen" text button → a top-right X (the app pattern).** While any view is
+fullscreen a single round **X** button (SVG `#close`) is pinned top-right; clicking it (or
+pressing **Esc**) exits. The old embed-header toggle that flipped its label to "⛶ Exit
+Fullscreen" is retired; enter affordances keep an SVG expand icon (added `#expand` to
+`viewer/icons.svg`) and, where they had one, a "Fullscreen" label.
+
+**3 — Prev/next navigation in the item detail popup.** The planet / house / aspect detail
+popup now has **‹ ›** arrows (SVG chevrons) flanking the content — step through sibling
+items without closing, matching the flow app's tarot-card modal. **X** top-right closes,
+**Esc** closes, **←/→** keys navigate, **horizontal swipe** navigates on mobile, tap-outside
+closes. Arrows auto-hide when there's only one sibling. Siblings are rebuilt live from the
+loaded horoscope (planets in wheel order, houses 1–12, aspects in the aspect-list order).
+
+`viewers/cards.html` was checked — its only "fullscreen" references are YouTube-iframe
+`allow` attributes and it already has a prev/next detail footer, so it needed no change.
+
+Verified locally with headless Chromium at a 390×844 mobile viewport against a synthetic
+chart: in fullscreen, tapping a planet paints the detail as the top element (modal z 10000 >
+chart z 9000); the X hit-tests as the top element and exits fullscreen; the arrows hit-test
+as the top element over the near-full-width popup and step Sun→Moon→Sun and across aspects.
+
 ## July 11, 2026 — Grammar format docs consolidation
 
 `GRAMMAR_FORMAT.md` re-synced from the canonical `recursive.eco-schemas` copy
