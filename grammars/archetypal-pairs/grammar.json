@@ -122,7 +122,7 @@
       },
       "sections": {
         "Archetype": "The Sun, in the broader archetypal-astrology tradition Tarnas works within, is the will-to-be-oneself — the organizing center around which a life composes itself, the light a person recognizes as unmistakably theirs. Its gift is vitality: purpose, self-expression, the courage to occupy the center of one's own story. Its shadow is the same gesture turned rigid — an ego that mistakes shining for being seen, or burns itself and everyone nearby chasing significance. Tarnas's own signature method reads planetary pairs in collective history rather than solo personal-planet portraits; this entry draws instead on the wider tradition his framework grows out of (Rudhyar's humanistic astrology chief among it), held as PlayfulProcess's synthesis, not a claim from Tarnas's own writing.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Sun's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-sun)."
+        "See also": "In the canonical Western reading, the Sun is core identity — conscious will, creative force, the organizing principle a life composes itself around. Its light is vitality, self-expression, and generous leadership; its shadow, an ego that inflates or burns itself out chasing achievement. The Sun's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -146,7 +146,7 @@
       },
       "sections": {
         "Archetype": "The Moon is the soul's own weather — memory, feeling, the wordless knowing that shapes a person before language does. It governs receptivity: the capacity to be moved, held, and to hold in turn, the tidal rhythm underneath a life's more visible ambitions. Its gift is attunement, an instinct for what a moment or a person actually needs. Its shadow is the tide with no shore: moods that flood a room, a need for safety so large it swallows the person feeling it. Tarnas's own signature method reads planetary pairs across collective history rather than solo personal-planet portraits; this entry draws on the wider humanistic-astrology tradition his framework grows out of (Rudhyar foremost), offered as PlayfulProcess's synthesis, not Tarnas's own claim.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Moon's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-moon)."
+        "See also": "In the canonical Western reading, the Moon is the emotional body — how you feel, what you need, where you seek comfort — governing instinct, memory, home, and nurture. Its light is receptivity, intuition, and emotional intelligence; its shadow, moodiness, dependency, and a clinging to the past. The Moon's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -170,7 +170,7 @@
       },
       "sections": {
         "Archetype": "Mercury is the connective principle — the quick, curious intelligence that moves between things and makes them speak to each other: thought, language, the nervous system's own restlessness. Its gift is the exact word, the useful question, a mind agile enough to translate one world into another. Its shadow is that same quickness turned glib — cleverness without depth, information without understanding, a trickster's charm used to dodge rather than connect. Tarnas's outer-planet correlations are his signature contribution; a solo Mercury portrait like this one leans instead on the broader archetypal-astrology tradition he draws from, offered as PlayfulProcess's synthesis rather than something found in his own texts.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Mercury's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-mercury)."
+        "See also": "In the canonical Western reading, Mercury is the mind in motion — thought, language, learning, and the bridges between things. Its light is curiosity, adaptability, and the exact word; its shadow, overthinking, scattered attention, and the trickster's glibness. Mercury's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -194,7 +194,7 @@
       },
       "sections": {
         "Archetype": "Venus is the drive toward relatedness — the pull to find what is beautiful, to be drawn toward another, to want harmony enough to build it. It governs eros in its gentler register: attraction, aesthetic pleasure, the values a person will actually organize a life around. Its gift is the capacity to love well and to make things worth loving. Its shadow is relatedness curdled into vanity, or a peace purchased by avoiding every real conflict. Tarnas's own signature work is the collective, historical reading of planetary pairs; a solo Venus portrait draws instead on the wider humanistic-astrology tradition around him, held here as PlayfulProcess's synthesis, not his own claim.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Venus's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-venus)."
+        "See also": "In the canonical Western reading, Venus is what you love, what you value, and how you attract — beauty, pleasure, relationship, and the principle of harmony. Her light is grace, magnetism, and devotion; her shadow, vanity, possessiveness, and a peace kept by pleasing everyone. Venus's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -218,7 +218,7 @@
       },
       "sections": {
         "Archetype": "Mars is assertive desire — the will that acts, the edge between wanting something and going to get it. It is eros's more combative twin: courage, initiative, the readiness to fight for what matters, including oneself. Its gift is aliveness with teeth, the energy that actually moves a life forward instead of merely wishing it would. Its shadow is that same force turned careless or cruel: aggression without aim, a temper that mistakes domination for strength. Tarnas reads Mars mostly inside larger complexes — paired with Venus's eros, or swept into the Uranus–Pluto correlations he traces through revolutionary history; a solo portrait like this one leans on the wider tradition his framework grows from, offered as PlayfulProcess's synthesis, not Tarnas's own words.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Mars's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-mars)."
+        "See also": "In the canonical Western reading, Mars is drive, desire, and fighting spirit — how you assert yourself, pursue what you want, and meet conflict. Its light is courage, initiative, and decisiveness; its shadow, aggression, impatience, and recklessness. Mars's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -242,7 +242,7 @@
       },
       "sections": {
         "Archetype": "Jupiter is the expansive principle — the impulse toward more: more meaning, more possibility, more room to grow into. It governs faith in the largest sense, the appetite that reaches past a life's current borders toward what could still be true. Its gift is genuine largeness of spirit — optimism that is earned, generosity that costs something. Its shadow is expansion without limit: overreach, excess, a confidence so total it stops checking itself against the world. Tarnas's own historical correlations pair Jupiter with Saturn as the classical dance of growth against limit; a solo Jupiter portrait draws on the broader tradition his method grows from, held here as PlayfulProcess's synthesis, not a claim from his own writing.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Jupiter's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-jupiter)."
+        "See also": "In the canonical Western reading, Jupiter is expansion, meaning, and faith — the search for truth and the capacity for growth, wisdom, and joy. Its light is generosity, optimism, and philosophical depth; its shadow, excess, overconfidence, and dogmatism. Jupiter's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -266,7 +266,7 @@
       },
       "sections": {
         "Archetype": "Saturn is necessity itself — structure, time, the limit that will not be argued with. It governs the reality principle: the discipline that turns a wish into a finished thing, the patience to stay with a difficulty long enough to actually learn from it. Its gift is mastery earned the slow way — competence, integrity, the kind of strength that only comes from having met a real limit and stayed. Its shadow is that same limit turned punitive: rigidity, fear, a harshness toward oneself or others mistaken for standards. Saturn anchors several of Tarnas's own signature correlations — Saturn–Pluto, Saturn–Uranus, Saturn–Neptune — where it plays the conserving, testing counterweight; this solo portrait, though, draws on the broader tradition around him rather than his own direct words, held as PlayfulProcess's synthesis.",
-        "See also": "This item exists here only so `composite_of` on the pairs below resolves locally, per GRAMMAR_FORMAT.md's rule (composite_of must reference an id in the same grammar). Saturn's full multi-voice reading — Canonical, Ptolemy, Lilly, Jyotiṣa, Alan Leo, Planetary Myths — is not duplicated here; it stacks live on archetypal.html from this repo's own voice grammars, and its single authoritative entry lives at grammars/western-astrology-canonical/grammar.json (id: planet-saturn)."
+        "See also": "In the canonical Western reading, Saturn is structure, time, and responsibility — the relationship to limits, mastery, and the hard-won wisdom of endurance. Its light is discipline, integrity, and perseverance; its shadow, rigidity, fear, and control mistaken for standards. Saturn's fuller multi-voice reading — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths — lives in this library's other voice grammars, where every tradition answers for the same planet in its own terms."
       }
     },
     {
@@ -854,5 +854,7 @@
         "A question": "What idea arrived for you complete, out of nowhere — and did you trust it, or wait for permission to take it seriously?"
       }
     }
-  ]
+  ],
+  "_recursive_eco_url": "https://flow.recursive.eco/play?id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=a1b2c3d4-5555-4a05-9e05-aa0000000005"
 }
