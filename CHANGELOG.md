@@ -1,5 +1,42 @@
 # Changelog — The Recursive Astrology
 
+## July 15, 2026 — Chart snapshot for AI interpretation (the "KEY")
+
+The Flow app can now attach an **image of the chart wheel** to its AI-interpretation
+prompt. When the reader asks for an AI reading, Flow's `AstrologyOracle` posts
+`{ type: 'astrology-request-chart-image' }` into the viewer iframe and waits (3s) for
+`{ type: 'astrology-chart-image', imageDataUrl }` back — `viewer/astrology-viewer.html`
+now answers that request by rasterizing the live chart to a PNG data URL. The protocol
+matches the Flow side exactly (it reads `event.data.imageDataUrl || null`); we add a
+harmless `view` field and, on any failure, an `error` string plus `imageDataUrl: null`
+so Flow degrades to a text-only reading instead of timing out.
+
+**What it captures.** The currently-*visible* chart view — the birth-chart **wheel**, or
+the **HD Mandala** / **HD Bodygraph** sub-views (whichever container isn't `.hidden`).
+One generic serializer handles all three.
+
+**Pitfalls handled (the previous stub got all of these wrong).**
+- **CSS custom properties don't exist in a standalone rasterized SVG.** The wheel paints
+  itself with `var(--v-fire-rgb)`, `var(--astro-gold)`, etc.; serialize it naïvely and
+  every themed fill collapses to **black**. Fix: enumerate every `--*` property the page
+  defines, resolve each against the *current* theme via `getComputedStyle(<html>)`, and
+  inline them onto the cloned SVG root (custom properties inherit, so descendant
+  presentation-attribute `var()` calls resolve).
+- **Transparent PNG of a dark chart is unreadable.** We paint a solid backing colour
+  (`--v-surface` — white in light, `#1a1a2e` in dark) onto the canvas before drawing.
+- **Grabbing the wrong SVG.** The view *container* also holds toolbar `<svg>` icon buttons
+  (fullscreen), so `container.querySelector('svg')` returned an 18×18 button icon. We query
+  the inner render target (`#chart-wheel svg` / `#hd-mandala svg` / `#hd-bodygraph svg`).
+- **Legibility vs. payload.** Rendered at **~2×** (capped at 1400px/side), then the data
+  URL is downscaled if it would exceed ~1.5 MB.
+
+**Verified with headless Chromium** (`/opt/pw-browsers/chromium`): loaded the viewer from
+a local `http.server`, injected a synthetic wheel using the same CSS-var fills the real
+renderer uses, simulated the parent's `postMessage` request, decoded the returned data
+URL to a **1000×1000 PNG (114 KB)**, and read the image — a clean white-background wheel
+with the four element-coloured zodiac segments, gold accent ring, purple ASC line, and
+legible glyphs/text. The colours prove the var-inlining path works (not a black square).
+
 ## July 15, 2026 — Round 2: homepage hero, grammar-switch fix, tarot-pattern detail chrome, one fullscreen
 
 Tablet round from the builder's live test. Five build items in `index.html` +

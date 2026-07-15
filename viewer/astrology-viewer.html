@@ -3040,51 +3040,13 @@
                     }
                 }
 
-                // Handle chart image capture request from parent
+                // Handle chart image capture request from parent (the "KEY" —
+                // lets the Flow AI interpretation attach an image of the wheel).
+                // Protocol (must match apps/flow AstrologyOracle.tsx):
+                //   parent → viewer: { type: 'astrology-request-chart-image' }
+                //   viewer → parent: { type: 'astrology-chart-image', imageDataUrl, view, error? }
                 if (event.data?.type === 'astrology-request-chart-image') {
-                    const svgEl = document.querySelector('#chart-wheel svg');
-                    if (svgEl) {
-                        try {
-                            const svgString = new XMLSerializer().serializeToString(svgEl);
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const img = new Image();
-                            img.onload = () => {
-                                // Cap canvas size for performance (800px max)
-                                const maxSize = 800;
-                                const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
-                                canvas.width = img.width * scale;
-                                canvas.height = img.height * scale;
-                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                                const pngDataUrl = canvas.toDataURL('image/png');
-                                window.parent.postMessage({
-                                    type: 'astrology-chart-image',
-                                    imageDataUrl: pngDataUrl
-                                }, '*');
-                            };
-                            img.onerror = (e) => {
-                                console.error('[Astrology Viewer] SVG-to-PNG conversion failed:', e);
-                                // Fallback: send null (SVG format not supported by OpenAI vision)
-                                window.parent.postMessage({
-                                    type: 'astrology-chart-image',
-                                    imageDataUrl: null
-                                }, '*');
-                            };
-                            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
-                        } catch (e) {
-                            console.error('[Astrology Viewer] Failed to capture chart image:', e);
-                            window.parent.postMessage({
-                                type: 'astrology-chart-image',
-                                imageDataUrl: null
-                            }, '*');
-                        }
-                    } else {
-                        console.warn('[Astrology Viewer] No SVG element found at #chart-wheel svg');
-                        window.parent.postMessage({
-                            type: 'astrology-chart-image',
-                            imageDataUrl: null
-                        }, '*');
-                    }
+                    captureActiveChartImage();
                 }
 
                 // Handle grammar selection from parent (Flow app). This is the
@@ -3162,6 +3124,157 @@
                     type: 'astrology-item-detail',
                     detail: detail
                 }, '*');
+            }
+        }
+
+        // ============================================================
+        // CHART SNAPSHOT — serialize the active chart view to a PNG so the
+        // Flow AI interpretation can attach an image of the wheel ("KEY").
+        //
+        // Protocol (the Flow side wins — matched to apps/flow AstrologyOracle.tsx):
+        //   parent → viewer: { type: 'astrology-request-chart-image' }        (no requestId)
+        //   viewer → parent: { type: 'astrology-chart-image', imageDataUrl }  (Flow reads .imageDataUrl || null)
+        //     we also include { view } and, on failure, { error } — extra
+        //     fields Flow ignores. On ANY failure we send imageDataUrl:null so
+        //     Flow resolves text-only instead of waiting out its 3s timeout.
+        //
+        // Pitfalls handled: the chart SVGs paint themselves with CSS custom
+        // properties (var(--v-*), var(--astro-*)) that DON'T exist in a
+        // standalone rasterized SVG — without inlining them every themed fill
+        // collapses to black. We also paint a solid backing colour first (a
+        // transparent PNG of a dark chart is unreadable), render at ~2x for
+        // legibility, and cap the payload size.
+        function captureActiveChartImage() {
+            const reply = (imageDataUrl, extra) => {
+                try {
+                    window.parent.postMessage(Object.assign({
+                        type: 'astrology-chart-image',
+                        imageDataUrl: imageDataUrl || null,
+                    }, extra || {}), '*');
+                } catch (e) { /* parent gone */ }
+            };
+
+            // 1) Find the active (visible) chart view's SVG. Query the inner
+            //    render target (#chart-wheel / #hd-mandala / #hd-bodygraph), NOT
+            //    the container — the container also holds toolbar <svg> icon
+            //    buttons (fullscreen), so container.querySelector('svg') would
+            //    grab an 18x18 button icon instead of the chart.
+            const views = [
+                { id: 'chart-wheel-container', target: 'chart-wheel', name: 'astrology' },
+                { id: 'hd-mandala-container', target: 'hd-mandala', name: 'hd-mandala' },
+                { id: 'hd-bodygraph-container', target: 'hd-bodygraph', name: 'hd-bodygraph' },
+            ];
+            let svgEl = null, viewName = null;
+            for (const v of views) {
+                const c = document.getElementById(v.id);
+                if (c && !c.classList.contains('hidden')) {
+                    const s = document.querySelector('#' + v.target + ' svg');
+                    if (s) { svgEl = s; viewName = v.name; break; }
+                }
+            }
+            if (!svgEl) {
+                svgEl = document.querySelector('#chart-wheel svg, #hd-mandala svg, #hd-bodygraph svg');
+                viewName = svgEl ? 'fallback' : null;
+            }
+            if (!svgEl) {
+                console.warn('[Astrology Viewer] chart-image: no active chart SVG to capture');
+                reply(null, { error: 'no-active-chart' });
+                return;
+            }
+
+            try {
+                const clone = svgEl.cloneNode(true);
+
+                // 2) Natural pixel size from viewBox (preferred) or bounding box.
+                let vbW = 0, vbH = 0;
+                const vb = svgEl.viewBox && svgEl.viewBox.baseVal;
+                if (vb && vb.width && vb.height) { vbW = vb.width; vbH = vb.height; }
+                if (!vbW || !vbH) {
+                    const r = svgEl.getBoundingClientRect();
+                    vbW = r.width || 500; vbH = r.height || 500;
+                }
+
+                // 3) Inline every CSS custom property the page defines, resolved
+                //    for the CURRENT theme, onto the SVG root. Custom properties
+                //    inherit, so descendant presentation attributes that use
+                //    var() (e.g. fill="rgb(var(--v-fire-rgb)/0.15)") resolve.
+                const rootStyle = getComputedStyle(document.documentElement);
+                const varNames = new Set();
+                for (const sheet of Array.from(document.styleSheets)) {
+                    let rules;
+                    try { rules = sheet.cssRules; } catch (e) { continue; } // cross-origin CDN sheets throw
+                    for (const rule of Array.from(rules || [])) {
+                        const st = rule.style;
+                        if (!st) continue;
+                        for (let i = 0; i < st.length; i++) {
+                            const p = st[i];
+                            if (p && p.charCodeAt(0) === 45 && p.charCodeAt(1) === 45) varNames.add(p);
+                        }
+                    }
+                }
+                let varDecls = '';
+                varNames.forEach((n) => {
+                    const val = rootStyle.getPropertyValue(n);
+                    if (val && val.trim()) varDecls += n + ':' + val.trim() + ';';
+                });
+
+                // 4) Solid backing colour (transparent → unreadable). --v-surface
+                //    is a solid colour in both themes (light #fff / dark #1a1a2e).
+                let bg = (rootStyle.getPropertyValue('--v-surface') || '').trim();
+                if (!bg) bg = (document.documentElement.getAttribute('data-theme') === 'dark') ? '#1a1a2e' : '#ffffff';
+
+                // 5) Make the clone self-contained: explicit px size + inlined vars.
+                clone.setAttribute('width', String(vbW));
+                clone.setAttribute('height', String(vbH));
+                clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                clone.setAttribute('style', varDecls + (clone.getAttribute('style') || ''));
+
+                const svgString = new XMLSerializer().serializeToString(clone);
+                const svgUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+
+                const img = new Image();
+                img.onload = () => {
+                    try {
+                        // 6) Render at ~2x (capped), on the solid background.
+                        let scale = 2;
+                        const MAX_DIM = 1400;
+                        scale = Math.min(scale, MAX_DIM / vbW, MAX_DIM / vbH);
+                        if (!isFinite(scale) || scale <= 0) scale = 1;
+
+                        const render = (s) => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.max(1, Math.round(vbW * s));
+                            canvas.height = Math.max(1, Math.round(vbH * s));
+                            const ctx = canvas.getContext('2d');
+                            ctx.fillStyle = bg;
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            return canvas.toDataURL('image/png');
+                        };
+
+                        // 7) Cap payload (~1.5MB) — downscale if a dense view is over.
+                        let dataUrl = render(scale);
+                        const MAX_LEN = 1500000;
+                        const steps = [1.5, 1.0, 0.75, 0.5];
+                        let i = 0;
+                        while (dataUrl.length > MAX_LEN && i < steps.length) {
+                            dataUrl = render(Math.min(scale, steps[i]));
+                            i++;
+                        }
+                        reply(dataUrl, { view: viewName });
+                    } catch (e) {
+                        console.error('[Astrology Viewer] chart-image: raster failed', e);
+                        reply(null, { error: 'raster-failed', view: viewName });
+                    }
+                };
+                img.onerror = (e) => {
+                    console.error('[Astrology Viewer] chart-image: SVG image load failed', e);
+                    reply(null, { error: 'svg-load-failed', view: viewName });
+                };
+                img.src = svgUrl;
+            } catch (e) {
+                console.error('[Astrology Viewer] chart-image: capture failed', e);
+                reply(null, { error: 'capture-failed', view: viewName });
             }
         }
 
