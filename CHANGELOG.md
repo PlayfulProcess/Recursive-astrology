@@ -39,11 +39,15 @@ below). Reflection-question bullets are now a small `#star` SVG instead of a bol
 the AI-context header `🤖`/`↗` emoji became `#chat`/`#expand` SVGs; the chart-controls
 "Interpret with AI" button lost its strong purple→indigo gradient for a quiet outlined style.
 
-**4 — One fullscreen control, and it truly fullscreens when embedded.** Consolidated the
-per-view fullscreen entry points into a single `toggleActiveFullscreen()` that fullscreens
-whichever view is active (chart wheel / HD mandala / HD bodygraph); the redundant
-embed-header "Fullscreen" button is removed. The `astrology-request-fullscreen` postMessage
-to the parent now fires whenever the viewer is iframed (`window.parent !== window`) on both
+**4 — One fullscreen control, and it fullscreens the WHOLE viewer.** Consolidated the
+per-view fullscreen entry points into a single `toggleActiveFullscreen()`, and — after the
+builder's follow-up ("now I just get the wheel and not the whole list") — it fullscreens
+**`#chart-display-section`**, a new wrapper around the view tabs (Astrology / HD Mandala /
+HD Bodygraph) + the active chart + the item lists/tabs below, as a scrollable full-viewport
+column (the active chart is enlarged inside it, capped at 85vh so the tabs and a peek of the
+list stay visible). The redundant embed-header "Fullscreen" button and the three dead
+per-view toggle functions are removed. The `astrology-request-fullscreen` postMessage to
+the parent now fires whenever the viewer is iframed (`window.parent !== window`) on both
 enter and exit — so the flow app can expand the iframe to the full viewport instead of the
 chart only filling the iframe box. Standalone keeps the CSS overlay; X top-right + Esc exit
 in both.

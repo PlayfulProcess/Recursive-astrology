@@ -1064,6 +1064,23 @@
            fullscreen — the shared top-right X is the exit. */
         .css-fullscreen .fs-enter-btn { display: none !important; }
 
+        /* The whole-viewer fullscreen (#chart-display-section = view tabs +
+           active chart + item lists/tabs). The generic .css-fullscreen rule
+           centers ONE child in a row; this section has several stacked children,
+           so it becomes a scrollable column instead — tabs on top, chart, then
+           the lists, everything reachable by scrolling while fullscreen. */
+        #chart-display-section.css-fullscreen {
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 3.4rem 1rem 1.5rem; /* top padding clears the fixed X button */
+        }
+        /* In embed mode the chart card is capped at 400px — lift the cap while
+           the whole section is fullscreen so the chart can actually grow. */
+        #chart-display-section.css-fullscreen .chart-container { max-width: none; }
+
         /* Shared "exit fullscreen" X, pinned top-right (the official app pattern). */
         .fs-close-btn {
             position: fixed;
@@ -1782,7 +1799,11 @@
                     </div><!-- End form-collapsible -->
                 </div>
 
-                <!-- Chart Display Section -->
+                <!-- Chart Display Section — #chart-display-section is what the ONE
+                     fullscreen control fullscreens: the view tabs + the active
+                     chart + the item lists/tabs below it, i.e. the whole viewer
+                     experience, not just the wheel (builder feedback, Jul 15 2026). -->
+                <div id="chart-display-section">
                     <!-- View Mode Toggle -->
                     <div id="view-mode-toggle" class="hidden mb-4">
                         <div class="flex gap-1 p-1 bg-gray-900/50 rounded-lg border border-gray-800">
@@ -2008,6 +2029,7 @@
                             <span class="hidden sm:inline">High-precision NASA/JPL data matching professional astrology software.</span>
                         </div>
                     </div>
+                </div><!-- End chart-display-section -->
             </div>
         </div>
     </main>
@@ -6302,50 +6324,45 @@
             if (mandala) { mandala.style.maxWidth = '500px'; mandala.style.height = 'auto'; }
         }
 
-        // THE single fullscreen control. Consolidates what used to be three
-        // separate per-view fullscreen entry points (chart wheel / HD mandala /
-        // HD bodygraph) plus the embed-header button into one control that
-        // fullscreens whichever view is currently active. Standalone gets the
-        // CSS overlay; embedded also asks the parent to expand the iframe so the
-        // chart truly fills the phone, not just the iframe box (see
-        // enterCssFullscreen's astrology-request-fullscreen postMessage).
+        // THE single fullscreen control. Fullscreens the WHOLE viewer area —
+        // #chart-display-section: the view tabs (Astrology / HD Mandala / HD
+        // Bodygraph) + the active chart + the item lists/tabs below it — not
+        // just the active chart element ("now I just get the wheel and not the
+        // whole list", builder, Jul 15 2026). The section becomes a scrollable
+        // full-viewport column (see #chart-display-section.css-fullscreen CSS);
+        // the active chart is enlarged inside it. Standalone gets the CSS
+        // overlay; embedded also asks the parent to expand the iframe to the
+        // full viewport (enterCssFullscreen's astrology-request-fullscreen
+        // postMessage, sent on enter AND exit). X top-right + Esc exit both.
         function toggleActiveFullscreen() {
             if (isCssFullscreen()) { exitCssFullscreen(); return; }
-            if (hdViewMode === 'hd-mandala') return toggleMandalaFullscreen();
-            if (hdViewMode === 'hd-bodygraph') return toggleBodygraphFullscreen();
-            return toggleChartWheelFullscreen();
+            const section = document.getElementById('chart-display-section');
+            enterCssFullscreen(section, () => {
+                // Enlarge the active chart inside the fullscreen column. 85vh
+                // (not 95) so the tabs above and a peek of the list below make
+                // it obvious the whole viewer came along and scrolls.
+                if (hdViewMode === 'hd-mandala') {
+                    const mandala = document.getElementById('hd-mandala');
+                    if (mandala) { mandala.style.maxWidth = 'min(92vmin, 1250px)'; mandala.style.height = 'auto'; }
+                } else if (hdViewMode === 'hd-bodygraph') {
+                    const bodygraph = document.getElementById('hd-bodygraph');
+                    if (bodygraph) {
+                        bodygraph.style.maxWidth = 'min(92vw, calc(85vh * 0.69))'; // aspect 400/580 ≈ 0.69
+                        bodygraph.style.height = 'auto';
+                    }
+                } else {
+                    const wheel = document.getElementById('chart-wheel');
+                    if (wheel) {
+                        wheel.style.maxWidth = 'min(92vmin, 1500px)';
+                        wheel.style.height = 'min(85vh, 1500px)';
+                        wheel.style.margin = '0 auto';
+                    }
+                }
+            });
         }
 
         // Back-compat alias (kept in case anything still references it).
         function toggleFullscreen() { return toggleActiveFullscreen(); }
-
-        // Fullscreen toggle for bodygraph
-        function toggleBodygraphFullscreen() {
-            const container = document.getElementById('hd-bodygraph-container');
-            const bodygraph = document.getElementById('hd-bodygraph');
-            if (isCssFullscreen()) { exitCssFullscreen(); return; }
-            enterCssFullscreen(container, () => {
-                if (bodygraph) {
-                    bodygraph.style.maxWidth = 'min(95vw, calc(95vh * 0.69))'; // aspect 400/580 ≈ 0.69
-                    bodygraph.style.height = 'min(95vh, calc(95vw * 1.45))';   // aspect 580/400 ≈ 1.45
-                }
-            });
-        }
-
-        // Fullscreen toggle for astrology wheel
-        function toggleChartWheelFullscreen() {
-            const container = document.getElementById('chart-wheel-container');
-            const wheel = document.getElementById('chart-wheel');
-            if (isCssFullscreen()) { exitCssFullscreen(); return; }
-            enterCssFullscreen(container, () => {
-                if (wheel) {
-                    // Scale wheel up to fill the fullscreen overlay.
-                    wheel.style.maxWidth = 'min(95vmin, 1500px)';
-                    wheel.style.height = 'min(95vh, 1500px)';
-                    wheel.style.margin = 'auto';
-                }
-            });
-        }
 
         // === CHART ZOOM / PAN ===
         let chartScale = 1;
@@ -6512,21 +6529,6 @@
             if (!wheel) return;
             wheel.classList.remove('planet-focus');
             wheel.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
-        }
-
-        // Fullscreen toggle for HD mandala
-        function toggleMandalaFullscreen() {
-            const container = document.getElementById('hd-mandala-container');
-            const mandala = document.getElementById('hd-mandala');
-            if (isCssFullscreen()) { exitCssFullscreen(); return; }
-            enterCssFullscreen(container, () => {
-                if (mandala) {
-                    // Scale mandala up to fill the fullscreen overlay.
-                    mandala.style.maxWidth = 'min(95vmin, 1250px)';
-                    mandala.style.height = 'min(95vh, 1250px)';
-                    mandala.style.margin = 'auto';
-                }
-            });
         }
 
         function formatDegree(decimal) {
