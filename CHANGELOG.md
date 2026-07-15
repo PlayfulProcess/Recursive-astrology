@@ -1,5 +1,61 @@
 # Changelog — The Recursive Astrology
 
+## July 15, 2026 — Round 2: homepage hero, grammar-switch fix, tarot-pattern detail chrome, one fullscreen
+
+Tablet round from the builder's live test. Five build items in `index.html` +
+`viewer/astrology-viewer.html`, plus a harmony-with-tarot plan appended to `PLAN.md`.
+
+**1 — Homepage hero cleanup + tablet layout.** The hero kept a single CTA
+("Chart viewer — cast & read your own chart"); the two ghost buttons ("The Wheel",
+"Browse every grammar") are removed. The tablet range (~800–1260px) was showing a
+*giant* Flammarion engraving next to an unreadable sliver of text. Fixed with two
+breakpoints: ≤1260px shrinks the plate (`clamp(230px,30vh,340px)`) so the text column
+gets real room while staying side-by-side; ≤900px stacks the text full-width *under* the
+image, centered. Verified with headless Chromium at 1250×2000 (row, ~590px text column)
+and 800×1280 (clean vertical stack).
+
+**2 — Grammar selector actually changes the detail now (root-caused).** Switching the
+primary grammar — from the wheel picker OR the in-modal "Primary Grammar" dropdown — and
+the compare carousel *appeared to do nothing* for the main text. Root cause: the detail
+templates render the biggest sections as `x.story || x.description`, and **every built-in
+default (`PLANETS`/`ZODIAC_SIGNS`/`HOUSES`) always defines `.story`**, while a grammar's
+narrative section ("Story", "Interpretation", …) maps to the **`description`** role via
+`flattenSections`, never `story`. So after `mergeNonEmpty` the default's `.story` always
+won and the grammar's own words were invisible in *The Symbol / In This Sign / In This
+House* — only fields the default lacked (shadow, archetype) visibly changed. One-line fix
+in `flattenSections`: mirror the narrative into `story` when it's empty, so the grammar's
+text takes precedence. Verified by running the **real edited `normalizeAstrologyData` +
+`mergeNonEmpty`** against the live Western-Canonical Sun item: the resolved "The Symbol"
+text now returns the grammar's narrative and masks the default. Compare (the carousel that
+pages one grammar at a time) now shows genuinely different content per grammar for the
+same reason.
+
+**3 — Detail popup follows the tarot item-detail pattern (SVG, not glyphs).** The modal X
+is now an SVG `#close` (was `&times;`). The old loud floating purple "book" circle and the
+bright gradient AI button are gone; every detail's actions live in **one quiet SVG icon row
+pinned at the bottom** (`detailActionRow` — grammar/compare `#book` + a calm `#star` for
+"Interpret with AI"), matching the tarot chrome (X top-right · ‹ › arrows flank · action row
+below). Reflection-question bullets are now a small `#star` SVG instead of a bold `?` glyph;
+the AI-context header `🤖`/`↗` emoji became `#chat`/`#expand` SVGs; the chart-controls
+"Interpret with AI" button lost its strong purple→indigo gradient for a quiet outlined style.
+
+**4 — One fullscreen control, and it truly fullscreens when embedded.** Consolidated the
+per-view fullscreen entry points into a single `toggleActiveFullscreen()` that fullscreens
+whichever view is active (chart wheel / HD mandala / HD bodygraph); the redundant
+embed-header "Fullscreen" button is removed. The `astrology-request-fullscreen` postMessage
+to the parent now fires whenever the viewer is iframed (`window.parent !== window`) on both
+enter and exit — so the flow app can expand the iframe to the full viewport instead of the
+chart only filling the iframe box. Standalone keeps the CSS overlay; X top-right + Esc exit
+in both.
+
+Verified with headless Chromium against the local build (external hosts — Supabase, the
+chart API, CDNs, the live site — are blocked by this environment's egress policy, so the
+full click-through-with-real-data flow was checked at the function/DOM level, not live):
+JS parses clean, the grammar-switch precedence resolves to grammar text, the modal shows the
+SVG X + star action row + star reflection marks + prev/next arrows, and
+`toggleActiveFullscreen` enters/exits fullscreen on the active view with the embed-header
+button gone.
+
 ## July 14, 2026 — Chart viewer: CSS fullscreen, X-close, item detail prev/next
 
 Three long-standing bugs in `viewer/astrology-viewer.html` (the chart viewer the app

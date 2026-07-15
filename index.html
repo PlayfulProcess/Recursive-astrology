@@ -38,11 +38,18 @@
   .lede{font-family:"Fraunces",Georgia,serif;font-size:16.5px;line-height:1.62;color:var(--muted);
     max-width:58ch;margin:20px 0 0;text-align:left}
   .lede strong{color:var(--ink)}
-  @media(max-width:780px){
-    .herowrap{flex-direction:column;text-align:center}
+  /* Tablet range (~800–1260px): the engraving was eating the width and
+     squeezing the text column to an unreadable sliver. Shrink the plate and
+     give the text room; below 900px stack the text full-width under the image. */
+  @media(max-width:1260px){
+    .plate .mat img{height:clamp(230px,30vh,340px)}
+  }
+  @media(max-width:900px){
+    .herowrap{flex-direction:column;text-align:center;gap:22px}
     .herowrap .htext{text-align:center}
     .htext .subtitle,.lede{margin-left:auto;margin-right:auto;text-align:center}
     .cta-row{justify-content:center}
+    .plate .mat img{height:clamp(240px,38vh,360px)}
   }
 
   /* three ways in */
@@ -174,8 +181,6 @@
       aspects of <strong>your own chart</strong> back to you — never a random draw, never a prediction.</p>
       <div class="cta-row">
         <a class="btn primary" href="viewer/astrology-viewer.html">Chart viewer — cast &amp; read your own chart ↗</a>
-        <a class="btn ghost" href="wheel.html">The Wheel (twelve houses) ↗</a>
-        <a class="btn ghost" href="#all-grammars">Browse every grammar</a>
       </div>
     </div>
   </section>

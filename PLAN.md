@@ -152,3 +152,90 @@ them or fetch raw if public):**
 
 *Parent project: [PlayfulProcess/recursive-tarot](https://github.com/PlayfulProcess/recursive-tarot).
 This seed was assembled from its `template/` starter (PR #35) and shipped in PR #36.*
+
+---
+
+## 7. Harmony with the tarot site — a reviewable plan (2026-07-15)
+
+*Direction from the builder after the tablet round. This is a **plan to review, not
+built work.** The through-line: bring this site's shape into line with
+[tarot.recursive.eco](https://tarot.recursive.eco) (the `recursive-tarot` repo), make the
+browse experience **item-level**, decide what "Grammars" in the header should mean, and
+open a long content lane on **cross-cultural cosmology**.*
+
+### 7a. Align structure/design with the tarot site
+
+Both sites already share the seed's chrome (`site-header.js`, `theme.css`, the
+`dimension-engine.js`/cards/tree/timeline viewers). The task is to diff the two live and
+close the drift. **Deltas to confirm against tarot and reconcile** (audit both, then pick
+one shape per row — prefer tarot's, since it's the proven parent):
+
+| Surface | Astro today | Tarot pattern | Proposed reconciliation |
+|---|---|---|---|
+| Header nav | `Home · Views · Courses · Grammars · GitHub` | (verify tarot's exact set) | Match tarot's top-level labels + order; keep the astro-specific Views entries |
+| Homepage hero | plate-left / text-right, one CTA (this round) | (verify) | Keep the single-CTA hero; align type scale + section order to tarot |
+| "Ways in" / gallery | "Three ways in" + "Every view" + grammar decks | (verify tarot's gallery grouping) | Use the same section rhythm and card component as tarot |
+| Detail popup | tarot-pattern chrome as of this round (X · arrows · SVG action row) | tarot card modal | **Done this round** — keep in lockstep going forward |
+| Footer / eco-tree callout | present | present | Confirm identical copy structure |
+
+**Action:** one audit session that opens both sites side by side, writes the exact per-row
+decision, and lands the CSS/markup changes in `index.html` + `site-header.js` only (no new
+components — reuse tarot's).
+
+### 7b. Explorer should be item-level
+
+Today `viewers/explorer.html` pivots *fields*, and the homepage decks list **grammars**
+(cards → open one grammar). The builder wants the browse experience to list **items**
+(planets, signs, houses, aspects) **across all grammars at once** — so the primary object a
+visitor meets is "Mars" or "the 7th house," and *under* it, every voice's reading of it.
+
+What the page becomes: a filterable index of **item archetypes** (the ~12 signs, ~10–13
+planets/bodies, 12 houses, the aspects), each row expandable into the **per-grammar
+readings** already loaded by the Lenses viewer (`viewers/lenses.html` is the working
+"one entity, many traditions" engine — reuse it, don't reinvent). Effectively: promote
+Lenses from a secondary view to the **default browse surface**, with an A–Z / by-category
+item index in front of it. Grammar cards stay available (read one voice closely) but stop
+being the front door.
+
+### 7c. What should the header "Grammars" / "Browse every grammar" point at?
+
+Three options:
+
+1. **A history page** (the `historiographies-of-astrology` grammar as the canonical index) —
+   grammars presented *as the transmission story*, era by era. Honest to this site's thesis;
+   good for reading, weaker for "give me every voice fast."
+2. **An internal channel page** — a single on-site catalog (the current `index.html#all-grammars`
+   deck grid, promoted to its own route) grouping every grammar by branch
+   (primary / synthesis / castings / readings). Simple, self-contained, no backend.
+3. **The recursive.eco channel** — deep-link out to the live `astrology` channel on the
+   platform (where these same grammars are published, per `ids.json`), so "Grammars" hands
+   off to the app's catalog + oracle.
+
+**Recommendation: (2) as the on-site default, with (1) and (3) as links *from* it.** Keep the
+front door on-site and fast (an internal channel page = the item-level Explorer of §7b), and
+let that page offer "read the transmission history →" (option 1) and "open in the Oracle →"
+(option 3) as two clearly-labelled exits. Avoids sending first-time visitors off-site, but
+still reciprocates with the platform.
+
+### 7d. Content lane — cross-cultural cosmology grammars
+
+A long research lane, following the existing dossier pattern (`research/views/<slug>.md`
+cited `[@key]`, confidence-flagged, `research/bibliography.bib`; grammar = display, dossier =
+source of truth). How different cultures read the planets, stars, and the Milky Way:
+
+- **Babylonian / Mesopotamian** — already seeded (`mesopotamian-omens`); deepen with the
+  MUL.APIN tradition (PD scholarly editions/translations — verify each).
+- **Chinese** — the 28 mansions (Xiù), the Purple Forbidden Enclosure, planet–element mapping.
+- **Vedic / Jyotiṣa** — already seeded (`jyotisha-brihat-jataka`); extend to nakṣatras + the
+  navagraha as a full item set.
+- **Mesoamerican** — Maya Venus/`Dresden Codex` cycles, the 260-day count (astronomical, not
+  natal-fate — hold the gate-not-fate frame carefully).
+- **Yoruba** — Ifá cosmology's sky/《òrìṣà》correspondences (living tradition → name the
+  tradition, "inspired by," never a living teacher; sourcing care).
+- **Polynesian navigation-star lore** — the star compass / zenith stars as a *wayfinding*
+  reading of the sky (a strong "mirror and calendar, not command" exemplar).
+
+**Guardrails (unchanged):** pre-1930 translations only for quoted text unless a license is
+verified; no invented citations — hedge/attribute/omit; living traditions named as
+traditions, not persons; honest gaps beat wrong pictures. Sequence after §7a–7c so the
+item-level browse exists to *hold* these before they're written.
