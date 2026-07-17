@@ -1,6 +1,22 @@
 {
-  "_note": "Slug -> recursive.eco grammar UUID (the deckId) for the astrology channel. Used by recursive.eco to bind repo grammars to their live rows and to build per-grammar links. _public_now lists the slugs that are is_public=true on recursive.eco (only public grammars import as channel members). Keep this updated when new grammars are created. Mirrors nara/ids.json and recursive-tarot/tarot/_eco_ids.json.",
+  "_note": "Slug -> recursive.eco grammar UUID (the deckId) for the astrology channel. Used by recursive.eco to bind repo grammars to their live rows and to build per-grammar links. _public_now lists the slugs that are is_public=true on recursive.eco (only public grammars import as channel members). Keep this updated when new grammars are created. Mirrors nara/ids.json and recursive-tarot/tarot/_eco_ids.json. UUIDs matched 2026-07-16 via the recursive.eco MCP (list_grammars, exact name match) — all 15 grammars exist in the library as private drafts; none verified public yet, hence the empty _public_now (publish via set_grammar_visibility, then move the slug in).",
   "_preview_links": "Every grammar renders with no extra hosting: swap <id> for the UUID from `ids`. Play = https://flow.recursive.eco/play?id=<id> | Edit = https://flow.recursive.eco/create/dashboard/unified/new?id=<id> | Cards = https://recursive.eco/pages/grammar-viewer.html?type=custom&id=<id> | Study = https://recursive.eco/pages/study-viewer.html?type=custom&id=<id> | Tree = https://recursive.eco/pages/tree-viewer.html?type=custom&id=<id> | Thumbnails = Cards + &layout=thumbnails",
   "_public_now": [],
-  "ids": {}
+  "ids": {
+    "western-astrology-canonical": "a0a21e50-807d-45ff-b2ab-13fbb4ae86be",
+    "tetrabiblos-ashmand": "043aae3c-e51b-4822-9828-e3e18ef9229b",
+    "alan-leo": "6a50ce87-e54b-47f2-9fc5-70b19c06d179",
+    "proctor-skeptical-astrology": "7e0a9452-7d34-4ada-a311-229ba13ecbe7",
+    "historiographies-of-astrology": "ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+    "casting-big-three": "bbcba06e-0a82-4959-ad69-439ac963bd54",
+    "casting-single-aspect": "d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+    "casting-twelve-houses": "90604ab1-c0c1-4e79-abfd-01e784014319",
+    "jyotisa-brhat-jataka": "a1b2c3d4-1111-4a01-9e01-aa0000000001",
+    "william-lilly-christian-astrology": "a1b2c3d4-3333-4a03-9e03-aa0000000003",
+    "aspects-commented": "dee46a22-3848-433e-a793-8c7a2206e8cb",
+    "essential-dignities": "1ab72d9f-f283-475e-951a-1841215e1274",
+    "mesopotamian-omen-craft": "a1b2c3d4-2222-4a02-9e02-aa0000000002",
+    "archetypal-astrology-tarnas": "a1b2c3d4-5555-4a05-9e05-aa0000000005",
+    "astro-of-all-astros": "a1b2c3d4-4444-4a04-9e04-aa0000000004"
+  }
 }

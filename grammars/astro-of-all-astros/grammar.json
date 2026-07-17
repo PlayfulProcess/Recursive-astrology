@@ -1,0 +1,815 @@
+{
+  "name": "Astro of All Astros — every voice, one placement",
+  "description": "A generated meta-voice grammar aggregating every interpretation grammar in this repo into one navigable set: one item per planet, sign, and house, each carrying every voice's own reading of that placement side by side — Ptolemy, Lilly, Jyotiṣa, Alan Leo, the planetary myths, and the platform's own Canonical synthesis. Cast a placement and hear every tradition answer at once.\n\nSOURCE OF TRUTH — read this first. Each voice's authoritative interpretation lives in its own grammar at `grammars/<slug>/grammar.json`. This meta is a *generated index* (a projection) over those voices, rebuilt idempotently by `scripts/build_meta_astro.py` — it is NOT a second copy to maintain. To correct an entry, edit its source voice; the meta re-derives. Coverage varies by entity — a voice with no historical entry for a given placement (e.g. Lilly only wrote on the seven planets, not signs or houses) simply has no section there; nothing is invented to fill a gap. See docs/DESIGN-oracle-trinity.md ('Astro of all Astros') for the design this proves out.",
+  "grammar_type": "astrology",
+  "author": "PlayfulProcess",
+  "items": [
+    {
+      "id": "planet-sun",
+      "name": "Sun",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The Sun represents the immortal Individuality, the divine spark within. It shows what we are becoming through evolution, our essential spiritual nature. In the horoscope, a strong Sun indicates one who can express their true self with power and authority. The Sun is the life-giver, and its position shows where we must shine.\n\n**Keywords:** Individuality",
+        "Canonical": "**Story:** The Sun is your core identity — who you are becoming. It represents your conscious will, creative force, and the central organizing principle of your life.\n\n**Light:** Vitality, self-expression, leadership, creative power, confidence, generosity.\n\n**Shadow:** Ego inflation, domination, burnout from over-identification with achievement.\n\n**Archetype:** The King/Queen — sovereign consciousness that gives light and warmth.",
+        "Lilly (1647)": "**Lilly's own words:** \"He signifies kings, princes, emperors, &c.; dukes, marquisses, earls, barons, lieutenants, deputy lieutenants of counties, magistrates, gentlemen in general, courtiers, desirers of honour and preferment.\" (From Zadkiel's 1852 abridgment, An Introduction to Astrology, Chapter VIII, 'Of the Sun, His General and Particular Significations' — a public-domain modernized-spelling reprint tradition of Lilly's material, not a claim that these are Lilly's exact 1647 words; confidence: ○.)\n\n**What Lilly reads:** The Sun's significations here are an unbroken ladder of rank — king down through every grade of gentleman and courtier — with no separate psychological or emotional register at all. In this text the Sun IS social position; nothing about 'identity' or 'ego' in the modern sense the tropical-canonical library uses (compare grammars/western-astrology-canonical).",
+        "Planetary Myths": "**Greco-Roman:** Helios, a Titan, drove a four-horse chariot across the sky each day, lighting the world from dawn to dusk. By the Hellenistic period the Olympian Apollo — god of prophecy, music, and healing — had absorbed most of Helios's solar identity in cult and art, though the two were never formally merged in myth. Sources: Wikipedia, \"Selene\" (cross-referenced) — https://en.wikipedia.org/wiki/Selene; Greek Names, \"Greek names of the planets\" — https://www.greek-names.info/greek-names-of-the-planets/ (confidence: ○ — search-triangulated, direct Wikipedia fetch blocked this session).\n\n**Vedic (graha):** Sūrya is the graha of soul, vitality, and self-worth — Jyotiṣa treats him as king among the nine grahas and the significator (kāraka) of ego, father, and life-force. He rides a seven-horse chariot driven by Aruṇa, the horses named for the seven Vedic poetic meters (chandas); his arrival is heralded by the dawn-goddess Uṣas. The Ṛgveda's Gāyatrī mantra (3.62.10) is addressed to Sūrya-as-Savitṛ. As taught in Jyotiṣa, summarized — see Wikipedia, \"Surya\" — https://en.wikipedia.org/wiki/Surya; Budaya Bali, \"God Surya and the 7 Horses\" — https://budayabali.com/god-surya-and-the-7-horses-the-timekeeper-energy-controller-and-guardian-of-cosmic-balance (confidence: ○).\n\n**Babylonian/Mesopotamian:** Shamash (Sumerian Utu) was sun-god and god of justice — riding his chariot by day, he was believed to see every human act and so judge right from wrong; Hammurabi's law code claims Shamash as its source. With Sin (Moon) and Ishtar (Venus) he formed an astral triad governing the Babylonian omen-sky, the oldest documented layer beneath the later Greco-Roman planet names. Sources: World History Encyclopedia, \"Utu-Shamash\" — https://www.worldhistory.org/Utu-Shamash/; Britannica, \"Shamash\" — https://www.britannica.com/topic/Shamash (confidence: ✔ — corroborated across independent reference sources).\n\n**What the lens reads:** Three unrelated cultures pointed at the same bright disk and each built a different story: a chariot-driving Titan who became a healer-god, a soul-significator riding meters-of-poetry horses, a judge who sees every human act. None of this is a claim that the Sun causes anything — it is a record of how differently situated humans, looking at the same sky, made sense together. The disagreement between the three readings IS the content.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** The Sun is found to produce heat and moderate dryness. His magnitude, and the changes which he so evidently makes in the seasons, render his power more plainly perceptible than that of the other heavenly bodies; since his approach to the zenith of any part of the earth creates a greater degree of heat in that part.\n\n**Light:** The Sun and Mercury are deemed of common influence, and productive either of good or evil in unison with whatever planets they may be connected with. The Sun is diurnal and masculine.\n\n**Shadow:** When afflicted, the Sun's heating influence may become excessive, creating imbalance in the constitution.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II of the Bṛhat Jātaka (\"Definitions and Elementary Planetary Principles\") gives the Sun a place among the Kālapuruṣa correspondences — the scheme that maps the nine grahas onto the body and rank of a cosmic \"Time-Person\": the Sun and Moon are its kings, and the Sun and Moon together are called the \"kings\" of the planetary hierarchy, with Mars as general, Mercury as first prince, Jupiter and Venus as counsellors, and Saturn as servant. The Sun is said to be strong in bones and to preside over copper colour. (Paraphrase of Chapter II, stanza-level material, via the chestofbooks.com mirror of the Chidambaram Iyer 1885 translation; confidence: ○ — search-triangulated this session, not independently re-fetched from the primary page.)\n\n**What this lens reads:** In tropical astrology the Sun anchors the whole zodiac (0° Aries is defined by the Sun's position at the equinox); in Jyotiṣa the Sun is one king among grahas measured against the fixed stars, roughly 24° behind its tropical degree today. Same star, two honest coordinate systems — the gap between them is the thing worth noticing, not a discrepancy to resolve."
+      },
+      "keywords": [
+        "sun",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Sun"
+      },
+      "symbol": "☉",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 1
+    },
+    {
+      "id": "planet-moon",
+      "name": "Moon",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The Moon represents the Personality, the sum of past experiences carried into this life. It shows our habits, instincts, and automatic responses—what we have been. The Moon governs the physical body, the public, women, and all matters of common everyday life. Its position shows our receptive, feeling nature.\n\n**Keywords:** Personality",
+        "Canonical": "**Story:** The Moon is your emotional body — how you feel, what you need, and where you seek comfort. It governs your instinctual responses and your relationship to home, nurturing, and memory.\n\n**Light:** Emotional intelligence, receptivity, nurturing, intuition, responsiveness.\n\n**Shadow:** Moodiness, dependency, emotional overwhelm, clinging to the past.\n\n**Archetype:** The Mother — the container that holds and nourishes life.",
+        "Lilly (1647)": "**Lilly's own words:** A Moon-dominant person appears \"in a great and full body, soft and phlegmatic, of colour like a black obscure cloud, having a swelling countenance, with eyes red and full of water, a bald head, and teeth like a wilde boar.\" (Quoted from Christian Astrology, 1647, Book I; confidence: ○ — corroborated across secondary reproductions this session.)\n\n**What Lilly reads:** This is a startlingly unflattering physical portrait next to the gentler, nurturing Moon of later astrology (compare grammars/western-astrology-canonical) — swelling, watery-eyed, boar-toothed. Lilly's Moon-native description reads more like a period medical case-note on phlegmatic humoral excess than a psychological temperament sketch; the vividness is the point of reading him at all.",
+        "Planetary Myths": "**Greco-Roman:** Selene, a Titan daughter of Hyperion and Theia, drove her own moon-chariot nightly across the sky, sister to the sun-god Helios; the Romans called her Luna, who had a temple on Rome's Aventine Hill. In post-classical practice Selene/Luna increasingly blended with Artemis/Diana, goddess of the hunt and wilderness, even though the two began as separate figures — one purely a sky-orb goddess, the other a broader nature deity. Sources: Wikipedia, \"Selene\" — https://en.wikipedia.org/wiki/Selene; Theoi Project, \"Selene\" — https://www.theoi.com/Titan/Selene.html (confidence: ○).\n\n**Vedic (graha):** Chandra (also called Soma, \"the bright drop\") governs the mind (manas) in Jyotiṣa — a fast-moving, changeable graha tied to emotion, memory, and the 27 nakṣatras, mythologized as his 27 wives, daughters of Daksha. Chandra's favoritism toward Rohiṇī drew Daksha's curse of a wasting sickness, later softened into the Moon's waxing-and-waning cycle — the tradition's own explanation for lunar phases. Whether \"Soma\" originally meant the Moon versus the ritual drink varies by textual layer, sources note. As taught in Jyotiṣa, summarized — Wikipedia, \"Chandra\" — https://en.wikipedia.org/wiki/Chandra; Dharma Station, \"The Myth of Chandra and His 27 Wives\" — https://www.dharmastation.ca/post/the-myth-of-chandra-and-his-27-wives (confidence: ○).\n\n**Babylonian/Mesopotamian:** Nanna (Akkadian Sin), one of Mesopotamia's oldest attested gods (from c. 3500 BCE), was worshipped as moon-god and god of wisdom at his great ziggurat in Ur; during the Ur III period he was additionally cast as judge of the dead. Son of Enlil and Ninlil, he was symbolized by the crescent moon. Source: World History Encyclopedia, \"Nanna\" — https://www.worldhistory.org/Nanna/ (confidence: ○ — single strong tertiary source, content consistent with other reference summaries).\n\n**What the lens reads:** A Titan sister on a nightly chariot ride, a wisdom-god whose crescent watches from a ziggurat in Ur, a changeable mind-graha with 27 star-brides — three cultures, one visibly-changing light in the night sky. Nobody in this grammar is claiming the Moon governs mood; the claim is narrower and more honest: humans across millennia independently reached for story to hold what they could plainly see changing shape above them.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** The Moon principally generates moisture; her proximity to the earth renders her highly capable of exciting damp vapours, and of thus operating sensibly upon animal bodies by relaxation and putrefaction. She has, however, also a moderate share in the production of heat, in consequence of the illumination she receives from the Sun.\n\n**Light:** The Moon is considered benefic for the same reasons as Jupiter and Venus. She is feminine, nocturnal, and governs the rhythms of change through her phases.\n\n**Shadow:** Her proximity to the earth causes her to operate sensibly upon animal bodies by relaxation and putrefaction.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II describes the Moon-native's body as \"well rounded,\" full of wind and phlegm, intelligent, and of sweet speech; white is the colour Candra presides over. In the Kālapuruṣa scheme the Moon is mind (manas) and, with the Sun, one of the two \"kings\" among the grahas. (Paraphrase with short quoted phrases from Chapter II via the chestofbooks.com mirror of the 1885 Chidambaram Iyer translation; confidence: ○.)\n\n**What this lens reads:** Where the tropical Western literature (see grammars/western-astrology-canonical, grammars/alan-leo) reads the Moon as feeling and instinct, this text reads it as manas — mind itself, the faculty that receives and processes, not merely emotion. The Sanskrit vocabulary carves the psyche differently than the Greek-derived one does; that's a real difference in what a chart is claimed to show, not just a translation gap."
+      },
+      "keywords": [
+        "moon",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Moon"
+      },
+      "symbol": "☽",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 2
+    },
+    {
+      "id": "planet-mercury",
+      "name": "Mercury",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** Mercury represents the rational mind, the link between higher and lower self. It governs communication, learning, and the nervous system. Mercury shows how we think, speak, and process information. Well-aspected, it gives intellectual brilliance; afflicted, it produces worry and nervous disorders.\n\n**Keywords:** Mentality",
+        "Canonical": "**Story:** Mercury is the mind in motion — how you think, communicate, and make sense of the world. It governs language, learning, commerce, and the bridges between things.\n\n**Light:** Articulate, curious, adaptable, quick-witted, perceptive.\n\n**Shadow:** Overthinking, trickery, scattered attention, nervousness.\n\n**Archetype:** The Messenger — the one who carries meaning between worlds.",
+        "Lilly (1647)": "**Lilly's own words:** Mercury \"rules the animal spirit: he is author of subtilty, tricks, devices, perjury, &c.\" — his nature convertible, taking on the quality of whatever planet he associates with, fittingly for a planet Lilly elsewhere treats as neither wholly masculine nor feminine, neither fully fortunate nor unfortunate. (Quoted from Christian Astrology, 1647, Book I; confidence: ○.)\n\n**What Lilly reads:** 'Author of subtilty, tricks, devices, perjury' is a considerably darker Mercury than the Hellenistic 'common, convertible' planet (grammars/tetrabiblos-ashmand) or the Vedic Budha's speech-and-cleverness portfolio (grammars/jyotisha-brihat-jataka) — Lilly's 17th-century English Mercury leans hard toward the trickster and the liar, a moralizing gloss the other two traditions' texts don't emphasize as strongly.",
+        "Planetary Myths": "**Greco-Roman:** Hermes, son of Zeus and the nymph Maia, served as herald and messenger of the Olympian gods and patron of travelers, merchants, orators, and — frankly — thieves, a boundary-crosser by nature. Rome adopted him as Mercury by the 4th century BCE, merging him with the Etruscan Turms; the name likely derives from merx, \"merchandise.\" Mercury kept Hermes's winged sandals, winged cap, and caduceus. Sources: Wikipedia, \"Hermes\" — https://en.wikipedia.org/wiki/Hermes; Britannica, \"Mercury\" — https://www.britannica.com/topic/Mercury-Roman-god (confidence: ✔).\n\n**Vedic (graha):** Budha (not to be confused with the Buddha) personifies buddhi, intellect — Jyotiṣa's significator of communication, learning, and adaptable thinking, said to take on the qualities of whichever planet it conjoins. His origin myth is unusually charged: born of Chandra's (the Moon's) affair with Tārā, wife of Bṛhaspati (Jupiter), a lineage dispute called the Tārakāmaya war. Budha later married Ilā and fathered Purūravas, founder of the lunar dynasty. As taught in Jyotiṣa, summarized — Wikipedia, \"Budha\" — https://en.wikipedia.org/wiki/Budha; Exotic India, \"Budha: God of Planet Mercury\" — https://www.exoticindiaart.com/article/god-of-planet-mercury-budha/ (confidence: ○).\n\n**Babylonian/Mesopotamian:** Nabu, patron of scribes, writing, and wisdom, rose to prominence in the 1st millennium BCE as the son of Marduk of Babylon; each New Year his statue traveled from his own city, Borsippa, to pay respects to his father, and by the Neo-Babylonian period he stood nearly equal to Marduk as co-ruler of the pantheon. His signature task was inscribing the Tablet of Destinies. Sources: Ancient Origins, \"Nabu\" — https://www.ancient-origins.net/myths-legends-africa/nabu-0014933; Wikipedia, \"Nabu\" — https://en.wikipedia.org/wiki/Nabu (confidence: ○).\n\n**What the lens reads:** A trickster-herald who invented commerce, an intellect-graha born of a scandalous lunar affair, a divine scribe who wrote the world's fate on a tablet — three very different plots converge on the same idea: this fast, changeable point of light governs thinking, language, and the crossing of boundaries. That convergence is interesting; it is not evidence any of the three literally happened.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Mercury sometimes produces dryness, and at other times moisture, and each with equal vigour. His faculty of absorbing moisture and creating dryness proceeds from his situation with regard to the Sun, from which he is at no time far distant in longitude; and, on the other hand, he produces moisture, because he borders upon the Moon's sphere.\n\n**Light:** Mercury is common to both genders, and common in influence—diurnal when matutine, nocturnal when vespertine. His rapid motion produces rapid changes.\n\n**Shadow:** Being excited by the velocity of his motion with the Sun, he consequently operates rapid changes tending to produce alternately either quality.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II describes the Budha-native as having gurgling speech, fond of joking, and a mixture of air, phlegm, and bile; green is his colour. In the Kālapuruṣa scheme Mercury is vāk, speech, and holds the rank of \"first prince\" — directly below the general and the two kings. (Paraphrase with quoted phrases; confidence: ○.)\n\n**What this lens reads:** Speech as Mercury's Kālapuruṣa portfolio lines up closely with the Greco-Roman Hermes/Mercury-as-messenger image (see grammars/tetrabiblos-ashmand) — one of the places where two unrelated traditions converge on a similar reading of the same fast-moving point of light, for reasons worth wondering about rather than assuming."
+      },
+      "keywords": [
+        "mercury",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Mercury"
+      },
+      "symbol": "☿",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 3
+    },
+    {
+      "id": "planet-venus",
+      "name": "Venus",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** Venus represents the love nature, attraction, and the desire for harmony. It governs art, beauty, social relations, and values. Venus shows what we love and find beautiful. Well-aspected, it gives charm and artistic ability; afflicted, it produces excessive pleasure-seeking or difficulty in relationships.\n\n**Keywords:** Affection",
+        "Canonical": "**Story:** Venus is what you love, what you value, and how you attract. She governs beauty, pleasure, relationship, aesthetics, and the principle of harmony.\n\n**Light:** Grace, magnetism, aesthetic sense, diplomacy, devotion.\n\n**Shadow:** Vanity, possessiveness, people-pleasing, overindulgence.\n\n**Archetype:** The Lover — the force that draws things together through beauty.",
+        "Lilly (1647)": "**Lilly's own words:** A well-placed Venerian person is \"a pretty, compleat, handsome Man or Woman\" (if Oriental) or, if Occidental, of shorter stature yet \"very decent and comely in Shape and Form, wel liked of all\" — with \"a stedfast eye, and full of amorous enticements.\" Venus governs \"Musitions, Gamesters, Silk-men, Mercers, Linnen-Drapers, Painters, Jewellers, Players, Lapidaries, Embroiderers, Women-tailors, Wives, Mothers, Virgins, Choristers, Fidlers, Pipers.\" Her diseases are \"principally in the Matrix and members of Generation... venereal diseases... Priapisme, impotency in generation, Hernias and the Diabetes.\" (Quoted from Christian Astrology, 1647, Book I, retaining Lilly's own spelling, with the 'amorous enticements' phrase corroborated via the 1852 Zadkiel abridgment; confidence: ○.)\n\n**What Lilly reads:** Venus's trade-list — musicians, silk-men, painters, jewellers, wives, choristers — reads almost as an occupational census of beauty-and-pleasure work in 17th-century London, a very concrete, tradesman's-eye-view Venus quite unlike the abstract 'love and harmony' of later psychological astrology (compare grammars/western-astrology-canonical).",
+        "Planetary Myths": "**Greco-Roman:** Aphrodite's birth has two competing accounts even within Greek sources: Hesiod's Theogony has her rising from sea-foam formed when Cronus cast Uranus's severed body into the water; Homer's Iliad instead calls her daughter of Zeus and Dione. Rome's Venus began as a goddess of gardens and spring growth before being formally identified with Aphrodite around the 3rd century BCE, per the historian Livy, after which she absorbed Aphrodite's love-and-beauty portfolio. Sources: Wikipedia, \"Aphrodite\" — https://en.wikipedia.org/wiki/Aphrodite; Ancient-Greece.org, \"Aphrodite (Venus)\" — https://ancient-greece.org/mythology/aphrodite-venus/ (confidence: ✔ for the two-birth-accounts claim, ○ for the Livy dating detail).\n\n**Vedic (graha):** Shukra, son of the sage Bhṛgu, is guru to the asuras (as Bṛhaspati is guru to the devas) — Jyotiṣa's significator of love, marriage, beauty, and pleasure. His signature myth: austerities won him Sanjīvanī Vidyā from Śiva, the power to revive the dead, which he used to repeatedly resurrect fallen asuras in their war against the devas. As taught in Jyotiṣa, summarized — Wikipedia, \"Shukra\" — https://en.wikipedia.org/wiki/Shukra; Mytho World, \"Shukra — God of Venus and the Guru of Asuras\" — https://www.mythoworld.com/shukra-god-of-venus-and-the-guru-of-asuras/ (confidence: ○).\n\n**Babylonian/Mesopotamian:** Inanna (Akkadian Ishtar), among the oldest deities for whom written evidence survives, combined love, sex, and fertility with war and political power — an unusual pairing for a single figure. Her eight-pointed star marked her identification with Venus in both its \"Morning Star\" (warrior) and \"Evening Star\" (beauty) aspects; her myth of descending to the underworld and returning has been read as a mirror of Venus's own disappearance and reappearance in the sky. Sources: World History Encyclopedia, \"Ishtar\" — https://www.worldhistory.org/ishtar/; Wikipedia, \"Inanna\" — https://en.wikipedia.org/wiki/Inanna (confidence: ✔ for the Venus/eight-pointed-star identification, ◆ for the descent-myth-as-Venus-cycle reading, which is an interpretive one).\n\n**What the lens reads:** Love-goddess and war-goddess, teacher of demons with power to revive the dead, a beauty born from severed divinity in sea-foam — the throughline across three traditions is a bright, twin-aspected planet (morning star and evening star are literally the same body) mapped onto love, value, and attraction. The lens reads a real astronomical phenomenon — Venus's two appearances — through three unrelated symbol systems; none of the three is 'the' correct reading.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** To Venus also the same temperate quality belongs, although it exists conversely; since the heat she produces by her vicinity to the Sun is not so great as the moisture which she generates by the magnitude of her light, and by appropriating to herself the moist vapours of the earth, in the same manner that the Moon does.\n\n**Light:** Venus is considered benefic, a causer of good, because her temperate quality promotes moisture. She is feminine, nocturnal, and brings harmony and fertility.\n\n**Shadow:** When afflicted, Venus's moistening influence may produce excess, leading to indulgence or dissolution.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II describes the Śukra-native as joyful, charming in physique, with beautiful and brilliant eyes, a poet by temperament, phlegmatic and windy in constitution, with curly hair. In the Kālapuruṣa scheme Venus (with Jupiter) is a counsellor, and separately is named as kāma, desire. (Paraphrase with quoted phrases via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** Śukra as poet-counsellor-of-desire is a specific and slightly different Venus than the Greco-Roman goddess-of-love image this site's other libraries carry (compare grammars/tetrabiblos-ashmand, grammars/alan-leo): still beauty and pleasure, but folded into a royal-court advisory role rather than a domestic or purely erotic one. Notably, in the received Sanskrit tradition Śukra is also a masculine figure (sage/preceptor of the asuras) — a reminder that 'Venus' the Roman name and Śukra the Sanskrit graha are not simply the same god in different languages."
+      },
+      "keywords": [
+        "venus",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Venus"
+      },
+      "symbol": "♀",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 4
+    },
+    {
+      "id": "planet-mars",
+      "name": "Mars",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** Mars represents the desire nature, courage, and the power to act. It governs physical energy, competition, and the sexual drive. Mars shows how we assert ourselves and fight for what we want. Well-aspected, it gives courage and enterprise; afflicted, it produces anger, accidents, and strife.\n\n**Keywords:** Energy",
+        "Canonical": "**Story:** Mars is your drive, desire, and fighting spirit. It governs how you assert yourself, pursue what you want, and handle conflict and competition.\n\n**Light:** Courage, initiative, passion, decisiveness, physical vitality.\n\n**Shadow:** Aggression, impatience, recklessness, anger, domination.\n\n**Archetype:** The Warrior — the force that cuts through and takes action.",
+        "Lilly (1647)": "**Lilly's own words:** \"Mars is a masculine, nocturnal planet, in nature hot and dry, choleric and fiery; the lesser infortune, author of quarrels, strifes, and contentions.\" Physically: \"martialists generally are of middle stature, their bodies strong, their bones large, rather lean than fat; their complexion of a brown, ruddy colour, their visage round, their hair red or sandy... sharp, hazel, piercing eyes; a bold confident countenance.\" On sickness: \"Mars causes all hurts by iron, the shingles, and such other diseases as arise by too much choler, anger, or passion.\" (Quoted from Christian Astrology, 1647, Book I; confidence: medium — corroborated across multiple secondary reproductions this session.)\n\n**What Lilly reads:** Mars-as-choler is the era's own humoral medicine speaking through the planet: hot, dry, red, quick to anger, prone to iron-wounds and inflammation. This is a physiological Mars as much as a psychological one, in a way pre-modern medicine and astrology genuinely shared one vocabulary for.",
+        "Planetary Myths": "**Greco-Roman:** Ares, son of Zeus and Hera, embodied war's raw violence and confusion — the Greeks themselves regarded him with distaste, one of their least-worshipped Olympians. Rome's Mars was a very different figure: second only to Jupiter in importance, more disciplined in portrayal, and doubling as an agricultural guardian — a war-and-harvest combination distinctive to early Roman religion. Rome formally identified Mars with Ares despite this temperamental gap. Sources: GreekReporter, \"Ares vs. Mars\" — https://greekreporter.com/2025/08/18/ares-mars-greek-roman-gods-war/; World History Encyclopedia, \"Ares\" — https://www.worldhistory.org/Ares/ (confidence: ✔).\n\n**Vedic (graha):** Mangala (also Aṅgāraka, \"the red one\") is Jyotiṣa's significator of courage, aggression, and drive — a fiery, challenging graha. Two competing origin myths exist: the Śaiva account has him born from three drops of Śiva's sweat, raised by the Earth-goddess Bhūmi; the Vaiṣṇava account ties his birth to Viṣṇu's boar-avatar Varāha piercing the Earth to rescue it, infusing it with divine essence. As taught in Jyotiṣa, summarized — Wikipedia, \"Mangala\" — https://en.wikipedia.org/wiki/Mangala; Exotic India, \"About Mangala Grah\" — https://www.exoticindiaart.com/article/about-mangala-grah/ (confidence: ○).\n\n**Babylonian/Mesopotamian:** Nergal, god of war, plague, and \"inflicted death,\" began as a regional agricultural deity of the city of Kutha before becoming lord of the underworld — in the myth of Nergal and Ereshkigal, he descends to challenge her, and the two end up ruling the underworld jointly as husband and wife. He was closely associated with the noon sun and the deadly heat of the Mesopotamian dry season. Sources: World History Encyclopedia, \"Nergal\" — https://www.worldhistory.org/Nergal/; Britannica, \"Nergal\" — https://www.britannica.com/topic/Nergal-Mesopotamian-deity (confidence: ✔).\n\n**What the lens reads:** An unloved war-god the Greeks distrusted, an underworld king who won his throne by threatening its queen, a red graha born of sweat or a boar's tusk — every tradition reaches for violence, heat, and challenge to describe the same rust-red point of light. That convergence says something about shared human pattern-recognition (a reddish object read as blood, fire, conflict), not that Mars 'causes' anger.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Mars chiefly causes dryness, and is also strongly heating, by means of his own fiery nature, which is indicated by his colour, and in consequence of his vicinity to the Sun; the sphere of which is immediately below him. Mars is esteemed malefic from his excess of dryness.\n\n**Light:** Mars provides energy, action, and the fire necessary for transformation. His dryness is allotted to the night, to counterbalance its moisture.\n\n**Shadow:** Malefic, causer of evil from excess of dryness. His fiery nature, indicated by his colour, produces burning effects.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II assigns Mars (Kuja, also Aṅgāraka — \"the red-hot one/coal-man\") blood-red as his colour, consistent across the classical Sanskrit tradition (rakta varṇa, \"blood-coloured\"). In the Kālapuruṣa scheme Mars is bala, strength — the general among the grahas, ranked directly under the two royal luminaries. (Paraphrase; confidence: ○.)\n\n**What this lens reads:** Mars-as-general is a specific, martial-bureaucratic image — a planetary hierarchy modeled on a royal court, not a modern psychological 'drive.' Worth sitting with before assuming every tradition's Mars means the same private thing it means in a Sun-sign column."
+      },
+      "keywords": [
+        "mars",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Mars"
+      },
+      "symbol": "♂",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 5
+    },
+    {
+      "id": "planet-jupiter",
+      "name": "Jupiter",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** Jupiter represents the higher mind, faith, and the principle of growth. It governs philosophy, religion, law, and long journeys. Jupiter shows where we seek meaning and where fortune smiles upon us. Well-aspected, it gives wisdom and prosperity; afflicted, it produces excess, extravagance, and false optimism.\n\n**Keywords:** Expansion",
+        "Canonical": "**Story:** Jupiter is expansion, meaning, and faith. It governs your search for truth, your sense of abundance, and your capacity for growth, wisdom, and joy.\n\n**Light:** Generosity, optimism, wisdom, philosophical depth, good fortune.\n\n**Shadow:** Excess, overconfidence, dogmatism, restlessness, waste.\n\n**Archetype:** The Sage — the one who sees the larger pattern and offers meaning.",
+        "Lilly (1647)": "**Lilly's own words:** Of the well-placed Jupiterian person: \"Magnanimous, Faithfull, Bashfull, Aspiring in an honourable way at high matters, in all his actions a Lover of fair Dealing, desiring to benefit all men, doing Glorious things, Honourable and Religious, of sweet and affable Conversation, wonderfully indulgent to his Wife and Children, reverencing Aged men, a great Reliever of the Poor, full of Charity and Godlinesse, Liberal, hating all Sordid actions, Just, Wise, Prudent, Thankfull, Vertuous.\" (Quoted from Christian Astrology, 1647, Book I, retaining Lilly's own spelling; confidence: medium — reproduced consistently across multiple secondary sources this session as verbatim 1647 text.)\n\n**What Lilly reads:** This is the era's most unreserved character portrait — Jupiter as moral excellence itself, virtue catalogued almost as a checklist. Compare Ptolemy's cooler, physics-of-temperature Jupiter (grammars/tetrabiblos-ashmand) and Alan Leo's spiritualized Jupiter (grammars/alan-leo): three centuries apart, three quite different registers for 'the benefic.'",
+        "Planetary Myths": "**Greco-Roman:** Zeus, son of Cronus and Rhea, ruled Olympus as sky-and-thunder god and \"father of gods and men\"; the Greek and Roman names for him (and the Vedic Dyaus, below) share an Indo-European root meaning \"sky father.\" Rome's Jupiter inherited Zeus's role as king of the gods and god of sky, law, and order. Sources: Wikipedia, \"Zeus\" — https://en.wikipedia.org/wiki/Zeus; British Museum blog, \"Gods and goddesses of the Greek and Roman pantheon\" — https://www.britishmuseum.org/blog/gods-and-goddesses-greek-and-roman-pantheon (confidence: ✔).\n\n**Vedic (graha):** Bṛhaspati (also Guru), teacher of the devas as Shukra teaches the asuras, is Jyotiṣa's significator of wisdom, expansion, and ethics — \"guru\" literally meaning \"heavy [with knowledge].\" He appears already in the Ṛgveda (book 4, hymn 50), described as born from the first light and carrying a bow strung with Ṛta, cosmic order; later texts call him son of the sage Aṅgiras. As taught in Jyotiṣa, summarized — Wikipedia, \"Brihaspati\" — https://en.wikipedia.org/wiki/Brihaspati (confidence: ○).\n\n**Babylonian/Mesopotamian:** Marduk began as a minor agricultural god of Babylon before Hammurabi's reign (c. 1792 BCE) elevated him to supreme sky-god and king of the pantheon. The Enūma Eliš epic tells how he defeated the primordial sea-goddess Tiamat and built the heavens and earth from her body — the mythic charter for Babylon's claim to cosmic and political centrality. Later astral texts equate him with the planet Jupiter. Sources: World History Encyclopedia, \"Enuma Elish\"; EBSCO Research Starters, \"Marduk\" — https://www.ebsco.com/research-starters/religion-and-philosophy/marduk (confidence: ✔ for the Enuma Elish narrative, ○ for the specific Jupiter equation's dating).\n\n**What the lens reads:** A thunder-king who overthrew his own father, a wisdom-teacher whose bowstring is cosmic order itself, a city-god who slew chaos and built the world from its corpse — three cultures independently cast their largest visible wandering star as the \"biggest\" kind of god: king, teacher, world-orderer. The size and brightness of Jupiter in the sky maps onto \"bigness\" of role across traditions that never spoke to each other.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Jupiter revolves in an intermediate sphere between the extreme cold of Saturn and the burning heat of Mars, and has consequently a temperate influence: he therefore at once promotes both warmth and moisture. But, owing to the spheres of Mars and the Sun, which lie beneath him, his warmth is predominant: and hence he produces fertilizing breezes.\n\n**Light:** Jupiter is considered by the ancients as benefic, or causer of good, because heat and moisture are predominant in him. He produces fertilizing breezes and promotes growth.\n\n**Shadow:** When afflicted, Jupiter's temperate nature may be overwhelmed by contrary influences, reducing his beneficial effects.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II lists several names for Jupiter — Jīva, Aṅgirā, Suraguru, Vācaspati, Ijya — and describes him as corpulent in body, with golden locks and eyes, of moral character, and phlegmatic. In the Kālapuruṣa scheme Jupiter (with Venus) is a counsellor, and separately Jupiter is named as knowledge and health. (Paraphrase with quoted phrases via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Suraguru\" — teacher of the gods — is doing real work: Jupiter here is specifically wisdom-as-counsel to a king, an image close to but not identical with the Hellenistic Jupiter's temperate, benefic warmth (compare grammars/tetrabiblos-ashmand's Jupiter). Two traditions independently landing on 'the wise, generous, expansive one' for the same slow bright planet is worth noticing without over-claiming why."
+      },
+      "keywords": [
+        "jupiter",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Jupiter"
+      },
+      "symbol": "♃",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 6
+    },
+    {
+      "id": "planet-saturn",
+      "name": "Saturn",
+      "category": "planet",
+      "sections": {
+        "Alan Leo": "**Interpretation:** Saturn represents karma, discipline, and the lessons of time. It governs structure, responsibility, and crystallization. Saturn shows where we must work hard and accept limitation. Well-aspected, it gives stability and achievement; afflicted, it produces fear, delay, and depression. Saturn is the great teacher.\n\n**Keywords:** Limitation",
+        "Canonical": "**Story:** Saturn is structure, time, and responsibility. It governs your relationship to limits, mastery, maturity, and the hard-won wisdom that comes from endurance.\n\n**Light:** Discipline, integrity, perseverance, mastery, wisdom through experience.\n\n**Shadow:** Rigidity, fear, depression, excessive control, self-denial.\n\n**Archetype:** The Elder — the keeper of boundaries who teaches through limitation.",
+        "Lilly (1647)": "**Lilly's own words:** \"Saturn is the supreamest or highest of all the Planets... he is not very bright or glorious, but is of a Pale, Wan, or Leaden, Ashy colour, and slow in motion.\" On who he signifies: \"In general Saturn signifies Husbandmen, Clowns, Beggars, Day-labourers, Old men, Fathers, Grand-fathers, Monks, Jesuits, Sectarists...\" among many other lowly and solitary trades. (Quoted from Christian Astrology, 1647, Book I, retaining Lilly's own spelling; confidence: ○ — corroborated across multiple secondary reproductions of the 1647 text this session, not independently re-fetched from a primary scan.)\n\n**What Lilly reads:** Saturn as slow, pale, and socially low — the planet of age, poverty, and solitary labour rather than the 'great teacher' softening later 20th-century astrology gives him (see grammars/western-astrology-canonical). Lilly's Saturn is unambiguously the era's grimmest planet, not yet rehabilitated.",
+        "Planetary Myths": "**Greco-Roman:** Kronos, youngest Titan, castrated his father Uranus and later swallowed his own children on hearing a prophecy he would be overthrown by one of them; Zeus, hidden by Rhea, survived to force his siblings back out and depose him. Beneath the horror-myth, Kronos was likely an older harvest-god — his festival, the Kronia, was a harvest celebration echoed by Rome's Saturnalia. Rome's Saturn kept this agricultural, golden-age, \"time\" association. Sources: Wikipedia, \"Cronus\" — https://en.wikipedia.org/wiki/Cronus; Theoi Project, \"Cronus\" — https://www.theoi.com/Titan/TitanKronos.html (confidence: ✔).\n\n**Vedic (graha):** Shani, son of Sūrya (the Sun) and his wife's shadow-double Chhāyā, is Jyotiṣa's grim significator of karma, justice, and time's slow reckoning — appointed, in later myth, to oversee everyone's karmic account without exception. His birth story says his first infant glance caused a solar eclipse, and that Sūrya himself could not bear to look at his dark-complexioned son directly. As taught in Jyotiṣa, summarized — Wikipedia, \"Shani\" — https://en.wikipedia.org/wiki/Shani; Exotic India, \"All About Shani Dev\" — https://www.exoticindiaart.com/article/all-about-shani-dev/ (confidence: ○).\n\n**Babylonian/Mesopotamian:** Saturn's Mesopotamian layer is the least settled of the seven: 1st-millennium astral texts (e.g. MUL.APIN) equate Saturn with Ninurta, a farmer-and-war god, but earlier tradition (under the variant name Ninib) sometimes cast the same figure as a solar deity instead — a real ambiguity in the sources, not a settled one-to-one mapping. What's firmer: Ninurta's harvest-god role parallels Kronos's, plausibly why the Greek-to-Babylonian chain (Kronos = Saturn = Ninurta) held. Sources: Ancient Mesopotamia, \"Ninurta\" — https://ancientmesopotamia.org/ideology/ninurta; Wikipedia, \"Ninurta\" — https://en.wikipedia.org/wiki/Ninurta (confidence: ◆ contested — flagged as such in the sources themselves, not just by us).\n\n**What the lens reads:** A child-devouring Titan who was secretly a harvest-god, a karma-accountant whose own father couldn't bear to look at him, a Mesopotamian farmer-god whose \"Saturn\" identity even ancient scribes weren't fully consistent about — Saturn is the one planet where every tradition, including the oldest layer, treats the assignment as difficult and heavy. That the ancients themselves disagreed about which god belongs here is worth sitting with, not smoothing over.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Saturn produces cold and dryness, for he is most remote both from the Sun's heat and from the earth's vapours. But he is more effective in the production of cold than of dryness. Saturn is esteemed malefic, or causer of evil, from his excess of cold. The coldness of Saturn is allotted to the day, to counterbalance its heat.\n\n**Light:** When moderated by combination with day, Saturn produces a favourable temperament. His influence brings structure, time, and the wisdom of age and distance.\n\n**Shadow:** Malefic, causer of evil from excess of cold. Saturn and Mars are esteemed of a contrary nature to the benefics, noxious in their influence.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter II gives Saturn several names — Kona, Manda (\"the slow one\"), Sūryaputra (\"son of the Sun\"), Asita (\"the black one\") — and describes him as lazy, with eyes of a golden colour, a thin and tall body, large teeth, stiff hair, and a windy constitution; black is his colour. In the Kālapuruṣa scheme Saturn is named as śoka, sorrow, and holds the rank of servant — the lowest of the nine. (Paraphrase with quoted phrases via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** Saturn-as-servant-and-sorrow is a harsher placement than the tropical tradition's 'great teacher' softening (see grammars/western-astrology-canonical) — worth sitting with as a genuinely different value judgment on the same slow, distant planet, not a translation quirk. 'Sūryaputra,' son of the Sun, also ties Śani into a specific mythological genealogy this grammar doesn't unpack further; see the Vedic-myth cross-references in grammars/planetary-myths."
+      },
+      "keywords": [
+        "saturn",
+        "planet"
+      ],
+      "metadata": {
+        "planet": "Saturn"
+      },
+      "symbol": "♄",
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Planetary Myths",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 7
+    },
+    {
+      "id": "sign-aries",
+      "name": "Aries",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The pioneer of the zodiac. Aries represents the outrushing of spirit into matter, the primal will to exist. Those born under this sign possess courage, enterprise, and the power to initiate. The Aries nature is direct, frank, and fearless, with strong executive ability. The higher type shows the spiritual warrior, fighting for principle rather than personal gain.\n\n**Light:** The spiritual warrior—courage devoted to principle, leadership that inspires others to action.\n\n**Shadow:** Selfishness, impatience, the lower martial nature that fights for personal gain alone.\n\n**Keywords:** I Am",
+        "Canonical": "**Story:** Aries is the spark of initiation — the first fire, the impulse to exist. Here energy moves before thought, asserting itself into being.\n\n**Light:** Courage, initiative, authenticity, pioneering spirit, directness.\n\n**Shadow:** Impatience, selfishness, combativeness, recklessness.\n\n**Archetype:** The Pioneer — first to arrive, first to act.",
+        "Lilly (1647)": "**In the text:** “Aries is a Masculine, Diurnall Sign, moveable, Cardinall, Equinoctiall; in nature fiery, hot and dry, cholerick, bestial, luxurious, intemperate and violent: the diurnall house of Mars of the Fiery Triplicity, and of the East.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Aries; confidence: medium — identical wording corroborated across two independent secondary reproductions this session, chronosspeaks.com's Lilly sign digest and renaissanceastrology.com's Aries page.)\n\n**What this lens reads:** Lilly's Aries is a humoral-physical formula — masculine, hot, dry, choleric, prone to violence and excess — not yet the modern 'Pioneer' light/shadow archetype (compare grammars/western-astrology-canonical); virtue and vice both sit inside the same hot, dry temperament rather than a separate moral register.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Aries is an equinoctial sign, the first after the vernal equinox. The commencement belongs to Aries; since the moisture of the spring forms an introduction for the other seasons. As the male sex governs, and the active principle takes precedence of the passive, Aries is consequently considered to be masculine and diurnal.\n\n**Light:** Aries initiates the cycle, provides the moisture of spring that introduces all other seasons. Cardinal fire energy that begins new cycles.\n\n**Shadow:** The stars in the head of Aries possess an influence similar in its effects to that of Mars and Saturn—both malefics.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I (\"Definitions and Elementary Zodiacal Principles\") of the Bṛhat Jātaka gives Meṣa the colour red, classes it among the quadruped (catuṣpada) signs, and — as a movable (cara) sign along with Karka, Tulā, and Makara — associates its trigon (with Siṃha and Dhanu) with the eastern direction. It is counted among the signs said to rise \"with their feet.\" (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** The classificatory apparatus here — quadruped/biped/aquatic, movable/fixed/common, directional trigons — runs strikingly parallel to Ptolemy's Tetrabiblos (compare grammars/tetrabiblos-ashmand's Aries), right down to shared categories like 'quadruped.' Whether that is convergent technical reasoning about the same visible zodiac or a trace of the historical transmission the Jyotiṣa dossier flags as contested (research/views/jyotisha.md) is an open question this grammar doesn't resolve."
+      },
+      "keywords": [
+        "aries",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Aries",
+        "element": "Fire"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 8
+    },
+    {
+      "id": "sign-taurus",
+      "name": "Taurus",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The builder and stabilizer. Taurus represents the desire nature seeking permanent form. Those born here possess determination, patience, and practical ability. The Taurus nature is steady, reliable, and appreciative of beauty and comfort. The higher type transmutes possessiveness into stewardship, using material resources for spiritual purposes.\n\n**Light:** The spiritual steward—using material resources for higher purposes, building forms that serve the soul.\n\n**Shadow:** Possessiveness, materialism, stubborn attachment to forms that have outlived their purpose.\n\n**Keywords:** I Have",
+        "Canonical": "**Story:** Taurus is embodiment — the pleasure of having form, of touching earth, of building something that lasts. Here spirit takes root in matter.\n\n**Light:** Stability, sensuality, patience, resourcefulness, loyalty.\n\n**Shadow:** Stubbornness, possessiveness, materialism, resistance to change.\n\n**Archetype:** The Builder — the one who gives form to what matters.",
+        "Lilly (1647)": "**In the text:** “Taurus is an Earthly, Cold, Dry, Melancholy, Feminine, Nocturnal, Fixed, Domestical or Beastial Sign, of the Earthly Triplicity, and South, the Night-house of Venus.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Taurus; confidence: medium — corroborated across chronosspeaks.com's Lilly sign digest and a second independent secondary reproduction this session.)\n\n**What this lens reads:** Lilly's Taurus is 'melancholy' and 'domestical/beastial' — a fixed-earth, cold-and-dry temperament rooted in the home and the beast-yard, not the sensuous 'Builder' of pleasure and stability that the modern light/shadow grammar gives it (compare grammars/western-astrology-canonical); this supersedes the app's earlier generic AI-drafted 'Taurus' item, which had no primary-source grounding.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Taurus is a fixed sign that follows the equinoctial Aries. During the Sun's presence in fixed signs, the cold, heat, moisture or dryness of the season is more firmly established. Those stars in Taurus in the abscission of the sign resemble the influence of Venus.\n\n**Light:** Fixed earth that stabilizes what the equinoctial sign initiated. The Pleiades within bring lunar and martial influence.\n\n**Shadow:** The Hyades star which is bright and ruddy, called Facula, has the same temperament as Mars—a malefic influence within the sign.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Vṛṣabha the colour white, classes it among the quadruped signs and, separately, among the fixed (sthira) signs; its southern-direction association is noted alongside Kanyā and Makara. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** A fixed earth sign carrying steadiness is a reading Jyotiṣa and the tropical tradition arrive at by the same structural logic (fixed quality + earth trigon) even though the underlying zodiac is measured differently — a case where the technique, not just the story, travels."
+      },
+      "keywords": [
+        "taurus",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Taurus",
+        "element": "Earth"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 9
+    },
+    {
+      "id": "sign-gemini",
+      "name": "Gemini",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The messenger and communicator. Gemini represents the reasoning mind seeking to understand duality. Those born here possess versatility, intellectual curiosity, and the gift of expression. The Gemini nature is alert, adaptable, and forever seeking new knowledge. The higher type unifies the lower and higher mind, becoming a channel for wisdom.\n\n**Light:** The divine messenger—unifying lower and higher mind, channeling wisdom through intellect.\n\n**Shadow:** Superficiality, scattered attention, the lower mind that gathers without synthesizing.\n\n**Keywords:** I Think",
+        "Canonical": "**Story:** Gemini is the dance of duality — the mind that plays with ideas, makes connections, and refuses to be pinned to a single truth. Here reality becomes conversation.\n\n**Light:** Versatility, wit, curiosity, communication, adaptability.\n\n**Shadow:** Superficiality, inconsistency, gossip, restlessness.\n\n**Archetype:** The Storyteller — the one who gives voice to multiplicity.",
+        "Lilly (1647)": "**In the text:** “Gemini is an aerial, hot, moyst, sanguine, Diurnal, common or double-bodied human Sign; the diurnall house of Mercury of the aery triplicity, Western, Masculine.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Gemini, with two OCR-mangled words in the secondary mirrors — 'dounle' and 'Mascu1ine' — silently corrected to 'double' and 'Masculine' for legibility; confidence: medium — the same wording surfaced across two independent reproductions this session.)\n\n**What this lens reads:** Lilly's Gemini is a 'common or double-bodied human Sign' under Mercury — the mutable, airy, sanguine formula that later psychological astrology keeps almost unchanged as 'the Messenger' (compare grammars/western-astrology-canonical), one of the closer continuities across this library rather than a sharp break.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Gemini is a bicorporeal sign, intermediately placed between the fixed and tropical signs, participating in the constitutional properties of both. The stars in the feet of Gemini have an influence similar to that of Mercury, and moderately to that of Venus.\n\n**Light:** Mutable air that transitions between seasons, carrying properties of both fixed and cardinal. Mercury's house of communication and duality.\n\n**Shadow:** The two bright stars on the heads—Apollo like Mercury, Hercules like Mars—show the dual nature can tend toward conflict.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Mithuna the colour of a parrot (green), classes it among the biped (dvipada) signs and among the common/dual (dvisvabhāva) signs (along with Kanyā, Dhanu, and Mīna), and places its trigon in the western direction. Unusually, Mithuna is noted as an exception among the otherwise \"night\"-rising signs. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Mithuna\" means a pair/couple in Sanskrit — the same twin-image the Greek Dídymoi (Gemini) carries, on an unrelated etymology. Two traditions independently seeing a pair of figures in the same patch of sky is a small, concrete instance of humans converging on similar readings from the actual star pattern (Castor and Pollux), not from shared doctrine."
+      },
+      "keywords": [
+        "gemini",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Gemini",
+        "element": "Air"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 10
+    },
+    {
+      "id": "sign-cancer",
+      "name": "Cancer",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The mother of the zodiac. Cancer represents the soul seeking incarnation through feeling and memory. Those born here possess sensitivity, tenacity, and deep protective instincts. The Cancer nature is receptive, nurturing, and connected to the past. The higher type becomes the universal mother, extending care beyond personal attachments.\n\n**Light:** The universal mother—extending nurturing care beyond personal attachments to all who need it.\n\n**Shadow:** Moodiness, clinging to the past, emotional manipulation through guilt or need.\n\n**Keywords:** I Feel",
+        "Canonical": "**Story:** Cancer is the shell and the softness within — the impulse to protect, nourish, and create a container for vulnerability. Here the emotional body becomes home.\n\n**Light:** Nurturing, emotional depth, protectiveness, tenacity, memory.\n\n**Shadow:** Clinginess, moodiness, defensiveness, emotional manipulation.\n\n**Archetype:** The Nurturer — the one who creates sanctuary.",
+        "Lilly (1647)": "**In the text:** “Cancer is the onely house of the Moon, and is the first Sign of the Watry or Northern Triplicity, is Watry, Cold, Moyst, Flegmatick, Feminine, Nocturnal, Moveable, a Solstice Sign mute and slow of Voyce, Fruitful, Northern.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Cancer; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)\n\n**What this lens reads:** 'Mute and slow of Voyce' and 'Flegmatick' is Lilly's Cancer speaking the era's humoral medicine as much as its astrology, a fruitful but wordless watery sign quite unlike the nurturing, emotionally expressive Cancer of later astrology (compare grammars/western-astrology-canonical) and Jyotiṣa's own watery, Moon-ruled Karkaṭa (grammars/jyotisha-brihat-jataka).",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Cancer is a tropical sign, the first thirty degrees after the summer solstice. These are called tropical because the Sun, after arriving at their first points, seems to turn and change his course towards a contrary latitude, causing summer by the turn he makes in Cancer.\n\n**Light:** The Moon's domicile, where lunar influence is strongest. The nebulous mass in the breast, called the Præsepe, has the efficacy of Mars and Moon together.\n\n**Shadow:** The two stars in the eyes of Cancer are of the same influence as Mercury, and moderately like Mars. Those in the claws are like Saturn and Mercury.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Karka the colour of the pāṭalā (trumpet flower), classes it among the aquatic (jalacara) signs and among the movable signs, with its trigon read toward the northern direction. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** An aquatic, movable, northern-trigon sign for the Moon's own house lines up with the tropical Cancer's watery, lunar, cardinal reading (compare grammars/tetrabiblos-ashmand) — again, shared structural logic rather than shared doctrine."
+      },
+      "keywords": [
+        "cancer",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Cancer",
+        "element": "Water"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 11
+    },
+    {
+      "id": "sign-leo",
+      "name": "Leo",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The king and creator. Leo represents the individualized self seeking expression and recognition. Those born here possess dignity, generosity, and natural authority. The Leo nature is warm, dramatic, and magnanimous when evolved. The higher type rules through love rather than dominion, radiating light that elevates others.\n\n**Light:** The benevolent ruler—leading through love, radiating light that elevates all it touches.\n\n**Shadow:** Pride, arrogance, the need for constant recognition, dominion rather than service.\n\n**Keywords:** I Will",
+        "Canonical": "**Story:** Leo is the radiance of the creative self — the heart that shines, performs, and celebrates being alive. Here consciousness becomes an art form.\n\n**Light:** Creativity, generosity, warmth, leadership, self-expression.\n\n**Shadow:** Pride, attention-seeking, drama, stubbornness.\n\n**Archetype:** The Performer — the one whose light calls others to their own.",
+        "Lilly (1647)": "**In the text:** “Leo is the onely house of the Sun, by nature, Fiery, Hot, Dry, Cholerick, Diurnal, Commanding, Bestial, Barren, of the East and Fiery Triplicity, Masculine.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Leo; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)\n\n**What this lens reads:** 'Commanding, Bestial, Barren' packs Leo's whole 17th-century meaning into one adjective string — rulership and animality in the same breath, and barren rather than fertile — a much harsher formula than the warm, generous 'Sovereign' Leo of the modern light/shadow grammar (compare grammars/western-astrology-canonical).",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Leo is a fixed sign following the summer solstice in Cancer. The bright star in the heart, called Regulus, agrees with Mars and Jupiter—combining the influences of a malefic and benefic planet in the royal star.\n\n**Light:** Fixed fire that establishes the heat of summer. Regulus brings the combined fortune of Mars's courage and Jupiter's expansion.\n\n**Shadow:** Two stars in the head are like Saturn and partly like Mars—both malefics. The three in the neck are like Saturn and Mercury.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Siṃha the colour \"black-white,\" classes it among the quadruped signs and among the fixed signs, sharing Meṣa's eastern-trigon association. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** Fire-trigon and fixed together read as the Sun's own house holding its heat steady rather than igniting and moving on — the same functional logic (fixed = a quality established, not just begun) that Ptolemy applies to Leo in the Hellenistic register (grammars/tetrabiblos-ashmand)."
+      },
+      "keywords": [
+        "leo",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Leo",
+        "element": "Fire"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 12
+    },
+    {
+      "id": "sign-virgo",
+      "name": "Virgo",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The craftsman and servant. Virgo represents the discriminating mind perfecting form through service. Those born here possess analytical ability, practical skill, and dedication to improvement. The Virgo nature is modest, methodical, and health-conscious. The higher type serves humanity selflessly, finding divinity in the details of daily work.\n\n**Light:** The sacred servant—finding divinity in details, perfecting form as an act of devotion.\n\n**Shadow:** Criticism, worry, perfectionism that paralyzes rather than refines.\n\n**Keywords:** I Analyze",
+        "Canonical": "**Story:** Virgo is devotion to craft — the sacred attention to detail, the impulse to refine, heal, and serve. Here consciousness meets the world through care.\n\n**Light:** Discernment, service, practical wisdom, humility, healing.\n\n**Shadow:** Perfectionism, criticism, anxiety, self-doubt.\n\n**Archetype:** The Healer — the one who makes whole through attention.",
+        "Lilly (1647)": "**In the text:** “Virgo is an earthly, cold, melancholly, barren, feminine, nocturnal, Southern Sign; the house and exaltation of Mercury, of the earthly triplicity.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Virgo; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)\n\n**What this lens reads:** Lilly's Virgo is again marked 'barren' (as Leo is) — fertility/barrenness is a load-bearing category for him that modern astrology has almost entirely dropped in favour of psychological traits like discernment and service (compare grammars/western-astrology-canonical).",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Virgo is a bicorporeal sign, participating in the properties of both fixed and tropical signs. That called Spica Virginis is like Venus and partly Mars—a complex mixture of benefic and malefic influence in the harvest star.\n\n**Light:** Mutable earth transitioning from summer to autumn. Mercury's exaltation and joy, bringing intellectual refinement to practical matters.\n\n**Shadow:** The stars in the head of Virgo, and that at the top of the southern wing, operate like Mercury and somewhat like Mars.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Kanyā a variegated colour, classes it among the biped signs, the common/dual signs, and shares Vṛṣabha and Makara's southern-trigon association. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Kanyā\" — maiden — is a direct semantic cousin of the Greco-Roman Virgo (also \"maiden\"/\"virgin\"), on the same unrelated-etymology logic as Mithuna/Gemini above: different words, same figure read into roughly the same stretch of sky."
+      },
+      "keywords": [
+        "virgo",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Virgo",
+        "element": "Earth"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 13
+    },
+    {
+      "id": "sign-libra",
+      "name": "Libra",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The harmonizer and judge. Libra represents the soul seeking equilibrium through relationship. Those born here possess diplomacy, artistic sense, and the desire for justice. The Libra nature is refined, cooperative, and peace-loving. The higher type achieves inner balance that no longer depends on external harmony, becoming a true peacemaker.\n\n**Light:** The true peacemaker—achieving inner balance that radiates outward, justice tempered by love.\n\n**Shadow:** Indecision, dependence on others for equilibrium, peace-keeping that avoids necessary conflict.\n\n**Keywords:** I Balance",
+        "Canonical": "**Story:** Libra is the art of relationship — the search for balance, beauty, and justice in the space between self and other. Here consciousness becomes dialogue.\n\n**Light:** Harmony, fairness, aesthetic sense, diplomacy, partnership.\n\n**Shadow:** Indecision, people-pleasing, avoidance of conflict, dependency.\n\n**Archetype:** The Artist — the one who creates beauty in the between.",
+        "Lilly (1647)": "**In the text:** “Libra is a Sign aeriall, hot and moyst, Sanguine, Masculine, Moveable, Equinoctiall, Cardinall, Humane, Diurnall, of the Aeriall Triplicity, and Western, the chief House of Venus.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Libra, with two OCR-mangled words in the secondary mirrors — 'Aerinall' and 'Diumnall' — silently corrected to 'Aeriall' and 'Diurnall' for legibility; confidence: medium — the same wording surfaced across two independent reproductions this session.)\n\n**What this lens reads:** Lilly's Libra is 'Humane' — one of only a few signs he calls out as specifically human-bodied and civilized — sitting under Venus as a cardinal air sign, a formula close enough to the modern 'Diplomat' (compare grammars/western-astrology-canonical) that Libra is one of the more stable signs across four centuries of this tradition.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Libra is an equinoctial sign, the first after the autumnal equinox. The signs of Aries and Libra are considered masculine and diurnal, describing the equinoctial circle from which proceed the principal variation and most powerful agitation of all things.\n\n**Light:** Venus's domicile bringing balance at the point of equal day and night. Cardinal air initiating the descent into darkness with grace.\n\n**Shadow:** Those stars at the points of the claws (formerly Scorpio's) operate like Jupiter and Mercury—but the association with Scorpio hints at hidden depths.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Tulā a black colour, classes it among the biped signs, the movable signs (with Meṣa, Karka, Makara), and shares Mithuna and Kumbha's western-trigon association. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Tulā\" means balance/scale in Sanskrit — the same image as the Greco-Roman Libra, the one zodiac sign in both traditions represented by an object rather than a person or animal. Whether this is a shared inheritance or an independent invention (both cultures having scales as a common tool) is exactly the kind of question the transmission dossier (research/views/jyotisha.md) holds open rather than settles."
+      },
+      "keywords": [
+        "libra",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Libra",
+        "element": "Air"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 14
+    },
+    {
+      "id": "sign-scorpio",
+      "name": "Scorpio",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The transformer and regenerator. Scorpio represents the emotional nature confronting death and rebirth. Those born here possess intensity, resourcefulness, and penetrating insight. The Scorpio nature is passionate, secretive, and powerfully magnetic. The higher type transmutes personal desire into spiritual will, becoming the eagle that soars above the serpent.\n\n**Light:** The eagle—transmuting desire into will, using emotional power for transformation and healing.\n\n**Shadow:** The scorpion—jealousy, revenge, using emotional intensity to manipulate or destroy.\n\n**Keywords:** I Desire",
+        "Canonical": "**Story:** Scorpio is the descent — the willingness to go where others won't, to face death, desire, and the raw truth of power. Here consciousness transforms through intensity.\n\n**Light:** Depth, passion, loyalty, psychological insight, regeneration.\n\n**Shadow:** Jealousy, manipulation, obsession, vindictiveness.\n\n**Archetype:** The Shaman — the one who travels between worlds.",
+        "Lilly (1647)": "**In the text:** Summarized from Christian Astrology, 1647, Book I, the chapter on Scorpio: a cold, watery, nocturnal, phlegmatic, northern, feminine sign of the watery triplicity, called the house and joy of Mars. (Confidence: ○ — this phrase surfaced identically across two independent secondary sources this session, but it is noticeably shorter than the full elemental/quality/triplicity formula Lilly gives the other eleven signs, so it reads as a condensed paraphrase of the 1647 chapter opening rather than a full verbatim sentence; treated as summary, not direct quotation.)\n\n**What this lens reads:** Even in paraphrase, 'the house and joy of Mars' plus 'cold, watery... phlegmatic' gives a Scorpio defined by Mars's rulership and a wet, withdrawn humoral temperament — not yet the psychological 'intensity and transformation' register of later astrology (compare grammars/western-astrology-canonical).",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Scorpio is a fixed sign following the autumnal equinox. As a fixed sign, it establishes the cold and dryness of autumn. The bright stars near the front, and those in the body, are similar to Mars and partly to Saturn—both malefics dominant.\n\n**Light:** Fixed water that consolidates the descent into darkness. Mars's nocturnal domicile bringing transformative intensity.\n\n**Shadow:** The bright stars near the front, and those in the body, are similar to Mars and partly to Saturn—double malefic influence.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Vṛścika a gold colour and, notably, marks it as the only centipede (śatapada, \"hundred-footed\") sign in the whole zodiac — a distinct classificatory category from quadruped, biped, or aquatic. It is a fixed sign, sharing the northern-trigon association with Karka and Mīna. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** A scorpion needs its own animal category (\"hundred-footed\") that no other sign shares — a small, concrete example of how far this classification scheme's own internal logic diverges from a simple biped/quadruped split, on a sign both traditions independently image as a scorpion or stinging creature."
+      },
+      "keywords": [
+        "scorpio",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Scorpio",
+        "element": "Water"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 15
+    },
+    {
+      "id": "sign-sagittarius",
+      "name": "Sagittarius",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The philosopher and seeker. Sagittarius represents the higher mind aspiring toward truth and meaning. Those born here possess enthusiasm, optimism, and love of freedom. The Sagittarian nature is jovial, adventurous, and prophetic. The higher type becomes the true teacher, pointing the way to wisdom while respecting each soul's unique path.\n\n**Light:** The true teacher—pointing toward wisdom while honoring each soul's unique journey.\n\n**Shadow:** Dogmatism, restlessness, the preacher who imposes rather than inspires.\n\n**Keywords:** I Perceive",
+        "Canonical": "**Story:** Sagittarius is the arrow in flight — the search for meaning, truth, and horizons beyond the known. Here consciousness expands through vision and adventure.\n\n**Light:** Optimism, philosophy, adventure, generosity, truthfulness.\n\n**Shadow:** Dogmatism, excess, restlessness, bluntness, irresponsibility.\n\n**Archetype:** The Explorer — the one who follows the arrow of meaning.",
+        "Lilly (1647)": "**In the text:** “Sagittarius is of the fiery triplicity, East, in nature fiery, hot, dry, Masculine, Cholericke, Diurnall, Common, by-corporall or double-bodied, the House and Joy of Jupiter.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Sagittarius; confidence: medium — the full formula surfaced via chronosspeaks.com's Lilly sign digest, and a second, separately worded search this session independently corroborated the constituent facts — fiery triplicity, masculine, diurnal, double-bodied, Jupiter's house — without reproducing the exact sentence.)\n\n**What this lens reads:** 'By-corporall or double-bodied' places Sagittarius among Lilly's three mutable signs sharing that label with Gemini and Pisces — a structural, not psychological, classification — while 'the House and Joy of Jupiter' does the work later astrology assigns to 'the Philosopher/Explorer' archetype (compare grammars/western-astrology-canonical).",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Sagittarius is a bicorporeal sign, participating in the properties of both fixed and tropical signs. Jupiter's domicile, bringing the expansive influence of the greater benefic to the mutable fire.\n\n**Light:** Mutable fire transitioning from autumn to winter, carrying both established and initiating properties. Jupiter's philosophical expansion.\n\n**Shadow:** The stars at the point of the arrow have an influence like that of Mars, and partly like the Moon—martial aggression present.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Dhanu the colour of paddy husk and treats it as a split sign: its second half is classed quadruped, its first half biped — a half-and-half classification shared with Makara (split the other way). It is a common/dual sign, sharing the eastern-trigon association with Meṣa and Siṃha. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Dhanu\" means bow — an archer, same as the Greco-Roman Sagittarius's centaur-archer, and the same half-human/half-animal duality shows up independently in the sign's own classification scheme (half biped, half quadruped) as well as in its symbol. A striking convergence, held here as fact-plus-question, not proof of either shared or separate origin."
+      },
+      "keywords": [
+        "sagittarius",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Sagittarius",
+        "element": "Fire"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 16
+    },
+    {
+      "id": "sign-capricorn",
+      "name": "Capricorn",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The father and administrator. Capricorn represents ambition crystallizing into achievement through discipline. Those born here possess endurance, organizational ability, and respect for tradition. The Capricorn nature is serious, responsible, and ambitious. The higher type uses worldly position for spiritual service, becoming the initiate who has mastered matter.\n\n**Light:** The initiate—using mastery of matter for spiritual service, worldly position devoted to higher purpose.\n\n**Shadow:** Cold ambition, materialism, using structure to control rather than to serve.\n\n**Keywords:** I Use",
+        "Canonical": "**Story:** Capricorn is the mountain — the slow, determined climb toward mastery and legacy. Here consciousness meets time, structure, and the weight of responsibility.\n\n**Light:** Ambition, discipline, integrity, practical wisdom, authority.\n\n**Shadow:** Coldness, workaholism, pessimism, rigidity, status obsession.\n\n**Archetype:** The Elder — the one who builds what endures.",
+        "Lilly (1647)": "**In the text:** “Capricorn is the House of Saturn, and is Nocturnal, Cold, Dry, Melancholly, Earthly, Feminine, Solsticall, Cardinall, Moveable, Domesticall, Four-footed, Southern; the exaltation of Mars.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Capricorn; confidence: ○ — this full sentence was located via only one secondary reproduction this session; a second, differently worded search independently corroborated the two load-bearing facts inside it — Capricorn as Saturn's nocturnal house, and Mars's exaltation there — but did not reproduce the whole sentence, so the exact phrasing rests on a single source.)\n\n**What this lens reads:** 'Four-footed' and 'Domesticall' are the kind of concrete, animal-taxonomy descriptor modern astrology drops entirely in favour of 'the Achiever' or 'the Sea-Goat' as pure symbol (compare grammars/western-astrology-canonical); Lilly's Capricorn is still half zoological classification.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Capricorn is a tropical sign, the first thirty degrees after the winter solstice. The Sun causes winter by the turn he makes in Capricorn. Saturn's domicile, where the greater malefic's cold and dryness find their natural home.\n\n**Light:** Cardinal earth initiating the return of light after the winter solstice. Saturn's discipline and structure in its domicile.\n\n**Shadow:** Saturn's nocturnal house where his cold, dry, malefic nature is most established. Mars is exalted here, adding martial intensity.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Makara a white-red colour and, like Dhanu, splits its classification: the first half aquatic, matching Karka and Mīna, the second half quadruped, matching Meṣa, Vṛṣabha, and Siṃha. It is a movable sign, sharing the southern-trigon association with Vṛṣabha and Kanyā. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** Makara is imaged as a crocodile-fish hybrid (the traditional makara creature) — and, tellingly, its own textual classification splits it half-aquatic, half-land, mirroring the hybrid symbol in the technical scheme itself rather than only in the artwork. Compare the Western sea-goat image for Capricorn (grammars/tetrabiblos-ashmand): two traditions, two different hybrid sea-creatures, same zodiac position."
+      },
+      "keywords": [
+        "capricorn",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Capricorn",
+        "element": "Earth"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 17
+    },
+    {
+      "id": "sign-aquarius",
+      "name": "Aquarius",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The humanitarian and reformer. Aquarius represents the universal mind working for collective progress. Those born here possess originality, humanitarian ideals, and scientific ability. The Aquarian nature is independent, progressive, and oriented toward the future. The higher type serves humanity through brotherhood, seeing all as equal expressions of the one life.\n\n**Light:** The world server—seeing all as equal expressions of one life, working for humanity's progress.\n\n**Shadow:** Emotional detachment, eccentricity for its own sake, ideas divorced from human feeling.\n\n**Keywords:** I Know",
+        "Canonical": "**Story:** Aquarius is the vision of what could be — the impulse toward collective evolution, individual freedom, and the future. Here consciousness serves the whole through radical originality.\n\n**Light:** Vision, humanitarianism, originality, intellectual independence.\n\n**Shadow:** Detachment, contrarianism, emotional avoidance, superiority.\n\n**Archetype:** The Visionary — the one who sees the future in the present.",
+        "Lilly (1647)": "**In the text:** “Aquarius is an aieriall, hot and moyst Sign, of the aiery Triplicity, diurnal, Sanguine, fixed, rationall, humane, masculine, the principall house of Saturn, and house wherein he most rejoyceth.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Aquarius; confidence: ○ — this full sentence was located via only one secondary reproduction this session; a second, differently worded search independently corroborated that Aquarius is Saturn's day-house and the sign in which Saturn 'rejoyceth,' but did not reproduce the whole sentence, so the exact phrasing rests on a single source.)\n\n**What this lens reads:** 'Rationall, humane' plus Saturn's special 'joy' there gives Lilly's Aquarius an intellectual, humane cast that survives remarkably intact into the modern 'Visionary'/humanitarian Aquarius (compare grammars/western-astrology-canonical) — one of the signs where the 1647 formula and the 21st-century archetype rhyme rather than clash.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Aquarius is a fixed sign following the winter solstice. Saturn's diurnal domicile, where his cold influence is moderated by the day. Fixed air that establishes the patterns of winter.\n\n**Light:** Fixed air consolidating winter's lessons. Saturn's diurnal house where coldness is tempered by daylight hours.\n\n**Shadow:** Saturn's house still carries malefic potential, though moderated by its diurnal nature.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Kumbha the colour of a mongoose and classes it among the biped signs and the fixed signs, sharing the western-trigon association with Mithuna and Tulā. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Kumbha\" means water-pot — the water-bearer image, close kin to the Greco-Roman Aquarius's water-carrier, yet classed here as a biped (human-form) sign rather than an aquatic one: the vessel is watery, the bearer is not, a small but real reminder that these classification schemes track the sign's imagined body, not its symbolic association."
+      },
+      "keywords": [
+        "aquarius",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Aquarius",
+        "element": "Air"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 18
+    },
+    {
+      "id": "sign-pisces",
+      "name": "Pisces",
+      "category": "sign",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The mystic and redeemer. Pisces represents the soul completing its cycle, dissolving separateness through compassion. Those born here possess imagination, sensitivity, and spiritual receptivity. The Piscean nature is gentle, impressionable, and self-sacrificing. The higher type becomes the conscious server, willingly taking on the suffering of others to aid their liberation.\n\n**Light:** The conscious server—willingly bearing others' suffering to aid liberation, redeeming through love.\n\n**Shadow:** Victimhood, escapism, losing self in others' pain without the strength to transform it.\n\n**Keywords:** I Believe",
+        "Canonical": "**Story:** Pisces is the ocean — the dissolution of separate self into the infinite. Here consciousness merges with everything, swimming in compassion, imagination, and the dream of unity.\n\n**Light:** Compassion, imagination, spirituality, artistic sensitivity, transcendence.\n\n**Shadow:** Escapism, victimhood, confusion, boundary dissolution.\n\n**Archetype:** The Dreamer — the one who remembers what the world has forgotten.",
+        "Lilly (1647)": "**In the text:** “Pisces is of the Watry Triplicity, Northern, cold Sign, moyst, Flegmatick, feminine, nocturnal, the house of Jupiter, and exaltation of Venus, a Bycorporeal, common or double-bodied Sign, an idle, effeminate, sickly Sign, representing a party of no action.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Pisces; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)\n\n**What this lens reads:** 'Idle, effeminate, sickly... a party of no action' is about as unflattering as this library's Lilly voice gets — a moralized reading of passivity that the modern 'Mystic/Dreamer' Pisces (compare grammars/western-astrology-canonical) reframes as spiritual receptivity rather than a character flaw.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** Pisces is a bicorporeal sign, the last of the zodiac, participating in the properties of both fixed and tropical signs. Jupiter's nocturnal domicile and Venus's exaltation bring benefic influence to the mutable water.\n\n**Light:** Mutable water dissolving winter and preparing for spring's renewal. Jupiter and Venus both have dignity here, doubling benefic influence.\n\n**Shadow:** The bright star at the binding of the two fishes is like Mars, and moderately like Mercury—martial dissolution present.",
+        "Jyotiṣa (Bṛhat Jātaka)": "**In the text:** Chapter I gives Mīna the colour of a fish and classes it among the aquatic signs and the common/dual signs, sharing the northern-trigon association with Karka and Vṛścika. (Paraphrase with quoted classificatory terms via chestofbooks.com; confidence: ○.)\n\n**What this lens reads:** \"Mīna\" simply means fish — the plainest possible name for the same paired-fish image the Greco-Roman Pisces carries. The final sign in both traditions' twelve-fold wheel, closing the same circle by two independently-arrived-at routes."
+      },
+      "keywords": [
+        "pisces",
+        "sign"
+      ],
+      "metadata": {
+        "sign": "Pisces",
+        "element": "Water"
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Lilly (1647)",
+        "Ptolemy (Tetrabiblos)",
+        "Jyotiṣa (Bṛhat Jātaka)"
+      ],
+      "number": 19
+    },
+    {
+      "id": "house-1",
+      "name": "First House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of the physical body and personal appearance. It represents the mask we wear, our approach to life, and how others see us. Planets here strongly color the personality and physical constitution.\n\n**Keywords:** Self",
+        "Canonical": "**Story:** The house of self and emergence. How you appear, how you begin, how you enter a room and a life. The mask that becomes the face.\n\n**Light:** Self-awareness, physical vitality, personal initiative.\n\n**Shadow:** Self-absorption, identity crises, over-concern with image.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** The Ascendant, also called the Horoscope (Greek: Horoskopos), is the portion rising above the horizon at the east. Planets here have the most potent influence on the life and destiny of the native. The Ascendant is considered masculine and the first of the masculine signs.\n\n**Light:** Life, body, soul, constitution—the very self of the native. Angular and most powerful position.\n\n**Shadow:** Malefics here afflict the native's life and health from birth."
+      },
+      "keywords": [
+        "first house",
+        "house"
+      ],
+      "metadata": {
+        "house": 1
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Ptolemy (Tetrabiblos)"
+      ],
+      "number": 20
+    },
+    {
+      "id": "house-2",
+      "name": "Second House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of money, possessions, and personal values. It shows our attitude toward material security and what we value. The second house reveals our earning capacity and relationship with the material world.\n\n**Keywords:** Possessions",
+        "Canonical": "**Story:** The house of resources and values. What you possess, what possesses you, and what you consider worth having. Your relationship to material reality.\n\n**Light:** Self-worth, material security, talent, sensory pleasure.\n\n**Shadow:** Greed, insecurity, over-attachment to possessions."
+      },
+      "keywords": [
+        "second house",
+        "house"
+      ],
+      "metadata": {
+        "house": 2
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 21
+    },
+    {
+      "id": "house-3",
+      "name": "Third House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of the concrete mind, communication, and immediate environment. It governs siblings, neighbors, short journeys, and early education. This house shows how we think and express our thoughts.\n\n**Keywords:** Communication",
+        "Canonical": "**Story:** The house of communication and mind. How you speak, write, learn, and connect with your immediate environment. The neighborhood of consciousness.\n\n**Light:** Curiosity, articulation, mental agility, sibling bonds.\n\n**Shadow:** Gossip, scattered thinking, superficial connections."
+      },
+      "keywords": [
+        "third house",
+        "house"
+      ],
+      "metadata": {
+        "house": 3
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 22
+    },
+    {
+      "id": "house-4",
+      "name": "Fourth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of home, family, and psychological foundations. It represents one parent, our roots, and the end of life. The fourth house shows our deepest private self and sense of security.\n\n**Keywords:** Home",
+        "Canonical": "**Story:** The house of roots and foundation. Your home, your family of origin, your emotional bedrock. The place you return to when everything else falls away.\n\n**Light:** Emotional security, ancestry, belonging, inner foundation.\n\n**Shadow:** Family wounds, rootlessness, clinging to the past.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** The Subterranean angle (Greek: Hypogeion) is the lower heaven, the place of the midnight Sun. It signifies parents, ancestry, foundations, and the end of matters.\n\n**Light:** Roots, home, ancestry, the foundation upon which life is built. Angular and powerful.\n\n**Shadow:** Also signifies the end of matters—where things conclude."
+      },
+      "keywords": [
+        "fourth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 4
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Ptolemy (Tetrabiblos)"
+      ],
+      "number": 23
+    },
+    {
+      "id": "house-5",
+      "name": "Fifth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of self-expression, creativity, and pleasure. It governs children, romance, speculation, and amusements. This house shows how we express our creative power and find joy.\n\n**Keywords:** Creativity",
+        "Canonical": "**Story:** The house of creation and play. Where you make things for the joy of making them — children, art, romance, games. The stage where your heart performs.\n\n**Light:** Creative expression, romance, children, joy, risk-taking.\n\n**Shadow:** Drama addiction, gambling, narcissistic expression."
+      },
+      "keywords": [
+        "fifth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 5
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 24
+    },
+    {
+      "id": "house-6",
+      "name": "Sixth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of health, work, and service. It governs employment, daily routine, and small animals. This house shows our attitude toward duty and the care of the physical body.\n\n**Keywords:** Service",
+        "Canonical": "**Story:** The house of service and daily practice. How you maintain your body, refine your craft, and serve the world through ordinary devotion. The sacred mundane.\n\n**Light:** Service, health awareness, craftsmanship, daily ritual.\n\n**Shadow:** Workaholism, hypochondria, perfectionism, servitude."
+      },
+      "keywords": [
+        "sixth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 6
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 25
+    },
+    {
+      "id": "house-7",
+      "name": "Seventh House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of marriage, partnership, and open enemies. It represents our approach to committed relationships and what we seek in others. This house shows how we relate one-to-one.\n\n**Keywords:** Partnership",
+        "Canonical": "**Story:** The house of the other. Your partnerships, marriages, open enemies, and projections. The mirror in which you see what you cannot see alone.\n\n**Light:** Partnership, commitment, diplomacy, balance through relationship.\n\n**Shadow:** Codependency, projection, loss of self in others.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** The Descendant or Occidental angle (Greek: Dysis) is opposite the Ascendant, the place where stars set. It signifies marriage, partnerships, and open dealings with others.\n\n**Light:** Partnership, marriage, contracts—the complementary other that completes the self.\n\n**Shadow:** Also signifies open enemies and, when afflicted, death."
+      },
+      "keywords": [
+        "seventh house",
+        "house"
+      ],
+      "metadata": {
+        "house": 7
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Ptolemy (Tetrabiblos)"
+      ],
+      "number": 26
+    },
+    {
+      "id": "house-8",
+      "name": "Eighth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of death, transformation, and shared resources. It governs inheritance, the occult, and deep psychological change. This house shows our capacity for rebirth and handling of others' resources.\n\n**Keywords:** Regeneration",
+        "Canonical": "**Story:** The house of transformation and shared resources. Where you merge with others — financially, sexually, psychologically. The territory of death, inheritance, and rebirth.\n\n**Light:** Psychological depth, intimacy, shared power, transformation.\n\n**Shadow:** Power struggles, obsession, fear of loss, manipulation."
+      },
+      "keywords": [
+        "eighth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 8
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 27
+    },
+    {
+      "id": "house-9",
+      "name": "Ninth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of the higher mind, religion, and long journeys. It governs philosophy, law, publishing, and foreign cultures. This house shows our search for meaning and expansion of consciousness.\n\n**Keywords:** Philosophy",
+        "Canonical": "**Story:** The house of expansion and meaning. Your philosophy, long journeys, higher education, and relationship to truth. Where you search for the big picture.\n\n**Light:** Wisdom, faith, cross-cultural understanding, philosophical depth.\n\n**Shadow:** Dogmatism, restlessness, spiritual bypassing, arrogance."
+      },
+      "keywords": [
+        "ninth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 9
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 28
+    },
+    {
+      "id": "house-10",
+      "name": "Tenth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of career, reputation, and public standing. It represents one parent, authority figures, and our ambitions. This house shows our contribution to society and how we're known publicly.\n\n**Keywords:** Career",
+        "Canonical": "**Story:** The house of vocation and public life. Your career, reputation, and contribution to the world. The peak of the chart — what you are seen to do.\n\n**Light:** Purpose, achievement, public contribution, authority.\n\n**Shadow:** Status obsession, workaholism, empty ambition, fear of failure.",
+        "Ptolemy (Tetrabiblos)": "**Interpretation:** The Mid-heaven or Culmination (Greek: Mesouranema) is the southern angle, the highest point of the heavens, where the Sun reaches at noon. It signifies honour, profession, authority, and public reputation.\n\n**Light:** Career, reputation, public standing, the heights one may achieve. Angular and most visible position.\n\n**Shadow:** Empty honors, reputation without substance, the isolation of the peak."
+      },
+      "keywords": [
+        "tenth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 10
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical",
+        "Ptolemy (Tetrabiblos)"
+      ],
+      "number": 29
+    },
+    {
+      "id": "house-11",
+      "name": "Eleventh House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of friends, groups, and hopes. It governs social circles, humanitarian interests, and our wishes for the future. This house shows how we participate in collective endeavors.\n\n**Keywords:** Friendship",
+        "Canonical": "**Story:** The house of community and vision. Your friends, networks, hopes, and the groups you belong to. Where individual purpose meets collective dreaming.\n\n**Light:** Community, friendship, humanitarian ideals, innovation.\n\n**Shadow:** Conformity, detachment, misplaced idealism, loneliness in crowds."
+      },
+      "keywords": [
+        "eleventh house",
+        "house"
+      ],
+      "metadata": {
+        "house": 11
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 30
+    },
+    {
+      "id": "house-12",
+      "name": "Twelfth House",
+      "category": "house",
+      "sections": {
+        "Alan Leo": "**Interpretation:** The house of seclusion, karma, and self-undoing. It governs hospitals, prisons, hidden enemies, and the unconscious. This house shows our hidden strengths and weaknesses, and the soul's need for retreat.\n\n**Keywords:** Karma",
+        "Canonical": "**Story:** The house of the unseen. Your unconscious, your connection to the collective dream, your hidden strengths and sorrows. The place before birth and after death.\n\n**Light:** Spiritual depth, compassion, artistic vision, surrender, healing.\n\n**Shadow:** Self-undoing, isolation, addiction, martyrdom, hidden enemies."
+      },
+      "keywords": [
+        "twelfth house",
+        "house"
+      ],
+      "metadata": {
+        "house": 12
+      },
+      "section_labels": [
+        "Alan Leo",
+        "Canonical"
+      ],
+      "number": 31
+    }
+  ],
+  "_exported_from_app": "a1b2c3d4-4444-4a04-9e04-aa0000000004 on 2026-07-16"
+}
