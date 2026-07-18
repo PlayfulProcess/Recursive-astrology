@@ -314,7 +314,7 @@
             "item_id": "planet-saturn"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-pluto"
           }
         ]
@@ -354,11 +354,11 @@
         "archetype": "Revolutionary epochs, eros unbound",
         "source_grammars": [
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-uranus"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-pluto"
           }
         ]
@@ -402,7 +402,7 @@
             "item_id": "planet-jupiter"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-uranus"
           }
         ]
@@ -442,11 +442,11 @@
         "archetype": "Spiritual awakenings, cultural dreamings",
         "source_grammars": [
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-uranus"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-neptune"
           }
         ]
@@ -490,7 +490,7 @@
             "item_id": "planet-saturn"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-neptune"
           }
         ]
@@ -534,7 +534,7 @@
             "item_id": "planet-saturn"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-uranus"
           }
         ]
@@ -622,7 +622,7 @@
             "item_id": "planet-jupiter"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-neptune"
           }
         ]
@@ -666,7 +666,7 @@
             "item_id": "planet-jupiter"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-pluto"
           }
         ]
@@ -706,11 +706,11 @@
         "archetype": "Deep-background epochal myth",
         "source_grammars": [
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-neptune"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-pluto"
           }
         ]
@@ -798,7 +798,7 @@
             "item_id": "planet-sun"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-pluto"
           }
         ]
@@ -930,7 +930,7 @@
             "item_id": "planet-mercury"
           },
           {
-            "slug": "archetypal-pairs",
+            "slug": "archetypal-astrology-tarnas",
             "item_id": "planet-uranus"
           }
         ]

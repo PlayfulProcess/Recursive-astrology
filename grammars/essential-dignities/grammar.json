@@ -100,7 +100,7 @@
       "sections": {
         "Canonical": "Modern astrology keeps Mercury's rulership of both Gemini and Virgo — no outer planet took either. The Virgo/Pisces axis is the tradition's cleanest teaching case: analysis exalted where it discriminates, undone where everything dissolves.",
         "Dignities table": "Domicile: Gemini, Virgo · Exaltation: Virgo (15°) · Detriment: Sagittarius, Pisces · Fall: Pisces",
-        "What dignity means": "[William Lilly, Christian Astrology, 1647] Mercury is the scheme's singular case: exalted in a sign he also rules — Lilly's own chapter calls Virgo \"the house and exaltation of Mercury\" (wording verified in this repo's grammars/renaissance-lilly) — so at 15° Virgo he can hold domicile and exaltation at once, +9 in Lilly's arithmetic, the strongest essential placement the table allows. The mirror is just as singular: in Pisces he is in detriment AND fall together, doubly debilitated. (Placements: high confidence; the Virgo quote is verified; the rest is gloss on the shared table.)"
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] Mercury is the scheme's singular case: exalted in a sign he also rules — Lilly's own chapter calls Virgo \"the house and exaltation of Mercury\" (wording verified in this repo's grammars/william-lilly-christian-astrology) — so at 15° Virgo he can hold domicile and exaltation at once, +9 in Lilly's arithmetic, the strongest essential placement the table allows. The mirror is just as singular: in Pisces he is in detriment AND fall together, doubly debilitated. (Placements: high confidence; the Virgo quote is verified; the rest is gloss on the shared table.)"
       },
       "keywords": [
         "mercury",
@@ -114,7 +114,7 @@
       "metadata": {
         "fall": "Pisces",
         "planet": "Mercury",
-        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647 — 'the house and exaltation of Mercury', verified via grammars/renaissance-lilly); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647 — 'the house and exaltation of Mercury', verified via grammars/william-lilly-christian-astrology); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
         "domicile": [
           "Gemini",
           "Virgo"
@@ -142,7 +142,7 @@
       "sections": {
         "Canonical": "Modern astrology keeps Venus ruling Taurus and Libra. The exaltation in Pisces reads now as love universalized past the personal; the fall in Virgo as the old scheme's warning about perfecting what wants to be enjoyed.",
         "Dignities table": "Domicile: Taurus, Libra · Exaltation: Pisces (27°) · Detriment: Scorpio, Aries · Fall: Virgo",
-        "What dignity means": "[William Lilly, Christian Astrology, 1647] By Lilly's scoring Venus rules from two homes — earthy Taurus and airy Libra — and is exalted at 27° Pisces (the one degree where the old tables genuinely waver: some sources give 28°), where sympathy is boundless. Lilly's own Pisces chapter states the placement — Pisces as \"the house of Jupiter, and exaltation of Venus\" (verified in grammars/renaissance-lilly). In Scorpio and Aries (detriment) her arts serve Mars's ends; in Virgo (fall) the tradition reads her as most out of place — affection under analysis. (Placements: high confidence; the 27°/28° variance is noted honestly.)"
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] By Lilly's scoring Venus rules from two homes — earthy Taurus and airy Libra — and is exalted at 27° Pisces (the one degree where the old tables genuinely waver: some sources give 28°), where sympathy is boundless. Lilly's own Pisces chapter states the placement — Pisces as \"the house of Jupiter, and exaltation of Venus\" (verified in grammars/william-lilly-christian-astrology). In Scorpio and Aries (detriment) her arts serve Mars's ends; in Virgo (fall) the tradition reads her as most out of place — affection under analysis. (Placements: high confidence; the 27°/28° variance is noted honestly.)"
       },
       "keywords": [
         "venus",
@@ -156,7 +156,7 @@
       "metadata": {
         "fall": "Virgo",
         "planet": "Venus",
-        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Pisces is the house of Jupiter and exaltation of Venus', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647, verified via grammars/renaissance-lilly); degree 27° per most listings, 28° in some — cross-checked Jul 2026",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Pisces is the house of Jupiter and exaltation of Venus', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647, verified via grammars/william-lilly-christian-astrology); degree 27° per most listings, 28° in some — cross-checked Jul 2026",
         "domicile": [
           "Taurus",
           "Libra"
@@ -184,7 +184,7 @@
       "sections": {
         "Canonical": "Modern astrology keeps Mars ruling Aries, and after Pluto's discovery (1930) most modern astrologers give Scorpio to Pluto — a MODERN addition, with Mars retained as traditional or co-ruler. The exaltation in Capricorn still reads as aggression at its most effective: aimed, patient, structural.",
         "Dignities table": "Domicile: Aries, Scorpio · Exaltation: Capricorn (28°) · Detriment: Libra, Taurus · Fall: Cancer",
-        "What dignity means": "[William Lilly, Christian Astrology, 1647] Mars rules day-Aries and night-Scorpio, and is exalted at 28° Capricorn — both Ptolemy and Lilly state the sign: \"Capricorn is the house of Saturn and exaltation of Mars\" (Ashmand, verified via grammars/tetrabiblos-ashmand), and Lilly's Capricorn chapter says the same (verified via grammars/renaissance-lilly). The old reading: choler disciplined into strategy — the soldier under command. In Libra and Taurus (detriment) the blade is a guest in Venus's houses; in Cancer (fall) heat drowns in moisture, force turned moody. (Placements: high confidence.)"
+        "What dignity means": "[William Lilly, Christian Astrology, 1647] Mars rules day-Aries and night-Scorpio, and is exalted at 28° Capricorn — both Ptolemy and Lilly state the sign: \"Capricorn is the house of Saturn and exaltation of Mars\" (Ashmand, verified via grammars/tetrabiblos-ashmand), and Lilly's Capricorn chapter says the same (verified via grammars/william-lilly-christian-astrology). The old reading: choler disciplined into strategy — the soldier under command. In Libra and Taurus (detriment) the blade is a guest in Venus's houses; in Cancer (fall) heat drowns in moisture, force turned moody. (Placements: high confidence.)"
       },
       "keywords": [
         "mars",
@@ -198,7 +198,7 @@
       "metadata": {
         "fall": "Cancer",
         "planet": "Mars",
-        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Capricorn is the house of Saturn and exaltation of Mars', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647, verified via grammars/renaissance-lilly); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — 'Capricorn is the house of Saturn and exaltation of Mars', verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647, verified via grammars/william-lilly-christian-astrology); exaltation degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
         "domicile": [
           "Aries",
           "Scorpio"
@@ -324,7 +324,7 @@
         "fall": "Saturn",
         "sign": "Aries",
         "ruler": "Mars",
-        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647 — 'the diurnall house of Mars', verified via grammars/renaissance-lilly); Sun's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I; Lilly, Christian Astrology 1647 — 'the diurnall house of Mars', verified via grammars/william-lilly-christian-astrology); Sun's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
         "detriment": "Venus",
         "confidence": "high",
         "exaltation": "Sun",
@@ -477,7 +477,7 @@
       "name": "Virgo",
       "category": "sign",
       "sections": {
-        "Canonical": "The scheme's singular sign: Lilly's own chapter calls Virgo \"the house and exaltation of Mercury\" (verified via grammars/renaissance-lilly) — the only place a classical planet rules AND is exalted at once. Mercury's rulership is unchanged in modern practice. Jupiter in detriment, Venus in fall: breadth and pleasure both submitted to analysis.",
+        "Canonical": "The scheme's singular sign: Lilly's own chapter calls Virgo \"the house and exaltation of Mercury\" (verified via grammars/william-lilly-christian-astrology) — the only place a classical planet rules AND is exalted at once. Mercury's rulership is unchanged in modern practice. Jupiter in detriment, Venus in fall: breadth and pleasure both submitted to analysis.",
         "Dignities table": "Ruler: Mercury · Exaltation: Mercury (15°) · Detriment: Jupiter · Fall: Venus"
       },
       "keywords": [
@@ -492,7 +492,7 @@
         "fall": "Venus",
         "sign": "Virgo",
         "ruler": "Mercury",
-        "_source": "Traditional table of essential dignities (Lilly, Christian Astrology 1647 — 'the house and exaltation of Mercury', verified via grammars/renaissance-lilly; Ptolemy, Tetrabiblos I — 'Mercury's exaltation and joy', verified via grammars/tetrabiblos-ashmand); degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
+        "_source": "Traditional table of essential dignities (Lilly, Christian Astrology 1647 — 'the house and exaltation of Mercury', verified via grammars/william-lilly-christian-astrology; Ptolemy, Tetrabiblos I — 'Mercury's exaltation and joy', verified via grammars/tetrabiblos-ashmand); degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
         "detriment": "Jupiter",
         "confidence": "high",
         "exaltation": "Mercury",
@@ -613,7 +613,7 @@
       "name": "Capricorn",
       "category": "sign",
       "sections": {
-        "Canonical": "Saturn's nocturnal house — stated by both source voices: Ptolemy, \"Capricorn is the house of Saturn and exaltation of Mars\" (verified via grammars/tetrabiblos-ashmand), and Lilly's Capricorn chapter likewise (verified via grammars/renaissance-lilly). Rulership unchanged in modern practice. Mars exalted at 28°: aggression at its most effective — aimed, patient, structural. The Moon in detriment, Jupiter in fall: feeling and bounty both put on a budget.",
+        "Canonical": "Saturn's nocturnal house — stated by both source voices: Ptolemy, \"Capricorn is the house of Saturn and exaltation of Mars\" (verified via grammars/tetrabiblos-ashmand), and Lilly's Capricorn chapter likewise (verified via grammars/william-lilly-christian-astrology). Rulership unchanged in modern practice. Mars exalted at 28°: aggression at its most effective — aimed, patient, structural. The Moon in detriment, Jupiter in fall: feeling and bounty both put on a budget.",
         "Dignities table": "Ruler: Saturn · Exaltation: Mars (28°) · Detriment: Moon · Fall: Jupiter"
       },
       "keywords": [
@@ -629,7 +629,7 @@
         "fall": "Jupiter",
         "sign": "Capricorn",
         "ruler": "Saturn",
-        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647 — verified via grammars/renaissance-lilly); Mars's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647 — verified via grammars/william-lilly-christian-astrology); Mars's degree per the Dorotheus/al-Biruni lineage, cross-checked Jul 2026",
         "detriment": "Moon",
         "confidence": "high",
         "exaltation": "Mars",
@@ -682,7 +682,7 @@
       "name": "Pisces",
       "category": "sign",
       "sections": {
-        "Canonical": "Jupiter's nocturnal house — stated by both source voices: Ptolemy, \"Pisces is the house of Jupiter and exaltation of Venus\" (verified via grammars/tetrabiblos-ashmand), and Lilly, \"the house of Jupiter, and exaltation of Venus\" (verified via grammars/renaissance-lilly). MODERN ADDITION, clearly marked: after 1846 most modern astrologers assign Pisces to Neptune, with Jupiter as traditional or co-ruler. Mercury is BOTH in detriment and in fall here — the table's sharpest debility, analysis dissolved. Venus exalted at 27° (some tables 28°): love universalized past the personal.",
+        "Canonical": "Jupiter's nocturnal house — stated by both source voices: Ptolemy, \"Pisces is the house of Jupiter and exaltation of Venus\" (verified via grammars/tetrabiblos-ashmand), and Lilly, \"the house of Jupiter, and exaltation of Venus\" (verified via grammars/william-lilly-christian-astrology). MODERN ADDITION, clearly marked: after 1846 most modern astrologers assign Pisces to Neptune, with Jupiter as traditional or co-ruler. Mercury is BOTH in detriment and in fall here — the table's sharpest debility, analysis dissolved. Venus exalted at 27° (some tables 28°): love universalized past the personal.",
         "Dignities table": "Ruler: Jupiter · Exaltation: Venus (27°) · Detriment: Mercury · Fall: Mercury"
       },
       "keywords": [
@@ -700,7 +700,7 @@
         "fall": "Mercury",
         "sign": "Pisces",
         "ruler": "Jupiter",
-        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647 — verified via grammars/renaissance-lilly); Venus 27° per most listings, 28° in some — cross-checked Jul 2026; Neptune co-rulership is a post-1846 modern convention",
+        "_source": "Traditional table of essential dignities (Ptolemy, Tetrabiblos I — verified via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology 1647 — verified via grammars/william-lilly-christian-astrology); Venus 27° per most listings, 28° in some — cross-checked Jul 2026; Neptune co-rulership is a post-1846 modern convention",
         "detriment": "Mercury",
         "confidence": "high",
         "exaltation": "Venus",
