@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HD Bodygraph — mockup for approval</title>
+<style>
+  /* Static mockup (Step 6, docs/APP-INTEGRATION-TODO.md). Pure SVG, no deps.
+     Sample chart: Throat · G · Sacral · Root defined; the rest open.
+     ?theme=light for the light skin; default dark. NOT wired to real gate data. */
+  :root{
+    --bg:#0d0d14; --panel:#15151f; --ink:#e8e6f0; --mut:#9a97ad; --line:#2a2a3a;
+    --channel:#3a3a4e; --channel-on:#cfcbe6; --open-fill:#15151f;
+  }
+  body.light{
+    --bg:#f7f5fb; --panel:#ffffff; --ink:#2b2735; --mut:#6b6780; --line:#e4e0ee;
+    --channel:#d9d5e8; --channel-on:#4b4560; --open-fill:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.5}
+  .wrap{max-width:760px;margin:0 auto;padding:24px 18px 60px}
+  h1{font-size:20px;margin:0 0 2px}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 18px}
+  .stage{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;justify-content:center}
+  svg{width:100%;max-width:360px;height:auto}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:16px 2px 0;font-size:12.5px;color:var(--mut)}
+  .legend b{color:var(--ink);font-weight:600}
+  .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+  .toggle{margin:14px 0 0;font-size:12.5px;color:var(--mut)}
+  .toggle a{color:inherit}
+  .clabel{font:600 9px -apple-system,'Segoe UI',sans-serif;fill:var(--ink)}
+  .gatetxt{font:600 7px -apple-system,sans-serif;fill:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>HD Bodygraph — geometric mockup</h1>
+  <p class="sub">Proposal for approval. Nine centers as clean primitives; <b>defined = filled</b>, <b>open = outlined</b>; channels are straight snapped lines. Sample chart only — not wired to real gate data.</p>
+
+  <div class="stage">
+    <svg viewBox="0 0 360 560" role="img" aria-label="Human Design bodygraph mockup">
+      <!-- ===== channels (behind) : solid where both centers defined, faint otherwise ===== -->
+      <g stroke-linecap="round">
+        <!-- faint skeleton -->
+        <g stroke="var(--channel)" stroke-width="4">
+          <line x1="180" y1="55"  x2="180" y2="113"/>
+          <line x1="180" y1="113" x2="180" y2="189"/>
+          <line x1="180" y1="189" x2="258" y2="300"/>
+          <line x1="180" y1="189" x2="72"  y2="375"/>
+          <line x1="180" y1="189" x2="288" y2="375"/>
+          <line x1="180" y1="285" x2="258" y2="300"/>
+          <line x1="180" y1="285" x2="72"  y2="375"/>
+          <line x1="180" y1="285" x2="288" y2="375"/>
+          <line x1="180" y1="380" x2="72"  y2="375"/>
+          <line x1="180" y1="380" x2="288" y2="375"/>
+          <line x1="72"  y1="375" x2="180" y2="470"/>
+          <line x1="288" y1="375" x2="180" y2="470"/>
+        </g>
+        <!-- defined channels: Throat–G–Sacral–Root (both ends filled) -->
+        <g stroke="var(--channel-on)" stroke-width="4.5">
+          <line x1="180" y1="189" x2="180" y2="285"/>
+          <line x1="180" y1="285" x2="180" y2="380"/>
+          <line x1="180" y1="380" x2="180" y2="470"/>
+        </g>
+      </g>
+
+      <!-- ===== centers ===== -->
+      <!-- Head — triangle apex up — OPEN (yellow outline) -->
+      <polygon points="180,30 150,76 210,76" fill="var(--open-fill)" stroke="#E8B800" stroke-width="2" stroke-linejoin="round"/>
+      <text class="clabel" x="180" y="58" text-anchor="middle" fill="#a58a00">Head</text>
+
+      <!-- Ajna — triangle apex down — OPEN (green outline) -->
+      <polygon points="150,94 210,94 180,140" fill="var(--open-fill)" stroke="#3E9A46" stroke-width="2" stroke-linejoin="round"/>
+      <text class="clabel" x="180" y="112" text-anchor="middle" fill="#3E9A46">Ajna</text>
+
+      <!-- Throat — square — DEFINED (brown filled) -->
+      <rect x="156" y="165" width="48" height="48" rx="2" fill="#8A6D3B" stroke="#6f572d" stroke-width="2"/>
+      <text class="clabel" x="180" y="192" text-anchor="middle" fill="#ffffff">Throat</text>
+
+      <!-- G / Identity — diamond — DEFINED (yellow filled) -->
+      <polygon points="180,255 212,285 180,315 148,285" fill="#F0C93B" stroke="#c9a41f" stroke-width="2" stroke-linejoin="round"/>
+      <text class="clabel" x="180" y="288" text-anchor="middle" fill="#5b4a00">G</text>
+
+      <!-- Heart / Will — small triangle pointing left — OPEN (red outline) -->
+      <polygon points="278,282 278,318 244,300" fill="var(--open-fill)" stroke="#C63329" stroke-width="2" stroke-linejoin="round"/>
+      <text class="clabel" x="266" y="303" text-anchor="middle" fill="#C63329">Will</text>
+
+      <!-- Spleen — triangle pointing right — OPEN (brown outline) -->
+      <polygon points="52,350 52,400 96,375" fill="var(--open-fill)" stroke="#8A6D3B" stroke-width="2" stroke-linejoin="round"/>
+      <text class="clabel" x="66" y="378" text-anchor="middle" fill="#8A6D3B">Spleen</text>
+
+      <!-- Solar Plexus — triangle pointing left — OPEN (brown outline) -->
+      <polygon points="308,350 308,400 264,375" fill="var(--open-fill)" stroke="#8A6D3B" stroke-width="2" stroke-linejoin="round"/>
+      <text class="clabel" x="292" y="378" text-anchor="middle" fill="#8A6D3B">Solar</text>
+
+      <!-- Sacral — square — DEFINED (red filled) -->
+      <rect x="156" y="356" width="48" height="48" rx="2" fill="#D9342B" stroke="#b02219" stroke-width="2"/>
+      <text class="clabel" x="180" y="383" text-anchor="middle" fill="#ffffff">Sacral</text>
+
+      <!-- Root — square — DEFINED (brown filled) -->
+      <rect x="156" y="446" width="48" height="48" rx="2" fill="#8A6D3B" stroke="#6f572d" stroke-width="2"/>
+      <text class="clabel" x="180" y="473" text-anchor="middle" fill="#ffffff">Root</text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <span><span class="sw" style="background:#8A6D3B"></span><b>Defined</b> — filled, canonical colour</span>
+    <span><span class="sw" style="background:transparent;border:2px solid #8A6D3B"></span><b>Open</b> — white fill, 2px outline</span>
+    <span><span class="sw" style="background:var(--channel-on)"></span>Channel, both gates active</span>
+    <span><span class="sw" style="background:var(--channel)"></span>Channel, hanging / inactive</span>
+  </div>
+
+  <p class="toggle">Preview: <a href="?theme=dark">dark</a> · <a href="?theme=light">light</a> — matches the calculator's <code>theme</code> param.</p>
+</div>
+<script>
+  (function(){ var t=new URLSearchParams(location.search).get('theme'); if(t==='light') document.body.classList.add('light'); })();
+</script>
+</body>
+</html>
