@@ -5,9 +5,11 @@ creed and method, a different domain. This file is what Claude reads first when 
 
 ## What this is
 
-A small, backend-free website for a **library about the historiography of astrology** — the eras and
+A small, mostly-static website for a **library about the historiography of astrology** — the eras and
 stances through which humans have read meaning into the sky, each presented faithfully in its own
-terms and held honestly to the record. Built on the recursive.eco grammar format. It is **not** a
+terms and held honestly to the record. **(Exception, Jul 19 2026: the library side stays static, but
+`viewer/astrology-viewer.html` is a ported chart calculator that flow embeds — the old "no app code"
+rule is reversed for that one page. See [`docs/APP-INTEGRATION-TODO.md`](docs/APP-INTEGRATION-TODO.md).)** Built on the recursive.eco grammar format. It is **not** a
 manual for casting charts and **not** a verdict on whether the sky speaks; it is a record of a
 five-thousand-year practice of meaning-making. The data is public JSON; the site is thin HTML; the
 point is that the **data**, not the platform, is what lasts.
