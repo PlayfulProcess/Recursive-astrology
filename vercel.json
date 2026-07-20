@@ -2,6 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/viewer/astrology-viewer.html" }
+    { "source": "/", "destination": "/viewer/astrology-viewer.html" },
+    { "source": "/api/calculate-chart", "destination": "/api/calculate_chart" }
   ]
 }

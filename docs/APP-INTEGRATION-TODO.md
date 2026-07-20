@@ -23,8 +23,10 @@ ephemeris to "copy."
 The earlier blocker ("must call flow's API cross-origin; needs CORS config that lives in
 the off-limits recursive-eco repo") is **gone.** The chart math turned out to be **two
 portable files**, not buried config: `calculate-chart.py` + `requirements.txt`. They were
-copied into **this repo's own `/api/`** (`api/calculate-chart.py`, `requirements.txt` at
-root), so the astro origin serves `/api/calculate-chart` itself. `CHART_API_URL` is now the
+copied into **this repo's own `/api/`** (`api/calculate_chart.py` — underscore, so it's a
+valid Python module name for Vercel's runtime; the public route stays `/api/calculate-chart`
+via a `vercel.json` rewrite — plus `requirements.txt` at root), so the astro origin serves
+`/api/calculate-chart` itself. `CHART_API_URL` is now the
 **root-relative** path `'/api/calculate-chart'` — same-origin, **no CORS, no dependency on
 recursive-eco.** (Source of the two files + the pipeline reference: the builder-supplied
 `ASTROMATHEPITOME.md`.)
