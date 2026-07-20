@@ -6981,358 +6981,103 @@
         function renderHDBodygraph() {
             if (!hdChart) return;
             const container = document.getElementById('hd-bodygraph');
-            const width = 400, height = 580;
+            if (!container) return;
+            // ---- Harmony renderer: orderly gates on each centre, curved channels, two colours ----
+            const VB_W = 400, VB_H = 640;
 
-            // SVG filter definitions for glow effects
-            const svgDefs = `
-                <defs>
-                    <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                    <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                        <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                    <linearGradient id="defined-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.6"/>
-                        <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.4"/>
-                    </linearGradient>
-                    <linearGradient id="undefined-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#374151;stop-opacity:0.3"/>
-                        <stop offset="100%" style="stop-color:#1f2937;stop-opacity:0.2"/>
-                    </linearGradient>
-                </defs>
-            `;
-
-            // Fixed gate positions for standard HD bodygraph layout
-            // Each gate has x, y coordinates based on its position along channels
-            const GATE_POSITIONS = {
-                // Head Center (top triangle) - gates along channels to Ajna
-                61: { x: 200, y: 28 },   // Channel 24-61
-                63: { x: 180, y: 35 },   // Channel 4-63
-                64: { x: 220, y: 35 },   // Channel 47-64
-
-                // Ajna Center - gates along channels
-                4: { x: 175, y: 85 },    // Channel 4-63
-                11: { x: 230, y: 115 },  // Channel 11-56
-                17: { x: 170, y: 115 },  // Channel 17-62
-                24: { x: 200, y: 70 },   // Channel 24-61
-                43: { x: 215, y: 95 },   // Channel 23-43
-                47: { x: 225, y: 85 },   // Channel 47-64
-
-                // Throat Center - many gates
-                8: { x: 185, y: 170 },   // Channel 1-8
-                12: { x: 240, y: 195 },  // Channel 12-22
-                16: { x: 145, y: 195 },  // Channel 16-48
-                20: { x: 200, y: 155 },  // Channels 10-20, 20-34, 20-57
-                23: { x: 215, y: 165 },  // Channel 23-43
-                31: { x: 200, y: 195 },  // Channel 7-31
-                33: { x: 230, y: 170 },  // Channel 13-33
-                35: { x: 255, y: 185 },  // Channel 35-36
-                45: { x: 145, y: 205 },  // Channel 21-45
-                56: { x: 230, y: 135 },  // Channel 11-56
-                62: { x: 170, y: 135 },  // Channel 17-62
-
-                // G Center (diamond) - gates along channels
-                1: { x: 185, y: 245 },   // Channel 1-8
-                2: { x: 200, y: 295 },   // Channel 2-14
-                7: { x: 200, y: 230 },   // Channel 7-31
-                10: { x: 175, y: 260 },  // Channels 10-20, 10-34, 10-57
-                13: { x: 225, y: 245 },  // Channel 13-33
-                15: { x: 200, y: 305 },  // Channel 5-15
-                25: { x: 155, y: 265 },  // Channel 25-51
-                46: { x: 215, y: 300 },  // Channel 29-46
-
-                // Heart Center - gates
-                21: { x: 125, y: 230 },  // Channel 21-45
-                26: { x: 115, y: 275 },  // Channel 26-44
-                40: { x: 145, y: 295 },  // Channel 37-40
-                51: { x: 140, y: 250 },  // Channel 25-51
-
-                // Sacral Center - many gates
-                3: { x: 200, y: 405 },   // Channel 3-60
-                5: { x: 200, y: 365 },   // Channel 5-15
-                9: { x: 185, y: 390 },   // Channel 9-52
-                14: { x: 200, y: 345 },  // Channel 2-14
-                27: { x: 155, y: 375 },  // Channel 27-50
-                29: { x: 215, y: 355 },  // Channel 29-46
-                34: { x: 175, y: 350 },  // Channels 10-34, 20-34, 34-57
-                42: { x: 215, y: 395 },  // Channel 42-53
-                59: { x: 245, y: 375 },  // Channel 6-59
-
-                // Spleen Center - gates
-                18: { x: 115, y: 390 },  // Channel 18-58
-                28: { x: 115, y: 405 },  // Channel 28-38
-                32: { x: 125, y: 370 },  // Channel 32-54
-                44: { x: 120, y: 320 },  // Channel 26-44
-                48: { x: 135, y: 345 },  // Channel 16-48
-                50: { x: 145, y: 360 },  // Channel 27-50
-                57: { x: 155, y: 335 },  // Channels 10-57, 20-57, 34-57
-
-                // Solar Plexus Center - gates
-                6: { x: 265, y: 360 },   // Channel 6-59
-                22: { x: 260, y: 305 },  // Channel 12-22
-                30: { x: 285, y: 380 },  // Channel 30-41
-                36: { x: 270, y: 295 },  // Channel 35-36
-                37: { x: 245, y: 330 },  // Channel 37-40
-                49: { x: 280, y: 395 },  // Channel 19-49
-                55: { x: 285, y: 365 },  // Channel 39-55
-
-                // Root Center (bottom) - many gates
-                19: { x: 250, y: 475 },  // Channel 19-49
-                38: { x: 130, y: 475 },  // Channel 28-38
-                39: { x: 265, y: 455 },  // Channel 39-55
-                41: { x: 280, y: 440 },  // Channel 30-41
-                52: { x: 175, y: 460 },  // Channel 9-52
-                53: { x: 225, y: 460 },  // Channel 42-53
-                54: { x: 145, y: 455 },  // Channel 32-54
-                58: { x: 115, y: 455 },  // Channel 18-58
-                60: { x: 200, y: 475 }   // Channel 3-60
+            // Centre layout (standard vertical bodygraph). Gates come from HD_CENTERS[id].gates.
+            const LAY = {
+                head:  { x:200, y:70,  shape:'triU', s:34 },
+                ajna:  { x:200, y:158, shape:'triD', s:34 },
+                throat:{ x:200, y:250, shape:'sq',   s:38 },
+                g:     { x:200, y:360, shape:'dia',  s:38 },
+                heart: { x:312, y:372, shape:'triR', s:30 },
+                spleen:{ x:90,  y:466, shape:'triR', s:36 },
+                sacral:{ x:200, y:478, shape:'sq',   s:38 },
+                solar: { x:310, y:466, shape:'triL', s:36 },
+                root:  { x:200, y:580, shape:'sq',   s:38 }
             };
-
-            let svg = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="background: linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%);">`;
-            svg += svgDefs;
-
-            // Center positions
-            const centers = {
-                head: { x: 200, y: 45, shape: 'triangle-up', size: 28 },
-                ajna: { x: 200, y: 105, shape: 'triangle-down', size: 28 },
-                throat: { x: 200, y: 175, shape: 'square', size: 30 },
-                g: { x: 200, y: 270, shape: 'diamond', size: 30 },
-                heart: { x: 130, y: 260, shape: 'triangle-right', size: 22 },
-                spleen: { x: 130, y: 360, shape: 'square', size: 25 },
-                sacral: { x: 200, y: 375, shape: 'square', size: 30 },
-                solar: { x: 270, y: 345, shape: 'triangle-left', size: 28 },
-                root: { x: 200, y: 465, shape: 'square', size: 30 }
-            };
-
-            // Draw all channels first (as lines between gate positions)
-            Object.entries(HD_CHANNELS).forEach(([id, ch]) => {
-                const [g1, g2] = id.split('-').map(Number);
-                const p1 = GATE_POSITIONS[g1];
-                const p2 = GATE_POSITIONS[g2];
-                if (!p1 || !p2) return;
-
-                const isDef = hdChart.definedChannels.some(c => c.id === id);
-                const g1Active = hdChart.activatedGates.has(g1);
-                const g2Active = hdChart.activatedGates.has(g2);
-
-                let strokeColor = 'rgba(255,255,255,0.1)';
-                let strokeWidth = 2;
-
-                if (isDef) {
-                    // Check activation types for coloring - more transparent for subtler look
-                    const g1Data = hdChart.activatedGates.get(g1);
-                    const g2Data = hdChart.activatedGates.get(g2);
-                    const hasBoth = (g1Data?.personality && g1Data?.design) || (g2Data?.personality && g2Data?.design);
-                    const hasPersonality = g1Data?.personality || g2Data?.personality;
-                    const hasDesign = g1Data?.design || g2Data?.design;
-
-                    if (hasBoth || (hasPersonality && hasDesign)) {
-                        strokeColor = 'rgba(251, 191, 36, 0.5)'; // Gold for mixed - more transparent
-                    } else if (hasDesign) {
-                        strokeColor = 'rgba(239, 68, 68, 0.5)'; // Red for design only - more transparent
-                    } else {
-                        strokeColor = 'rgba(167, 139, 250, 0.5)'; // Purple for personality only - more transparent
-                    }
-                    strokeWidth = 3;
-                } else if (g1Active || g2Active) {
-                    strokeColor = 'rgba(167, 139, 250, 0.2)';
-                    strokeWidth = 2;
-                }
-
-                svg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>`;
-            });
-
-            // Draw centers with improved styling
-            Object.entries(centers).forEach(([id, c]) => {
-                const isDef = hdChart.definedCenters.has(id);
-                const centerData = HD_CENTERS[id];
-                const fill = isDef ? 'url(#defined-gradient)' : 'url(#undefined-gradient)';
-                const stroke = isDef ? '#06b6d4' : 'rgba(100,100,120,0.4)';
-                const strokeWidth = isDef ? 2.5 : 1.5;
-                const filter = isDef ? 'filter="url(#glow-cyan)"' : '';
-                const s = c.size;
-
-                // Draw center shape
-                let shapeSvg = '';
-                if (c.shape === 'diamond') {
-                    shapeSvg = `<polygon points="${c.x},${c.y-s} ${c.x+s},${c.y} ${c.x},${c.y+s} ${c.x-s},${c.y}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${filter} style="cursor:pointer" onclick="showCenterDetail('${id}')"/>`;
-                } else if (c.shape === 'triangle-up') {
-                    shapeSvg = `<polygon points="${c.x},${c.y-s} ${c.x+s},${c.y+s*0.6} ${c.x-s},${c.y+s*0.6}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${filter} style="cursor:pointer" onclick="showCenterDetail('${id}')"/>`;
-                } else if (c.shape === 'triangle-down') {
-                    shapeSvg = `<polygon points="${c.x-s},${c.y-s*0.6} ${c.x+s},${c.y-s*0.6} ${c.x},${c.y+s}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${filter} style="cursor:pointer" onclick="showCenterDetail('${id}')"/>`;
-                } else if (c.shape === 'triangle-right') {
-                    shapeSvg = `<polygon points="${c.x-s*0.5},${c.y-s} ${c.x+s*0.7},${c.y} ${c.x-s*0.5},${c.y+s}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${filter} style="cursor:pointer" onclick="showCenterDetail('${id}')"/>`;
-                } else if (c.shape === 'triangle-left') {
-                    shapeSvg = `<polygon points="${c.x+s*0.5},${c.y-s} ${c.x-s*0.7},${c.y} ${c.x+s*0.5},${c.y+s}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${filter} style="cursor:pointer" onclick="showCenterDetail('${id}')"/>`;
-                } else {
-                    shapeSvg = `<rect x="${c.x-s}" y="${c.y-s}" width="${s*2}" height="${s*2}" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${filter} style="cursor:pointer" onclick="showCenterDetail('${id}')"/>`;
-                }
-                svg += shapeSvg;
-
-                // Center name inside shape
-                svg += `<text x="${c.x}" y="${c.y + 3}" text-anchor="middle" fill="${isDef ? '#fff' : '#666'}" font-size="9" font-weight="600" style="pointer-events:none">${centerData.name}</text>`;
-            });
-
-            // Draw ALL 64 gates with improved styling
-            for (let gate = 1; gate <= 64; gate++) {
-                const pos = GATE_POSITIONS[gate];
-                if (!pos) continue;
-
-                const isActive = hdChart.activatedGates.has(gate);
-                const gateData = hdChart.activatedGates.get(gate);
-                const centerId = HD_GATE_TO_CENTER[gate];
-                const centerData = HD_CENTERS[centerId];
-
-                let fillColor = 'rgba(40,40,50,0.9)';
-                let textColor = '#555';
-                let strokeColor = 'rgba(70,70,80,0.6)';
-                let glowFilter = '';
-                let strokeWidth = 1.5;
-                let opacity = 1;
-                let activationType = null;
-
-                if (isActive) {
-                    if (gateData.personality && gateData.design) {
-                        activationType = 'both';
-                    } else if (gateData.design) {
-                        activationType = 'design';
-                    } else {
-                        activationType = 'personality';
-                    }
-
-                    if (bodygraphLegendMode === 'center') {
-                        // Color by center
-                        const chakraColor = centerData?.chakraColor || '#888';
-                        fillColor = chakraColor + '40'; // 25% opacity
-                        textColor = chakraColor;
-                        strokeColor = chakraColor;
-                        strokeWidth = 2;
-                        glowFilter = 'filter="url(#glow-purple)"';
-
-                        // Apply filter if set
-                        if (bodygraphHighlightFilter && bodygraphHighlightFilter !== centerId) {
-                            opacity = 0.25;
-                        }
-                    } else {
-                        // Color by activation type (default)
-                        if (activationType === 'both') {
-                            fillColor = 'rgba(251,191,36,0.25)';
-                            textColor = '#fbbf24';
-                            strokeColor = '#fbbf24';
-                            glowFilter = 'filter="url(#glow-purple)"';
-                            strokeWidth = 2;
-                        } else if (activationType === 'design') {
-                            fillColor = 'rgba(239,68,68,0.25)';
-                            textColor = '#ef4444';
-                            strokeColor = '#ef4444';
-                            strokeWidth = 2;
-                        } else {
-                            fillColor = 'rgba(167,139,250,0.25)';
-                            textColor = '#a78bfa';
-                            strokeColor = '#a78bfa';
-                            glowFilter = 'filter="url(#glow-purple)"';
-                            strokeWidth = 2;
-                        }
-
-                        // Apply filter if set
-                        if (bodygraphHighlightFilter && bodygraphHighlightFilter !== activationType) {
-                            opacity = 0.25;
-                        }
-                    }
-                } else {
-                    // Inactive gates - apply filter dimming if needed
-                    if (bodygraphHighlightFilter && bodygraphHighlightFilter !== 'inactive') {
-                        opacity = bodygraphLegendMode === 'center' ? 0.15 : 0.25;
-                    }
-                }
-
-                // Gate circle with hover effect via CSS class
-                svg += `<circle cx="${pos.x}" cy="${pos.y}" r="11" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}" ${glowFilter} class="hd-gate-circle" style="cursor:pointer; transition: all 0.2s ease; opacity: ${opacity};" onclick="showHDGateDetail(${gate})">
-                    <title>Gate ${gate} - ${HD_GATE_MEANINGS[gate]?.name || ''} (${HD_CENTERS[centerId]?.name || ''})</title>
-                </circle>`;
-
-                // Gate number with better visibility
-                svg += `<text x="${pos.x}" y="${pos.y + 4}" text-anchor="middle" fill="${textColor}" font-size="9" font-weight="${isActive ? '700' : '500'}" style="pointer-events:none; text-shadow: 0 1px 2px rgba(0,0,0,0.5); opacity: ${opacity};">${gate}</text>`;
+            function verts(c){ const x=c.x, y=c.y, s=c.s;
+                if(c.shape==='triU') return [[x,y-s],[x+s,y+s*0.62],[x-s,y+s*0.62]];
+                if(c.shape==='triD') return [[x-s,y-s*0.62],[x+s,y-s*0.62],[x,y+s]];
+                if(c.shape==='dia')  return [[x,y-s],[x+s,y],[x,y+s],[x-s,y]];
+                if(c.shape==='triR') return [[x-s*0.6,y-s],[x+s*0.85,y],[x-s*0.6,y+s]];
+                if(c.shape==='triL') return [[x+s*0.6,y-s],[x-s*0.85,y],[x+s*0.6,y+s]];
+                return [[x-s,y-s],[x+s,y-s],[x+s,y+s],[x-s,y+s]];
+            }
+            function perim(pts,n){ const segs=[]; let tot=0;
+                for(let i=0;i<pts.length;i++){ const a=pts[i], b=pts[(i+1)%pts.length];
+                    const d=Math.hypot(b[0]-a[0],b[1]-a[1]); segs.push({a,b,d}); tot+=d; }
+                const out=[], step=tot/n; let dist=step/2;
+                for(let k=0;k<n;k++){ const tgt=dist+k*step; let acc=0;
+                    for(let s=0;s<segs.length;s++){ if(acc+segs[s].d>=tgt){ const f=(tgt-acc)/segs[s].d;
+                        out.push([segs[s].a[0]+(segs[s].b[0]-segs[s].a[0])*f, segs[s].a[1]+(segs[s].b[1]-segs[s].a[1])*f]); break; } acc+=segs[s].d; } }
+                return out;
             }
 
-            // Add clickable legend based on mode
-            let legendContent = '';
-            if (bodygraphLegendMode === 'center') {
-                // Center-based legend (9 centers in a compact layout)
-                const centerItems = [
-                    { id: 'head', name: 'Head', color: '#9f7aea' },
-                    { id: 'ajna', name: 'Ajna', color: '#667eea' },
-                    { id: 'throat', name: 'Throat', color: '#4fd1c5' },
-                    { id: 'g', name: 'G', color: '#68d391' },
-                    { id: 'heart', name: 'Heart', color: '#48bb78' },
-                    { id: 'sacral', name: 'Sacral', color: '#ed8936' },
-                    { id: 'spleen', name: 'Spleen', color: '#f6ad55' },
-                    { id: 'solar', name: 'Solar', color: '#ecc94b' },
-                    { id: 'root', name: 'Root', color: '#fc8181' }
-                ];
-                let xPos = 10;
-                centerItems.forEach((item, i) => {
-                    const isHighlighted = bodygraphHighlightFilter === item.id;
-                    const itemOpacity = bodygraphHighlightFilter && !isHighlighted ? 0.4 : 1;
-                    const ringStroke = isHighlighted ? 'white' : 'transparent';
-                    legendContent += `
-                        <g style="cursor:pointer; opacity: ${itemOpacity};" onclick="setBodygraphHighlight('${item.id}')">
-                            <circle cx="${xPos + 6}" cy="20" r="8" fill="transparent" stroke="${ringStroke}" stroke-width="2"/>
-                            <circle cx="${xPos + 6}" cy="20" r="5" fill="${item.color}40" stroke="${item.color}"/>
-                            <text x="${xPos + 16}" y="23" fill="${item.color}" font-size="7">${item.name}</text>
-                        </g>`;
-                    xPos += 42;
-                });
-            } else {
-                // Activation-based legend (original)
-                const isPersonalityHighlighted = bodygraphHighlightFilter === 'personality';
-                const isDesignHighlighted = bodygraphHighlightFilter === 'design';
-                const isBothHighlighted = bodygraphHighlightFilter === 'both';
-                const isInactiveHighlighted = bodygraphHighlightFilter === 'inactive';
-                const hasFilter = bodygraphHighlightFilter !== null;
+            // gate -> {x,y} spread evenly on its centre's perimeter; gate -> centreId
+            const GP = {}, GCEN = {};
+            Object.keys(LAY).forEach(id => {
+                const gates = (HD_CENTERS[id] && HD_CENTERS[id].gates) || [];
+                const pos = perim(verts(LAY[id]), gates.length);
+                gates.forEach((g,i) => { GP[g] = pos[i]; GCEN[g] = id; });
+            });
 
-                legendContent = `
-                    <g style="cursor:pointer; opacity: ${hasFilter && !isPersonalityHighlighted ? 0.4 : 1};" onclick="setBodygraphHighlight('personality')">
-                        <circle cx="20" cy="20" r="8" fill="transparent" stroke="${isPersonalityHighlighted ? 'white' : 'transparent'}" stroke-width="2"/>
-                        <circle cx="20" cy="20" r="5" fill="rgba(167,139,250,0.3)" stroke="#a78bfa"/>
-                        <text x="32" y="23" fill="#a78bfa" font-size="8">Personality</text>
-                    </g>
-                    <g style="cursor:pointer; opacity: ${hasFilter && !isDesignHighlighted ? 0.4 : 1};" onclick="setBodygraphHighlight('design')">
-                        <circle cx="100" cy="20" r="8" fill="transparent" stroke="${isDesignHighlighted ? 'white' : 'transparent'}" stroke-width="2"/>
-                        <circle cx="100" cy="20" r="5" fill="rgba(239,68,68,0.3)" stroke="#ef4444"/>
-                        <text x="112" y="23" fill="#ef4444" font-size="8">Design</text>
-                    </g>
-                    <g style="cursor:pointer; opacity: ${hasFilter && !isBothHighlighted ? 0.4 : 1};" onclick="setBodygraphHighlight('both')">
-                        <circle cx="165" cy="20" r="8" fill="transparent" stroke="${isBothHighlighted ? 'white' : 'transparent'}" stroke-width="2"/>
-                        <circle cx="165" cy="20" r="5" fill="rgba(251,191,36,0.3)" stroke="#fbbf24"/>
-                        <text x="177" y="23" fill="#fbbf24" font-size="8">Both</text>
-                    </g>
-                    <g>
-                        <rect x="225" y="14" width="12" height="12" fill="rgba(6,182,212,0.4)" stroke="#06b6d4" rx="2"/>
-                        <text x="242" y="23" fill="#06b6d4" font-size="8">Defined</text>
-                    </g>
-                    <g style="cursor:pointer; opacity: ${hasFilter && !isInactiveHighlighted ? 0.4 : 1};" onclick="setBodygraphHighlight('inactive')">
-                        <circle cx="310" cy="20" r="8" fill="transparent" stroke="${isInactiveHighlighted ? 'white' : 'transparent'}" stroke-width="2"/>
-                        <circle cx="310" cy="20" r="5" fill="rgba(50,50,60,0.8)" stroke="rgba(80,80,90,0.5)"/>
-                        <text x="322" y="23" fill="#666" font-size="8">Inactive</text>
-                    </g>`;
+            // defined state from the real chart
+            const defChSet = new Set((hdChart.definedChannels||[]).map(c => c.id));
+            const defCenters = hdChart.definedCenters; // Set of centre ids
+            function gateActive(g){ return hdChart.activatedGates.has(g); }
+
+            let svg = `<svg viewBox="0 0 ${VB_W} ${VB_H}" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="background:transparent;display:block">`;
+
+            // ---- 1. channels as gently bowed curves. Undefined first (faint), defined on top. ----
+            function channelPath(id){
+                const [g1,g2] = id.split('-').map(Number);
+                const p1 = GP[g1], p2 = GP[g2]; if(!p1||!p2) return '';
+                const def = defChSet.has(id);
+                const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
+                const dx=p2[0]-p1[0], dy=p2[1]-p1[1], len=Math.hypot(dx,dy)||1;
+                let nx=-dy/len, ny=dx/len;
+                const bow=Math.min(24, len*0.16);
+                if((mx<200&&nx>0)||(mx>200&&nx<0)){ nx=-nx; ny=-ny; }
+                const cx=mx+nx*bow, cy=my+ny*bow;
+                return `<path d="M ${p1[0]} ${p1[1]} Q ${cx} ${cy} ${p2[0]} ${p2[1]}" fill="none" `
+                    + `stroke="${def?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${def?3.2:1.6}" `
+                    + `stroke-linecap="round" opacity="${def?1:0.42}"/>`;
+            }
+            const chIds = Object.keys(HD_CHANNELS);
+            chIds.forEach(id => { if(!defChSet.has(id)) svg += channelPath(id); });
+            chIds.forEach(id => { if(defChSet.has(id)) svg += channelPath(id); });
+
+            // ---- 2. centres (rounded), clickable ----
+            Object.keys(LAY).forEach(id => {
+                const def = defCenters.has(id);
+                const pts = verts(LAY[id]).map(p => p.join(',')).join(' ');
+                svg += `<polygon points="${pts}" fill="${def?'var(--bgc-accent-soft)':'var(--bgc-surface)'}" `
+                    + `stroke="${def?'var(--bgc-accent)':'var(--bgc-line)'}" stroke-width="${def?2.2:1.6}" `
+                    + `stroke-linejoin="round" style="cursor:pointer" onclick="showCenterDetail('${id}')">`
+                    + `<title>${(HD_CENTERS[id]&&HD_CENTERS[id].name)||id}${def?' — defined':' — open'}</title></polygon>`;
+            });
+
+            // ---- 3. gates: even, numbered, clickable ----
+            for (let g=1; g<=64; g++){
+                const p = GP[g]; if(!p) continue;
+                const on = gateActive(g);
+                const cen = GCEN[g];
+                svg += `<circle cx="${p[0]}" cy="${p[1]}" r="8" fill="${on?'var(--bgc-accent)':'var(--bgc-surface)'}" `
+                    + `stroke="${on?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${on?0:1.4}" `
+                    + `style="cursor:pointer" onclick="showHDGateDetail(${g})">`
+                    + `<title>Gate ${g}${HD_GATE_MEANINGS[g]?(' — '+HD_GATE_MEANINGS[g].name):''} (${(HD_CENTERS[cen]&&HD_CENTERS[cen].name)||''})</title></circle>`;
+                svg += `<text x="${p[0]}" y="${p[1]+2.8}" text-anchor="middle" font-size="7.5" font-weight="700" `
+                    + `font-family="ui-monospace,Menlo,monospace" fill="${on?'var(--bgc-gate-on-text)':'var(--bgc-mut)'}" style="pointer-events:none">${g}</text>`;
             }
 
-            svg += `
-                <g transform="translate(10, 530)">
-                    <rect x="0" y="0" width="380" height="40" fill="rgba(0,0,0,0.5)" rx="4"/>
-                    ${legendContent}
-                </g>
-            `;
+            // ---- 4. compact legend ----
+            svg += `<g transform="translate(14, 614)" font-family="-apple-system,Segoe UI,sans-serif" font-size="10" fill="var(--bgc-mut)">`
+                + `<line x1="0" y1="-3" x2="20" y2="-3" stroke="var(--bgc-accent)" stroke-width="3.2" stroke-linecap="round"/><text x="26" y="0">Defined</text>`
+                + `<line x1="92" y1="-3" x2="112" y2="-3" stroke="var(--bgc-dim)" stroke-width="1.6" stroke-linecap="round"/><text x="118" y="0">Undefined</text>`
+                + `<circle cx="205" cy="-3" r="5" fill="var(--bgc-accent)"/><text x="215" y="0">Active gate</text>`
+                + `</g>`;
 
             svg += '</svg>';
             container.innerHTML = svg;
@@ -8488,6 +8233,11 @@
     <script src="https://flow.recursive.eco/js/assistant-launcher.js" defer data-auto></script>
 
 <style id="astro-embed-overrides">
+/* Bodygraph palette — two colours, theme-aware. Dark defaults; light overrides below. */
+:root{ --bgc-accent:#a99bf5; --bgc-accent-soft:#2b2748; --bgc-dim:#3a3947;
+  --bgc-surface:#1a1922; --bgc-line:#2a2933; --bgc-mut:#8f8aa0; --bgc-gate-on-text:#141225; }
+body.theme-light{ --bgc-accent:#6d5bd0; --bgc-accent-soft:#e7e2fa; --bgc-dim:#d5cfc4;
+  --bgc-surface:#fffdf9; --bgc-line:#e7e1d6; --bgc-mut:#8a8496; --bgc-gate-on-text:#ffffff; }
 /* Step 4 — honor ?theme=light: light surfaces, dark text, purple accents kept */
 body.theme-light{background:#f7f5fb!important;color:#2b2735!important}
 body.theme-light .text-white{color:#2b2735!important}
