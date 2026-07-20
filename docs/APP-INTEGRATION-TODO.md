@@ -29,14 +29,17 @@ root), so the astro origin serves `/api/calculate-chart` itself. `CHART_API_URL`
 recursive-eco.** (Source of the two files + the pipeline reference: the builder-supplied
 `ASTROMATHEPITOME.md`.)
 
-**Deploy-target requirement (important):** the library site deploys via **GitHub Pages**,
-which cannot run a Python function. The calculator page **and** its `/api/calculate-chart`
-must therefore be served from **Vercel** (Python serverless, zero-config: Vercel builds
-`api/*.py` with `requirements.txt` and serves the rest statically) — the same platform the
-I Ching repo already uses. Options for the builder: (a) point `astro.recursive.eco` at
-Vercel and let it serve both the static library and the API; or (b) keep Pages for the
-library and deploy just the calculator + api to a Vercel project. Either way the relative
-`/api/calculate-chart` resolves same-origin. **Cold-start caveat carried from the epitome:**
+**Deploy target — calculator-only on Vercel (builder's call, Jul 20 2026):** the library
+site keeps deploying via **GitHub Pages** exactly as before. Only the **calculator + its
+API** go to **Vercel** (Python serverless — Vercel builds `api/*.py` with `requirements.txt`
+and serves the viewer statically; same platform the I Ching repo uses). To keep the library
+from being duplicated onto Vercel, a **`.vercelignore`** excludes every grammar/library/tool
+file, so the Vercel build contains only `viewer/`, `api/`, `requirements.txt`, and
+`vercel.json`. `vercel.json` rewrites `/` → `/viewer/astrology-viewer.html` so flow can embed
+the Vercel domain root. The relative `/api/calculate-chart` resolves same-origin on that
+Vercel deploy. **Setup:** create a Vercel project from this repo (root directory = repo root);
+no build command needed; it auto-detects the Python function. Flow embeds the resulting
+Vercel URL for the calculator; the Pages URL stays canonical for the library. **Cold-start caveat carried from the epitome:**
 the function auto-downloads `de421.bsp` (~17 MB) to `/tmp` on first call — keep the
 `get_ephemeris()` cache, warm via the GET health-check, or commit the `.bsp` if cold-start
 latency bites. DE421 covers **1900–2050**; births outside fail (swap to `de440s.bsp`).
