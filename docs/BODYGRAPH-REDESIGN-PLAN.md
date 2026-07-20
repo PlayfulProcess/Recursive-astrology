@@ -64,15 +64,31 @@ after sign-off does the styling merge into `astrology-viewer.html`'s bodygraph f
 in-sandbox) at mobile width, light and dark: channels land on their gates, defined/hanging/open
 read correctly against a known chart, no dark slabs.
 
-## Decisions needed from the builder
+## Decisions — LOCKED (builder, Jul 20 2026)
 
-1. **Split colour?** Full HD shows each gate/channel half red (Design) + half black (Personality),
-   with four channel states (both-personality, both-design, mixed, hanging). Do we render that
-   canonical split, or simplify to defined/hanging/open for v1? (BodyGraph.com renders the split.)
-2. **Match BodyGraph.com exactly**, or our own cleaner minimalist take on the same framework?
-3. **Gate numbers** always visible, or only on active gates / on hover (less clutter)?
-4. Keep the tidied geometric-primitive centre shapes, or move to the more rounded standard
-   bodygraph centre rendering?
+1. **Split colour → FULL HD SPLIT.** Each gate/channel carries the canonical Personality (black) /
+   Design (red) split; channels render in halves, each half coloured by its gate's activation
+   (personality black · design red · both = mixed · dormant = faint). The chart object already
+   computes this (`activatedGates` Map: `gate → {personality, design, planets}`), so it is a
+   *drawing* change, not a data-model change.
+2. **Style → MATCH BodyGraph.com.** Replicate the familiar industry-standard rendering closely so
+   it reads as "a real bodygraph" at a glance.
+3. **Gate numbers → ALWAYS VISIBLE.** All 64, in small chips at their anchors.
+4. **Centre shapes → STANDARD ROUNDED** bodygraph rendering (not the sharp primitives).
+
+## Scope confirmation after reading the live renderer
+
+The bodygraph draw code lives at ~line 7113 of `viewer/astrology-viewer.html`. Confirmed:
+- The channel loop already iterates `HD_CHANNELS` and draws each as **one** `<line>` between
+  `GATE_POSITIONS[g1]`→`GATE_POSITIONS[g2]`, coloured by an *aggregate* of both gates. To honour
+  the **split**, this becomes **two half-segments** (g1→mid, mid→g2), each coloured by *its own*
+  gate's `{personality, design}` — a localized change to that one loop.
+- Centres draw with `url(#defined-gradient)` + cyan glow on a `#0a0a0f` dark gradient background —
+  that is the "dark slabs in the light app" bug. Restyle to canonical centre colours (defined =
+  filled, open = surface + outline), rounded, on the themed surface.
+- All 64 gates already draw as circles at `GATE_POSITIONS`; restyle to BodyGraph-style rounded
+  chips, always numbered.
+None of `HD_CENTERS` / `HD_CHANNELS` / `GATE_POSITIONS` / the chart math changes.
 
 ## Not in scope / untouched
 The 36-channel framework, `GATE_POSITIONS`, `HD_CENTERS`, and the chart-calculation data flow —
