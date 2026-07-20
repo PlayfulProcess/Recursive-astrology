@@ -5,6 +5,13 @@
     { "src": "api/calculate_chart.py", "use": "@vercel/python" }
   ],
   "routes": [
+    {
+      "src": "/(viewer/.*|)",
+      "headers": {
+        "Content-Security-Policy": "frame-ancestors https://*.recursive.eco https://*.vercel.app https://localhost:* http://localhost:* 'self'"
+      },
+      "continue": true
+    },
     { "src": "/api/calculate-chart", "dest": "/api/calculate_chart.py" },
     { "src": "/", "dest": "/viewer/astrology-viewer.html" },
     { "handle": "filesystem" }
