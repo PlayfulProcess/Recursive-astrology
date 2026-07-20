@@ -1,8 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/viewer/astrology-viewer.html" },
-    { "source": "/api/calculate-chart", "destination": "/api/calculate_chart" }
+  "builds": [
+    { "src": "viewer/**", "use": "@vercel/static" },
+    { "src": "api/calculate_chart.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/api/calculate-chart", "dest": "/api/calculate_chart" },
+    { "src": "/", "dest": "/viewer/astrology-viewer.html" },
+    { "handle": "filesystem" }
   ]
 }
