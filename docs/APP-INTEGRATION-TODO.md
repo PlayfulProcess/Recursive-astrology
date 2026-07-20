@@ -15,13 +15,31 @@ was not edited). The ephemeris math was **not** rewritten — see the critical f
 ## Critical finding the original port brief did not capture
 
 **The chart math is not in the page — it is a backend API.** The calculator POSTs to
-`/api/calculate-chart` (Skyfield / JPL DE421, server-side in the flow app). There is no
-client-side ephemeris to "copy." So a page hosted on the astro origin cannot compute a
-chart by itself; it must call flow's API cross-origin. The port therefore points
-`CHART_API_URL` at flow's absolute origin (dev/prod auto-detected). **This requires flow's
-`/api/calculate-chart` (and the app-shell assets) to allow the astro origin via CORS —
-that config lives in the recursive-eco repo (off-limits here) and is the one open
-dependency before the ported page can calculate live.**
+`/api/calculate-chart` (Skyfield / JPL DE421, server-side). There is no client-side
+ephemeris to "copy."
+
+### RESOLVED (Jul 20 2026) — the API is self-hosted here now, no CORS
+
+The earlier blocker ("must call flow's API cross-origin; needs CORS config that lives in
+the off-limits recursive-eco repo") is **gone.** The chart math turned out to be **two
+portable files**, not buried config: `calculate-chart.py` + `requirements.txt`. They were
+copied into **this repo's own `/api/`** (`api/calculate-chart.py`, `requirements.txt` at
+root), so the astro origin serves `/api/calculate-chart` itself. `CHART_API_URL` is now the
+**root-relative** path `'/api/calculate-chart'` — same-origin, **no CORS, no dependency on
+recursive-eco.** (Source of the two files + the pipeline reference: the builder-supplied
+`ASTROMATHEPITOME.md`.)
+
+**Deploy-target requirement (important):** the library site deploys via **GitHub Pages**,
+which cannot run a Python function. The calculator page **and** its `/api/calculate-chart`
+must therefore be served from **Vercel** (Python serverless, zero-config: Vercel builds
+`api/*.py` with `requirements.txt` and serves the rest statically) — the same platform the
+I Ching repo already uses. Options for the builder: (a) point `astro.recursive.eco` at
+Vercel and let it serve both the static library and the API; or (b) keep Pages for the
+library and deploy just the calculator + api to a Vercel project. Either way the relative
+`/api/calculate-chart` resolves same-origin. **Cold-start caveat carried from the epitome:**
+the function auto-downloads `de421.bsp` (~17 MB) to `/tmp` on first call — keep the
+`get_ephemeris()` cache, warm via the GET health-check, or commit the `.bsp` if cold-start
+latency bites. DE421 covers **1900–2050**; births outside fail (swap to `de440s.bsp`).
 
 Two embed-contract requirements from the brief were **already implemented in the source**
 and are preserved by the copy:
@@ -33,10 +51,12 @@ and are preserved by the copy:
 
 ## What the port changed (surgical, low-risk)
 
-- **Asset + API base → flow.** Root-absolute deps (`/config.js`, `/assets/…`, `/style.css`,
-  `/icons.svg`, `/spiral/…`, `/js/…`, `/favicon.png`) and `CHART_API_URL` now resolve
-  against `https://flow.recursive.eco` (or `dev.flow.…` when the host contains "dev"), so
-  the page loads its shell and reaches the math API from the astro origin.
+- **Asset base → flow; API base → self.** App-shell deps that only exist on flow
+  (`/config.js`, `/assets/…`, `/style.css`, `/icons.svg`, `/spiral/…`, `/js/…`,
+  `/favicon.png`) still resolve against `https://flow.recursive.eco` (or `dev.flow.…`), so
+  the page loads its Tailwind/auth/icon shell. **`CHART_API_URL`, by contrast, is now the
+  root-relative `'/api/calculate-chart'`** served by this repo's own `api/calculate-chart.py`
+  (see the RESOLVED note above) — the math no longer depends on flow at all.
 - **`RecursiveAuth.init()` guarded** so a missing/blocked auth shell can't hard-crash the page.
 - **Step 4 — theme=light honored.** An appended override reads `?theme=light` and applies a
   light surface / dark text / purple-accent skin (the source was dark-only; dark slabs in

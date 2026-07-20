@@ -1738,8 +1738,11 @@
         // CONFIGURATION & SETUP
         // ============================================================
 
-        // API endpoint for chart calculations
-        const CHART_API_URL = (location.hostname.indexOf('dev') !== -1 ? 'https://dev.flow.recursive.eco' : 'https://flow.recursive.eco') + '/api/calculate-chart';
+        // API endpoint for chart calculations.
+        // Served by THIS repo's own Vercel Python function (api/calculate-chart.py) —
+        // a root-relative path, so no cross-origin call and no CORS dependency on flow.
+        // (Requires the page to be deployed on Vercel, not GitHub Pages; see docs/APP-INTEGRATION-TODO.md.)
+        const CHART_API_URL = '/api/calculate-chart';
 
         // Defensive check for Supabase (CDN might fail to load)
         if (!window.supabase) {
