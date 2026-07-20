@@ -5,7 +5,7 @@
     { "src": "api/calculate_chart.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/api/calculate-chart", "dest": "/api/calculate_chart" },
+    { "src": "/api/calculate-chart", "dest": "/api/calculate_chart.py" },
     { "src": "/", "dest": "/viewer/astrology-viewer.html" },
     { "handle": "filesystem" }
   ]
