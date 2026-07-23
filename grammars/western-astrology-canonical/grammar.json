@@ -18,6 +18,7 @@
   },
   "name": "Western Astrology — Canonical",
   "description": "A canonical Western astrology grammar covering planets, signs, houses, and aspects with archetypal interpretations. A living document — contribute at github.com/PlayfulProcess/recursive.eco-schemas — Adopted as this channel's flagship interpretation set. Provenance, honestly: this is a contemporary community-authored synthesis in the psychological register (CC-BY-SA), not a historical text; for the historical registers see the public-domain voice libraries in this repo (grammars/tetrabiblos-ashmand, grammars/alan-leo, grammars/proctor-skeptical-astrology) and the cited dossiers under research/. Under this site's creed every item is a mirror-prompt: a chart is a mirror and a calendar, never a prediction and never a command.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800",
   "grammar_type": "astrology",
   "tags": [
     "archetypal",
@@ -49,7 +50,8 @@
       ],
       "metadata": {
         "planet": "Sun"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Apollo_del_Belvedere.jpg?width=800"
     },
     {
       "id": "planet-moon",
@@ -72,7 +74,8 @@
       ],
       "metadata": {
         "planet": "Moon"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bronze_lamp_representing_the_moon-goddess_Luna._Roman_1st_century_AD._British_Museum,_London.jpg?width=800"
     },
     {
       "id": "planet-mercury",
@@ -94,7 +97,8 @@
       ],
       "metadata": {
         "planet": "Mercury"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_Hermes_Chiaramonti.jpg?width=800"
     },
     {
       "id": "planet-venus",
@@ -117,7 +121,8 @@
       ],
       "metadata": {
         "planet": "Venus"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_de_Milo_Louvre_Ma399.jpg?width=800"
     },
     {
       "id": "planet-mars",
@@ -140,7 +145,8 @@
       ],
       "metadata": {
         "planet": "Mars"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mars_Borghese_(Louvre).jpg?width=800"
     },
     {
       "id": "planet-jupiter",
@@ -163,7 +169,8 @@
       ],
       "metadata": {
         "planet": "Jupiter"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Jupiter_statue,_Vaticana.jpg?width=800"
     },
     {
       "id": "planet-saturn",
@@ -186,7 +193,8 @@
       ],
       "metadata": {
         "planet": "Saturn"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=800"
     },
     {
       "id": "planet-uranus",
@@ -208,7 +216,8 @@
       ],
       "metadata": {
         "planet": "Uranus"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "planet-neptune",
@@ -231,7 +240,8 @@
       ],
       "metadata": {
         "planet": "Neptune"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "planet-pluto",
@@ -254,7 +264,8 @@
       ],
       "metadata": {
         "planet": "Pluto"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "planet-north-node",
@@ -276,7 +287,8 @@
       ],
       "metadata": {
         "planet": "North Node"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "planet-south-node",
@@ -298,7 +310,8 @@
       ],
       "metadata": {
         "planet": "South Node"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "planet-chiron",
@@ -320,7 +333,8 @@
       ],
       "metadata": {
         "planet": "Chiron"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
     },
     {
       "id": "sign-aries",
@@ -344,7 +358,8 @@
         "sign": "Aries",
         "element": "Fire",
         "modality": "Cardinal"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-taurus",
@@ -368,7 +383,8 @@
         "sign": "Taurus",
         "element": "Earth",
         "modality": "Fixed"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-gemini",
@@ -392,7 +408,8 @@
         "sign": "Gemini",
         "element": "Air",
         "modality": "Mutable"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-cancer",
@@ -416,7 +433,8 @@
         "sign": "Cancer",
         "element": "Water",
         "modality": "Cardinal"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-leo",
@@ -440,7 +458,8 @@
         "sign": "Leo",
         "element": "Fire",
         "modality": "Fixed"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-virgo",
@@ -464,7 +483,8 @@
         "sign": "Virgo",
         "element": "Earth",
         "modality": "Mutable"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-libra",
@@ -488,7 +508,8 @@
         "sign": "Libra",
         "element": "Air",
         "modality": "Cardinal"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-scorpio",
@@ -512,7 +533,8 @@
         "sign": "Scorpio",
         "element": "Water",
         "modality": "Fixed"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-sagittarius",
@@ -536,7 +558,8 @@
         "sign": "Sagittarius",
         "element": "Fire",
         "modality": "Mutable"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-capricorn",
@@ -560,7 +583,8 @@
         "sign": "Capricorn",
         "element": "Earth",
         "modality": "Cardinal"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-aquarius",
@@ -584,7 +608,8 @@
         "sign": "Aquarius",
         "element": "Air",
         "modality": "Fixed"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "sign-pisces",
@@ -608,7 +633,8 @@
         "sign": "Pisces",
         "element": "Water",
         "modality": "Mutable"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
     {
       "id": "house-1",
@@ -629,7 +655,8 @@
       ],
       "metadata": {
         "house": "1"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-2",
@@ -650,7 +677,8 @@
       ],
       "metadata": {
         "house": "2"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-3",
@@ -671,7 +699,8 @@
       ],
       "metadata": {
         "house": "3"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-4",
@@ -692,7 +721,8 @@
       ],
       "metadata": {
         "house": "4"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-5",
@@ -713,7 +743,8 @@
       ],
       "metadata": {
         "house": "5"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-6",
@@ -734,7 +765,8 @@
       ],
       "metadata": {
         "house": "6"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-7",
@@ -755,7 +787,8 @@
       ],
       "metadata": {
         "house": "7"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-8",
@@ -776,7 +809,8 @@
       ],
       "metadata": {
         "house": "8"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-9",
@@ -797,7 +831,8 @@
       ],
       "metadata": {
         "house": "9"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-10",
@@ -818,7 +853,8 @@
       ],
       "metadata": {
         "house": "10"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-11",
@@ -839,7 +875,8 @@
       ],
       "metadata": {
         "house": "11"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "house-12",
@@ -860,7 +897,8 @@
       ],
       "metadata": {
         "house": "12"
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoskop_Johannette_Maria_zu_Wied_1615_img01.jpg?width=800"
     },
     {
       "id": "aspect-conjunction",
@@ -882,7 +920,8 @@
         "aspect": "Conjunction",
         "angle": 0,
         "orb": 8
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
     },
     {
       "id": "aspect-opposition",
@@ -904,7 +943,8 @@
         "aspect": "Opposition",
         "angle": 180,
         "orb": 8
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
     },
     {
       "id": "aspect-trine",
@@ -926,7 +966,8 @@
         "aspect": "Trine",
         "angle": 120,
         "orb": 8
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
     },
     {
       "id": "aspect-square",
@@ -948,7 +989,8 @@
         "aspect": "Square",
         "angle": 90,
         "orb": 7
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
     },
     {
       "id": "aspect-sextile",
@@ -969,7 +1011,8 @@
         "aspect": "Sextile",
         "angle": 60,
         "orb": 6
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
     },
     {
       "id": "aspect-quincunx",
@@ -991,9 +1034,13 @@
         "aspect": "Quincunx",
         "angle": 150,
         "orb": 3
-      }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
     }
   ],
   "creator_name": "PlayfulProcess",
-  "creator_link": "https://recursive.eco"
+  "creator_link": "https://recursive.eco",
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800",
+  "_recursive_eco_url": "https://flow.recursive.eco/play?id=a0a21e50-807d-45ff-b2ab-13fbb4ae86be",
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=a0a21e50-807d-45ff-b2ab-13fbb4ae86be"
 }

@@ -4,7 +4,7 @@ type: "view"
 title: "Jyotiṣa — The Indian Tradition"
 status: "drafting"
 confidence: "low"
-last_updated: "2026-07-05"
+last_updated: "2026-07-07"
 maintainer_note: "AI-assisted; awaiting maintainer / historian review. Transmission claims are actively debated — this dossier's job is to hold that debate honestly. Key bibliography verified 2026-07-05."
 era: "Vedic roots; horoscopic layer c. early centuries CE; living tradition"
 region: "Indian subcontinent"
@@ -100,6 +100,16 @@ practitioner-informed review.
 - PD status of older English translations of Varāhamihira (there are 19th–early-20th-century
   ones) — a Phase 2/3 job; verify translator + date before linking.
 
+## 8a. In its own words (added Jul 7 2026)
+
+The grammar item's "In its own words" section quotes the tradition's own self-description of
+Jyotiṣa as *cakṣus* — "the eye" — among the six Vedāṅgas, on the reasoning that touch alone
+cannot distinguish colors and so the Veda's ritual body needs Jyotiṣa's eye to see the correct
+time for right action. This is a widely repeated traditional metaphor, corroborated across
+multiple tertiary sources including India's own government heritage portal
+[@web_vedicheritage_jyotisha], not a single author's sourced verbatim sentence — presented and
+flagged as such in the grammar text.
+
 ## 8. Sources
 
-[@pingree1997], [@pingree1978], [@mak2013], [@campion2008].
+[@pingree1997], [@pingree1978], [@mak2013], [@campion2008], [@web_vedicheritage_jyotisha].

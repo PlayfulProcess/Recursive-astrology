@@ -4,7 +4,7 @@ type: "view"
 title: "The Great Decline & the Demarcation"
 status: "drafting"
 confidence: "medium"
-last_updated: "2026-07-05"
+last_updated: "2026-07-07"
 maintainer_note: "AI-assisted; awaiting maintainer / historian review. Key bibliography verified 2026-07-05."
 era: "c. 16th–18th century"
 region: "Europe"
@@ -94,6 +94,20 @@ maximal claim).
 - Dates of astrology's exit from specific universities (Bologna, Salamanca kept chairs late)
   — verify before any load-bearing use (confidence: low as unstated specifics).
 
+## 8a. In its own words (added Jul 7 2026)
+
+The grammar item's "In its own words" section quotes Jonathan Swift's 1708 Bickerstaff hoax
+against the astrologer John Partridge verbatim: "I have consulted the Star of his Nativity by
+my own Rules, and find he will infallibly dye upon the 29th of March next, about Eleven at
+Night, of a raging fever" [@swift1708]. The quotation and its aftermath (Bickerstaff's
+insistence Partridge was dead anyway once the date passed) are corroborated by an academic
+account of the hoax [@web_hoaxes_bickerstaff] and by Project MUSE / ResearchGate coverage
+found via WebSearch. WebFetch on the Project Gutenberg text (#1090) returned HTTP 403 this
+session, so the exact wording rests on cross-source corroboration rather than an independent
+refetch of the primary pamphlet — a future session should confirm against the Gutenberg or
+Wikisource text directly.
+
 ## 8. Sources
 
-[@curry1989], [@thomas1971], [@campion2009], [@lilly1647], [@curry1992].
+[@curry1989], [@thomas1971], [@campion2009], [@lilly1647], [@curry1992], [@swift1708],
+[@web_hoaxes_bickerstaff].

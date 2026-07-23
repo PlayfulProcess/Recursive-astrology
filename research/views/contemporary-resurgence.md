@@ -4,7 +4,7 @@ type: "view"
 title: "The Contemporary Resurgence"
 status: "drafting"
 confidence: "low"
-last_updated: "2026-07-05"
+last_updated: "2026-07-07"
 maintainer_note: "AI-assisted; awaiting maintainer review. Contemporary history — provisional by nature; living practitioners not named per the repo's rule."
 era: "c. 1990–present"
 region: "Global / Anglophone"
@@ -87,6 +87,16 @@ read the sky to know yourself, not to be told your fate. Stated as history-in-pr
   licensing noted — they are recent translations and NOT PD; the entry's job is pointers,
   not reproduction.
 
+## 8a. In its own words (added Jul 7 2026)
+
+The grammar item's "In its own words" section quotes Chris Brennan's own preface to
+*Hellenistic Astrology*, in which he calls the book "only an introduction to a vast field"
+despite its size. This quotation was found via a book review that reproduces the preface
+text [@web_sevenstars_brennan_review], not checked against the print edition directly this
+session (WebFetch on retailer/preview pages returned HTTP 403). Held at ○ reported, not
+✔︎ primary-verified, and marked as such in the grammar text — a future pass with the physical
+or ebook edition in hand should confirm the exact wording.
+
 ## 8. Sources
 
-[@brennan2017], [@campion2012].
+[@brennan2017], [@campion2012], [@web_sevenstars_brennan_review].

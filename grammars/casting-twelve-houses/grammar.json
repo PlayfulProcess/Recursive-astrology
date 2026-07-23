@@ -1,6 +1,7 @@
 {
   "name": "The Twelve Houses — a chart-wheel casting",
   "description": "The chart-shaped casting: the twelve houses as twelve fixed positions on the wheel — the richer target the three-position casting graduates into. Nothing is drawn at random: the positions ARE your chart. Each house resolves to the sign on its cusp and the planets standing in it, read against the flagship interpretation set (western-astrology-canonical) or any interpretation grammar the reader chooses. Requires a real chart calculation (birth time + place -> house cusps); data-only fallback: enter placements you already know, or read the houses as twelve standing rooms of a life. A chart is a mirror and a calendar, never a command. Rendered as a wheel by this repo's wheel.html.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800",
   "grammar_type": "sequence",
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
@@ -42,7 +43,8 @@
       "keywords": [
         "house",
         "self"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-2",
@@ -61,7 +63,8 @@
       "keywords": [
         "house",
         "worth"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-3",
@@ -80,7 +83,8 @@
       "keywords": [
         "house",
         "voice"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-4",
@@ -99,7 +103,8 @@
       "keywords": [
         "house",
         "root"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-5",
@@ -118,7 +123,8 @@
       "keywords": [
         "house",
         "play"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-6",
@@ -137,7 +143,8 @@
       "keywords": [
         "house",
         "craft"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-7",
@@ -156,7 +163,8 @@
       "keywords": [
         "house",
         "the other"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-8",
@@ -175,7 +183,8 @@
       "keywords": [
         "house",
         "depth"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-9",
@@ -194,7 +203,8 @@
       "keywords": [
         "house",
         "horizon"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-10",
@@ -213,7 +223,8 @@
       "keywords": [
         "house",
         "work-in-the-world"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-11",
@@ -232,7 +243,8 @@
       "keywords": [
         "house",
         "the many"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     },
     {
       "id": "position-house-12",
@@ -251,7 +263,8 @@
       "keywords": [
         "house",
         "the hidden"
-      ]
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
     }
   ],
   "_grammar_commons": {
@@ -265,5 +278,8 @@
         "link": "https://recursive.eco"
       }
     ]
-  }
+  },
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800",
+  "_recursive_eco_url": "https://flow.recursive.eco/play?id=90604ab1-c0c1-4e79-abfd-01e784014319",
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=90604ab1-c0c1-4e79-abfd-01e784014319"
 }

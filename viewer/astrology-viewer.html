@@ -1,15 +1,41 @@
 <!DOCTYPE html>
-<!-- Ported wholesale from recursive-eco apps/landing/pages/astrology-viewer.html
-     (read-only) on 2026-07-19. Math stays server-side (flow /api/calculate-chart).
-     Surgical fixes: asset/API base -> flow, RecursiveAuth guarded, theme=light,
-     CSS-overlay fullscreen. See docs/APP-INTEGRATION-TODO.md. Do not hand-tune here
-     what should be re-copied from source; keep the diff from source minimal. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astrology Chart - Recursive.eco</title>
-    <link rel="icon" type="image/png" href="https://flow.recursive.eco/favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Theme resolution — runs first, before any CSS paints, so there's no flash.
+         Priority: ?theme= URL param (set by the recursive.eco Journal embed) ->
+         prefers-color-scheme -> light (the astro site's own default). Also listens
+         for a postMessage from the parent frame so a live theme toggle in Journal
+         re-themes this iframe without a reload. -->
+    <script>
+        (function () {
+            function resolveTheme() {
+                try {
+                    var p = new URLSearchParams(window.location.search).get('theme');
+                    if (p === 'light' || p === 'dark') return p;
+                } catch (e) {}
+                try {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+                } catch (e) {}
+                return 'light';
+            }
+            function applyTheme(t) {
+                document.documentElement.setAttribute('data-theme', t);
+                document.documentElement.style.colorScheme = t;
+                window.__astroTheme = t;
+            }
+            applyTheme(resolveTheme());
+            window.addEventListener('message', function (e) {
+                var d = e.data;
+                if (d && d.type === 'astrology-set-theme' && (d.theme === 'light' || d.theme === 'dark')) {
+                    applyTheme(d.theme);
+                }
+            });
+        })();
+    </script>
     <!-- Using Tailwind CDN for static page (appropriate for low-traffic internal tool) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -17,10 +43,10 @@
         tailwind.config = { corePlugins: { preflight: true } };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://flow.recursive.eco/config.js"></script>
-    <script src="https://flow.recursive.eco/assets/js/auth-init.js"></script>
-    <link rel="stylesheet" href="https://flow.recursive.eco/style.css">
-    <link rel="stylesheet" href="https://flow.recursive.eco/assets/css/components.css">
+    <script src="config.js"></script>
+    <script src="assets/js/auth-init.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 
     <!-- Astrology Libraries -->
     <!-- Custom SVG visualization (no external dependencies) -->
@@ -29,33 +55,165 @@
         /* Critical fallback for Tailwind classes - ensures page works if CDN fails */
         .hidden { display: none !important; }
 
-        /* Astrology Viewer Theme - matching tarot viewer */
+        /* Astrology Viewer Theme - matching the site's blue chrome (Jul 2026 port) */
+        /* ============================================================
+           THEME TOKENS — light/dark aware, driven by [data-theme] on <html>
+           (set by the script above). Light values echo the astro site's own
+           theme.css palette (paper + restrained blue accent) so the viewer matches
+           index/wheel/lenses instead of being a bespoke dark box; dark
+           values keep this viewer's original near-black treatment, tuned for
+           contrast, with the accent switched from gold to a lighter blue.
+           --astro-gold / --astro-purple / --astro-purple-dark are CHROME
+           tokens (buttons, checkboxes, panel borders) — names kept for now to
+           avoid touching ~40 call sites, but their VALUES are blue, not gold
+           or purple. --astro-blue is a separate, unrelated token: one of the
+           aspect/element legend colors (red/green/blue/violet/yellow), which
+           keep their hue since they're domain content, not chrome — only
+           their shade changes per theme for readability.
+           NOTE: the Human Design bodygraph sub-view (search "Human Design
+           Bodygraph" below) intentionally keeps a fixed dark "instrument
+           panel" look in both themes — its raw SVG fills are out of scope
+           for this pass; everything else in the viewer is theme-aware.
+           ============================================================ */
         :root {
+            color-scheme: light;
+            --astro-bg-dark: #f4f1ea;
+            --astro-bg-light: #ffffff;
+            --astro-gold: #2f5d8a;
+            --astro-purple: #2f5d8a;
+            --astro-purple-dark: #1f4468;
+            --astro-blue: #2f5f8a;
+            --astro-teal: #3f7a6e;
+
+            --v-page-grad: linear-gradient(135deg, #ffffff 0%, #f4f1ea 100%);
+            --v-surface: #ffffff;
+            --v-surface-2: #faf8f3;
+            --v-header-grad: linear-gradient(180deg, #ffffff 0%, #f8f5ee 100%);
+            --v-modal-grad: linear-gradient(135deg, #ffffff 0%, #faf8f3 100%);
+            --v-chart-grad: linear-gradient(135deg, #ffffff 0%, #f4f1ea 100%);
+
+            --v-ink: #221f1a;
+            --v-ink-soft: #4a4439;
+            --v-muted: #6b6457;
+            --v-faint: #8a8273;
+            --v-on-accent: #ffffff;
+
+            --v-line: #d8d2c6;
+            --v-line-soft: #cfc8ba;
+
+            --v-accent-rgb: 154 115 34;
+            --v-gold-soft: #f4e4b0;
+
+            --v-wash-rgb: 34 31 26;
+            --v-veil-rgb: 34 31 26;
+
+            --v-danger-rgb: 179 38 30;
+            --v-success-rgb: 47 111 78;
+            --v-info-rgb: 47 95 138;
+            --v-violet-rgb: 124 58 149;
+            --v-hd-rgb: 21 116 130;
+
+            --v-fire-rgb: 179 38 30;
+            --v-earth-rgb: 47 111 78;
+            --v-air-rgb: 138 100 20;
+            --v-water-rgb: 47 95 138;
+
+            /* Chart-wheel internals (SVG fills/strokes + zoom tiles). Light values are
+               tuned for the paper panel: a warm paper glow behind the wheel instead of a
+               grey veil, white planet/hub chips, and ink-strength cusp/aspect colors.
+               Dark values (in the dark block below) are byte-equal to what the wheel
+               hardcoded before, so dark rendering is unchanged. */
+            --v-wheel-bg: rgba(255, 253, 246, 0.6);
+            --v-chip-bg: #ffffff;
+            --v-cusp-minor: rgba(124, 58, 149, 0.3);
+            --v-wheel-violet-rgb: 109 51 158;
+            --v-teal-rgb: 63 122 110;
+            --v-aspect-minor: rgba(124, 58, 149, 0.4);
+            --v-zoom-bg: #fffdf6;
+            --v-zoom-ink: #7a5a12;
+            --v-zoom-border: rgba(154, 115, 34, 0.4);
+
+            --v-danger: rgb(var(--v-danger-rgb));
+            --v-success: rgb(var(--v-success-rgb));
+            --v-info: rgb(var(--v-info-rgb));
+            --v-violet: rgb(var(--v-violet-rgb));
+            --v-hd: rgb(var(--v-hd-rgb));
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark;
             --astro-bg-dark: #0a0a0f;
             --astro-bg-light: #1a1a2e;
-            --astro-gold: #d4af37;
-            --astro-purple: #8b5cf6;
-            --astro-purple-dark: #6d28d9;
+            --astro-gold: #6f9fd8;
+            --astro-purple: #6f9fd8;
+            --astro-purple-dark: #4a76ad;
             --astro-blue: #3b82f6;
             --astro-teal: #14b8a6;
+
+            --v-page-grad: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            --v-surface: #1a1a2e;
+            --v-surface-2: #15131f;
+            --v-header-grad: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(10, 10, 15, 0.9) 100%);
+            --v-modal-grad: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            --v-chart-grad: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(26, 26, 46, 0.9) 100%);
+
+            --v-ink: #f4ede0;
+            --v-ink-soft: #d9d2c2;
+            --v-muted: #a89f8c;
+            --v-faint: #8b8271;
+            --v-on-accent: #ffffff;
+
+            --v-line: rgba(212, 175, 55, 0.22);
+            --v-line-soft: rgba(212, 175, 55, 0.14);
+
+            --v-accent-rgb: 212 175 55;
+            --v-gold-soft: #f4e4b0;
+
+            --v-wash-rgb: 0 0 0;
+            --v-veil-rgb: 255 255 255;
+
+            --v-danger-rgb: 239 68 68;
+            --v-success-rgb: 34 197 94;
+            --v-info-rgb: 59 130 246;
+            --v-violet-rgb: 168 85 247;
+            --v-hd-rgb: 6 182 212;
+
+            --v-fire-rgb: 239 68 68;
+            --v-earth-rgb: 34 197 94;
+            --v-air-rgb: 234 179 8;
+            --v-water-rgb: 59 130 246;
+
+            /* Chart-wheel internals — byte-equal to the wheel's original hardcoded dark
+               colors (rgba(10,10,15,...) chips, violet 167/139/250, teal 20/184/166,
+               zoom tiles = black wash + gold), so dark mode renders exactly as before. */
+            --v-wheel-bg: rgba(10, 10, 15, 0.3);
+            --v-chip-bg: rgba(10, 10, 15, 0.95);
+            --v-cusp-minor: rgba(139, 92, 246, 0.25);
+            --v-wheel-violet-rgb: 167 139 250;
+            --v-teal-rgb: 20 184 166;
+            --v-aspect-minor: rgba(139, 92, 246, 0.3);
+            --v-zoom-bg: rgba(0, 0, 0, 0.55);
+            --v-zoom-ink: rgba(212, 175, 55, 0.85);
+            --v-zoom-border: rgba(212, 175, 55, 0.3);
         }
 
         body {
-            background: linear-gradient(135deg, var(--astro-bg-dark) 0%, var(--astro-bg-light) 100%);
+            background: var(--v-page-grad);
+            color: var(--v-ink);
             min-height: 100vh;
         }
 
         /* Header Section */
         .astro-header {
-            background: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(10, 10, 15, 0.9) 100%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            background: var(--v-header-grad);
+            border-bottom: 1px solid var(--v-line);
             backdrop-filter: blur(10px);
         }
 
         .astro-title {
             font-family: Georgia, 'Times New Roman', serif;
             font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--astro-gold) 0%, #f4e4b0 50%, var(--astro-gold) 100%);
+            background: linear-gradient(135deg, var(--astro-gold) 0%, var(--v-gold-soft) 50%, var(--astro-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -67,17 +225,17 @@
 
         /* Form Styles */
         .form-container {
-            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(15, 15, 35, 0.95) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background: var(--v-modal-grad);
+            border: 1px solid var(--v-line);
             border-radius: 16px;
             backdrop-filter: blur(10px);
         }
 
         .form-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid var(--v-line);
             border-radius: 8px;
-            color: #fff;
+            color: var(--v-ink);
             padding: 0.75rem 1rem;
             width: 100%;
             transition: all 0.2s;
@@ -85,40 +243,40 @@
 
         .form-input:focus {
             outline: none;
-            border-color: var(--astro-purple);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            border-color: var(--astro-gold);
+            box-shadow: 0 0 0 3px rgb(var(--v-accent-rgb) / 0.2);
         }
 
         .form-input::placeholder {
-            color: #71717a;
+            color: var(--v-faint);
         }
 
         .form-label {
             font-size: 0.85rem;
-            color: #a1a1aa;
+            color: var(--v-muted);
             margin-bottom: 0.5rem;
             display: block;
         }
 
         .form-select {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid var(--v-line);
             border-radius: 8px;
-            color: #fff;
+            color: var(--v-ink);
             padding: 0.75rem 1rem;
             width: 100%;
             cursor: pointer;
         }
 
         .form-select option {
-            background: #1a1a2e;
-            color: #fff;
+            background: var(--v-surface);
+            color: var(--v-ink);
         }
 
         /* Primary Button */
         .btn-primary {
-            background: linear-gradient(135deg, var(--astro-purple) 0%, var(--astro-purple-dark) 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--astro-gold) 0%, var(--astro-purple-dark) 100%);
+            color: var(--v-on-accent);
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-weight: 600;
@@ -129,7 +287,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 25px rgb(var(--v-accent-rgb) / 0.4);
         }
 
         .btn-primary:disabled {
@@ -140,8 +298,8 @@
 
         /* Secondary Button */
         .btn-secondary {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.1);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             color: var(--astro-gold);
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
@@ -151,14 +309,14 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(212, 175, 55, 0.2);
+            background: rgb(var(--v-accent-rgb) / 0.2);
             border-color: var(--astro-gold);
         }
 
         /* Chart Container */
         .chart-container {
-            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(26, 26, 46, 0.9) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: var(--v-chart-grad);
+            border: 1px solid var(--v-line);
             border-radius: 16px;
             overflow: hidden;
         }
@@ -213,9 +371,9 @@
             width: 28px;
             height: 28px;
             border-radius: 6px;
-            background: rgba(10, 10, 15, 0.85);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: rgba(212, 175, 55, 0.7);
+            background: var(--v-zoom-bg);
+            border: 1px solid var(--v-zoom-border);
+            color: var(--v-zoom-ink);
             font-size: 16px;
             cursor: pointer;
             display: flex;
@@ -224,8 +382,8 @@
             line-height: 1;
         }
         .zoom-controls button:hover {
-            background: rgba(212, 175, 55, 0.15);
-            color: #d4af37;
+            background: rgb(var(--v-accent-rgb) / 0.15);
+            color: var(--astro-gold);
         }
 
         /* System Switcher */
@@ -233,9 +391,9 @@
             display: flex;
             gap: 0.5rem;
             padding: 0.25rem;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgb(var(--v-wash-rgb) / 0.05);
             border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--v-line);
         }
 
         .system-btn {
@@ -245,24 +403,24 @@
             font-weight: 500;
             border: none;
             background: transparent;
-            color: #a78bfa;
+            color: var(--astro-gold);
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .system-btn:hover {
-            background: rgba(139, 92, 246, 0.1);
+            background: rgb(var(--v-accent-rgb) / 0.1);
         }
 
         .system-btn.active {
-            background: linear-gradient(135deg, var(--astro-purple) 0%, var(--astro-purple-dark) 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--astro-gold) 0%, var(--astro-purple-dark) 100%);
+            color: var(--v-on-accent);
         }
 
         /* Planet Details Panel */
         .planet-panel {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid var(--v-line);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 0.75rem;
@@ -270,25 +428,25 @@
         }
 
         .planet-panel:hover {
-            border-color: var(--astro-purple);
-            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--astro-gold);
+            background: rgb(var(--v-accent-rgb) / 0.1);
         }
 
         .planet-panel.selected {
             border-color: var(--astro-gold);
-            background: rgba(212, 175, 55, 0.15);
-            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.15);
+            box-shadow: 0 0 0 2px rgb(var(--v-accent-rgb) / 0.3);
         }
 
         .planet-panel.selected:hover {
             border-color: var(--astro-gold);
-            background: rgba(212, 175, 55, 0.2);
+            background: rgb(var(--v-accent-rgb) / 0.2);
         }
 
         .aspect-checkbox {
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(139, 92, 246, 0.5);
+            border: 2px solid rgb(var(--v-accent-rgb) / 0.5);
             border-radius: 4px;
             cursor: pointer;
             display: flex;
@@ -313,7 +471,7 @@
         body.embed-mode .selection-hint {
             display: block;
             text-align: center;
-            color: #a1a1aa;
+            color: var(--v-muted);
             font-size: 0.75rem;
             padding: 0.5rem;
             margin-bottom: 0.5rem;
@@ -321,8 +479,8 @@
 
         /* Astro Context for AI Preview Box */
         .ai-context-preview {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, rgb(var(--v-accent-rgb) / 0.1) 0%, rgb(var(--v-accent-rgb) / 0.1) 100%);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 12px;
             margin-top: 1rem;
             overflow: hidden;
@@ -333,12 +491,12 @@
             align-items: center;
             justify-content: space-between;
             padding: 0.75rem 1rem;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgb(var(--v-wash-rgb) / 0.04);
             cursor: pointer;
         }
 
         .ai-context-header:hover {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgb(var(--v-wash-rgb) / 0.07);
         }
 
         .ai-context-title {
@@ -364,9 +522,9 @@
         }
 
         .ai-context-btn {
-            background: rgba(139, 92, 246, 0.3);
-            border: 1px solid rgba(139, 92, 246, 0.5);
-            color: #fff;
+            background: rgb(var(--v-accent-rgb) / 0.16);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.4);
+            color: var(--v-ink);
             padding: 0.25rem 0.75rem;
             border-radius: 6px;
             font-size: 0.75rem;
@@ -375,22 +533,22 @@
         }
 
         .ai-context-btn:hover {
-            background: rgba(139, 92, 246, 0.5);
+            background: rgb(var(--v-accent-rgb) / 0.3);
         }
 
         .ai-context-btn.fullscreen {
-            background: rgba(212, 175, 55, 0.3);
-            border-color: rgba(212, 175, 55, 0.5);
+            background: rgb(var(--v-accent-rgb) / 0.3);
+            border-color: rgb(var(--v-accent-rgb) / 0.5);
         }
 
         .ai-context-btn.delete-all {
-            background: rgba(239, 68, 68, 0.3);
-            border-color: rgba(239, 68, 68, 0.5);
-            color: #fca5a5;
+            background: rgb(var(--v-danger-rgb) / 0.16);
+            border-color: rgb(var(--v-danger-rgb) / 0.5);
+            color: var(--v-danger);
         }
 
         .ai-context-btn.delete-all:hover {
-            background: rgba(239, 68, 68, 0.5);
+            background: rgb(var(--v-danger-rgb) / 0.3);
         }
 
         .ai-context-body {
@@ -406,13 +564,13 @@
 
         .ai-context-empty {
             text-align: center;
-            color: #71717a;
+            color: var(--v-faint);
             font-size: 0.85rem;
             padding: 1rem;
         }
 
         .ai-context-item {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgb(var(--v-wash-rgb) / 0.05);
             border-radius: 8px;
             padding: 0.75rem;
             margin-bottom: 0.5rem;
@@ -434,7 +592,7 @@
         }
 
         .ai-context-aspect-name {
-            color: #fff;
+            color: var(--v-ink);
             font-weight: 500;
         }
 
@@ -445,19 +603,19 @@
         }
 
         .ai-context-story {
-            color: #a1a1aa;
+            color: var(--v-muted);
             font-size: 0.8rem;
             line-height: 1.4;
             margin-top: 0.5rem;
         }
 
         .ai-context-json {
-            background: #000;
+            background: rgb(var(--v-wash-rgb) / 0.08);
             border-radius: 6px;
             padding: 0.75rem;
             font-family: monospace;
             font-size: 0.7rem;
-            color: #10b981;
+            color: var(--v-success);
             white-space: pre-wrap;
             word-break: break-all;
             max-height: 200px;
@@ -475,12 +633,12 @@
         }
 
         .planet-position {
-            color: #d4d4d8;
+            color: var(--v-ink-soft);
             font-size: 0.9rem;
         }
 
         .planet-house {
-            color: #a78bfa;
+            color: var(--astro-gold);
             font-size: 0.85rem;
         }
 
@@ -493,17 +651,17 @@
             margin: 0.15rem;
         }
 
-        .aspect-conjunction { background: rgba(212, 175, 55, 0.3); color: #d4af37; }
-        .aspect-opposition { background: rgba(239, 68, 68, 0.3); color: #ef4444; }
-        .aspect-trine { background: rgba(34, 197, 94, 0.3); color: #22c55e; }
-        .aspect-square { background: rgba(239, 68, 68, 0.3); color: #f87171; }
-        .aspect-sextile { background: rgba(59, 130, 246, 0.3); color: #3b82f6; }
-        .aspect-quincunx { background: rgba(168, 85, 247, 0.3); color: #a855f7; }
+        .aspect-conjunction { background: rgb(var(--v-accent-rgb) / 0.18); color: var(--astro-gold); }
+        .aspect-opposition { background: rgb(var(--v-danger-rgb) / 0.18); color: var(--v-danger); }
+        .aspect-trine { background: rgb(var(--v-success-rgb) / 0.18); color: var(--v-success); }
+        .aspect-square { background: rgb(var(--v-danger-rgb) / 0.18); color: var(--v-danger); }
+        .aspect-sextile { background: rgb(var(--v-info-rgb) / 0.18); color: var(--v-info); }
+        .aspect-quincunx { background: rgb(var(--v-violet-rgb) / 0.18); color: var(--v-violet); }
 
         /* Auth Section */
         .auth-section {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, rgb(var(--v-accent-rgb) / 0.1) 0%, rgb(var(--v-info-rgb) / 0.1) 100%);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 12px;
             padding: 1.5rem;
         }
@@ -514,13 +672,14 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: #1a1a2e;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: var(--v-surface);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 8px;
             max-height: 200px;
             overflow-y: auto;
             z-index: 50;
             display: none;
+            box-shadow: var(--v-shadow-lift, 0 10px 30px rgba(0,0,0,.2));
         }
 
         .location-suggestions.active {
@@ -530,12 +689,12 @@
         .location-option {
             padding: 0.75rem 1rem;
             cursor: pointer;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: #d4d4d8;
+            border-bottom: 1px solid var(--v-line-soft);
+            color: var(--v-ink-soft);
         }
 
         .location-option:hover {
-            background: rgba(139, 92, 246, 0.2);
+            background: rgb(var(--v-accent-rgb) / 0.12);
         }
 
         .location-option:last-child {
@@ -546,7 +705,7 @@
         .loading-spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid rgba(212, 175, 55, 0.2);
+            border: 3px solid rgb(var(--v-accent-rgb) / 0.2);
             border-top-color: var(--astro-gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -561,23 +720,19 @@
             padding: 0.75rem 1.5rem;
             font-size: 0.9rem;
             font-weight: 500;
-            color: #a1a1aa;
+            color: var(--v-muted);
             border-bottom: 2px solid transparent;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .tab-btn:hover {
-            color: #d4d4d8;
+            color: var(--v-ink-soft);
         }
 
         .tab-btn.active {
-            /* Jul 7 2026: unified with .view-mode-btn.active — one accent
-               (app purple) for tab chrome instead of gold, so the
-               Astrology/Human Design tab rows don't clash with the
-               Astrology/HD Mandala/HD Bodygraph toggle above them. */
-            color: var(--astro-purple);
-            border-bottom-color: var(--astro-purple);
+            color: var(--astro-gold);
+            border-bottom-color: var(--astro-gold);
         }
 
         .tab-content {
@@ -596,38 +751,42 @@
             font-weight: 500;
             border: none;
             background: transparent;
-            color: #a78bfa;
+            color: var(--astro-gold);
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .view-mode-btn:hover {
-            background: rgba(139, 92, 246, 0.1);
+            background: rgb(var(--v-accent-rgb) / 0.1);
         }
 
         .view-mode-btn.active {
-            background: linear-gradient(135deg, var(--astro-purple) 0%, var(--astro-purple-dark) 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--astro-gold) 0%, var(--astro-purple-dark) 100%);
+            color: var(--v-on-accent);
         }
 
-        /* Bodygraph Legend Toggle */
+        /* Bodygraph Legend Toggle — the HD bodygraph sub-view (below) keeps a
+           fixed dark "instrument panel" look in both themes, out of scope for
+           this pass; this toggle button itself still follows the page theme. */
         .bodygraph-legend-btn {
-            background: rgba(30, 30, 40, 0.8);
-            border-color: rgba(100, 100, 120, 0.3);
-            color: #888;
+            background: rgb(var(--v-wash-rgb) / 0.08);
+            border-color: var(--v-line);
+            color: var(--v-muted);
         }
         .bodygraph-legend-btn:hover {
-            background: rgba(50, 50, 60, 0.8);
-            border-color: rgba(100, 100, 120, 0.5);
-            color: #aaa;
+            background: rgb(var(--v-wash-rgb) / 0.14);
+            border-color: var(--v-line);
+            color: var(--v-ink-soft);
         }
         .bodygraph-legend-btn.active {
-            background: rgba(6, 182, 212, 0.2);
-            border-color: #06b6d4;
-            color: #06b6d4;
+            background: rgb(var(--v-hd-rgb) / 0.18);
+            border-color: var(--v-hd);
+            color: var(--v-hd);
         }
 
-        /* Human Design Bodygraph */
+        /* Human Design Bodygraph — raw SVG fills, intentionally NOT theme-aware
+           (fixed dark instrument panel in both light and dark mode; see notes
+           at the top of the THEME TOKENS block). */
         .hd-center {
             transition: all 0.3s;
             cursor: pointer;
@@ -649,7 +808,7 @@
             cursor: pointer;
         }
 
-        .hd-channel.defined { stroke: var(--astro-gold); }
+        .hd-channel.defined { stroke: #d4af37; }
         .hd-channel.undefined { stroke: rgba(255, 255, 255, 0.1); }
 
         .hd-gate-label {
@@ -660,12 +819,15 @@
 
         .hd-gate-label.personality { fill: #1a1a2e; font-weight: bold; }
         .hd-gate-label.design { fill: #ef4444; }
-        .hd-gate-label.both { fill: var(--astro-gold); font-weight: bold; }
+        .hd-gate-label.both { fill: #d4af37; font-weight: bold; }
 
-        /* Gate Panel (HD) */
+        /* Gate Panel (HD) — panel chrome follows the page theme; the left-border
+           accent keeps its fixed identity hue (personality/design/both) rather
+           than folding into the gold chrome accent, so all three stay
+           distinguishable regardless of theme. */
         .gate-panel {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(6, 182, 212, 0.2);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid rgb(var(--v-hd-rgb) / 0.2);
             border-radius: 8px;
             padding: 0.75rem;
             margin-bottom: 0.5rem;
@@ -674,8 +836,8 @@
         }
 
         .gate-panel:hover {
-            border-color: rgba(6, 182, 212, 0.5);
-            background: rgba(6, 182, 212, 0.05);
+            border-color: rgb(var(--v-hd-rgb) / 0.5);
+            background: rgb(var(--v-hd-rgb) / 0.06);
         }
 
         .gate-panel.personality { border-left: 3px solid #8b5cf6; }
@@ -687,22 +849,22 @@
             display: inline-flex;
             align-items: center;
             padding: 0.35rem 0.75rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid var(--v-line);
             border-radius: 9999px;
             font-size: 0.75rem;
-            color: #9ca3af;
+            color: var(--v-muted);
             cursor: pointer;
             transition: all 0.2s;
         }
         .hd-filter-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: rgb(var(--v-veil-rgb) / 0.08);
+            color: var(--v-ink);
         }
         .hd-filter-btn.active {
-            background: rgba(139, 92, 246, 0.2);
-            border-color: rgba(139, 92, 246, 0.5);
-            color: #fff;
+            background: rgb(var(--v-accent-rgb) / 0.2);
+            border-color: rgb(var(--v-accent-rgb) / 0.5);
+            color: var(--v-ink);
         }
 
         /* Form Collapse Animation */
@@ -719,8 +881,8 @@
 
         /* I Ching Grammar Selector */
         .grammar-selector {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid var(--v-line);
             border-radius: 8px;
             padding: 0.75rem;
             margin-bottom: 1rem;
@@ -730,8 +892,8 @@
         .grammar-stack-section {
             margin-top: 1rem;
             padding: 1rem;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, rgb(var(--v-accent-rgb) / 0.1) 0%, rgb(var(--v-info-rgb) / 0.1) 100%);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 8px;
         }
 
@@ -741,15 +903,15 @@
             gap: 0.5rem;
             font-size: 0.75rem;
             font-weight: 600;
-            color: #a78bfa;
+            color: var(--astro-gold);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 0.75rem;
         }
 
         .grammar-layer {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgb(var(--v-wash-rgb) / 0.05);
+            border: 1px solid var(--v-line);
             border-radius: 6px;
             margin-bottom: 0.5rem;
             overflow: hidden;
@@ -764,34 +926,34 @@
             align-items: center;
             justify-content: space-between;
             padding: 0.5rem 0.75rem;
-            background: rgba(139, 92, 246, 0.1);
+            background: rgb(var(--v-accent-rgb) / 0.1);
             cursor: pointer;
             transition: background 0.2s;
         }
 
         .grammar-layer-header:hover {
-            background: rgba(139, 92, 246, 0.2);
+            background: rgb(var(--v-accent-rgb) / 0.2);
         }
 
         .grammar-layer-title {
             font-size: 0.8rem;
             font-weight: 500;
-            color: #e9d5ff;
+            color: var(--astro-gold);
         }
 
         .grammar-layer-badge {
             font-size: 0.65rem;
             padding: 2px 6px;
             border-radius: 4px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--astro-gold) 0%, var(--astro-purple-dark) 100%);
+            color: var(--v-on-accent);
             font-weight: 600;
         }
 
         .grammar-layer-content {
             padding: 0.75rem;
             font-size: 0.8rem;
-            color: #d1d5db;
+            color: var(--v-ink-soft);
             line-height: 1.5;
             display: none;
         }
@@ -803,12 +965,12 @@
         .grammar-layer-components {
             margin-top: 0.75rem;
             padding-top: 0.75rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--v-line);
         }
 
         .grammar-layer-components-title {
             font-size: 0.7rem;
-            color: #9ca3af;
+            color: var(--v-muted);
             margin-bottom: 0.5rem;
         }
 
@@ -823,18 +985,18 @@
             align-items: center;
             gap: 0.25rem;
             padding: 0.25rem 0.5rem;
-            background: rgba(212, 175, 55, 0.2);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.16);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 4px;
             font-size: 0.7rem;
-            color: #fcd34d;
+            color: var(--astro-gold);
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .grammar-component-chip:hover {
-            background: rgba(212, 175, 55, 0.3);
-            border-color: rgba(212, 175, 55, 0.5);
+            background: rgb(var(--v-accent-rgb) / 0.3);
+            border-color: rgb(var(--v-accent-rgb) / 0.5);
         }
 
         /* Personal Notes Section */
@@ -845,16 +1007,16 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgb(var(--v-wash-rgb) / 0.06);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(139, 92, 246, 0.5);
+            background: rgb(var(--v-accent-rgb) / 0.5);
         }
 
         /* Modal Styles */
@@ -863,7 +1025,10 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            z-index: 2147483647; /* Maximum z-index to ensure it's above fullscreen */
+            /* Above .css-fullscreen (9000) so detail popups always stack ON TOP
+               of a fullscreened chart. Both are ordinary body descendants, so
+               plain z-index ordering does the job — no reparenting, no 2^31 hack. */
+            z-index: 10000;
             display: none;
             align-items: center;
             justify-content: center;
@@ -871,27 +1036,111 @@
             overflow-y: auto;
         }
 
-        /* When fullscreen is active, modal needs to be in the fullscreen container */
-        :fullscreen .modal-overlay,
-        :-webkit-full-screen .modal-overlay {
-            position: fixed;
-            z-index: 2147483647;
-        }
-
         .modal-overlay.active {
             display: flex;
         }
 
+        /* CSS-based fullscreen — replaces the native Fullscreen API.
+           Native fullscreen (a) doesn't work on non-video elements on iOS and
+           (b) creates a top-layer stacking context that hid body-level detail
+           modals behind the chart regardless of z-index. A fixed full-viewport
+           overlay has neither problem and works identically inside the flow
+           iframe. */
+        .css-fullscreen {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 9000 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            width: auto !important;
+            background: var(--v-stage-grad, linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%));
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 1rem;
+        }
+        /* Hide a container's own "enter fullscreen" affordance while it IS
+           fullscreen — the shared top-right X is the exit. */
+        .css-fullscreen .fs-enter-btn { display: none !important; }
+
+        /* The whole-viewer fullscreen (#chart-display-section = view tabs +
+           active chart + item lists/tabs). The generic .css-fullscreen rule
+           centers ONE child in a row; this section has several stacked children,
+           so it becomes a scrollable column instead — tabs on top, chart, then
+           the lists, everything reachable by scrolling while fullscreen. */
+        #chart-display-section.css-fullscreen {
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 3.4rem 1rem 1.5rem; /* top padding clears the fixed X button */
+        }
+        /* In embed mode the chart card is capped at 400px — lift the cap while
+           the whole section is fullscreen so the chart can actually grow. */
+        #chart-display-section.css-fullscreen .chart-container { max-width: none; }
+
+        /* Shared "exit fullscreen" X, pinned top-right (the official app pattern). */
+        .fs-close-btn {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9100;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid var(--v-line, rgba(255, 255, 255, 0.18));
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .fs-close-btn.active { display: flex; }
+        .fs-close-btn:hover { background: rgba(0, 0, 0, 0.75); transform: scale(1.08); }
+
+        /* Prev/next navigation arrows for the detail popup (planet/house/aspect).
+           Same interaction language as the flow app's tarot card modal: arrows
+           flank the content, X top-right closes, Esc/backdrop/swipe also close. */
+        .modal-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10001;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgb(var(--v-accent-rgb) / 0.85);
+            border: 1px solid var(--v-line, rgba(255, 255, 255, 0.18));
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .modal-nav:hover { background: rgb(var(--v-accent-rgb) / 1); transform: translateY(-50%) scale(1.08); }
+        .modal-nav-prev { left: 10px; }
+        .modal-nav-next { right: 10px; }
+        #planet-modal.has-nav.active .modal-nav { display: flex; }
+
         .modal-content {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            background: var(--v-modal-grad);
+            color: var(--v-ink);
             border-radius: 16px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--v-line);
             max-width: 500px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
             padding: 2rem;
         }
 
@@ -902,9 +1151,9 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
+            background: rgb(var(--v-veil-rgb) / 0.08);
+            border: 1px solid var(--v-line);
+            color: var(--v-ink);
             font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.2s;
@@ -914,8 +1163,49 @@
         }
 
         .modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgb(var(--v-veil-rgb) / 0.16);
             transform: scale(1.1);
+        }
+
+        /* Detail-popup action row — the tarot-style quiet SVG icon row pinned at
+           the bottom of every placement/aspect/house detail. Replaces the old
+           loud floating purple book circle + bright gradient AI button; all the
+           detail's actions live here as calm, consistent, equal-weight icons. */
+        .detail-action-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--v-line);
+        }
+        .detail-action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgb(var(--v-veil-rgb) / 0.06);
+            border: 1px solid var(--v-line);
+            color: var(--v-muted, var(--v-ink));
+            cursor: pointer;
+            transition: color 0.18s, background 0.18s, border-color 0.18s, transform 0.18s;
+        }
+        .detail-action-btn:hover {
+            color: rgb(var(--v-accent-rgb));
+            border-color: rgb(var(--v-accent-rgb) / 0.5);
+            background: rgb(var(--v-accent-rgb) / 0.08);
+            transform: translateY(-1px);
+        }
+        /* Quiet SVG bullet for reflection questions (was a bold "?" glyph). */
+        .reflect-mark {
+            flex: 0 0 auto;
+            margin-right: 0.5rem;
+            margin-top: 2px;
+            color: rgb(var(--v-accent-rgb) / 0.7);
+            display: inline-flex;
         }
 
         /* Grammar Carousel Navigation */
@@ -926,8 +1216,8 @@
             gap: 1rem;
             padding: 0.75rem;
             margin-bottom: 1rem;
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.1);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 8px;
         }
 
@@ -935,9 +1225,9 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            color: #a78bfa;
+            background: rgb(var(--v-accent-rgb) / 0.16);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.4);
+            color: var(--astro-gold);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -946,8 +1236,8 @@
         }
 
         .carousel-nav-btn:hover {
-            background: rgba(139, 92, 246, 0.4);
-            color: #fff;
+            background: rgb(var(--v-accent-rgb) / 0.4);
+            color: var(--v-on-accent);
         }
 
         .carousel-grammar-info {
@@ -958,9 +1248,9 @@
         }
 
         .comparison-badge {
-            background: rgba(139, 92, 246, 0.3);
-            border: 1px solid rgba(139, 92, 246, 0.5);
-            color: #a78bfa;
+            background: rgb(var(--v-accent-rgb) / 0.2);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.5);
+            color: var(--astro-gold);
             padding: 0.25rem 0.5rem;
             border-radius: 12px;
             font-size: 0.75rem;
@@ -980,9 +1270,9 @@
         }
 
         .auth-bar-btn {
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            color: #a78bfa;
+            background: rgb(var(--v-accent-rgb) / 0.14);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.4);
+            color: var(--astro-gold);
             padding: 0.5rem 1rem;
             border-radius: 6px;
             font-size: 0.875rem;
@@ -992,8 +1282,8 @@
         }
 
         .auth-bar-btn:hover {
-            background: rgba(139, 92, 246, 0.3);
-            border-color: var(--astro-purple);
+            background: rgb(var(--v-accent-rgb) / 0.3);
+            border-color: var(--astro-gold);
         }
 
         .user-menu {
@@ -1004,7 +1294,7 @@
         }
 
         .user-email {
-            color: #a78bfa;
+            color: var(--astro-gold);
             font-size: 0.875rem;
         }
 
@@ -1013,8 +1303,8 @@
         }
 
         .saved-charts-btn {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.1);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             color: var(--astro-gold);
             padding: 0.5rem 1rem;
             border-radius: 6px;
@@ -1028,7 +1318,7 @@
         }
 
         .saved-charts-btn:hover {
-            background: rgba(212, 175, 55, 0.2);
+            background: rgb(var(--v-accent-rgb) / 0.2);
             border-color: var(--astro-gold);
         }
 
@@ -1038,10 +1328,11 @@
             right: 1rem;
             margin-top: 0.5rem;
             min-width: 280px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: var(--v-modal-grad);
+            color: var(--v-ink);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
             border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
             z-index: 9999;
             display: none;
             max-height: 400px;
@@ -1060,22 +1351,22 @@
 
         .saved-charts-menu-header {
             padding: 0.75rem 1rem;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgb(var(--v-accent-rgb) / 0.2);
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: #a1a1aa;
+            color: var(--v-muted);
         }
 
         .saved-chart-item {
             padding: 0.75rem 1rem;
             cursor: pointer;
             transition: all 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--v-line-soft);
         }
 
         .saved-chart-item:hover {
-            background: rgba(139, 92, 246, 0.1);
+            background: rgb(var(--v-accent-rgb) / 0.1);
         }
 
         .saved-chart-item:last-child {
@@ -1083,27 +1374,27 @@
         }
 
         .saved-chart-name {
-            color: #fff;
+            color: var(--v-ink);
             font-size: 0.9rem;
             margin-bottom: 0.25rem;
         }
 
         .saved-chart-date {
-            color: #71717a;
+            color: var(--v-faint);
             font-size: 0.75rem;
         }
 
         .no-saved-charts {
             padding: 1.5rem 1rem;
             text-align: center;
-            color: #71717a;
+            color: var(--v-faint);
             font-size: 0.875rem;
         }
 
         .sign-out-btn {
             background: transparent;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #ef4444;
+            border: 1px solid rgb(var(--v-danger-rgb) / 0.35);
+            color: var(--v-danger);
             padding: 0.5rem 1rem;
             border-radius: 6px;
             font-size: 0.875rem;
@@ -1112,8 +1403,8 @@
         }
 
         .sign-out-btn:hover {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: #ef4444;
+            background: rgb(var(--v-danger-rgb) / 0.1);
+            border-color: var(--v-danger);
         }
 
         /* Sign-in Modal */
@@ -1134,9 +1425,10 @@
         }
 
         .signin-modal {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            background: var(--v-modal-grad);
+            color: var(--v-ink);
             border-radius: 16px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            border: 1px solid var(--v-line);
             max-width: 400px;
             width: 100%;
             padding: 2rem;
@@ -1190,7 +1482,7 @@
         .embed-header {
             display: none;
             padding: 0.5rem;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgb(var(--v-wash-rgb) / 0.05);
             border-radius: 8px;
             margin-bottom: 0.5rem;
         }
@@ -1203,27 +1495,79 @@
 
         .embed-header .chart-name {
             font-weight: 500;
-            color: #c4b5fd;
+            color: var(--astro-gold);
             font-size: 0.875rem;
         }
 
         .embed-header button {
             padding: 0.25rem 0.75rem;
             font-size: 0.75rem;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            color: #c4b5fd;
+            background: rgb(var(--v-accent-rgb) / 0.16);
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.3);
+            color: var(--astro-gold);
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .embed-header button:hover {
-            background: rgba(139, 92, 246, 0.3);
+            background: rgb(var(--v-accent-rgb) / 0.3);
         }
         /* Hide header elements when loaded in an iframe */
         body.in-iframe site-header { display: none !important; }
         body.in-iframe .astro-header { display: none !important; }
+
+        /* ============================================================
+           Tailwind utility-class remap — theme-aware, see comment above
+           the THEME TOKENS block for the chrome-vs-content-color rule.
+           Uses [class*="..."] substring-attribute selectors (not plain
+           .class selectors) so ONE rule also catches Tailwind's opacity-
+           modifier variants of the same token (e.g. "bg-purple-900/20",
+           "bg-purple-900/50" are both caught by [class*="bg-purple-900"]),
+           without needing a rule per exact opacity value. The specific
+           alpha picked per rule is a reasonable single value standing in
+           for whatever opacity variant was originally used.
+           ============================================================ */
+        [class*="bg-gray-900"] { background-color: var(--v-surface) !important; }
+        [class*="bg-gray-800"] { background-color: var(--v-surface-2) !important; }
+        [class*="bg-gray-700"] { background-color: rgb(var(--v-wash-rgb) / 0.12) !important; }
+        .bg-white { background-color: var(--v-surface) !important; }
+        [class*="bg-purple-900"] { background-color: rgb(var(--v-accent-rgb) / 0.14) !important; }
+        [class*="bg-purple-600"], [class*="bg-purple-500"] { background-color: var(--astro-gold) !important; color: var(--v-on-accent) !important; }
+        [class*="bg-yellow-900"] { background-color: rgb(var(--v-air-rgb) / 0.16) !important; }
+        [class*="bg-yellow-500"] { background-color: rgb(var(--v-air-rgb)) !important; color: var(--v-on-accent) !important; }
+        [class*="bg-red-900"] { background-color: rgb(var(--v-danger-rgb) / 0.16) !important; }
+        [class*="bg-red-500"] { background-color: var(--v-danger) !important; color: var(--v-on-accent) !important; }
+        [class*="bg-cyan-900"] { background-color: rgb(var(--v-hd-rgb) / 0.16) !important; }
+        [class*="bg-blue-600"] { background-color: var(--v-info) !important; color: var(--v-on-accent) !important; }
+        [class*="bg-orange-600"] { background-color: rgb(var(--v-air-rgb)) !important; color: var(--v-on-accent) !important; }
+
+        [class*="text-gray-500"], [class*="text-gray-400"], [class*="text-gray-600"] { color: var(--v-muted) !important; }
+        [class*="text-gray-300"] { color: var(--v-ink-soft) !important; }
+        [class*="text-gray-200"] { color: var(--v-ink) !important; }
+        [class*="text-purple-400"], [class*="text-purple-300"], [class*="text-purple-500"] { color: var(--astro-gold) !important; }
+        [class*="text-yellow-400"], [class*="text-yellow-500"], [class*="text-yellow-600"], [class*="text-yellow-200"] { color: rgb(var(--v-air-rgb)) !important; }
+        [class*="text-red-400"], [class*="text-red-300"] { color: var(--v-danger) !important; }
+        [class*="text-green-400"] { color: var(--v-success) !important; }
+        [class*="text-cyan-300"], [class*="text-cyan-400"], [class*="text-cyan-500"] { color: var(--v-hd) !important; }
+        [class*="text-blue-400"] { color: var(--v-info) !important; }
+        [class*="text-teal-400"] { color: var(--astro-teal) !important; }
+        .text-white { color: var(--v-ink) !important; }
+
+        [class*="border-gray-800"], [class*="border-gray-700"], [class*="border-gray-600"], [class*="border-gray-300"] { border-color: var(--v-line) !important; }
+        .border-white { border-color: var(--v-line) !important; }
+        [class*="border-purple-800"], [class*="border-purple-700"] { border-color: rgb(var(--v-accent-rgb) / 0.35) !important; }
+        [class*="border-purple-500"] { border-color: var(--astro-gold) !important; }
+        [class*="border-yellow-800"], [class*="border-yellow-700"], [class*="border-yellow-600"], [class*="border-yellow-500"] { border-color: rgb(var(--v-air-rgb) / 0.45) !important; }
+        [class*="border-cyan-800"], [class*="border-cyan-700"] { border-color: rgb(var(--v-hd-rgb) / 0.4) !important; }
+
+        /* the one gradient button in the page (AI interpretation CTA) */
+        .bg-gradient-to-r.from-purple-600.to-indigo-600 {
+            background-image: linear-gradient(to right, var(--astro-gold), var(--astro-purple-dark)) !important;
+            color: var(--v-on-accent) !important;
+        }
+        [class*="from-yellow-900"] { --tw-gradient-from: rgb(var(--v-air-rgb) / 0.25) var(--tw-gradient-from-position) !important; }
+        [class*="to-orange-900"] { --tw-gradient-to: rgb(var(--v-air-rgb) / 0.12) var(--tw-gradient-to-position) !important; }
     </style>
     <script>
         // Detect iframe and add class to body when DOM is ready
@@ -1236,8 +1580,17 @@
     </script>
 </head>
 <body class="text-white">
-    <!-- Site Header -->
-    <site-header></site-header>
+    <!-- Site Header — the SAME shared nav as every other page in this repo (Home / Views /
+         Grammars / GitHub), not the recursive.eco-family platform header. Previously this page
+         rendered a bespoke plain-markup "back to the site" strip specifically to dodge a
+         <site-header> custom-element collision with site-shell-inline.js's own platform-nav
+         definition (Journal / Create / Library) below. That collision is now resolved at the
+         source: site-shell-inline.js registers its header under <viewer-shell-header> instead
+         (unused here, kept for its auth logic — see that file's comment), which frees up
+         <site-header> for this repo's own component, loaded the same way index.html/wheel.html/
+         lenses.html/genealogy.html do. -->
+    <script src="../site-header.js?v=45"></script>
+    <site-header active="viewer"></site-header>
 
     <!-- Main Content -->
     <main class="min-h-screen">
@@ -1266,7 +1619,7 @@
                             <div class="saved-charts-dropdown">
                                 <button type="button" class="saved-charts-btn" onclick="toggleSavedChartsMenu(event)">
                                     My Charts
-                                    <svg width="14" height="14" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#chevron-down-thin"/></svg>
+                                    <svg width="14" height="14" aria-hidden="true"><use href="icons.svg#chevron-down-thin"/></svg>
                                 </button>
                                 <div id="saved-charts-menu" class="saved-charts-menu">
                                     <div class="saved-charts-menu-header">Saved Charts</div>
@@ -1403,11 +1756,11 @@
 
                         <div id="auth-form" class="space-y-3">
                             <!-- Email delivery tips -->
-                            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 10px; font-size: 11px; margin-bottom: 8px;">
-                                <p style="color: #93c5fd; margin-bottom: 4px;"><strong>Email Delivery Tips:</strong></p>
-                                <p style="color: #bfdbfe; margin-bottom: 2px;">• <strong>Gmail works best</strong> for reliable delivery</p>
-                                <p style="color: #bfdbfe; margin-bottom: 2px;">• Yahoo/Outlook: add <strong>pp@playfulprocess.com</strong> to contacts</p>
-                                <p style="color: #bfdbfe;">• Check your <strong>Spam folder</strong> if you don't see it</p>
+                            <div style="background: rgb(var(--v-info-rgb) / 0.08); border: 1px solid rgb(var(--v-info-rgb) / 0.3); border-radius: 8px; padding: 10px; font-size: 11px; margin-bottom: 8px;">
+                                <p style="color: var(--v-info); margin-bottom: 4px;"><strong>Email Delivery Tips:</strong></p>
+                                <p style="color: var(--v-ink-soft); margin-bottom: 2px;">• <strong>Gmail works best</strong> for reliable delivery</p>
+                                <p style="color: var(--v-ink-soft); margin-bottom: 2px;">• Yahoo/Outlook: add <strong>pp@playfulprocess.com</strong> to contacts</p>
+                                <p style="color: var(--v-ink-soft);">• Check your <strong>Spam folder</strong> if you don't see it</p>
                             </div>
                             <div>
                                 <label class="form-label" for="auth-email">Email Address</label>
@@ -1446,7 +1799,11 @@
                     </div><!-- End form-collapsible -->
                 </div>
 
-                <!-- Chart Display Section -->
+                <!-- Chart Display Section — #chart-display-section is what the ONE
+                     fullscreen control fullscreens: the view tabs + the active
+                     chart + the item lists/tabs below it, i.e. the whole viewer
+                     experience, not just the wheel (builder feedback, Jul 15 2026). -->
+                <div id="chart-display-section">
                     <!-- View Mode Toggle -->
                     <div id="view-mode-toggle" class="hidden mb-4">
                         <div class="flex gap-1 p-1 bg-gray-900/50 rounded-lg border border-gray-800">
@@ -1469,7 +1826,7 @@
                         </div>
 
                         <div id="chart-wheel-container" class="hidden relative">
-                            <button onclick="toggleChartWheelFullscreen()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-sm px-2 py-1 bg-gray-900/80 rounded z-10" title="Toggle fullscreen">⛶</button>
+                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
                             <div class="zoom-controls">
                                 <button onclick="chartZoom(-1)" title="Zoom out">−</button>
                                 <button onclick="chartZoomReset()" title="Reset zoom">⟲</button>
@@ -1480,19 +1837,19 @@
                                 <select id="astrology-schema-select" onchange="selectAstrologySchema(this.value)" class="text-xs px-3 py-1.5 rounded-lg bg-gray-900/80 border border-gray-700 text-gray-300 focus:border-purple-500 focus:outline-none">
                                     <option value="">Default Interpretations</option>
                                 </select>
-                                <button onclick="interpretWithAI('astrology')" class="px-3 py-1.5 text-xs rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 transition-all flex items-center gap-1.5" title="Get AI interpretation of your birth chart">
-                                    <svg class="w-4 h-4" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#chat"/></svg>
+                                <button onclick="interpretWithAI('astrology')" class="px-3 py-1.5 text-xs rounded-lg bg-purple-900/20 border border-purple-700/40 text-purple-300 hover:bg-purple-900/35 hover:text-purple-200 transition-all flex items-center gap-1.5" title="Get AI interpretation of your birth chart">
+                                    <svg class="w-4 h-4" aria-hidden="true"><use href="icons.svg#star"/></svg>
                                     Interpret with AI
                                 </button>
                             </div>
                             <div id="chart-wheel"></div>
                         </div>
                         <div id="hd-mandala-container" class="hidden relative">
-                            <button onclick="toggleMandalaFullscreen()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-sm px-2 py-1 bg-gray-900/80 rounded z-10" title="Toggle fullscreen">⛶</button>
+                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
                             <div id="hd-mandala" style="max-width: 500px; margin: 0 auto;"></div>
                         </div>
                         <div id="hd-bodygraph-container" class="hidden relative">
-                            <button onclick="toggleBodygraphFullscreen()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-sm px-2 py-1 bg-gray-900/80 rounded z-10" title="Toggle fullscreen">⛶</button>
+                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
                             <!-- Legend Mode Toggle -->
                             <div id="bodygraph-legend-toggle" class="flex justify-center gap-2 mb-3">
                                 <button onclick="setBodygraphLegendMode('activation')" class="bodygraph-legend-btn active text-xs px-3 py-1.5 rounded-full border transition-colors" data-mode="activation">By Activation</button>
@@ -1503,14 +1860,14 @@
                     </div>
 
                     <!-- Human Design Summary (shown when HD view active) -->
-                    <div id="hd-summary" class="hidden mt-4 p-4 rounded-lg border border-purple-800/30 bg-purple-900/10">
+                    <div id="hd-summary" class="hidden mt-4 p-4 rounded-lg border border-cyan-800/30 bg-cyan-900/10">
                         <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
                             <div class="flex flex-wrap items-center gap-3">
-                                <span id="hd-type-badge" class="px-3 py-1 rounded-full text-sm font-semibold bg-purple-900/50 text-purple-200 border border-purple-700/50">Type</span>
-                                <span id="hd-authority-badge" class="px-2 py-1 rounded-full text-xs bg-purple-900/30 text-purple-300 border border-purple-700/40">Authority</span>
-                                <span id="hd-profile-badge" class="px-2 py-1 rounded-full text-xs bg-purple-900/30 text-purple-300 border border-purple-700/40">Profile</span>
+                                <span id="hd-type-badge" class="px-3 py-1 rounded-full text-sm font-semibold bg-cyan-900/50 text-cyan-300 border border-cyan-700/50">Type</span>
+                                <span id="hd-authority-badge" class="px-2 py-1 rounded-full text-xs bg-yellow-900/30 text-yellow-400 border border-yellow-700/30">Authority</span>
+                                <span id="hd-profile-badge" class="px-2 py-1 rounded-full text-xs bg-purple-900/30 text-purple-400 border border-purple-700/30">Profile</span>
                             </div>
-                            <button onclick="interpretWithAI('hd')" class="px-3 py-1.5 text-xs rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-all flex items-center gap-1.5" title="Get AI interpretation of your Human Design">
+                            <button onclick="interpretWithAI('hd')" class="px-3 py-1.5 text-xs rounded-lg bg-gradient-to-r from-cyan-600 to-purple-600 text-white hover:from-cyan-500 hover:to-purple-500 transition-all flex items-center gap-1.5" title="Get AI interpretation of your Human Design">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                                 Interpret with AI
                             </button>
@@ -1520,10 +1877,11 @@
 
                     <!-- Chart Details Tabs -->
                     <div id="chart-details" class="hidden mt-6">
-                        <!-- Embed Header (only visible in embed mode) -->
+                        <!-- Embed Header (only visible in embed mode). The single
+                             fullscreen control lives on the chart view itself
+                             (toggleActiveFullscreen), so this bar just names the chart. -->
                         <div class="embed-header">
                             <span class="chart-name" id="embed-chart-name">Birth Chart</span>
-                            <button onclick="toggleFullscreen()" title="Toggle fullscreen">⛶ Fullscreen</button>
                         </div>
 
                         <!-- Transit Toggle -->
@@ -1559,11 +1917,7 @@
 
                         <!-- Astrology Tabs -->
                         <div class="flex flex-wrap items-center border-b border-gray-800 mb-2">
-                            <!-- Jul 7 2026: domain label muted to neutral gray (was
-                                 saturated yellow) — the label is a section header,
-                                 not chrome; the active tab's own purple underline
-                                 already carries the "selected" signal. -->
-                            <span class="text-xs text-gray-500 mr-3 py-2 font-medium">Astrology:</span>
+                            <span class="text-xs text-yellow-600 mr-3 py-2 font-medium">Astrology:</span>
                             <button class="tab-btn active" data-tab="planets">Planets</button>
                             <button class="tab-btn" data-tab="houses">Houses</button>
                             <button class="tab-btn" data-tab="aspects">Aspects</button>
@@ -1571,7 +1925,7 @@
                         </div>
                         <!-- Human Design Tabs (separate row) -->
                         <div class="flex flex-wrap items-center border-b border-gray-800 mb-2">
-                            <span class="text-xs text-gray-500 mr-3 py-2 font-medium">Human Design:</span>
+                            <span class="text-xs text-cyan-500 mr-3 py-2 font-medium">Human Design:</span>
                             <button class="tab-btn" data-tab="hd-gates">Gates</button>
                             <button class="tab-btn" data-tab="hd-channels">Channels</button>
                             <button class="tab-btn" data-tab="hd-centers">Centers</button>
@@ -1609,14 +1963,14 @@
                             <div id="ai-context-preview" class="ai-context-preview">
                                 <div class="ai-context-header" onclick="toggleAIContextPreview()">
                                     <div class="ai-context-title">
-                                        <span>🤖</span>
+                                        <span style="display:inline-flex;vertical-align:-2px"><svg width="16" height="16" aria-hidden="true"><use href="icons.svg#chat"/></svg></span>
                                         <span>Astro Context for AI</span>
                                         <span id="ai-context-count" class="ai-context-count" style="display: none;">0</span>
                                     </div>
                                     <div class="ai-context-actions">
                                         <button class="ai-context-btn delete-all" onclick="event.stopPropagation(); clearAllSelectionsFromIframe()">Delete All</button>
                                         <button class="ai-context-btn" onclick="event.stopPropagation(); toggleAIContextJSON()">JSON</button>
-                                        <button class="ai-context-btn fullscreen" onclick="event.stopPropagation(); openAIContextFullscreen()">↗ Full</button>
+                                        <button class="ai-context-btn fullscreen" onclick="event.stopPropagation(); openAIContextFullscreen()"><svg width="12" height="12" style="vertical-align:-1px;margin-right:3px" aria-hidden="true"><use href="icons.svg#expand"/></svg>Full</button>
                                     </div>
                                 </div>
                                 <div id="ai-context-body" class="ai-context-body">
@@ -1675,6 +2029,7 @@
                             <span class="hidden sm:inline">High-precision NASA/JPL data matching professional astrology software.</span>
                         </div>
                     </div>
+                </div><!-- End chart-display-section -->
             </div>
         </div>
     </main>
@@ -1682,15 +2037,21 @@
     <!-- Gate Detail Modal -->
     <div id="gate-modal" class="modal-overlay">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeGateModal()">&times;</button>
+            <button class="modal-close" onclick="closeGateModal()" aria-label="Close" title="Close (Esc)"><svg width="20" height="20" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
             <div id="gate-modal-content"></div>
         </div>
     </div>
 
     <!-- Planet Details Modal -->
     <div id="planet-modal" class="modal-overlay">
+        <button class="modal-nav modal-nav-prev" onclick="navigateDetail(-1)" aria-label="Previous item" title="Previous (←)">
+            <svg width="22" height="22" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
+        </button>
+        <button class="modal-nav modal-nav-next" onclick="navigateDetail(1)" aria-label="Next item" title="Next (→)">
+            <svg width="22" height="22" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+        </button>
         <div class="modal-content">
-            <button class="modal-close" onclick="closePlanetModal()">&times;</button>
+            <button class="modal-close" onclick="closePlanetModal()" aria-label="Close" title="Close (Esc)"><svg width="20" height="20" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
             <div id="planet-modal-content"></div>
         </div>
     </div>
@@ -1698,17 +2059,17 @@
     <!-- Sign-in Modal -->
     <div id="signin-modal" class="signin-modal-overlay">
         <div class="signin-modal">
-            <button class="modal-close" onclick="closeSigninModal()">&times;</button>
+            <button class="modal-close" onclick="closeSigninModal()" aria-label="Close" title="Close"><svg width="20" height="20" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
             <h2 class="text-xl font-semibold text-white mb-4">Sign In</h2>
             <p class="text-gray-400 text-sm mb-4">
                 Sign in to save your charts and access them later.
             </p>
             <!-- Email delivery tips -->
-            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 12px; font-size: 12px; margin-bottom: 16px;">
-                <p style="color: #93c5fd; margin-bottom: 6px;"><strong>Email Delivery Tips:</strong></p>
-                <p style="color: #bfdbfe; margin-bottom: 4px;">• <strong>Gmail works best</strong> for reliable delivery</p>
-                <p style="color: #bfdbfe; margin-bottom: 4px;">• Yahoo/Outlook: add <strong>pp@playfulprocess.com</strong> to contacts</p>
-                <p style="color: #bfdbfe;">• Check your <strong>Spam folder</strong> if you don't see it</p>
+            <div style="background: rgb(var(--v-info-rgb) / 0.08); border: 1px solid rgb(var(--v-info-rgb) / 0.3); border-radius: 8px; padding: 12px; font-size: 12px; margin-bottom: 16px;">
+                <p style="color: var(--v-info); margin-bottom: 6px;"><strong>Email Delivery Tips:</strong></p>
+                <p style="color: var(--v-ink-soft); margin-bottom: 4px;">• <strong>Gmail works best</strong> for reliable delivery</p>
+                <p style="color: var(--v-ink-soft); margin-bottom: 4px;">• Yahoo/Outlook: add <strong>pp@playfulprocess.com</strong> to contacts</p>
+                <p style="color: var(--v-ink-soft);">• Check your <strong>Spam folder</strong> if you don't see it</p>
             </div>
             <div class="space-y-4">
                 <div>
@@ -1726,23 +2087,22 @@
         </div>
     </div>
 
-    <!-- Site Footer -->
+    <!-- Site Footer (platform footer — defined by site-shell-inline.js below) -->
     <site-footer></site-footer>
 
     <!-- Component Scripts -->
-    <script src="https://flow.recursive.eco/assets/js/components/site-shell-inline.js"></script>
-    <script src="https://flow.recursive.eco/spiral/spiral.js"></script>
+    <script src="assets/js/components/site-shell-inline.js"></script>
+    <script src="spiral/spiral.js"></script>
 
     <script>
         // ============================================================
         // CONFIGURATION & SETUP
         // ============================================================
 
-        // API endpoint for chart calculations.
-        // Served by THIS repo's own Vercel Python function (api/calculate-chart.py) —
-        // a root-relative path, so no cross-origin call and no CORS dependency on flow.
-        // (Requires the page to be deployed on Vercel, not GitHub Pages; see docs/APP-INTEGRATION-TODO.md.)
-        const CHART_API_URL = '/api/calculate-chart';
+        // API endpoint for chart calculations
+        const CHART_API_URL = '/api/calculate-chart'; // self-hosted (Jul 23 2026): this repo's own Vercel
+        // Python function (api/calculate_chart.py, Skyfield/DE421) serves the math same-origin —
+        // no CORS, no dependency on recursive.eco. Rewrite in vercel.json maps the public path.
 
         // Defensive check for Supabase (CDN might fail to load)
         if (!window.supabase) {
@@ -1751,7 +2111,7 @@
         const createClient = window.supabase?.createClient;
 
         // Initialize Supabase via shared auth module
-        const supabaseClient = (window.RecursiveAuth && window.RecursiveAuth.init) ? window.RecursiveAuth.init() : null;
+        const supabaseClient = window.RecursiveAuth.init();
 
         // ============================================================
         // ZODIAC & PLANET DATA WITH JUNGIAN/CBT INTERPRETATIONS
@@ -2682,54 +3042,20 @@
                     }
                 }
 
-                // Handle chart image capture request from parent
+                // Handle chart image capture request from parent (the "KEY" —
+                // lets the Flow AI interpretation attach an image of the wheel).
+                // Protocol (must match apps/flow AstrologyOracle.tsx):
+                //   parent → viewer: { type: 'astrology-request-chart-image' }
+                //   viewer → parent: { type: 'astrology-chart-image', imageDataUrl, view, error? }
                 if (event.data?.type === 'astrology-request-chart-image') {
-                    const svgEl = document.querySelector('#chart-wheel svg');
-                    if (svgEl) {
-                        try {
-                            const svgString = new XMLSerializer().serializeToString(svgEl);
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const img = new Image();
-                            img.onload = () => {
-                                // Cap canvas size for performance (800px max)
-                                const maxSize = 800;
-                                const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
-                                canvas.width = img.width * scale;
-                                canvas.height = img.height * scale;
-                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                                const pngDataUrl = canvas.toDataURL('image/png');
-                                window.parent.postMessage({
-                                    type: 'astrology-chart-image',
-                                    imageDataUrl: pngDataUrl
-                                }, '*');
-                            };
-                            img.onerror = (e) => {
-                                console.error('[Astrology Viewer] SVG-to-PNG conversion failed:', e);
-                                // Fallback: send null (SVG format not supported by OpenAI vision)
-                                window.parent.postMessage({
-                                    type: 'astrology-chart-image',
-                                    imageDataUrl: null
-                                }, '*');
-                            };
-                            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
-                        } catch (e) {
-                            console.error('[Astrology Viewer] Failed to capture chart image:', e);
-                            window.parent.postMessage({
-                                type: 'astrology-chart-image',
-                                imageDataUrl: null
-                            }, '*');
-                        }
-                    } else {
-                        console.warn('[Astrology Viewer] No SVG element found at #chart-wheel svg');
-                        window.parent.postMessage({
-                            type: 'astrology-chart-image',
-                            imageDataUrl: null
-                        }, '*');
-                    }
+                    captureActiveChartImage();
                 }
 
-                // Handle grammar selection from parent (Flow app)
+                // Handle grammar selection from parent (Flow app). This is the
+                // fix point for "switching grammars changes nothing on screen":
+                // selectAstrologySchema() now fetches (or serves from cache) the
+                // new grammar AND re-renders any currently-open detail modal —
+                // see selectAstrologySchema / refreshOpenDetailModal below.
                 if (event.data?.type === 'astrology-select-grammar') {
                     const { grammarId, grammarType } = event.data;
                     if (grammarId) {
@@ -2800,6 +3126,157 @@
                     type: 'astrology-item-detail',
                     detail: detail
                 }, '*');
+            }
+        }
+
+        // ============================================================
+        // CHART SNAPSHOT — serialize the active chart view to a PNG so the
+        // Flow AI interpretation can attach an image of the wheel ("KEY").
+        //
+        // Protocol (the Flow side wins — matched to apps/flow AstrologyOracle.tsx):
+        //   parent → viewer: { type: 'astrology-request-chart-image' }        (no requestId)
+        //   viewer → parent: { type: 'astrology-chart-image', imageDataUrl }  (Flow reads .imageDataUrl || null)
+        //     we also include { view } and, on failure, { error } — extra
+        //     fields Flow ignores. On ANY failure we send imageDataUrl:null so
+        //     Flow resolves text-only instead of waiting out its 3s timeout.
+        //
+        // Pitfalls handled: the chart SVGs paint themselves with CSS custom
+        // properties (var(--v-*), var(--astro-*)) that DON'T exist in a
+        // standalone rasterized SVG — without inlining them every themed fill
+        // collapses to black. We also paint a solid backing colour first (a
+        // transparent PNG of a dark chart is unreadable), render at ~2x for
+        // legibility, and cap the payload size.
+        function captureActiveChartImage() {
+            const reply = (imageDataUrl, extra) => {
+                try {
+                    window.parent.postMessage(Object.assign({
+                        type: 'astrology-chart-image',
+                        imageDataUrl: imageDataUrl || null,
+                    }, extra || {}), '*');
+                } catch (e) { /* parent gone */ }
+            };
+
+            // 1) Find the active (visible) chart view's SVG. Query the inner
+            //    render target (#chart-wheel / #hd-mandala / #hd-bodygraph), NOT
+            //    the container — the container also holds toolbar <svg> icon
+            //    buttons (fullscreen), so container.querySelector('svg') would
+            //    grab an 18x18 button icon instead of the chart.
+            const views = [
+                { id: 'chart-wheel-container', target: 'chart-wheel', name: 'astrology' },
+                { id: 'hd-mandala-container', target: 'hd-mandala', name: 'hd-mandala' },
+                { id: 'hd-bodygraph-container', target: 'hd-bodygraph', name: 'hd-bodygraph' },
+            ];
+            let svgEl = null, viewName = null;
+            for (const v of views) {
+                const c = document.getElementById(v.id);
+                if (c && !c.classList.contains('hidden')) {
+                    const s = document.querySelector('#' + v.target + ' svg');
+                    if (s) { svgEl = s; viewName = v.name; break; }
+                }
+            }
+            if (!svgEl) {
+                svgEl = document.querySelector('#chart-wheel svg, #hd-mandala svg, #hd-bodygraph svg');
+                viewName = svgEl ? 'fallback' : null;
+            }
+            if (!svgEl) {
+                console.warn('[Astrology Viewer] chart-image: no active chart SVG to capture');
+                reply(null, { error: 'no-active-chart' });
+                return;
+            }
+
+            try {
+                const clone = svgEl.cloneNode(true);
+
+                // 2) Natural pixel size from viewBox (preferred) or bounding box.
+                let vbW = 0, vbH = 0;
+                const vb = svgEl.viewBox && svgEl.viewBox.baseVal;
+                if (vb && vb.width && vb.height) { vbW = vb.width; vbH = vb.height; }
+                if (!vbW || !vbH) {
+                    const r = svgEl.getBoundingClientRect();
+                    vbW = r.width || 500; vbH = r.height || 500;
+                }
+
+                // 3) Inline every CSS custom property the page defines, resolved
+                //    for the CURRENT theme, onto the SVG root. Custom properties
+                //    inherit, so descendant presentation attributes that use
+                //    var() (e.g. fill="rgb(var(--v-fire-rgb)/0.15)") resolve.
+                const rootStyle = getComputedStyle(document.documentElement);
+                const varNames = new Set();
+                for (const sheet of Array.from(document.styleSheets)) {
+                    let rules;
+                    try { rules = sheet.cssRules; } catch (e) { continue; } // cross-origin CDN sheets throw
+                    for (const rule of Array.from(rules || [])) {
+                        const st = rule.style;
+                        if (!st) continue;
+                        for (let i = 0; i < st.length; i++) {
+                            const p = st[i];
+                            if (p && p.charCodeAt(0) === 45 && p.charCodeAt(1) === 45) varNames.add(p);
+                        }
+                    }
+                }
+                let varDecls = '';
+                varNames.forEach((n) => {
+                    const val = rootStyle.getPropertyValue(n);
+                    if (val && val.trim()) varDecls += n + ':' + val.trim() + ';';
+                });
+
+                // 4) Solid backing colour (transparent → unreadable). --v-surface
+                //    is a solid colour in both themes (light #fff / dark #1a1a2e).
+                let bg = (rootStyle.getPropertyValue('--v-surface') || '').trim();
+                if (!bg) bg = (document.documentElement.getAttribute('data-theme') === 'dark') ? '#1a1a2e' : '#ffffff';
+
+                // 5) Make the clone self-contained: explicit px size + inlined vars.
+                clone.setAttribute('width', String(vbW));
+                clone.setAttribute('height', String(vbH));
+                clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                clone.setAttribute('style', varDecls + (clone.getAttribute('style') || ''));
+
+                const svgString = new XMLSerializer().serializeToString(clone);
+                const svgUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+
+                const img = new Image();
+                img.onload = () => {
+                    try {
+                        // 6) Render at ~2x (capped), on the solid background.
+                        let scale = 2;
+                        const MAX_DIM = 1400;
+                        scale = Math.min(scale, MAX_DIM / vbW, MAX_DIM / vbH);
+                        if (!isFinite(scale) || scale <= 0) scale = 1;
+
+                        const render = (s) => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.max(1, Math.round(vbW * s));
+                            canvas.height = Math.max(1, Math.round(vbH * s));
+                            const ctx = canvas.getContext('2d');
+                            ctx.fillStyle = bg;
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            return canvas.toDataURL('image/png');
+                        };
+
+                        // 7) Cap payload (~1.5MB) — downscale if a dense view is over.
+                        let dataUrl = render(scale);
+                        const MAX_LEN = 1500000;
+                        const steps = [1.5, 1.0, 0.75, 0.5];
+                        let i = 0;
+                        while (dataUrl.length > MAX_LEN && i < steps.length) {
+                            dataUrl = render(Math.min(scale, steps[i]));
+                            i++;
+                        }
+                        reply(dataUrl, { view: viewName });
+                    } catch (e) {
+                        console.error('[Astrology Viewer] chart-image: raster failed', e);
+                        reply(null, { error: 'raster-failed', view: viewName });
+                    }
+                };
+                img.onerror = (e) => {
+                    console.error('[Astrology Viewer] chart-image: SVG image load failed', e);
+                    reply(null, { error: 'svg-load-failed', view: viewName });
+                };
+                img.src = svgUrl;
+            } catch (e) {
+                console.error('[Astrology Viewer] chart-image: capture failed', e);
+                reply(null, { error: 'capture-failed', view: viewName });
             }
         }
 
@@ -3368,10 +3845,10 @@
             // === ZODIAC RING (outer) ===
             // Draw 12 zodiac sign segments
             const signColors = {
-                'Fire': { bg: 'rgba(239, 68, 68, 0.15)', text: '#ef4444' },
-                'Earth': { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e' },
-                'Air': { bg: 'rgba(234, 179, 8, 0.15)', text: '#eab308' },
-                'Water': { bg: 'rgba(59, 130, 246, 0.15)', text: '#3b82f6' }
+                'Fire': { bg: 'rgb(var(--v-fire-rgb) / 0.15)', text: 'rgb(var(--v-fire-rgb))' },
+                'Earth': { bg: 'rgb(var(--v-earth-rgb) / 0.15)', text: 'rgb(var(--v-earth-rgb))' },
+                'Air': { bg: 'rgb(var(--v-air-rgb) / 0.15)', text: 'rgb(var(--v-air-rgb))' },
+                'Water': { bg: 'rgb(var(--v-water-rgb) / 0.15)', text: 'rgb(var(--v-water-rgb))' }
             };
 
             ZODIAC_SIGNS.forEach((sign, i) => {
@@ -3381,11 +3858,11 @@
                 const chartStart = toChartAngle(signStart);
                 const chartEnd = toChartAngle(signEnd);
 
-                const colors = signColors[sign.element] || { bg: 'rgba(139, 92, 246, 0.1)', text: '#a78bfa' };
+                const colors = signColors[sign.element] || { bg: 'rgb(var(--v-accent-rgb) / 0.1)', text: 'var(--astro-gold)' };
 
                 // Draw segment (start to end, counter-clockwise)
                 svg += `<path d="${createArc(chartStart, chartEnd, zodiacInnerR, outerR)}"
-                              fill="${colors.bg}" stroke="rgba(139, 92, 246, 0.3)" stroke-width="1"/>`;
+                              fill="${colors.bg}" stroke="rgb(var(--v-accent-rgb) / 0.3)" stroke-width="1"/>`;
 
                 // Sign symbol at midpoint
                 const midAngle = toChartAngle(signStart + 15);
@@ -3423,7 +3900,7 @@
                 // Angular houses (1, 4, 7, 10) get thicker lines
                 const isAngular = [1, 4, 7, 10].includes(house.num);
                 const strokeWidth = isAngular ? 2 : 1;
-                const strokeColor = isAngular ? 'rgba(212, 175, 55, 0.7)' : 'rgba(139, 92, 246, 0.25)';
+                const strokeColor = isAngular ? 'rgb(var(--v-accent-rgb) / 0.7)' : 'var(--v-cusp-minor)';
 
                 svg += `<line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}"
                               stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`;
@@ -3437,7 +3914,7 @@
                 const numPos = getPoint(numAngle, (innerR + zodiacInnerR) / 2 - 15);
                 svg += `<text x="${numPos.x}" y="${numPos.y}"
                               text-anchor="middle" dominant-baseline="middle"
-                              fill="rgba(167, 139, 250, 0.6)" font-size="12">${house.num}</text>`;
+                              fill="rgb(var(--v-wheel-violet-rgb) / 0.6)" font-size="12">${house.num}</text>`;
             });
 
             // === ASPECT LINES ===
@@ -3486,12 +3963,12 @@
 
                     let color, dash = '';
                     switch(aspect.aspect) {
-                        case 'conjunction': color = 'rgba(212, 175, 55, 0.6)'; break;
-                        case 'opposition': color = 'rgba(239, 68, 68, 0.5)'; break;
-                        case 'trine': color = 'rgba(34, 197, 94, 0.5)'; break;
-                        case 'square': color = 'rgba(239, 68, 68, 0.4)'; dash = '4,2'; break;
-                        case 'sextile': color = 'rgba(59, 130, 246, 0.5)'; break;
-                        default: color = 'rgba(139, 92, 246, 0.3)'; dash = '2,2';
+                        case 'conjunction': color = 'rgb(var(--v-accent-rgb) / 0.6)'; break;
+                        case 'opposition': color = 'rgb(var(--v-danger-rgb) / 0.5)'; break;
+                        case 'trine': color = 'rgb(var(--v-success-rgb) / 0.5)'; break;
+                        case 'square': color = 'rgb(var(--v-danger-rgb) / 0.4)'; dash = '4,2'; break;
+                        case 'sextile': color = 'rgb(var(--v-info-rgb) / 0.5)'; break;
+                        default: color = 'var(--v-aspect-minor)'; dash = '2,2';
                     }
 
                     svg += `<line class="aspect-line" data-planet1="${aspect.planet1}" data-planet2="${aspect.planet2}"
@@ -3510,15 +3987,15 @@
                     // Planet group with click handler
                     svg += `<g class="planet-clickable" data-planet-key="${key}" style="cursor:pointer">`;
                     svg += `<circle cx="${pos.x}" cy="${pos.y}" r="12"
-                                  fill="rgba(10, 10, 15, 0.95)" stroke="rgba(212, 175, 55, 0.5)" stroke-width="1.5"/>`;
+                                  fill="var(--v-chip-bg)" stroke="rgb(var(--v-accent-rgb) / 0.5)" stroke-width="1.5"/>`;
                     svg += `<text x="${pos.x}" y="${pos.y}"
                                   text-anchor="middle" dominant-baseline="middle"
-                                  fill="#d4af37" font-size="13" pointer-events="none">${planet.symbol}</text>`;
+                                  fill="var(--astro-gold)" font-size="13" pointer-events="none">${planet.symbol}</text>`;
 
                     // Retrograde indicator
                     if (isRetrograde) {
                         svg += `<text x="${pos.x + 10}" y="${pos.y - 8}"
-                                      fill="#ef4444" font-size="8" pointer-events="none">R</text>`;
+                                      fill="var(--v-danger)" font-size="8" pointer-events="none">R</text>`;
                     }
                     svg += `</g>`;
                 });
@@ -3527,7 +4004,7 @@
             // === TRANSIT PLANETS (outer ring) ===
             if (hasTransits && currentTransits?.planets) {
                 // Draw transit ring
-                svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 2}" fill="none" stroke="rgba(20, 184, 166, 0.3)" stroke-width="1" stroke-dasharray="4,4"/>`;
+                svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 2}" fill="none" stroke="rgb(var(--v-teal-rgb) / 0.3)" stroke-width="1" stroke-dasharray="4,4"/>`;
 
                 const transitPlanetsList = Object.entries(currentTransits.planets)
                     .map(([key, planet]) => ({
@@ -3558,10 +4035,10 @@
 
                     // Transit planet circle and symbol (teal color)
                     svg += `<circle cx="${pos.x}" cy="${pos.y}" r="10"
-                                  fill="rgba(10, 10, 15, 0.95)" stroke="rgba(20, 184, 166, 0.6)" stroke-width="1.5"/>`;
+                                  fill="var(--v-chip-bg)" stroke="rgb(var(--v-teal-rgb) / 0.6)" stroke-width="1.5"/>`;
                     svg += `<text x="${pos.x}" y="${pos.y}"
                                   text-anchor="middle" dominant-baseline="middle"
-                                  fill="#14b8a6" font-size="11">${planetData.symbol}</text>`;
+                                  fill="var(--astro-teal)" font-size="11">${planetData.symbol}</text>`;
                 });
 
                 // Draw transit-to-natal aspect lines
@@ -3573,12 +4050,12 @@
                         const tAngle = toChartAngle(aspect.transitLon);
                         const tPos = getPoint(tAngle, transitR);
 
-                        let color = 'rgba(20, 184, 166, 0.3)';
+                        let color = 'rgb(var(--v-teal-rgb) / 0.3)';
                         let dash = '3,3';
-                        if (aspect.aspect === 'conjunction') { color = 'rgba(20, 184, 166, 0.5)'; dash = ''; }
-                        else if (aspect.aspect === 'trine') { color = 'rgba(34, 197, 94, 0.4)'; }
-                        else if (aspect.aspect === 'sextile') { color = 'rgba(59, 130, 246, 0.4)'; }
-                        else if (aspect.aspect === 'square' || aspect.aspect === 'opposition') { color = 'rgba(239, 68, 68, 0.3)'; }
+                        if (aspect.aspect === 'conjunction') { color = 'rgb(var(--v-teal-rgb) / 0.5)'; dash = ''; }
+                        else if (aspect.aspect === 'trine') { color = 'rgb(var(--v-success-rgb) / 0.4)'; }
+                        else if (aspect.aspect === 'sextile') { color = 'rgb(var(--v-info-rgb) / 0.4)'; }
+                        else if (aspect.aspect === 'square' || aspect.aspect === 'opposition') { color = 'rgb(var(--v-danger-rgb) / 0.3)'; }
 
                         svg += `<line x1="${natalPos.x}" y1="${natalPos.y}" x2="${tPos.x}" y2="${tPos.y}"
                                       stroke="${color}" stroke-width="1" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
@@ -3588,12 +4065,12 @@
 
             // === CENTER CIRCLE ===
             svg += `<circle cx="${cx}" cy="${cy}" r="${innerR}"
-                          fill="rgba(10, 10, 15, 0.95)" stroke="rgba(212, 175, 55, 0.6)" stroke-width="2"/>`;
+                          fill="var(--v-chip-bg)" stroke="rgb(var(--v-accent-rgb) / 0.6)" stroke-width="2"/>`;
 
             // ASC indicator on left
             const ascPos = getPoint(180, innerR + 5);
             svg += `<text x="${ascPos.x - 20}" y="${ascPos.y}"
-                          text-anchor="middle" fill="#d4af37" font-size="11" font-weight="bold">ASC</text>`;
+                          text-anchor="middle" fill="var(--astro-gold)" font-size="11" font-weight="bold">ASC</text>`;
 
             // MC indicator at top
             const mcAngle = toChartAngle(mcDegree);
@@ -3602,9 +4079,9 @@
             // Center text
             const ascSign = ZODIAC_SIGNS[Math.floor(ascDegree / 30)];
             const ascDegInSign = ascDegree % 30;
-            svg += `<text x="${cx}" y="${cy - 12}" text-anchor="middle" fill="rgba(212, 175, 55, 0.9)" font-size="11">Ascendant</text>`;
-            svg += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#d4af37" font-size="14" font-weight="bold">${ascSign?.symbol || ''} ${Math.floor(ascDegInSign)}°${Math.floor((ascDegInSign % 1) * 60)}'</text>`;
-            svg += `<text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="rgba(167, 139, 250, 0.7)" font-size="10">${ascSign?.name || ''}</text>`;
+            svg += `<text x="${cx}" y="${cy - 12}" text-anchor="middle" fill="rgb(var(--v-accent-rgb) / 0.9)" font-size="11">Ascendant</text>`;
+            svg += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="var(--astro-gold)" font-size="14" font-weight="bold">${ascSign?.symbol || ''} ${Math.floor(ascDegInSign)}°${Math.floor((ascDegInSign % 1) * 60)}'</text>`;
+            svg += `<text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="rgb(var(--v-wheel-violet-rgb) / 0.7)" font-size="10">${ascSign?.name || ''}</text>`;
 
             // === RENDER ===
             chartWheel.innerHTML = `
@@ -3621,7 +4098,7 @@
                         </defs>
 
                         <!-- Background -->
-                        <circle cx="${cx}" cy="${cy}" r="${outerR + 5}" fill="rgba(10, 10, 15, 0.3)"/>
+                        <circle cx="${cx}" cy="${cy}" r="${outerR + 5}" fill="var(--v-wheel-bg)"/>
 
                         <!-- Chart content -->
                         ${svg}
@@ -3865,11 +4342,11 @@
                     const nPlanet = PLANETS[aspect.natalPlanet.toLowerCase()] || { symbol: '?', name: aspect.natalPlanet };
 
                     const aspectColors = {
-                        conjunction: '#d4af37',
-                        trine: '#22c55e',
-                        sextile: '#3b82f6',
-                        square: '#ef4444',
-                        opposition: '#ef4444'
+                        conjunction: 'var(--astro-gold)',
+                        trine: 'var(--v-success)',
+                        sextile: 'var(--v-info)',
+                        square: 'var(--v-danger)',
+                        opposition: 'var(--v-danger)'
                     };
 
                     // Transit key for selection
@@ -3895,14 +4372,14 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="aspect-checkbox transit-checkbox ${isSelected ? 'checked' : ''}" data-select="true"></div>
-                                <span style="color: #14b8a6;">${tPlanet.symbol}</span>
-                                <span style="color: ${aspectColors[aspect.aspect] || '#a78bfa'};">${aspect.symbol}</span>
-                                <span style="color: #d4af37;">${nPlanet.symbol}</span>
+                                <span style="color: var(--astro-teal);">${tPlanet.symbol}</span>
+                                <span style="color: ${aspectColors[aspect.aspect] || 'var(--astro-gold)'};">${aspect.symbol}</span>
+                                <span style="color: var(--astro-gold);">${nPlanet.symbol}</span>
                             </div>
                             <div class="text-sm">
-                                <span style="color: #14b8a6;">${tPlanet.name}</span>
+                                <span style="color: var(--astro-teal);">${tPlanet.name}</span>
                                 <span class="text-gray-500"> ${aspect.aspect} </span>
-                                <span style="color: #d4af37;">${nPlanet.name}</span>
+                                <span style="color: var(--astro-gold);">${nPlanet.name}</span>
                             </div>
                             <span class="text-xs text-gray-500">${aspect.orb}° orb</span>
                         </div>
@@ -4195,21 +4672,92 @@
             updateHouseSelectionUI();
         }
 
+        // Merge schema (grammar) data with built-in defaults — only non-empty
+        // schema values override built-ins (normalization creates empty strings
+        // for missing sections, which would otherwise wipe built-in stories).
+        // Shared by showPlanetDetails / showAspectDetails / showHouseDetails.
+        function mergeNonEmpty(base, override) {
+            if (!override) return { ...base };
+            const result = { ...base };
+            for (const [k, v] of Object.entries(override)) {
+                if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) {
+                    result[k] = v;
+                }
+            }
+            return result;
+        }
+
+        // The single quiet SVG action row shared by every detail popup (tarot
+        // pattern: X top-right, arrows flank, actions live in one calm icon row at
+        // the bottom). `schemaToken` is the argument toggleAstrologySchemaSelector
+        // needs to re-render this kind of detail ('sun'/'moon'… for a planet,
+        // 'aspect', or 'house').
+        function detailActionRow(schemaToken) {
+            const grammarBtn = astrologySchemaOptions.length > 0
+                ? `<button onclick="toggleAstrologySchemaSelector('${schemaToken}')" class="detail-action-btn" title="Change or compare grammar" aria-label="Change or compare grammar"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#book"/></svg></button>`
+                : '';
+            const aiBtn = `<button onclick="interpretWithAI('astrology')" class="detail-action-btn" title="Interpret with AI" aria-label="Interpret with AI"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#star"/></svg></button>`;
+            return `<div class="detail-action-row">${grammarBtn}${aiBtn}</div>`;
+        }
+
         function showHouseDetails(houseNumber, sign, house) {
+            // Store for refresh after schema change (grammar switch re-renders
+            // whichever modal is currently open — see refreshOpenDetailModal()).
+            lastDetailShown = { type: 'house', args: [houseNumber, sign, house] };
+
+            // Check for schema overrides - look for this house and its cusp sign
+            // in the currently loaded grammar (mirrors the planet-modal lookup).
+            let schemaHouse = null;
+            let schemaSign = null;
+            if (astrologySchemaItems) {
+                const houses = astrologySchemaItems.houses || astrologySchemaItems.items?.filter(i => i.type === 'house') || [];
+                schemaHouse = houses.find(h =>
+                    h.number === houseNumber ||
+                    parseInt(h.number) === parseInt(houseNumber) ||
+                    h.metadata?.house === houseNumber ||
+                    parseInt(h.name?.match(/(\d+)/)?.[1]) === parseInt(houseNumber)
+                );
+
+                const signNameLower = sign.name?.toLowerCase();
+                const signs = astrologySchemaItems.signs || astrologySchemaItems.items?.filter(i => i.type === 'sign') || [];
+                schemaSign = signs.find(s =>
+                    s.name?.toLowerCase() === signNameLower ||
+                    s.english_name?.toLowerCase() === signNameLower ||
+                    s.metadata?.english_name?.toLowerCase() === signNameLower
+                );
+            }
+            const isFromGrammar = !!(schemaHouse || schemaSign);
+            const mergedHouse = mergeNonEmpty(house, schemaHouse);
+            const mergedSign = mergeNonEmpty(sign, schemaSign);
+
+            // Name the selected grammar so switching is visible on screen even
+            // when it has no entry for this house/sign combination.
+            let schemaIndicator = '';
+            if (loadedGrammars.length > 1) {
+                schemaIndicator = buildCarouselNavHTML();
+            } else if (astrologySchemaItems) {
+                schemaIndicator = isFromGrammar
+                    ? `<div class="text-xs text-gray-500/50 mb-2">Using: ${astrologySchemaItems.name || 'Custom Grammar'}</div>`
+                    : `<div class="text-xs text-gray-500/50 mb-2 italic">No entry for this house in "${astrologySchemaItems.name || 'the selected grammar'}" — showing standard commentary</div>`;
+            }
+
             const content = document.getElementById('planet-modal-content');
             content.innerHTML = `
                 <div class="text-center mb-6">
                     <span class="text-6xl text-blue-400">${houseNumber}</span>
-                    <h2 class="text-2xl font-semibold" style="color: var(--astro-gold);">${house.name}</h2>
-                    <div class="text-purple-400 text-sm mt-1">${house.archetype || ''}</div>
-                    <div class="text-gray-400 text-sm">${house.domain}</div>
+                    <h2 class="text-2xl font-semibold" style="color: var(--astro-gold);">${mergedHouse.name}</h2>
+                    <div class="text-purple-400 text-sm mt-1">${mergedHouse.archetype || ''}</div>
+                    <div class="text-gray-400 text-sm">${mergedHouse.domain}</div>
+                    ${schemaIndicator}
                 </div>
+
+                ${renderGrammarItemImage(schemaHouse) || renderGrammarItemImage(schemaSign)}
 
                 <!-- Sign on Cusp -->
                 <div class="planet-panel mb-4">
                     <div class="text-gray-400 text-sm mb-1">Sign on Cusp</div>
-                    <div class="text-lg">${sign.symbol} ${sign.name}</div>
-                    <div class="text-gray-500 text-sm">${sign.element} • ${sign.modality}</div>
+                    <div class="text-lg">${mergedSign.symbol} ${mergedSign.name}</div>
+                    <div class="text-gray-500 text-sm">${mergedSign.element} • ${mergedSign.modality}</div>
                 </div>
 
                 <!-- Disclaimer -->
@@ -4220,30 +4768,31 @@
                 <!-- House Story -->
                 <div class="mb-4">
                     <h3 class="text-sm uppercase tracking-wide text-purple-400 mb-2">The Domain</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">${house.story || ''}</p>
+                    <p class="text-gray-300 text-sm leading-relaxed">${mergedHouse.story || ''}</p>
                 </div>
 
                 <!-- Sign Lens -->
                 <div class="mb-4">
-                    <h3 class="text-sm uppercase tracking-wide text-purple-400 mb-2">${sign.name} Colors This House</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">${sign.story || ''}</p>
+                    <h3 class="text-sm uppercase tracking-wide text-purple-400 mb-2">${mergedSign.name} Colors This House</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">${mergedSign.story || ''}</p>
                 </div>
 
                 <!-- Reflection -->
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${house.question ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${house.question}</li>` : ''}
-                        ${sign.reframe ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${sign.reframe}</li>` : ''}
+                        ${mergedHouse.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${mergedHouse.question}</li>` : ''}
+                        ${mergedSign.reframe ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${mergedSign.reframe}</li>` : ''}
                     </ul>
                 </div>
+
+                ${detailActionRow('house')}
             `;
 
-            // If in fullscreen, move modal into the fullscreen element
+            // Fullscreen is CSS-based, so the modal (z-index 10000) stacks above
+            // the fullscreened chart (z-index 9000) with no reparenting needed.
             const planetModal = document.getElementById('planet-modal');
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(planetModal);
-            }
+            updateDetailNavButtons();
             planetModal.classList.add('active');
         }
 
@@ -4413,6 +4962,10 @@
         }
 
         function showAspectDetails(p1, p2, aspectInfo, orb) {
+            // Store for refresh after schema change (grammar switch re-renders
+            // whichever modal is currently open — see refreshOpenDetailModal()).
+            lastDetailShown = { type: 'aspect', args: [p1, p2, aspectInfo, orb] };
+
             // Notify parent window in embed mode
             notifyParentOfAspectClick({
                 planet1: p1.name,
@@ -4468,23 +5021,17 @@
                 if (isFromGrammar) {
                     schemaIndicator = `<div class="text-xs text-purple-400/50 mb-2">Using: ${astrologySchemaItems.name || 'Custom Grammar'}</div>`;
                 } else {
-                    schemaIndicator = `<div class="text-xs text-gray-500/50 mb-2 italic">Built-in interpretation — not in grammar</div>`;
+                    // Name the selected grammar even in the fallback case, so a
+                    // grammar switch is visibly reflected even when the newly
+                    // selected grammar has no entry for this aspect.
+                    schemaIndicator = `<div class="text-xs text-gray-500/50 mb-2 italic">No entry for this aspect in "${astrologySchemaItems.name || 'the selected grammar'}" — showing standard commentary</div>`;
                 }
             }
 
             // Schema selector button
-            const schemaButton = astrologySchemaOptions.length > 0
-                ? `<button onclick="toggleAstrologySchemaSelector('aspect')"
-                    class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-purple-900/30 hover:bg-purple-900/50 text-purple-400 hover:text-purple-300 transition-colors"
-                    title="Change astrology grammar">
-                    <svg class="w-4 h-4" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#book"/></svg>
-                </button>`
-                : '';
-
             const content = document.getElementById('planet-modal-content');
             content.innerHTML = `
                 <div class="text-center mb-6 relative">
-                    ${schemaButton}
                     <div class="flex items-center justify-center gap-4 text-4xl mb-2">
                         <span>${mergedP1.symbol || p1.symbol}</span>
                         <span class="aspect-tag aspect-${aspectInfo.name?.toLowerCase()}">${mergedAspect.symbol || aspectInfo.symbol}</span>
@@ -4494,6 +5041,8 @@
                     <div class="text-gray-400 text-sm mt-1">Orb: ${orb.toFixed(1)}°</div>
                     ${schemaIndicator}
                 </div>
+
+                ${renderGrammarItemImage(schemaAspect) || renderGrammarItemImage(schemaP1) || renderGrammarItemImage(schemaP2)}
 
                 <!-- Disclaimer -->
                 <div class="text-xs text-gray-500 italic mb-4 p-3 border border-gray-800 rounded-lg">
@@ -4538,9 +5087,9 @@
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${mergedAspect.question || mergedAspect.questions ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${mergedAspect.question || mergedAspect.questions}</li>` : ''}
-                        <li class="flex items-start"><span class="text-purple-400 mr-2">?</span>How do these two needs or drives show up in your life?</li>
-                        <li class="flex items-start"><span class="text-purple-400 mr-2">?</span>When do they support each other? When do they conflict?</li>
+                        ${mergedAspect.question || mergedAspect.questions ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${mergedAspect.question || mergedAspect.questions}</li>` : ''}
+                        <li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>How do these two needs or drives show up in your life?</li>
+                        <li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>When do they support each other? When do they conflict?</li>
                     </ul>
                 </div>
 
@@ -4548,13 +5097,14 @@
                 <div class="text-center text-sm text-gray-400 italic p-3">
                     ${mergedAspect.invitation || 'Remember: aspects describe inner tensions and harmonies, not fates. You are the one who chooses how to work with these energies.'}
                 </div>
+
+                ${detailActionRow('aspect')}
             `;
 
-            // If in fullscreen, move modal into the fullscreen element
+            // Fullscreen is CSS-based, so the modal (z-index 10000) stacks above
+            // the fullscreened chart (z-index 9000) with no reparenting needed.
             const planetModal = document.getElementById('planet-modal');
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(planetModal);
-            }
+            updateDetailNavButtons();
             planetModal.classList.add('active');
         }
 
@@ -4563,6 +5113,7 @@
             lastPlanetKey = key;
             lastPlanetBody = body;
             lastPlanetInfo = planet;
+            lastDetailShown = { type: 'planet', args: [key, body, planet] };
 
             const signData = ZODIAC_SIGNS.find(s =>
                 s.name.toLowerCase() === body.Sign?.label?.toLowerCase()
@@ -4614,18 +5165,8 @@
 
             }
 
-            // Merge schema data with defaults — only non-empty schema values override built-ins
-            // (normalization creates empty strings for missing sections, which would wipe built-in stories)
-            function mergeNonEmpty(base, override) {
-                if (!override) return { ...base };
-                const result = { ...base };
-                for (const [k, v] of Object.entries(override)) {
-                    if (v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)) {
-                        result[k] = v;
-                    }
-                }
-                return result;
-            }
+            // (mergeNonEmpty is defined once at module scope, above showHouseDetails,
+            // and shared across all three detail modals.)
             const p = mergeNonEmpty(planet, schemaPlanet);
             const sign = mergeNonEmpty(signData, schemaSign);
             const house = mergeNonEmpty(houseData, schemaHouse);
@@ -4643,33 +5184,29 @@
                 return `<span class="text-gray-600 text-[10px] ml-2">${shortGrammarName} · n/a</span>`;
             }
 
-            // Show carousel navigation when multiple grammars are loaded, otherwise show single grammar name
+            // Show carousel navigation when multiple grammars are loaded, otherwise show single grammar name.
+            // Name the grammar even in the "no entry" case, so a grammar switch is
+            // visibly reflected on screen even when it has nothing for this placement.
             let schemaIndicator = '';
             if (loadedGrammars.length > 1) {
                 schemaIndicator = buildCarouselNavHTML();
             } else if (astrologySchemaItems) {
-                schemaIndicator = `<div class="text-xs text-gray-500/50 mb-2">${grammarName}</div>`;
+                schemaIndicator = isFromGrammar
+                    ? `<div class="text-xs text-gray-500/50 mb-2">Using: ${grammarName}</div>`
+                    : `<div class="text-xs text-gray-500/50 mb-2 italic">No entry for this placement in "${grammarName || 'the selected grammar'}" — showing standard commentary</div>`;
             }
-
-            // Build schema selector button if options are available
-            const schemaButton = astrologySchemaOptions.length > 0
-                ? `<button onclick="toggleAstrologySchemaSelector('${key}')"
-                    class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-purple-900/30 hover:bg-purple-900/50 text-purple-400 hover:text-purple-300 transition-colors"
-                    title="Change astrology grammar">
-                    <svg class="w-4 h-4" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#book"/></svg>
-                </button>`
-                : '';
 
             const content = document.getElementById('planet-modal-content');
             content.innerHTML = `
                 <div class="text-center mb-6 relative">
-                    ${schemaButton}
                     <span class="text-6xl">${p.symbol || planet.symbol}</span>
                     <h2 class="text-2xl font-semibold" style="color: var(--astro-gold);">${p.name}</h2>
                     <div class="text-purple-400 text-sm mt-1">${p.archetype || ''}</div>
                     ${isRetrograde ? '<div class="text-red-400 text-sm mt-1">℞ Retrograde — inverted, internalized</div>' : ''}
                     ${schemaIndicator}
                 </div>
+
+                ${renderGrammarItemImage(schemaPlanet) || renderGrammarItemImage(schemaSign) || renderGrammarItemImage(schemaHouse)}
 
                 <!-- Placement Summary -->
                 <div class="planet-panel mb-4">
@@ -4715,9 +5252,9 @@
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection${sourceTag(schemaPlanet, 'questions')}</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${p.question ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${p.question}</li>` : ''}
-                        ${sign.reframe || sign.question ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${sign.reframe || sign.question}</li>` : ''}
-                        ${house.question ? `<li class="flex items-start"><span class="text-purple-400 mr-2">?</span>${house.question}</li>` : ''}
+                        ${p.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${p.question}</li>` : ''}
+                        ${sign.reframe || sign.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${sign.reframe || sign.question}</li>` : ''}
+                        ${house.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${house.question}</li>` : ''}
                     </ul>
                 </div>
 
@@ -4732,28 +5269,126 @@
                 ${selectedAstrologyDocId ? `
                 <!-- View Full Grammar Link -->
                 <div class="pt-3 mt-3 border-t border-gray-700 text-center">
-                    <a href="./grammar-viewer.html?type=astrology&id=${selectedAstrologyDocId}"
+                    <a href="https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=${selectedAstrologyDocId}"
                        target="_blank"
                        class="text-sm text-purple-400 hover:text-purple-300 transition-colors">
                         View full grammar →
                     </a>
                 </div>` : ''}
+
+                ${detailActionRow(key)}
             `;
 
-            // If in fullscreen, move modal into the fullscreen element
+            // Fullscreen is CSS-based, so the modal (z-index 10000) stacks above
+            // the fullscreened chart (z-index 9000) with no reparenting needed.
             const planetModal = document.getElementById('planet-modal');
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(planetModal);
-            }
+            updateDetailNavButtons();
             planetModal.classList.add('active');
         }
 
         function closePlanetModal() {
             const modal = document.getElementById('planet-modal');
             modal.classList.remove('active');
-            // Move modal back to body if it was in a fullscreen element
-            if (modal.parentElement !== document.body) {
-                document.body.appendChild(modal);
+        }
+
+        // ============================================================
+        // DETAIL POPUP PREV/NEXT NAVIGATION
+        // ------------------------------------------------------------
+        // Step through sibling items (planets / houses / aspects) without
+        // closing the popup — same interaction as the flow app's tarot card
+        // modal. `lastDetailShown` records the open item; we rebuild the
+        // sibling list from the live horoscope and re-open the neighbour.
+        // ============================================================
+        function getNavPlanetKeys(h) {
+            if (!h?.CelestialBodies) return [];
+            return Object.keys(h.CelestialBodies).filter(k => h.CelestialBodies[k]?.Sign);
+        }
+
+        function getNavAspects(h) {
+            let aspects = [];
+            if (Array.isArray(h?.Aspects)) {
+                aspects = h.Aspects;
+            } else if (h?.Aspects?.points) {
+                Object.keys(h.Aspects.points).forEach(pointKey => {
+                    const pointAspects = h.Aspects.points[pointKey];
+                    if (Array.isArray(pointAspects)) {
+                        pointAspects.forEach(a => {
+                            if (a?.aspectedPointKey) {
+                                aspects.push({ planet1: pointKey, planet2: a.aspectedPointKey, aspect: a.aspectKey || 'unknown', orb: a.orb || 0 });
+                            }
+                        });
+                    }
+                });
+            }
+            const seen = new Set();
+            const uniq = aspects.filter(a => {
+                const key = [a.planet1, a.planet2].sort().join('-');
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+            const order = ['conjunction', 'opposition', 'square', 'trine', 'sextile', 'quincunx', 'semisextile'];
+            uniq.sort((a, b) => order.indexOf(a.aspect) - order.indexOf(b.aspect));
+            return uniq.map(a => ({
+                p1: PLANETS[a.planet1?.toLowerCase()] || { name: a.planet1, symbol: '?' },
+                p2: PLANETS[a.planet2?.toLowerCase()] || { name: a.planet2, symbol: '?' },
+                aspectInfo: ASPECTS[a.aspect?.toLowerCase()] || { name: a.aspect, symbol: '●' },
+                orb: a.orb || 0
+            }));
+        }
+
+        // How many siblings the currently-open detail can step through.
+        function detailSiblingCount() {
+            if (!lastDetailShown) return 0;
+            const h = currentChart?.horoscope;
+            if (!h) return 0;
+            if (lastDetailShown.type === 'planet') return getNavPlanetKeys(h).length;
+            if (lastDetailShown.type === 'house') return (h.Houses || []).length || 12;
+            if (lastDetailShown.type === 'aspect') return getNavAspects(h).length;
+            return 0;
+        }
+
+        // Show/hide the arrows depending on whether there's more than one sibling.
+        function updateDetailNavButtons() {
+            const modal = document.getElementById('planet-modal');
+            if (!modal) return;
+            modal.classList.toggle('has-nav', detailSiblingCount() > 1);
+        }
+
+        function navigateDetail(dir) {
+            if (!lastDetailShown) return;
+            const h = currentChart?.horoscope;
+            if (!h) return;
+            const { type, args } = lastDetailShown;
+
+            if (type === 'planet') {
+                const keys = getNavPlanetKeys(h);
+                if (keys.length < 2) return;
+                const i = keys.indexOf(args[0]);
+                if (i < 0) return;
+                const k = keys[(i + dir + keys.length) % keys.length];
+                const body = h.CelestialBodies[k];
+                const planet = PLANETS[k.toLowerCase()] || { name: k, symbol: '⚫' };
+                showPlanetDetails(k, body, planet);
+            } else if (type === 'house') {
+                const houses = h.Houses || [];
+                const count = houses.length || 12;
+                if (count < 2) return;
+                const n = args[0];
+                const nn = ((n - 1 + dir + count) % count) + 1;
+                const hd = houses[nn - 1];
+                const sign = ZODIAC_SIGNS.find(s => s.name.toLowerCase() === hd?.Sign?.label?.toLowerCase())
+                    || { symbol: '?', name: hd?.Sign?.label || 'Unknown' };
+                const house = HOUSES[nn] || {};
+                showHouseDetails(nn, sign, house);
+            } else if (type === 'aspect') {
+                const list = getNavAspects(h);
+                if (list.length < 2) return;
+                const curKey = [args[0]?.name, args[1]?.name].sort().join('|');
+                const i = list.findIndex(a => [a.p1.name, a.p2.name].sort().join('|') === curKey);
+                if (i < 0) return;
+                const a = list[(i + dir + list.length) % list.length];
+                showAspectDetails(a.p1, a.p2, a.aspectInfo, a.orb);
             }
         }
 
@@ -4909,7 +5544,7 @@
             // Check if user is signed in
             if (!currentUser) {
                 // Show auth prompt modal or redirect to Flow which will handle auth
-                const proceed = confirm('To use AI interpretation, you\'ll be redirected to the app where you can sign in and chat with AI about your chart.\n\nProceed to the app?');
+                const proceed = confirm('To use AI interpretation, you\'ll be redirected to Flow where you can sign in and chat with AI about your chart.\n\nProceed to Flow?');
                 if (proceed) {
                     window.open(flowUrl, '_blank');
                 }
@@ -5492,14 +6127,14 @@
             return `
                 <div class="grammar-carousel-nav">
                     <button onclick="prevGrammar()" class="carousel-nav-btn" title="Previous grammar">
-                        <svg class="w-5 h-5" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#chevron-left"/></svg>
+                        <svg class="w-5 h-5" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
                     </button>
                     <div class="carousel-grammar-info">
                         <span class="text-sm font-medium text-purple-300">${currentGrammar?.name || 'Unknown'}</span>
                         <span class="text-xs text-gray-500">${currentGrammarIndex + 1} of ${loadedGrammars.length}</span>
                     </div>
                     <button onclick="nextGrammar()" class="carousel-nav-btn" title="Next grammar">
-                        <svg class="w-5 h-5" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#chevron-right"/></svg>
+                        <svg class="w-5 h-5" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
                     </button>
                 </div>
             `;
@@ -5733,106 +6368,116 @@
             toggleIcon.textContent = '▼';
         }
 
-        // Fullscreen toggle for embed mode - uses fullscreen API to expand within iframe
-        function toggleFullscreen() {
-            const elem = document.documentElement;
+        // ============================================================
+        // CSS-BASED FULLSCREEN (replaces the native Fullscreen API)
+        // ------------------------------------------------------------
+        // Why not the Fullscreen API: (1) element.requestFullscreen() is a
+        // no-op on non-video elements in iOS Safari (the builder tests on her
+        // phone inside the flow iframe); (2) a native-fullscreen element lives
+        // in the browser "top layer", so ANY modal appended to document.body
+        // renders behind it regardless of z-index — that was the "details
+        // hidden behind the chart" bug. A fixed full-viewport overlay has
+        // neither problem: the detail modal (z-index 10000) simply stacks above
+        // the fullscreened container (z-index 9000) by ordinary rules.
+        let cssFsContainer = null;
 
-            // Check if already in fullscreen
-            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        function isCssFullscreen() { return !!cssFsContainer; }
 
-            if (isFullscreen) {
-                // Exit fullscreen
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            } else {
-                // Enter fullscreen - this works within iframes that allow fullscreen
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
+        function getFsCloseBtn() {
+            let btn = document.getElementById('fs-close-btn');
+            if (!btn) {
+                btn = document.createElement('button');
+                btn.id = 'fs-close-btn';
+                btn.className = 'fs-close-btn';
+                btn.setAttribute('aria-label', 'Exit fullscreen');
+                btn.title = 'Exit fullscreen (Esc)';
+                btn.innerHTML = '<svg width="24" height="24" aria-hidden="true"><use href="icons.svg#close"/></svg>';
+                btn.addEventListener('click', exitCssFullscreen);
+                document.body.appendChild(btn);
+            }
+            return btn;
+        }
+
+        function enterCssFullscreen(container, onEnter) {
+            if (!container) return;
+            if (cssFsContainer && cssFsContainer !== container) exitCssFullscreen();
+            cssFsContainer = container;
+            container.classList.add('css-fullscreen');
+            getFsCloseBtn().classList.add('active');
+            // Whenever we're inside an iframe, ask the parent to grow the iframe so
+            // the overlay fills the whole viewport (the phone screen) rather than
+            // just the iframe box. The flow app listens for this and expands to the
+            // full viewport. Sent on enter here and on exit below.
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'astrology-request-fullscreen', chartId: currentChartId, state: 'enter' }, '*');
+            }
+            if (onEnter) { try { onEnter(); } catch (e) { console.warn('fullscreen onEnter failed', e); } }
+        }
+
+        function exitCssFullscreen() {
+            if (!cssFsContainer) return;
+            const container = cssFsContainer;
+            cssFsContainer = null;
+            container.classList.remove('css-fullscreen');
+            const btn = document.getElementById('fs-close-btn');
+            if (btn) btn.classList.remove('active');
+            resetFullscreenSizing();
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'astrology-request-fullscreen', chartId: currentChartId, state: 'exit' }, '*');
+            }
+        }
+
+        // Undo the inline sizing the per-view onEnter callbacks apply.
+        function resetFullscreenSizing() {
+            const bodygraph = document.getElementById('hd-bodygraph');
+            const bodygraphContainer = document.getElementById('hd-bodygraph-container');
+            const wheel = document.getElementById('chart-wheel');
+            const mandala = document.getElementById('hd-mandala');
+            if (bodygraph) { bodygraph.style.maxWidth = '400px'; bodygraph.style.height = 'auto'; }
+            if (bodygraphContainer) { bodygraphContainer.style.background = ''; }
+            if (wheel) { wheel.style.maxWidth = ''; wheel.style.height = ''; wheel.style.margin = ''; }
+            if (mandala) { mandala.style.maxWidth = '500px'; mandala.style.height = 'auto'; }
+        }
+
+        // THE single fullscreen control. Fullscreens the WHOLE viewer area —
+        // #chart-display-section: the view tabs (Astrology / HD Mandala / HD
+        // Bodygraph) + the active chart + the item lists/tabs below it — not
+        // just the active chart element ("now I just get the wheel and not the
+        // whole list", builder, Jul 15 2026). The section becomes a scrollable
+        // full-viewport column (see #chart-display-section.css-fullscreen CSS);
+        // the active chart is enlarged inside it. Standalone gets the CSS
+        // overlay; embedded also asks the parent to expand the iframe to the
+        // full viewport (enterCssFullscreen's astrology-request-fullscreen
+        // postMessage, sent on enter AND exit). X top-right + Esc exit both.
+        function toggleActiveFullscreen() {
+            if (isCssFullscreen()) { exitCssFullscreen(); return; }
+            const section = document.getElementById('chart-display-section');
+            enterCssFullscreen(section, () => {
+                // Enlarge the active chart inside the fullscreen column. 85vh
+                // (not 95) so the tabs above and a peek of the list below make
+                // it obvious the whole viewer came along and scrolls.
+                if (hdViewMode === 'hd-mandala') {
+                    const mandala = document.getElementById('hd-mandala');
+                    if (mandala) { mandala.style.maxWidth = 'min(92vmin, 1250px)'; mandala.style.height = 'auto'; }
+                } else if (hdViewMode === 'hd-bodygraph') {
+                    const bodygraph = document.getElementById('hd-bodygraph');
+                    if (bodygraph) {
+                        bodygraph.style.maxWidth = 'min(92vw, calc(85vh * 0.69))'; // aspect 400/580 ≈ 0.69
+                        bodygraph.style.height = 'auto';
+                    }
                 } else {
-                    // Fallback: notify parent to handle fullscreen or open in new tab
-                    if (isEmbedMode && window.parent !== window) {
-                        // Ask parent to toggle fullscreen on the iframe
-                        window.parent.postMessage({
-                            type: 'astrology-request-fullscreen',
-                            chartId: currentChartId
-                        }, '*');
+                    const wheel = document.getElementById('chart-wheel');
+                    if (wheel) {
+                        wheel.style.maxWidth = 'min(92vmin, 1500px)';
+                        wheel.style.height = 'min(85vh, 1500px)';
+                        wheel.style.margin = '0 auto';
                     }
                 }
-            }
+            });
         }
 
-        // Listen for fullscreen changes to update button text
-        document.addEventListener('fullscreenchange', updateFullscreenButton);
-        document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
-
-        function updateFullscreenButton() {
-            const btn = document.querySelector('.embed-header button');
-            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-            if (btn) {
-                btn.textContent = isFullscreen ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
-            }
-        }
-
-        // Fullscreen toggle for bodygraph
-        function toggleBodygraphFullscreen() {
-            const container = document.getElementById('hd-bodygraph-container');
-            const bodygraph = document.getElementById('hd-bodygraph');
-
-            const isFullscreen = document.fullscreenElement;
-
-            if (isFullscreen) {
-                document.exitFullscreen();
-                bodygraph.style.maxWidth = '400px';
-                bodygraph.style.height = 'auto';
-                container.style.display = '';
-                container.style.alignItems = '';
-                container.style.justifyContent = '';
-                container.style.background = '';
-            } else {
-                container.requestFullscreen().then(() => {
-                    // Make container a flex container to center the bodygraph
-                    container.style.display = 'flex';
-                    container.style.alignItems = 'center';
-                    container.style.justifyContent = 'center';
-                    container.style.background = 'linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 100%)';
-                    // Scale bodygraph to fit screen while maintaining aspect ratio (400x580)
-                    bodygraph.style.maxWidth = 'min(95vw, calc(95vh * 0.69))'; // aspect ratio 400/580 ≈ 0.69
-                    bodygraph.style.height = 'min(95vh, calc(95vw * 1.45))';   // aspect ratio 580/400 ≈ 1.45
-                }).catch(err => {
-                    console.warn('Fullscreen not available:', err);
-                });
-            }
-        }
-
-        // Fullscreen toggle for astrology wheel
-        function toggleChartWheelFullscreen() {
-            const container = document.getElementById('chart-wheel-container');
-            const wheel = document.getElementById('chart-wheel');
-
-            const isFullscreen = document.fullscreenElement;
-
-            if (isFullscreen) {
-                document.exitFullscreen();
-            } else {
-                container.requestFullscreen().then(() => {
-                    // Scale wheel to ~250% of original (600px base -> 1500px)
-                    wheel.style.maxWidth = 'min(95vmin, 1500px)';
-                    wheel.style.height = 'min(95vh, 1500px)';
-                    wheel.style.margin = 'auto';
-                }).catch(err => {
-                    console.warn('Fullscreen not available:', err);
-                });
-            }
-        }
+        // Back-compat alias (kept in case anything still references it).
+        function toggleFullscreen() { return toggleActiveFullscreen(); }
 
         // === CHART ZOOM / PAN ===
         let chartScale = 1;
@@ -6001,55 +6646,6 @@
             wheel.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
         }
 
-        // Fullscreen toggle for HD mandala
-        function toggleMandalaFullscreen() {
-            const container = document.getElementById('hd-mandala-container');
-            const mandala = document.getElementById('hd-mandala');
-
-            const isFullscreen = document.fullscreenElement;
-
-            if (isFullscreen) {
-                document.exitFullscreen();
-            } else {
-                container.requestFullscreen().then(() => {
-                    // Scale mandala to ~250% of original (500px base -> 1250px)
-                    mandala.style.maxWidth = 'min(95vmin, 1250px)';
-                    mandala.style.height = 'min(95vh, 1250px)';
-                    mandala.style.margin = 'auto';
-                }).catch(err => {
-                    console.warn('Fullscreen not available:', err);
-                });
-            }
-        }
-
-        // Reset sizes when exiting fullscreen
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                const bodygraphContainer = document.getElementById('hd-bodygraph-container');
-                const bodygraph = document.getElementById('hd-bodygraph');
-                const wheel = document.getElementById('chart-wheel');
-                const mandala = document.getElementById('hd-mandala');
-                if (bodygraph) {
-                    bodygraph.style.maxWidth = '400px';
-                    bodygraph.style.height = 'auto';
-                }
-                if (bodygraphContainer) {
-                    bodygraphContainer.style.display = '';
-                    bodygraphContainer.style.alignItems = '';
-                    bodygraphContainer.style.justifyContent = '';
-                    bodygraphContainer.style.background = '';
-                }
-                if (wheel) {
-                    wheel.style.maxWidth = '';
-                    wheel.style.height = '';
-                }
-                if (mandala) {
-                    mandala.style.maxWidth = '500px';
-                    mandala.style.height = 'auto';
-                }
-            }
-        });
-
         function formatDegree(decimal) {
             if (typeof decimal !== 'number') return '0°0\'';
             const sign = Math.floor(decimal / 30);
@@ -6110,20 +6706,49 @@
             return '?';
         }
 
-        // Close modal on escape
+        // Keyboard: Esc closes the open detail (else exits fullscreen); arrows step items.
         document.addEventListener('keydown', (e) => {
+            const planetModal = document.getElementById('planet-modal');
+            const detailOpen = planetModal && planetModal.classList.contains('active');
             if (e.key === 'Escape') {
+                const wasDetailOpen = detailOpen;
                 closePlanetModal();
                 closeSigninModal();
+                // Only exit fullscreen if no popup was open (Esc drills out one level).
+                if (!wasDetailOpen && isCssFullscreen()) exitCssFullscreen();
+            } else if (detailOpen && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                e.preventDefault();
+                navigateDetail(e.key === 'ArrowLeft' ? -1 : 1);
             }
         });
 
-        // Close modal on overlay click
-        document.getElementById('planet-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'planet-modal') {
-                closePlanetModal();
-            }
-        });
+        // Close modal on overlay click; horizontal swipe steps items (mobile).
+        (function wireDetailModalGestures() {
+            const modal = document.getElementById('planet-modal');
+            modal.addEventListener('click', (e) => {
+                if (e.target.id === 'planet-modal') {
+                    closePlanetModal();
+                }
+            });
+            let touchStartX = 0, touchStartY = 0, touchActive = false;
+            modal.addEventListener('touchstart', (e) => {
+                if (e.touches.length !== 1) { touchActive = false; return; }
+                touchActive = true;
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            modal.addEventListener('touchend', (e) => {
+                if (!touchActive) return;
+                touchActive = false;
+                const t = e.changedTouches[0];
+                const dx = t.clientX - touchStartX;
+                const dy = t.clientY - touchStartY;
+                // Mostly-horizontal swipe past the threshold → navigate.
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                    navigateDetail(dx < 0 ? 1 : -1); // swipe left → next
+                }
+            }, { passive: true });
+        })();
 
         // Close sign-in modal on overlay click
         document.getElementById('signin-modal').addEventListener('click', (e) => {
@@ -6329,6 +6954,18 @@
         let astrologySchemaItems = null; // Currently loaded schema data
         let astrologySchemaOptions = []; // Available schema options
         let selectedAstrologySchema = null;
+
+        // In-memory cache of fetched/normalized grammar documents, keyed by the
+        // "type:id" value string (e.g. "user:abc123"). Lets switching back to a
+        // grammar already viewed this session be instant (no re-fetch).
+        const astrologyGrammarCache = new Map();
+        let isGrammarSwitchLoading = false; // true while a (non-cached) grammar fetch is in flight
+
+        // Tracks whichever placement/aspect/house detail modal is currently open,
+        // so that switching grammars (via parent postMessage or the in-viewer
+        // selector) can re-render it in place instead of leaving stale content on
+        // screen. { type: 'planet'|'aspect'|'house', args: [...] } or null.
+        let lastDetailShown = null;
 
         // Multi-grammar carousel state
         let loadedGrammars = []; // Array of { id, name, data } for comparison
@@ -6730,9 +7367,9 @@
             // Simple summary without filter (filter is now in Gates tab)
             container.innerHTML = `
                 <div class="flex flex-wrap items-center gap-3 mb-2">
-                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-purple-900/50 text-purple-200 border border-purple-700/50">${hdChart.type.name}</span>
-                    <span class="px-2 py-1 rounded-full text-xs bg-purple-900/30 text-purple-300 border border-purple-700/40">${hdChart.authority} Authority</span>
-                    <span class="px-2 py-1 rounded-full text-xs bg-purple-900/30 text-purple-300 border border-purple-700/40">Profile ${hdChart.profile}</span>
+                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-cyan-900/50 text-cyan-300 border border-cyan-700/50">${hdChart.type.name}</span>
+                    <span class="px-2 py-1 rounded-full text-xs bg-yellow-900/30 text-yellow-400 border border-yellow-700/30">${hdChart.authority} Authority</span>
+                    <span class="px-2 py-1 rounded-full text-xs bg-purple-900/30 text-purple-400 border border-purple-700/30">Profile ${hdChart.profile}</span>
                 </div>
                 <p class="text-gray-400 text-sm">Strategy: ${hdChart.type.strategy}</p>
             `;
@@ -7219,7 +7856,7 @@
 
                     // Build grammar-viewer URL if we have a document ID
                     const grammarViewerUrl = selectedIchingDocId
-                        ? `./grammar-viewer.html?type=iching&id=${selectedIchingDocId}&card=${gateNum}`
+                        ? `https://recursive.eco/pages/grammar-viewer.html?type=iching&id=${selectedIchingDocId}&card=${gateNum}`
                         : null;
 
                     // I Ching Card View - styled like grammar-viewer
@@ -7232,9 +7869,9 @@
                             ${ichingGrammarOptions.length > 0 ? `<button onclick="event.stopPropagation(); toggleGrammarSelector(${gateNum})"
                                 class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-yellow-900/30 hover:bg-yellow-900/50 text-yellow-500 hover:text-yellow-400 transition-colors"
                                 title="Change I Ching grammar">
-                                <svg class="w-4 h-4" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#book"/></svg>
+                                <svg class="w-4 h-4" aria-hidden="true"><use href="icons.svg#book"/></svg>
                             </button>` : ''}
-                            <div class="text-6xl mb-2" style="color: #d4af37;">${hexSymbol}</div>
+                            <div class="text-6xl mb-2" style="color: var(--astro-gold);">${hexSymbol}</div>
                             <div class="text-yellow-200 text-xl font-semibold">${hexName}</div>
                             ${chineseName ? `<div class="text-yellow-400/70 text-sm">${chineseName}${pinyin ? ` (${pinyin})` : ''}</div>` : ''}
                             ${hasTrigramInfo ? `<div class="text-yellow-500/50 text-xs mt-2">
@@ -7302,7 +7939,7 @@
                 interp = `<div class="mt-4 rounded-xl overflow-hidden border border-yellow-700/40 shadow-lg" style="background: linear-gradient(135deg, #1a1507 0%, #0d0d0a 100%);">
                     <!-- Card Header with Hexagram Symbol -->
                     <div class="p-4 text-center border-b border-yellow-800/30" style="background: linear-gradient(180deg, #2d2815 0%, #1a1507 100%);">
-                        <div class="text-6xl mb-2" style="color: #d4af37;">${hexSymbol}</div>
+                        <div class="text-6xl mb-2" style="color: var(--astro-gold);">${hexSymbol}</div>
                         <div class="text-yellow-200 text-xl font-semibold">${defaultMeaning?.name || 'Hexagram ' + gateNum}</div>
                         <div class="text-yellow-400/70 text-sm">${defaultMeaning?.theme || ''}</div>
                     </div>
@@ -7317,7 +7954,7 @@
                         ${ichingGrammarOptions.length > 0 ? `
                             <div class="pt-3 border-t border-yellow-800/30">
                                 <p class="text-xs text-yellow-500/70 mb-2 font-semibold uppercase flex items-center gap-2">
-                                    <svg class="w-4 h-4" aria-hidden="true"><use href="https://flow.recursive.eco/icons.svg#book"/></svg>
+                                    <svg class="w-4 h-4" aria-hidden="true"><use href="icons.svg#book"/></svg>
                                     Load I Ching Grammar for deeper meaning
                                 </p>
                                 <select id="popup-grammar-select" onchange="selectGrammarAndRefresh(this.value, ${gateNum})" class="w-full p-2 rounded-lg bg-gray-800 border border-gray-600 text-white text-sm focus:border-yellow-500 focus:outline-none">
@@ -7391,10 +8028,7 @@
                 ${interp}
             </div>`;
 
-            // If in fullscreen, move modal into the fullscreen element
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(modal);
-            }
+            // Fullscreen is CSS-based — the modal stacks above by z-index alone.
             modal.classList.add('active');
         }
 
@@ -7450,19 +8084,12 @@
                 </div>` : ''}
             </div>`;
 
-            if (document.fullscreenElement) {
-                document.fullscreenElement.appendChild(modal);
-            }
             modal.classList.add('active');
         }
 
         function closeGateModal() {
             const modal = document.getElementById('gate-modal');
             modal.classList.remove('active');
-            // Move modal back to body if it was in a fullscreen element
-            if (modal.parentElement !== document.body) {
-                document.body.appendChild(modal);
-            }
         }
 
         // Close gate modal on escape
@@ -7666,7 +8293,7 @@
 
             const viewGrammarLink = grammarId ? `
                 <div class="text-center mt-2">
-                    <a href="./grammar-viewer.html?type=iching&id=${grammarId}"
+                    <a href="https://recursive.eco/pages/grammar-viewer.html?type=iching&id=${grammarId}"
                        target="_blank"
                        class="text-xs text-purple-400 hover:text-purple-300">
                         View in ${grammarName} →
@@ -7816,6 +8443,16 @@
                 }
             }
 
+            // CRITICAL (Jul 2026): the detail templates read `x.story || x.description`,
+            // and every built-in default (PLANETS/ZODIAC_SIGNS/HOUSES) always defines
+            // `.story`. A grammar's narrative section ("Story", "Interpretation", …)
+            // maps to the `description` role, NOT `story` — so after mergeNonEmpty the
+            // default's `.story` always won and the grammar's text was invisible in the
+            // three biggest sections (The Symbol / In This Sign / In This House). That
+            // is exactly why "switching the primary grammar changed nothing." Mirror
+            // the narrative into `story` so the grammar's own words take precedence.
+            if (merged.description && !merged.story) merged.story = merged.description;
+
             return merged;
         }
 
@@ -7825,6 +8462,26 @@
             const roles = { ...DEFAULT_CATEGORY_ROLES, ...categoryRoles };
             const cat = category.toLowerCase();
             return roles[cat] || null;
+        }
+
+        // Render a matched grammar item's image (if it has one) for the
+        // placement/aspect detail modal. Grammars may carry image_url either
+        // top-level or under metadata.image_url (e.g. Wikimedia Special:FilePath
+        // URLs). Capped at ~200px tall, letterboxed, theme-correct via the
+        // existing bg-gray-900/border-gray-800 token mapping. Fails gracefully:
+        // a broken/blocked image just hides itself instead of showing a broken-
+        // image icon.
+        function renderGrammarItemImage(item) {
+            const url = item && (item.image_url || item.metadata?.image_url);
+            if (!url || typeof url !== 'string') return '';
+            const safeUrl = url.replace(/"/g, '&quot;');
+            return `
+                <div class="mb-3 text-center">
+                    <img src="${safeUrl}" alt="" loading="lazy"
+                         style="max-height:200px;max-width:100%;width:auto;object-fit:contain;display:inline-block;border-radius:0.5rem;"
+                         class="border border-gray-800 bg-gray-900 p-1"
+                         onerror="this.parentElement.style.display='none';">
+                </div>`;
         }
 
         // Normalize astrology data - convert various formats to consistent structure
@@ -8006,19 +8663,35 @@
             return data;
         }
 
-        // Select an astrology schema
+        // Select an astrology schema. Fetches (or serves from the in-memory cache)
+        // the grammar document, THEN re-renders whatever is currently on screen
+        // (an open placement/aspect/house detail modal) so the switch is visible
+        // immediately — this is the fix for "switching grammars changes nothing":
+        // the old code only ever stored the new id/data and never re-rendered.
         async function selectAstrologySchema(val) {
             if (!val) {
                 astrologySchemaItems = null;
                 selectedAstrologySchema = null;
                 selectedAstrologyDocId = null;
+                refreshOpenDetailModal();
                 return;
             }
             selectedAstrologySchema = val;
+
+            // Instant path: we've already loaded this grammar this session.
+            if (astrologyGrammarCache.has(val)) {
+                const cached = astrologyGrammarCache.get(val);
+                astrologySchemaItems = cached.items;
+                selectedAstrologyDocId = cached.docId;
+                refreshOpenDetailModal();
+                return;
+            }
+
             selectedAstrologyDocId = null;
             const [type, id] = val.split(':');
             if (!supabaseClient) return;
 
+            setGrammarSwitchLoading(true);
             try {
                 if (type === 'user') {
                     const { data } = await supabaseClient.from('user_documents').select('document_data').eq('id', id).single();
@@ -8091,7 +8764,44 @@
             } catch (err) {
                 console.error('[Astrology] Exception fetching schema:', err);
                 astrologySchemaItems = null;
+            } finally {
+                // Cache this outcome (including a "not found" null) so switching
+                // back to the same grammar later is instant and doesn't re-hit
+                // Supabase or re-show the "could not be loaded" alert.
+                astrologyGrammarCache.set(val, { items: astrologySchemaItems, docId: selectedAstrologyDocId });
+                setGrammarSwitchLoading(false);
+                refreshOpenDetailModal();
             }
+        }
+
+        // Brief loading state while a (non-cached) grammar is being fetched.
+        // Only visible if a detail modal is currently open — otherwise there is
+        // nothing on screen yet for the new grammar to affect.
+        function setGrammarSwitchLoading(loading) {
+            isGrammarSwitchLoading = loading;
+            const modal = document.getElementById('planet-modal');
+            const content = document.getElementById('planet-modal-content');
+            if (!loading || !modal || !content || !modal.classList.contains('active')) return;
+            content.innerHTML = `
+                <div class="text-center py-10">
+                    <div class="loading-spinner mx-auto mb-3"></div>
+                    <p class="text-gray-400 text-sm">Loading grammar…</p>
+                </div>
+            `;
+        }
+
+        // Re-render whichever detail modal (planet / aspect / house) is currently
+        // open, using the now-current astrologySchemaItems. Called after every
+        // grammar switch — from the parent's postMessage, the in-viewer schema
+        // dropdown, and the compare-grammar selector — so all three paths behave
+        // identically instead of only some of them refreshing the view.
+        function refreshOpenDetailModal() {
+            const modal = document.getElementById('planet-modal');
+            if (!modal || !modal.classList.contains('active') || !lastDetailShown) return;
+            const { type, args } = lastDetailShown;
+            if (type === 'planet') showPlanetDetails(...args);
+            else if (type === 'aspect') showAspectDetails(...args);
+            else if (type === 'house') showHouseDetails(...args);
         }
 
         // Store last planet key for refresh after schema change
@@ -8198,14 +8908,13 @@
 
         // Select schema and refresh the planet detail
         async function selectSchemaAndRefresh(val) {
+            // selectAstrologySchema() now refreshes whichever detail modal is
+            // open on its own (planet, aspect, or house — see
+            // refreshOpenDetailModal), so no separate re-show call is needed here.
             await selectAstrologySchema(val);
             // Close the dropdown
             const dropdown = document.querySelector('.schema-change-dropdown');
             if (dropdown) dropdown.remove();
-            // Refresh the planet modal if we have stored planet data
-            if (lastPlanetKey && lastPlanetBody && lastPlanetInfo) {
-                showPlanetDetails(lastPlanetKey, lastPlanetBody, lastPlanetInfo);
-            }
         }
 
         // Hook into chart calculation to also show HD toggle
@@ -8228,47 +8937,27 @@
             setTimeout(() => calculateHumanDesign(), 100);
         };
     </script>
-    <script src="https://flow.recursive.eco/js/image-reachout.js" defer></script>
-    <!-- Assistant — shared launcher + pinned tabbed sidebar (flow parity). One component for every landing page. -->
-    <script src="https://flow.recursive.eco/js/assistant-launcher.js" defer data-auto></script>
+    <script src="js/image-reachout.js" defer></script>
+    <!-- Shared recursive.eco assistant sidebar (star FAB → tabbed panel). No-ops
+         when this viewer is iframed by the flow app, which has its own assistant. -->
+    <script src="../assistant.js" defer></script>
 
-<style id="astro-embed-overrides">
-/* Bodygraph palette — two colours, theme-aware. Dark defaults; light overrides below. */
+<style id="astro-embed-theme">
+/* Bodygraph palette — two colours, theme-aware (dark default, light overrides). */
 :root{ --bgc-accent:#a99bf5; --bgc-accent-soft:#2b2748; --bgc-dim:#3a3947;
   --bgc-surface:#1a1922; --bgc-line:#2a2933; --bgc-mut:#8f8aa0; --bgc-gate-on-text:#141225; }
 body.theme-light{ --bgc-accent:#6d5bd0; --bgc-accent-soft:#e7e2fa; --bgc-dim:#d5cfc4;
   --bgc-surface:#fffdf9; --bgc-line:#e7e1d6; --bgc-mut:#8a8496; --bgc-gate-on-text:#ffffff; }
-/* Step 4 — honor ?theme=light: light surfaces, dark text, purple accents kept */
+/* honor ?theme=light in the flow embed: light surfaces, dark text */
 body.theme-light{background:#f7f5fb!important;color:#2b2735!important}
 body.theme-light .text-white{color:#2b2735!important}
 body.theme-light .text-gray-300,body.theme-light .text-gray-400,body.theme-light .text-gray-500{color:#555063!important}
 body.theme-light .bg-black,body.theme-light .bg-gray-900,body.theme-light .bg-gray-800,body.theme-light [class*="bg-gray-9"],body.theme-light [class*="bg-slate-9"]{background:#ffffff!important}
 body.theme-light .border-gray-700,body.theme-light .border-gray-800,body.theme-light [class*="border-gray-7"],body.theme-light [class*="border-gray-8"]{border-color:#e4e0ee!important}
-/* Step 5 — fullscreen as a CSS overlay, never the native Fullscreen API */
-.fs-overlay{position:fixed!important;inset:0!important;z-index:2147483646!important;display:flex!important;align-items:center;justify-content:center;background:rgba(10,10,15,.98);padding:2vmin;overflow:auto}
-body.theme-light .fs-overlay{background:rgba(247,245,251,.98)}
-.fs-overlay>*{max-width:96vmin!important;max-height:96vh!important;margin:auto!important}
-.fs-overlay-exit{position:fixed;top:12px;right:14px;z-index:2147483647;font-size:20px;line-height:1;background:rgba(0,0,0,.4);color:#fff;border:none;border-radius:8px;padding:4px 11px;cursor:pointer}
 </style>
 <script>
-/* Ported-page overrides (astro embed). Runs after the page's own scripts, so it
-   overrides the globals the onclick handlers call. See docs/APP-INTEGRATION-TODO.md. */
-(function(){
-  try{ if(new URLSearchParams(location.search).get('theme')==='light'){
-    document.body.classList.add('theme-light'); document.body.classList.remove('text-white'); } }catch(e){}
-  var T=null,B=null;
-  function exit(){ if(T){T.classList.remove('fs-overlay');T=null;} if(B){B.remove();B=null;} }
-  function overlay(id){ var el=document.getElementById(id); if(!el)return;
-    if(T===el){exit();return;} exit(); el.classList.add('fs-overlay'); T=el;
-    var b=document.createElement('button'); b.className='fs-overlay-exit'; b.textContent='✕';
-    b.title='Exit fullscreen'; b.onclick=exit; document.body.appendChild(b); B=b; }
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape')exit(); });
-  window.toggleChartWheelFullscreen=function(){overlay('chart-wheel-container');};
-  window.toggleMandalaFullscreen=function(){overlay('mandala-container');};
-  window.toggleBodygraphFullscreen=function(){overlay('hd-bodygraph-container');};
-  window.toggleFullscreen=function(){overlay('chart-wheel-container');};
-})();
+try{ if(new URLSearchParams(location.search).get('theme')==='light'){
+  document.body.classList.add('theme-light'); document.body.classList.remove('text-white'); } }catch(e){}
 </script>
-
 </body>
 </html>

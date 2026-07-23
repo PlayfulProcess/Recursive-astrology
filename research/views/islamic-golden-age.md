@@ -4,7 +4,7 @@ type: "view"
 title: "The Islamic Golden Age"
 status: "drafting"
 confidence: "medium"
-last_updated: "2026-07-05"
+last_updated: "2026-07-07"
 maintainer_note: "AI-assisted; awaiting maintainer / historian review. Key bibliography verified 2026-07-05."
 era: "c. 8th–11th century CE"
 region: "Abbasid Caliphate & the wider Islamic world"
@@ -97,6 +97,16 @@ sometimes wanted. Stated as history, not endorsement.
 - The Latin transmission (which translators, which routes) is summarized from [@campion2009;
   @tester1987]; a dedicated dossier pass could cite the specialist translation-movement
   literature directly.
+
+## 8a. In its own words (added Jul 7 2026)
+
+The grammar item's "In its own words" section paraphrases the *Great Introduction*'s opening
+line of defense — astrology likened to medicine, both natural arts reasoning from visible
+causes to fallible effects — following the standard scholarly description of the argument in
+[@abumashar2019]. This is explicitly marked in the grammar text as a paraphrase, not a
+verbatim translation; a future pass with direct access to the Yamamoto & Burnett edition
+should replace it with an actual quoted line if a suitably short, unambiguous one can be
+identified and licensed for quotation.
 
 ## 8. Sources
 

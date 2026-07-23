@@ -1,16 +1,27 @@
 {
   "name": "One Aspect — the smallest casting",
   "description": "The minimal casting, and the purest statement of this channel's rule: one position, filled by ANY single aspect of your own chart — a planet in its sign, a house and what stands in it, or an aspect between two planets. You choose it (or a chart calculation surfaces the day's exact aspect); it is never drawn at random, because the deck being 'drawn' from is your own chart. Read against the flagship interpretation set (western-astrology-canonical) or any voice library. A chart is a mirror and a calendar, never a command.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800",
   "grammar_type": "sequence",
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
-  "tags": ["astrology", "casting", "spread", "aspect", "recursive-eco"],
+  "tags": [
+    "astrology",
+    "casting",
+    "spread",
+    "aspect",
+    "recursive-eco"
+  ],
   "casting": {
     "draw": "choose",
     "from": "western-astrology-canonical",
     "allow_reversed": false,
     "requires": [],
-    "choose_from": ["planet-in-sign", "house", "aspect-between-planets"],
+    "choose_from": [
+      "planet-in-sign",
+      "house",
+      "aspect-between-planets"
+    ],
     "_note": "draw:'choose' — the querent picks one feature of their own chart (no birth data required if they already know a placement; a full chart calc can instead offer today's exact transits to choose from). Resolution: the chosen feature binds to its matching item(s) in the `from` grammar — a planet item + sign item, a house item, or an aspect item + the two planet items it joins."
   },
   "items": [
@@ -20,12 +31,19 @@
       "level": 1,
       "category": "position",
       "position": 1,
-      "maps_to": { "kind": "any-chart-feature" },
+      "maps_to": {
+        "kind": "any-chart-feature"
+      },
       "sections": {
         "Position": "One feature of your own chart, chosen by you: a planet in its sign (your Mercury in Gemini), a house and its tenants (your 10th and what stands there), or an aspect between two planets (your Moon square Saturn). The whole casting is this single mirror.",
         "Prompt": "Sit with the one item (or pair) this feature resolves to. Ask three questions the tradition would ask, in order: What does this describe that I recognize? What does it describe that I resist? And what would relating to it — not obeying it — change this week? One aspect, honestly read, beats a whole chart skimmed."
       },
-      "keywords": ["aspect", "single", "reflection"]
+      "keywords": [
+        "aspect",
+        "single",
+        "reflection"
+      ],
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
     }
   ],
   "_grammar_commons": {
@@ -33,7 +51,14 @@
     "license": "CC-BY-SA-4.0",
     "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
     "attribution": [
-      { "name": "PlayfulProcess", "role": "author", "link": "https://recursive.eco" }
+      {
+        "name": "PlayfulProcess",
+        "role": "author",
+        "link": "https://recursive.eco"
+      }
     ]
-  }
+  },
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800",
+  "_recursive_eco_url": "https://flow.recursive.eco/play?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f"
 }

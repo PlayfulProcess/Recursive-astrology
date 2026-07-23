@@ -1,5 +1,6 @@
-> **Copied into this starter so a fork is self-contained.** The authoritative version
-> lives in the parent project (recursive-tarot `GRAMMAR_FORMAT.md`); if they drift, that one wins.
+> **Mirrored copy.** The canonical version lives in
+> [`recursive.eco-schemas/GRAMMAR_FORMAT.md`](https://github.com/PlayfulProcess/recursive.eco-schemas/blob/main/GRAMMAR_FORMAT.md).
+> If this copy and that one differ, the schemas repo wins — update this copy to match.
 
 # Grammar JSON — Canonical Format
 
@@ -36,6 +37,10 @@ A grammar is a single JSON object:
 
   // Optional commons metadata:
   // "_grammar_commons": { "schema_version": "1.0", "license": "...", "attribution": [...] }
+
+  // Optional astrology customization (see "Category & section roles" below):
+  // "_category_roles": { "my-category-name": "planet" },
+  // "_section_roles": { "My Section Name": "affirmation" }
 }
 ```
 
@@ -170,6 +175,70 @@ purposes. The viewer ignores unknown keys.
 
 ---
 
+## Category & section roles (astrology customization)
+
+For `astrology` (and Vedic/Jyotish) grammars, the astrology viewer buckets
+items into tabs — Planets, Signs, Houses, Aspects, etc. — by reading each
+item's `category`. A default table of category names is already recognized,
+no configuration needed:
+
+| Category | Viewer role |
+|---|---|
+| `planet` | planet |
+| `sign` | sign |
+| `house` | house |
+| `aspect` | aspect |
+| `graha` (Vedic) | planet |
+| `rashi` (Vedic) | sign |
+| `bhava` (Vedic) | house |
+| `nakshatra` (Vedic) | nakshatra |
+| `yoga`, `drishti` (Vedic) | emergence |
+| `dignity`, `position` | modifier |
+
+### Custom category names — `_category_roles`
+
+If your tradition uses category names outside this list (a regional or
+invented tradition, not Western or Jyotish), declare a mapping at the
+**grammar root** — this ADDS to the default table above, it doesn't replace it:
+
+```jsonc
+{
+  "name": "My Astrology Tradition",
+  "grammar_type": "astrology",
+  "_category_roles": {
+    "planetary-lord": "planet",
+    "constellation": "sign"
+  },
+  "items": [ /* items whose "category" is "planetary-lord", "constellation", etc. */ ]
+}
+```
+
+Valid target roles: `planet`, `sign`, `house`, `aspect`, `nakshatra`,
+`emergence`, `modifier`.
+
+### Custom section names — `_section_roles`
+
+The astrology viewer also maps **section names** to display roles (which tab
+subsection a section's content lands in) — `Shadow`, `Light`, `Archetype`,
+`Karakatvas`/`Significations`, `Affirmation`/`Mantra`, `Questions`,
+`Invitation`, and description-like sections (`Interpretation`, `Description`,
+`Story`, `Meaning`, `Summary`) are recognized by default. If your sections
+use different labels, declare `_section_roles` alongside `_category_roles`:
+
+```json
+{
+  "_section_roles": {
+    "Karakatvas": "significations",
+    "Mantra": "affirmation"
+  }
+}
+```
+
+Both `_category_roles` and `_section_roles` are reserved, **grammar-root**
+fields — never put them inside an item.
+
+---
+
 ## Performance object (timestamped video clip rendering)
 
 For grammars where each item is a clip from a YouTube video — common
@@ -208,6 +277,11 @@ item carries an optional `performance` object:
         "y_pct": 80,          // vertical position, 0..100
         "width_pct": 80       // width as percentage of viewport
       }
+    ],
+
+    "words": [                // OPTIONAL — per-word karaoke timing (see below)
+      { "w": "In", "start": 5.0, "end": 5.2 },
+      { "w": "the", "start": 5.2, "end": 5.3 }
     ]
   },
   "sections": {
@@ -216,6 +290,51 @@ item carries an optional `performance` object:
   }
 }
 ```
+
+### Audio karaoke mode (`words`)
+
+Some grammars are a single narrated audio track (a karaoke book / dramatic
+reading) rather than per-item YouTube clips. For these, the **grammar root**
+carries the narration track in `metadata.audio` (a hosted audio URL) and
+optionally `metadata.total_sec` / `metadata.crop_ranges`. Each item then sets
+`performance.video_visible: false` and times its own text against that shared
+track with `performance.words` — one entry per spoken word, in seconds,
+**absolute within the grammar-level narration track** (not relative to the
+item):
+
+```jsonc
+{
+  "name": "A Narrated Poem",
+  "grammar_type": "custom",
+  "metadata": {
+    "audio": "https://.../narration.mp3",
+    "total_sec": 612,
+    "audio_source": "LibriVox (public domain) · Jane Reader (2026)"
+  },
+  "items": [
+    {
+      "id": "stanza-1",
+      "name": "Stanza 1",
+      "sections": { "Text": "In the beginning..." },
+      "performance": {
+        "video_visible": false,
+        "start_sec": 12.4,          // this item's first word (absolute in the track)
+        "end_sec": 18.9,            // this item's last word
+        "cover_image_url": "https://...",   // shown instead of a video
+        "words": [
+          { "w": "In", "start": 12.4, "end": 12.6 },
+          { "w": "the", "start": 12.6, "end": 12.7 },
+          { "w": "beginning", "start": 12.7, "end": 13.3 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+`words` is normally produced by an audio-alignment tool (Whisper word
+timestamps aligned onto the item's own text), not hand-written. The field
+names are terse (`w` / `start` / `end`) because there's one object per word.
 
 ### Field-name conventions inside `performance`
 
@@ -253,6 +372,7 @@ On a **UnifiedItem**:
 |---|---|
 | `item_type` | `"content"` (default) or `"reference"` |
 | `ref_document_id` | the `user_document` id this item opens |
+| `ref_item_id` | OPTIONAL — the specific item **inside** `ref_document_id` this item points at. Omit it and the reference opens the whole target document; set it and the reference opens exactly one item within that document. |
 | `ref_preview` | how the target opens: `"default" \| "study" \| "grammar" \| "altar"` |
 | `grammars` | array of linked grammar/document ids (multi-link) |
 
@@ -263,8 +383,17 @@ On the **grammar root**:
 | `default_preview` | the viewer that opens by default: `"grammar" \| "study" \| "tree" \| "altar" \| "course" \| "thumbnails"` |
 
 The viewer renders a reference item as a link that opens the target
-(`/play?id=<ref_document_id>`). Combined with the L1/L2/L3 `composite_of`
+(`/play?id=<ref_document_id>`, or `?id=<ref_document_id>&item=<ref_item_id>`
+when `ref_item_id` is set). Combined with the L1/L2/L3 `composite_of`
 emergence, `default_preview: "tree"` renders the whole thing in the tree-viewer.
+
+**Resolution is additive, not a replacement.** A reference item is allowed to
+carry its own content too (its own `sections`, e.g. a short provenance
+blurb) — when the target resolves, the viewer renders the item's OWN content
+together with the resolved SOURCE item's content, side by side. Don't treat
+"this reference item already has some sections filled in" as a reason to
+skip resolving it; resolve whenever `ref_document_id` (+ optionally
+`ref_item_id`) is present, regardless of what else is on the item.
 
 ### Example 1 — a meta-grammar leaf that opens a full deck
 
@@ -280,6 +409,31 @@ emergence, `default_preview: "tree"` renders the whole thing in the tree-viewer.
   "metadata": { "branch": "branch-roots" }
 }
 ```
+
+### Example 1b — a meta-grammar leaf that opens ONE card inside a deck (`ref_item_id`)
+
+Use `ref_item_id` when the meta-grammar's leaves are individual cards drawn
+from many source decks, rather than whole decks — e.g. a "Tarot — All Decks,
+Many Lenses" meta-grammar with one item per source-deck card:
+
+```json
+{
+  "id": "leaf-visconti-the-fool",
+  "name": "The Fool (Visconti-Sforza)",
+  "level": 1,
+  "item_type": "reference",
+  "ref_document_id": "<the Visconti-Sforza deck's user_document id>",
+  "ref_item_id": "<that deck's 'The Fool' item id>",
+  "ref_preview": "study",
+  "sections": {
+    "Origin": "One of many cards drawn from every deck in the commons."
+  }
+}
+```
+
+None of this leaf's card content (keywords, interpretation, image) needs to
+be duplicated inline — it resolves live from the source deck, and the
+"Origin" section renders alongside it.
 
 ### Example 2 — the genealogy tree that opens in tree view
 
