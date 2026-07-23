@@ -1589,7 +1589,26 @@
          (unused here, kept for its auth logic — see that file's comment), which frees up
          <site-header> for this repo's own component, loaded the same way index.html/wheel.html/
          lenses.html/genealogy.html do. -->
-    <script src="../site-header.js?v=45"></script>
+    <script>
+        // The calculator deploys standalone on Vercel (chart.recursive.eco)
+        // WITHOUT the library files — ../site-header.js and ../assistant.js
+        // exist only on the Pages library origin (astro.recursive.eco). Loading
+        // them unconditionally 404'd in the console on every flow embed
+        // (Jul 23 2026). Load the site shell only where the library serves it;
+        // embed mode hides <site-header> via CSS anyway.
+        (function () {
+            var isEmbed = new URLSearchParams(location.search).get('embed') === 'true';
+            var hasLibraryShell = /(^|\.)astro\.recursive\.eco$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
+            if (isEmbed || !hasLibraryShell) return;
+            var sh = document.createElement('script');
+            sh.src = '../site-header.js?v=45';
+            document.head.appendChild(sh);
+            var as = document.createElement('script');
+            as.src = '../assistant.js';
+            as.defer = true;
+            document.head.appendChild(as);
+        })();
+    </script>
     <site-header active="viewer"></site-header>
 
     <!-- Main Content -->
@@ -6178,15 +6197,25 @@
             showLoading();
 
             try {
+                // maybeSingle (Jul 23 2026): .single() turns "0 visible rows"
+                // into a PostgREST 406 ("Cannot coerce the result to a single
+                // JSON object") — which is exactly what an anonymous session
+                // gets for a PRIVATE chart under RLS. Treat 0 rows as a state
+                // we explain, not a raw error alert.
                 const { data, error } = await supabaseClient
                     .from('user_documents')
                     .select('*')
                     .eq('id', chartId)
                     .eq('tool_slug', 'birth-chart')
-                    .single();
+                    .maybeSingle();
 
                 if (error) throw error;
-                if (!data) throw new Error('Chart not found');
+                if (!data) {
+                    const { data: { session } } = await supabaseClient.auth.getSession();
+                    throw new Error(session?.user
+                        ? 'Chart not found — it may have been deleted, or it belongs to another account.'
+                        : 'This chart is private. Sign in on recursive.eco (same browser) and reload to see it.');
+                }
 
                 // Check if public or owned by current user
                 if (!data.is_public) {
@@ -6246,8 +6275,18 @@
             } catch (error) {
                 if (error.name === 'AbortError') return; // Aborted by a newer calculation
                 console.error('Load error:', error);
-                alert('Failed to load chart: ' + error.message);
+                // Inline message instead of a native alert() (Jul 23 2026) —
+                // the alert was jarring inside the flow embed and hid the page.
                 showPlaceholder();
+                if (chartPlaceholder) {
+                    const msg = document.createElement('p');
+                    msg.style.cssText = 'margin-top:0.75rem;font-size:0.9rem;opacity:0.85;';
+                    msg.textContent = error.message;
+                    // Replace any previous load-error note, never stack them.
+                    chartPlaceholder.querySelector('.load-error-note')?.remove();
+                    msg.className = 'load-error-note';
+                    chartPlaceholder.appendChild(msg);
+                }
             }
         }
 
@@ -8940,7 +8979,10 @@
     <script src="js/image-reachout.js" defer></script>
     <!-- Shared recursive.eco assistant sidebar (star FAB → tabbed panel). No-ops
          when this viewer is iframed by the flow app, which has its own assistant. -->
-    <script src="../assistant.js" defer></script>
+    <!-- assistant.js now loads conditionally from the site-shell loader next to
+         <site-header> (library origin only — it 404s on the Vercel calculator
+         deployment, Jul 23 2026). -->
+
 
 <style id="astro-embed-theme">
 /* Bodygraph palette — two colours, theme-aware (dark default, light overrides). */
