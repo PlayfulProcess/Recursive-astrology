@@ -43,7 +43,8 @@
     "archetypal-astrology-tarnas": "cab7f682-c0dd-4f26-9316-5db80f6b06cf",
     "essential-dignities": "4779ccb3-2eac-4649-a7fe-e223c61043ab",
     "jyotisa-brhat-jataka": "64d62441-2cf3-4824-94b8-787d3e333ed4",
-    "mesopotamian-omen-craft": "627ee9d2-414f-4dbb-b89e-d67723709665"
+    "mesopotamian-omen-craft": "627ee9d2-414f-4dbb-b89e-d67723709665",
+    "william-lilly-christian-astrology": "54622c06-0a8d-4268-b020-3490ad5c5201"
   },
   "preview_links": {
     "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. `raw` always resolves (no UUID needed); `cards`/`study`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
