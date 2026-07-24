@@ -2483,6 +2483,15 @@
         let zodiacSystem = 'tropical';
         let locationSearchTimeout = null;
         let isLoadingFromDatabase = false; // Flag to prevent postMessage loop when loading existing charts
+        // EDIT MODE (round 66, B1 — Jul 24 2026): set from ?edit=true, always
+        // paired with a ?chartId. Opened by Flow's manage-list "edit" action
+        // (AstrologyOracle.tsx handleEditChart). When true, a recalculation
+        // (the user resubmits the form — e.g. after changing birth time)
+        // UPDATEs the SAME user_documents row instead of letting the parent
+        // auto-insert a new one (see calculateChart() and
+        // updateExistingChart() below). Default false = today's "Create new
+        // Chart" behavior, unchanged.
+        let isEditMode = false;
         let chartAbortController = null; // AbortController for canceling stale chart API calls
         let hdAbortController = null; // AbortController for canceling stale Human Design API calls
 
@@ -3102,6 +3111,9 @@
             // Check for chartId in URL
             const params = new URLSearchParams(window.location.search);
             const chartId = params.get('chartId') || params.get('id');
+            // EDIT MODE (round 66, B1): ?edit=true — only meaningful paired
+            // with a chartId, set below.
+            isEditMode = params.get('edit') === 'true';
             if (chartId) {
                 currentChartId = chartId;
                 loadSelectedAspects();
@@ -3166,11 +3178,25 @@
         // transparent PNG of a dark chart is unreadable), render at ~2x for
         // legibility, and cap the payload size.
         function captureActiveChartImage() {
+            // Round 66 (B2a, Jul 24 2026) — investigated whether this needed
+            // a transit-aware capture path. It doesn't: the "astrology" view
+            // ('#chart-wheel svg') is ONE svg that renderAstroWheel() rebuilds
+            // from scratch on every renderChart() call, including the transit
+            // ring/planets/aspect-lines whenever `showTransits && currentTransits`
+            // (see the "hasTransits" branching inside renderAstroWheel — the
+            // transit toggle's change handler calls renderChart() right after
+            // fetching transits, so by the time this function's querySelector
+            // runs, the live SVG already has the overlay baked in if the
+            // toggle is on). There is no separate transit layer/canvas to
+            // union in. `transitsIncluded` below is just explicit metadata
+            // for the caller/logs, not a behavior change.
+            const transitsIncluded = !!(showTransits && currentTransits);
             const reply = (imageDataUrl, extra) => {
                 try {
                     window.parent.postMessage(Object.assign({
                         type: 'astrology-chart-image',
                         imageDataUrl: imageDataUrl || null,
+                        transitsIncluded,
                     }, extra || {}), '*');
                 } catch (e) { /* parent gone */ }
             };
@@ -3710,24 +3736,95 @@
             // Skip when loading an existing chart from DB to avoid infinite loop:
             // postMessage → parent auto-saves as new record → selectedChartId changes → iframe reloads → repeat
             if (window.parent !== window && !isLoadingFromDatabase) {
-                window.parent.postMessage({
-                    type: 'astrology-chart-calculated',
-                    chartData: {
-                        name: document.getElementById('chart-name')?.value?.trim() || 'Birth Chart',
-                        birthData: currentChart.birthData,
-                        settings: currentChart.settings,
-                        planets: serializeCelestialBodies(currentChart.horoscope.CelestialBodies),
-                        houses: serializeHouses(currentChart.horoscope.Houses),
-                        aspects: serializeAspects(currentChart.horoscope.Aspects),
-                        ascendant: currentChart.horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees,
-                        midheaven: currentChart.horoscope.Midheaven?.ChartPosition?.Ecliptic?.DecimalDegrees,
-                        calculatedAt: currentChart.calculatedAt
-                    }
-                }, '*');
+                if (isEditMode && currentChartId) {
+                    // EDIT MODE (round 66, B1): opened as ?chartId=<id>&edit=true
+                    // from Flow's manage-list "edit" action. A recalculation here
+                    // (the user resubmitted the form — e.g. changed birth time)
+                    // must persist onto the SAME row, not go through the parent's
+                    // "astrology-chart-calculated" auto-insert path below (that
+                    // path is for "Create new Chart" only — using it here would
+                    // insert a duplicate row on every edit).
+                    await updateExistingChart(currentChart, currentChartId);
+                } else {
+                    window.parent.postMessage({
+                        type: 'astrology-chart-calculated',
+                        chartData: {
+                            name: document.getElementById('chart-name')?.value?.trim() || 'Birth Chart',
+                            birthData: currentChart.birthData,
+                            settings: currentChart.settings,
+                            planets: serializeCelestialBodies(currentChart.horoscope.CelestialBodies),
+                            houses: serializeHouses(currentChart.horoscope.Houses),
+                            aspects: serializeAspects(currentChart.horoscope.Aspects),
+                            ascendant: currentChart.horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees,
+                            midheaven: currentChart.horoscope.Midheaven?.ChartPosition?.Ecliptic?.DecimalDegrees,
+                            calculatedAt: currentChart.calculatedAt
+                        }
+                    }, '*');
+                }
             }
 
             showChart();
             saveSection.classList.remove('hidden');
+        }
+
+        // ============================================================
+        // EDIT MODE — update the SAME user_documents row (round 66, B1,
+        // Jul 24 2026). Mirrors the documentData shape saveChart() writes
+        // (see SAVE/LOAD CHART below) so a chart saved via "Create new
+        // Chart" and one recalculated via "edit" end up in an identical
+        // shape — no drift for downstream readers (Flow's chart list, the
+        // get_birth_chart chat tool).
+        //
+        // Protocol (matches the Flow-side astrology-chart-updated handler
+        // in apps/flow AstrologyOracle.tsx):
+        //   viewer → parent: { type: 'astrology-chart-updated', chartId, chartName, error? }
+        // ============================================================
+        async function updateExistingChart(chart, chartId) {
+            const chartName = document.getElementById('chart-name')?.value?.trim() || 'Birth Chart';
+            const notifyParent = (extra) => {
+                if (window.parent === window) return;
+                try {
+                    window.parent.postMessage(Object.assign({
+                        type: 'astrology-chart-updated',
+                        chartId,
+                        chartName,
+                    }, extra || {}), '*');
+                } catch (e) { /* parent gone */ }
+            };
+
+            if (!currentUser) {
+                console.warn('[Astrology Viewer] edit mode: no signed-in user, cannot update chart', chartId);
+                notifyParent({ error: 'not-signed-in' });
+                return;
+            }
+
+            const documentData = {
+                name: chartName,
+                birthData: chart.birthData,
+                settings: chart.settings,
+                planets: serializeCelestialBodies(chart.horoscope.CelestialBodies),
+                houses: serializeHouses(chart.horoscope.Houses),
+                aspects: serializeAspects(chart.horoscope.Aspects),
+                ascendant: chart.horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees,
+                midheaven: chart.horoscope.Midheaven?.ChartPosition?.Ecliptic?.DecimalDegrees,
+                calculatedAt: chart.calculatedAt
+            };
+
+            try {
+                // Scoped by id AND user_id — an edit can only ever touch the
+                // signed-in user's own chart (RLS backs this up too, but the
+                // explicit .eq keeps intent readable here).
+                const { error } = await supabaseClient
+                    .from('user_documents')
+                    .update({ document_data: documentData })
+                    .eq('id', chartId)
+                    .eq('user_id', currentUser.id);
+                if (error) throw error;
+                notifyParent();
+            } catch (error) {
+                console.error('[Astrology Viewer] edit mode: update failed', error);
+                notifyParent({ error: error.message || 'update-failed' });
+            }
         }
 
         // Convert API result to the horoscope format expected by rendering functions
