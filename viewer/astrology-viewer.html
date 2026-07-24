@@ -6484,6 +6484,20 @@
         // full viewport (enterCssFullscreen's astrology-request-fullscreen
         // postMessage, sent on enter AND exit). X top-right + Esc exit both.
         function toggleActiveFullscreen() {
+            // EMBED mode (Jul 24 2026, builder): a fixed-position overlay inside an
+            // iframe can only ever fill the IFRAME's own box (the sidebar embed is
+            // ~400px tall), which looked broken — "fullscreen" showed a cramped
+            // empty panel. Per the builder's call, fullscreen from the embed opens
+            // the STANDALONE full-page viewer in a new tab instead (chart + view
+            // tab + theme carried over via URL params).
+            if (document.body.classList.contains('embed-mode')) {
+                const params = new URLSearchParams(location.search);
+                params.delete('embed');
+                if (currentChartId) params.set('chartId', currentChartId);
+                if (hdViewMode) params.set('view', hdViewMode);
+                window.open(location.pathname + '?' + params.toString(), '_blank', 'noopener');
+                return;
+            }
             if (isCssFullscreen()) { exitCssFullscreen(); return; }
             const section = document.getElementById('chart-display-section');
             enterCssFullscreen(section, () => {
@@ -7044,6 +7058,11 @@
                     updateViewMode();
                 });
             });
+            // ?view= deep link (Jul 24 2026): the embed's fullscreen button opens
+            // the standalone page in a new tab and carries the active view along.
+            const requestedView = new URLSearchParams(location.search).get('view');
+            const viewBtn = requestedView && document.querySelector(`.view-mode-btn[data-view="${CSS.escape(requestedView)}"]`);
+            if (viewBtn) viewBtn.click();
         }
 
         function setBodygraphLegendMode(mode) {
