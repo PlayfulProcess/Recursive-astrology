@@ -5869,21 +5869,16 @@
             if (!select || !section) return;
 
             try {
-                // Query for user's own astrology grammars (unified or legacy format)
-                const { data, error } = await supabaseClient
-                    .from('user_documents')
-                    .select('id, document_data')
-                    .eq('user_id', currentUser.id)
-                    .or('document_type.eq.astrology_set,document_type.eq.unified_grammar,tool_slug.eq.astrology,tool_slug.eq.unified-grammar');
+                // astrology_grammar_options() RPC (Jul 24 2026): the old query here
+                // selected id + FULL document_data for EVERY grammar the user owns
+                // (~42KB blob each) and, together with flow's twin query, choked the
+                // whole Supabase REST endpoint into 522s. The RPC computes the
+                // astrology-shape filter server-side and returns only light rows.
+                const { data, error } = await supabaseClient.rpc('astrology_grammar_options');
 
                 if (error) throw error;
 
-                // Filter to only astrology grammars
-                const astrologyGrammars = (data || []).filter(doc => {
-                    const grammarType = doc.document_data?.grammar_type;
-                    const docType = doc.document_data?.document_type;
-                    return grammarType === 'astrology' || docType === 'astrology_set' || doc.document_data?.interpretations;
-                });
+                const astrologyGrammars = (data || []).filter(row => row.is_astrology && !row.is_spread);
 
                 // Clear existing options (keep the first "Don't save" option)
                 while (select.options.length > 1) {
@@ -5892,7 +5887,7 @@
 
                 // Add grammar options
                 astrologyGrammars.forEach(grammar => {
-                    const name = grammar.document_data?.name || 'Untitled Grammar';
+                    const name = grammar.name || 'Untitled Grammar';
                     const option = new Option(name, grammar.id);
                     select.add(option);
                 });
@@ -7094,32 +7089,39 @@
 
         // Find the exact date when Sun was at targetLongitude using binary search
         async function findDesignDate(birthDate, targetSunLongitude, latitude, longitude, signal) {
-            // Helper to get Sun longitude at a specific date
+            // Helper to get Sun longitude at a specific date.
+            // One retry after a short backoff (Jul 24 2026): the binary search
+            // fires ~20 rapid API calls and a single transient "Failed to fetch"
+            // (serverless cold start / network blip) used to abort the whole
+            // Human-Design calc into the ±88-day fallback.
             async function getSunLongitude(date) {
-                try {
-                    const response = await fetch(CHART_API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        signal,
-                        body: JSON.stringify({
-                            year: date.getFullYear(),
-                            month: date.getMonth() + 1,
-                            day: date.getDate(),
-                            hour: date.getHours(),
-                            minute: date.getMinutes(),
-                            latitude: parseFloat(latitude),
-                            longitude: parseFloat(longitude),
-                            houseSystem: 'placidus',
-                            zodiac: 'tropical'
-                        })
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        return data.planets?.sun?.longitude;
+                for (let attempt = 0; attempt < 2; attempt++) {
+                    try {
+                        const response = await fetch(CHART_API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            signal,
+                            body: JSON.stringify({
+                                year: date.getFullYear(),
+                                month: date.getMonth() + 1,
+                                day: date.getDate(),
+                                hour: date.getHours(),
+                                minute: date.getMinutes(),
+                                latitude: parseFloat(latitude),
+                                longitude: parseFloat(longitude),
+                                houseSystem: 'placidus',
+                                zodiac: 'tropical'
+                            })
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            return data.planets?.sun?.longitude;
+                        }
+                    } catch (e) {
+                        if (e.name === 'AbortError') throw e; // Let abort propagate
+                        console.error('Error fetching Sun position:', e, attempt === 0 ? '— retrying once' : '');
                     }
-                } catch (e) {
-                    if (e.name === 'AbortError') throw e; // Let abort propagate
-                    console.error('Error fetching Sun position:', e);
+                    if (attempt === 0) await new Promise(r => setTimeout(r, 600));
                 }
                 return null;
             }
@@ -8142,7 +8144,8 @@
             try {
                 const select = document.getElementById('iching-grammar-select');
 
-                const { data: userDocs, error: userError } = await supabaseClient.from('user_documents').select('id, document_data').eq('document_type', 'iching_set').eq('is_public', true).limit(20);
+                // Name-only projection — was shipping up to 20 full blobs (Jul 24 2026).
+                const { data: userDocs, error: userError } = await supabaseClient.from('user_documents').select('id, name:document_data->>name').eq('document_type', 'iching_set').eq('is_public', true).limit(20);
                 const { data: toolDocs, error: toolError } = await supabaseClient.from('tools').select('id, slug, tool_data').eq('channel_slug', 'iching').limit(20);
 
                 if (userError) console.error('User docs error:', userError);
@@ -8151,7 +8154,7 @@
                 // Build grammar options for popup selector (do this first, before touching DOM)
                 ichingGrammarOptions = [];
                 if (userDocs) userDocs.forEach(d => {
-                    const name = d.document_data?.name || 'I Ching';
+                    const name = d.name || 'I Ching';
                     const value = `user:${d.id}`;
                     ichingGrammarOptions.push({ name, value, type: 'user', id: d.id });
                 });
@@ -8403,9 +8406,11 @@
 
                 // Query for astrology schemas - check both user_documents and tools
                 // Astrology documents can have document_type: astrology_chart, astrology_set, or tool_slug: astrology
+                // Only the NAME is read from these rows — project it instead of
+                // shipping up to 20 full document_data blobs (Jul 24 2026 I/O diet).
                 const { data: userDocs, error: userError } = await supabaseClient
                     .from('user_documents')
-                    .select('id, document_data')
+                    .select('id, name:document_data->>name')
                     .eq('is_public', true)
                     .or('document_type.eq.astrology_chart,document_type.eq.astrology_set,document_type.eq.astrology_schema,tool_slug.eq.astrology')
                     .limit(20);
@@ -8416,7 +8421,7 @@
 
                 astrologySchemaOptions = [];
                 if (userDocs) userDocs.forEach(d => {
-                    const name = d.document_data?.name || 'Astrology Grammar';
+                    const name = d.name || 'Astrology Grammar';
                     const value = `user:${d.id}`;
                     astrologySchemaOptions.push({ name, value, type: 'user', id: d.id });
                 });
