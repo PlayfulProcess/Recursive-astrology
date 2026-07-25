@@ -29,8 +29,8 @@ OUT_SLUG = "astro-of-all-astros"
 SOURCES = [
     ("western-astrology-canonical", "Canonical"),
     ("tetrabiblos-ashmand",         "Ptolemy (Tetrabiblos)"),
-    ("renaissance-lilly",           "Lilly (1647)"),
-    ("jyotisha-brihat-jataka",      "Jyotiṣa (Bṛhat Jātaka)"),
+    ("william-lilly-christian-astrology", "Lilly (1647)"),
+    ("jyotisa-brhat-jataka",        "Jyotiṣa (Bṛhat Jātaka)"),
     ("alan-leo",                    "Alan Leo"),
     ("planetary-myths",             "Planetary Myths"),
 ]
