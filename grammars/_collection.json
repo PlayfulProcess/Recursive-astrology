@@ -29,7 +29,6 @@
         "aspects-commented",
         "astro-of-all-astros",
         "dignities-rulerships",
-        "essential-dignities",
         "historiographies-of-astrology",
         "jyotisa-brhat-jataka",
         "mesopotamian-omen-craft",
@@ -175,19 +174,6 @@
       "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800",
       "blurb": "Essential dignities and rulerships as a LENS grammar: the seven classical planets, each carrying its domicile(s), exaltation (with the traditional degree), detriment, and fall — and the twelve signs, …",
       "path": "grammars/dignities-rulerships/grammar.json",
-      "provenance": "living"
-    },
-    {
-      "slug": "essential-dignities",
-      "name": "Essential Dignities & Rulerships — the traditional scheme, planet by planet and sign by sign",
-      "type": "astrology",
-      "branch": "synthesis",
-      "is_meta": false,
-      "default_preview": null,
-      "items": 19,
-      "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800",
-      "blurb": "Essential dignities and rulerships as a LENS grammar: the seven classical planets, each carrying its domicile(s), exaltation (with the traditional degree), detriment, and fall — and the twelve signs, …",
-      "path": "grammars/essential-dignities/grammar.json",
       "provenance": "living"
     },
     {
