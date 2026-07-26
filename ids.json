@@ -197,17 +197,7 @@
     }
   },
   "_retired_ids": {
-    "_note": "Graveyard record only — NOT an index. These directories were byte-level duplicates of a survivor (same item ids, same section text, same order; the only fields they carried that the survivor lacked were the exporter artifacts `number` and `section_labels`, both derivable from the survivor's array order and its own section keys). The directories were deleted on 2026-07-26 and every live reference to them was purged from `ids`, `_public_now`, `preview_links`, both _collection.json files, and scripts/. Their recursive.eco rows still exist and should be deleted there; the UUIDs are kept here ONLY so that cleanup is possible. Nothing may read this block as a slug index.",
-    "archetypal-astrology-tarnas": {
-      "was_duplicate_of": "archetypal-pairs",
-      "retired_id": "cab7f682-c0dd-4f26-9316-5db80f6b06cf",
-      "deleted": "2026-07-26"
-    },
-    "mesopotamian-omen-craft": {
-      "was_duplicate_of": "mesopotamian-omens",
-      "retired_id": "627ee9d2-414f-4dbb-b89e-d67723709665",
-      "deleted": "2026-07-26"
-    }
+    "_note": "Graveyard record only — NOT an index. These directories were byte-level duplicates of a survivor (same item ids, same section text, same order; the only fields they carried that the survivor lacked were the exporter artifacts `number` and `section_labels`, both derivable from the survivor's array order and its own section keys). The directories were deleted on 2026-07-26 and every live reference to them was purged from `ids`, `_public_now`, `preview_links`, both _collection.json files, and scripts/. Their recursive.eco rows still exist and should be deleted there; the UUIDs are kept here ONLY so that cleanup is possible. Nothing may read this block as a slug index."
   },
   "_missing_ids": {
     "_note": "On disk and in the collection, but with no recursive.eco UUID yet — no UUID is invented here. Add the real one when the grammar is created on recursive.eco.",

@@ -18,7 +18,7 @@
     "source_url": "https://archive.org/details/wg1079"
   },
   "author": "Varāhamihira (c. 6th century CE)",
-  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navagraha_Mandala.jpg?width=800",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navagraha.jpg?width=800",
   "tags": [
     "astrology",
     "jyotisha",
@@ -887,5 +887,15 @@
       "number": 21
     }
   ],
-  "_exported_from_app": "a1b2c3d4-1111-4a01-9e01-aa0000000001 on 2026-07-16"
+  "_exported_from_app": "a1b2c3d4-1111-4a01-9e01-aa0000000001 on 2026-07-16",
+  "cover_image_credit": {
+    "title": "The Navagraha — the nine grahas of Jyotiṣa",
+    "creator": "Anant Shivaji Desai, Ravi Varma Press",
+    "date": "before 1945",
+    "source": "Chromolithograph, Ravi Varma Press",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Navagraha.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Commons file page states public domain",
+    "verified": "2026-07-26"
+  }
 }

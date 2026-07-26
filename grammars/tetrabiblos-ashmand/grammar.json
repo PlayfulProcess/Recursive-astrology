@@ -61,8 +61,7 @@
           ]
         }
       },
-      "sort_order": 0,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=800"
+      "sort_order": 0
     },
     {
       "id": "jupiter",
@@ -106,8 +105,7 @@
           ]
         }
       },
-      "sort_order": 1,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Jupiter_statue,_Vaticana.jpg?width=800"
+      "sort_order": 1
     },
     {
       "id": "mars",
@@ -151,8 +149,7 @@
           ]
         }
       },
-      "sort_order": 2,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mars_Borghese_(Louvre).jpg?width=800"
+      "sort_order": 2
     },
     {
       "id": "sun",
@@ -196,8 +193,7 @@
           ]
         }
       },
-      "sort_order": 3,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Apollo_del_Belvedere.jpg?width=800"
+      "sort_order": 3
     },
     {
       "id": "venus",
@@ -241,8 +237,7 @@
           ]
         }
       },
-      "sort_order": 4,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_de_Milo_Louvre_Ma399.jpg?width=800"
+      "sort_order": 4
     },
     {
       "id": "mercury",
@@ -286,8 +281,7 @@
           ]
         }
       },
-      "sort_order": 5,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_Hermes_Chiaramonti.jpg?width=800"
+      "sort_order": 5
     },
     {
       "id": "moon",
@@ -331,8 +325,7 @@
           ]
         }
       },
-      "sort_order": 6,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bronze_lamp_representing_the_moon-goddess_Luna._Roman_1st_century_AD._British_Museum,_London.jpg?width=800"
+      "sort_order": 6
     },
     {
       "id": "aries",
@@ -377,8 +370,7 @@
           ]
         }
       },
-      "sort_order": 10,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 10
     },
     {
       "id": "taurus",
@@ -422,8 +414,7 @@
           ]
         }
       },
-      "sort_order": 11,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 11
     },
     {
       "id": "gemini",
@@ -466,8 +457,7 @@
           ]
         }
       },
-      "sort_order": 12,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 12
     },
     {
       "id": "cancer",
@@ -511,8 +501,7 @@
           ]
         }
       },
-      "sort_order": 13,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 13
     },
     {
       "id": "leo",
@@ -555,8 +544,7 @@
           ]
         }
       },
-      "sort_order": 14,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 14
     },
     {
       "id": "virgo",
@@ -600,8 +588,7 @@
           ]
         }
       },
-      "sort_order": 15,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 15
     },
     {
       "id": "libra",
@@ -646,8 +633,7 @@
           ]
         }
       },
-      "sort_order": 16,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 16
     },
     {
       "id": "scorpio",
@@ -690,8 +676,7 @@
           ]
         }
       },
-      "sort_order": 17,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 17
     },
     {
       "id": "sagittarius",
@@ -735,8 +720,7 @@
           ]
         }
       },
-      "sort_order": 18,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 18
     },
     {
       "id": "capricorn",
@@ -780,8 +764,7 @@
           ]
         }
       },
-      "sort_order": 19,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 19
     },
     {
       "id": "aquarius",
@@ -824,8 +807,7 @@
           ]
         }
       },
-      "sort_order": 20,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 20
     },
     {
       "id": "pisces",
@@ -869,8 +851,7 @@
           ]
         }
       },
-      "sort_order": 21,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "sort_order": 21
     },
     {
       "id": "house-1",
@@ -914,8 +895,7 @@
           ]
         }
       },
-      "sort_order": 30,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
+      "sort_order": 30
     },
     {
       "id": "house-4",
@@ -957,8 +937,7 @@
           ]
         }
       },
-      "sort_order": 33,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
+      "sort_order": 33
     },
     {
       "id": "house-7",
@@ -1000,8 +979,7 @@
           ]
         }
       },
-      "sort_order": 36,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
+      "sort_order": 36
     },
     {
       "id": "house-10",
@@ -1044,8 +1022,7 @@
           ]
         }
       },
-      "sort_order": 39,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
+      "sort_order": 39
     },
     {
       "id": "conjunction",
@@ -1085,8 +1062,7 @@
           ]
         }
       },
-      "sort_order": 50,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      "sort_order": 50
     },
     {
       "id": "sextile",
@@ -1126,8 +1102,7 @@
           ]
         }
       },
-      "sort_order": 51,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      "sort_order": 51
     },
     {
       "id": "square",
@@ -1167,8 +1142,7 @@
           ]
         }
       },
-      "sort_order": 52,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      "sort_order": 52
     },
     {
       "id": "trine",
@@ -1208,8 +1182,7 @@
           ]
         }
       },
-      "sort_order": 53,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      "sort_order": 53
     },
     {
       "id": "opposition",
@@ -1249,8 +1222,7 @@
           ]
         }
       },
-      "sort_order": 54,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      "sort_order": 54
     }
   ],
   "_grammar_commons": {
@@ -1277,5 +1249,15 @@
   },
   "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ptolemy_16century.jpg?width=800",
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=043aae3c-e51b-4822-9828-e3e18ef9229b",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=043aae3c-e51b-4822-9828-e3e18ef9229b"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=043aae3c-e51b-4822-9828-e3e18ef9229b",
+  "cover_image_credit": {
+    "title": "Claudius Ptolemy — sixteenth-century book frontispiece",
+    "creator": "Theodor de Bry",
+    "date": "1596",
+    "source": "Engraved frontispiece portrait",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Ptolemy_16century.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "De Bry died 1598; Commons states public domain (PD-old-100)",
+    "verified": "2026-07-26"
+  }
 }

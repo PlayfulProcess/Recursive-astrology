@@ -45,8 +45,13 @@ history is the record of humans reading meaning *into* the sky; that history is 
 - **Flag paraphrase as paraphrase.** Where you give a famous line, quote verbatim only if certain of
   the wording; otherwise paraphrase and *say so* (see the Ptolemy item — the "stars incline, they do
   not compel" tag is flagged as a later Latin maxim, not a *Tetrabiblos* quotation).
-- **No images.** Every item is imageless on purpose: honest sourcing of public-domain plates is a
-  later, separate job, and an honest gap beats a wrong picture.
+- **Illustrations: public-domain only, sourced and recorded** (builder, Jul 26 2026 — this
+  REPLACES the former "No images" rule, which held that honest sourcing of public-domain
+  plates was a later job. That job is now open). An item may carry `image_url` only when the
+  image is genuinely public domain (Wikimedia Commons or an equivalent host that states the
+  status), and the item records where it came from and why it is PD. Never hotlink an image
+  whose status you have not checked, never reuse one generic picture across unrelated items,
+  and an honest gap still beats a wrong or decorative picture.
 - **Autonomy floor everywhere:** nothing states a chart as prediction or command.
 
 ## Architecture (don't change without reason)

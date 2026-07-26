@@ -164,6 +164,7 @@ your grammar needs. Some conventions:
 | `lines` | Array of line texts (for I Ching items) | I Ching grammars |
 | `planet`, `sign`, `house` | Astrology categorizations | Astrology grammars |
 | `theme`, `mood`, `tradition` | Free-form taxonomy | Any grammar |
+| `image_credit` | Provenance for the item's `image_url` — **required whenever `image_url` is set** in this repo. See "Illustrations & image provenance" below. | Recursive Astrology |
 
 > ⚠️ **YouTube field naming gotcha:** The canonical field name is
 > `youtube_video_id`, NOT `video_id`. Earlier drafts of grammars
@@ -234,6 +235,62 @@ grammar-root fields carry that:
 
 The derived `_collection.json` mirrors this contract flat, as `provenance`,
 `year_label`, `year`, and `year_confidence` — see that file's `_dating_contract` key.
+
+---
+
+## Illustrations & image provenance
+
+> **Recursive Astrology extension** (added Jul 26 2026). `image_url` and
+> `cover_image_url` are upstream fields; the two `*_credit` objects below are this
+> repo's addition. The app ignores unknown keys, so they are safe to carry.
+
+`CLAUDE.md` allows an item to carry an image **only when the image is genuinely
+public domain and the item records where it came from and why it is PD**. That record
+lives in a credit object:
+
+- **item-level** — `metadata.image_credit`, describing that item's `image_url`
+- **grammar-level** — `cover_image_credit` at the grammar root, describing
+  `cover_image_url` (and `thumbnail_url`, which mirrors the cover when present)
+
+```jsonc
+"metadata": {
+  "image_credit": {
+    "title":    "The Flammarion engraving — a traveller puts his head through the edge of the sky",
+    "creator":  "Anonymous wood engraver",      // REQUIRED — "Unknown …" is a real answer
+    "date":     "1888",                          // REQUIRED — "c." / a range is fine
+    "source":   "Camille Flammarion, *L'atmosphere: meteorologie populaire* (Paris, 1888)",
+                                                 // OPTIONAL — the edition/collection it comes from
+    "file_page":"https://commons.wikimedia.org/wiki/File:Flammarion.jpg",
+                                                 // REQUIRED — the FILE PAGE, not the raw file
+    "license":  "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Anonymous engraving published 1888; Commons file page states public domain (PD-old)",
+    "verified": "2026-07-26"                     // REQUIRED — the day the URL and licence were checked
+  }
+}
+```
+
+### Rules
+
+- **Public domain only, and checked.** Before an image goes in, fetch it and read the
+  file page. Commons must *state* a public-domain status (PD-old / PD-old-100 / PD-US /
+  "Public domain"). A CC licence — including CC BY and CC BY-SA on a modern photograph
+  of an ancient object — **is not public domain**; those images do not belong here even
+  though the object photographed is old. `pd_basis` must say which of the two it is
+  (the work's age, or what the file page states), never a guess.
+- **One image, one item, and it must be *of* that item.** A file may appear at most
+  once as an item image across the whole repo, plus at most once as a grammar cover.
+  Never repeat one picture down a list of signs, houses or aspects to make a page look
+  furnished — that is decoration, and the honest gap is better.
+- **No anachronism.** Don't illustrate a twentieth-century psychological item with a
+  Renaissance woodcut, or a Renaissance item with a modern diagram.
+- **Spread (`casting-*`) grammars carry no images at all** — they are position
+  scaffolds, not content.
+- **URL form.** Use `https://commons.wikimedia.org/wiki/Special:FilePath/<File_Name>?width=800`
+  — a stable canonical URL that serves a sized rendition of the original (several of
+  these originals are 20 000 px wide). Keep the human-readable file page in
+  `file_page` so the licence is one click away.
+- **An honest gap beats a wrong picture.** An item with no `image_url` is a valid,
+  finished item. Leave it bare rather than reach.
 
 ---
 

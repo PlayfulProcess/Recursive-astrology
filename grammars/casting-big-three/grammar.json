@@ -1,7 +1,6 @@
 {
   "name": "The Big Three — a reflection casting",
   "description": "A three-position casting that mirrors the tarot three-card spread so it works in the oracle from day one — but nothing here is drawn at random: every position resolves to an aspect of YOUR OWN chart (Sun, Moon, Ascendant). The chart is a mirror and a calendar, never a command: each position hands you a prompt about something already yours, and you author what it means. Positions are read against the flagship interpretation set (western-astrology-canonical) or any interpretation grammar the reader chooses (the historical voices work too — Ptolemy, Leo, the skeptics).",
-  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800",
   "grammar_type": "sequence",
   "provenance": "casting",
   "dating": {
@@ -46,8 +45,7 @@
         "sun",
         "identity",
         "will"
-      ],
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Apollo_del_Belvedere.jpg?width=800"
+      ]
     },
     {
       "id": "position-moon",
@@ -67,8 +65,7 @@
         "moon",
         "feeling",
         "habit"
-      ],
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bronze_lamp_representing_the_moon-goddess_Luna._Roman_1st_century_AD._British_Museum,_London.jpg?width=800"
+      ]
     },
     {
       "id": "position-ascendant",
@@ -89,8 +86,7 @@
         "ascendant",
         "rising",
         "threshold"
-      ],
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horoscope_from_the_book_of_the_birth_of_Iskandar_Wellcome_L0015229.jpg?width=800"
+      ]
     }
   ],
   "_grammar_commons": {
@@ -105,7 +101,6 @@
       }
     ]
   },
-  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800",
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=bbcba06e-0a82-4959-ad69-439ac963bd54",
   "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=bbcba06e-0a82-4959-ad69-439ac963bd54"
 }

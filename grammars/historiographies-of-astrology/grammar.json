@@ -55,9 +55,19 @@
         "region": "Mesopotamia",
         "stance": "omen-craft",
         "confidence": "medium",
-        "_research": "research/views/mesopotamian-omens.md"
+        "_research": "research/views/mesopotamian-omens.md",
+        "image_credit": {
+          "title": "Cuneiform tablet of lunar omens — the commentary series *Sîn ina tāmartīšu* (Böhl Collection LB 1321)",
+          "creator": "Unknown Assyrian scribe",
+          "date": "669-627 BCE",
+          "source": "De Liagre Böhl Collection, Nederlands Instituut voor het Nabije Oosten, Leiden",
+          "file_page": "https://commons.wikimedia.org/wiki/File:NINODeLiagreBohlLB1321.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Ancient work; Commons file page states public domain",
+          "verified": "2026-07-26"
+        }
       },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_Tablet_of_Ammisaduqa.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/NINODeLiagreBohlLB1321.jpg?width=800"
     },
     {
       "id": "view-hellenistic-synthesis",
@@ -95,9 +105,19 @@
           "edition_note": "This session fetched the archive.org scan identified 'TheFiveBooksOfM.ManiliusAncientAstronomy', whose title page carries a 1700 imprint ('Printed and Sold by the Booksellers of London and Westminster') — an anonymous second impression of Creech's 1697 translation (first published by Jacob Tonson), not the 1697 Tonson edition itself. Same translator, same text, per the standard bibliographic record for this title; flagged honestly since the exact scanned leaf is the 1700 reprint. The Goold/Loeb Classical Library prose translation of Manilius is separately in copyright and was not consulted.",
           "source_url": "https://archive.org/details/TheFiveBooksOfM.ManiliusAncientAstronomy",
           "source_txt_url": "https://archive.org/download/TheFiveBooksOfM.ManiliusAncientAstronomy/TheFiveBooksOfM.Manilius-AncientAstronomy_djvu.txt"
+        },
+        "image_credit": {
+          "title": "The Zodiac of Denderah — the Greco-Roman zodiac ceiling from the temple of Hathor",
+          "creator": "Photograph by Mansell",
+          "date": "before 1911",
+          "source": "Reproduced in W. T. Olcott, *Star Lore of All Ages* (New York, 1911)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Star_Lore_Of_All_Ages_(1911),_0393,_The_Zodiac_of_Denderah.png",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1911; Commons states public domain (PD-old / PD-US)",
+          "verified": "2026-07-26"
         }
       },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Star_Lore_Of_All_Ages_(1911),_0393,_The_Zodiac_of_Denderah.png?width=800"
     },
     {
       "id": "view-jyotisha",
@@ -123,9 +143,19 @@
         "region": "Indian subcontinent",
         "stance": "natural-philosophy",
         "confidence": "low",
-        "_research": "research/views/jyotisha.md"
+        "_research": "research/views/jyotisha.md",
+        "image_credit": {
+          "title": "Relief fragment from a navagraha (nine-planet) panel, the figure identified as Ketu",
+          "creator": "Unknown sculptor, India",
+          "date": "10th century",
+          "source": "Walters Art Museum, Baltimore (25.39)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Indian_-_Diety_with_Two_Attendants_and_an_Animal_Frieze_Below_-_Walters_2539.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Medieval sculpture; Commons file page states public domain",
+          "verified": "2026-07-26"
+        }
       },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navagraha_Mandala.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Indian_-_Diety_with_Two_Attendants_and_an_Animal_Frieze_Below_-_Walters_2539.jpg?width=800"
     },
     {
       "id": "view-islamic-golden-age",
@@ -151,9 +181,19 @@
         "region": "Abbasid Caliphate & the wider Islamic world",
         "stance": "court-science",
         "confidence": "medium",
-        "_research": "research/views/islamic-golden-age.md"
+        "_research": "research/views/islamic-golden-age.md",
+        "image_credit": {
+          "title": "Page from a fifteenth-century Egyptian manuscript of Abū Maʿshar’s *Kitāb al-Mawālīd* (Book of Nativities)",
+          "creator": "Qanbar ʿAlī Naqqāsh Shīrāzī",
+          "date": "15th century",
+          "source": "Manuscript copy of Abū Maʿshar (Albumasar, d. 886)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Abu_Ma'shar(Ibn_Balkhi)-850AD.png",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Fifteenth-century manuscript; Commons states public domain (PD-old)",
+          "verified": "2026-07-26"
+        }
       },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/A_drawing_of_an_astrolabe_Wellcome_L0041186.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Abu_Ma'shar(Ibn_Balkhi)-850AD.png?width=800"
     },
     {
       "id": "view-medieval-renaissance-court",
@@ -178,7 +218,17 @@
         "region": "Latin Europe",
         "stance": "court-science",
         "confidence": "medium",
-        "_research": "research/views/medieval-renaissance-court.md"
+        "_research": "research/views/medieval-renaissance-court.md",
+        "image_credit": {
+          "title": "The Anatomical Man (homo signorum) — the zodiac mapped on the body, fol. 14v",
+          "creator": "Limbourg brothers",
+          "date": "c. 1411-1416",
+          "source": "*Les Tres Riches Heures du Duc de Berry*, Musee Conde, Chantilly",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Anatomical_Man.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Painters died 1416; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800"
     },
@@ -206,9 +256,19 @@
         "region": "Europe",
         "stance": "critical",
         "confidence": "medium",
-        "_research": "research/views/decline-demarcation.md"
+        "_research": "research/views/decline-demarcation.md",
+        "image_credit": {
+          "title": "Credulity, Superstition, and Fanaticism — a medley",
+          "creator": "William Hogarth",
+          "date": "1762",
+          "source": "Engraving, London, 1762",
+          "file_page": "https://commons.wikimedia.org/wiki/File:William_Hogarth_-_Credulity,_Superstition,_and_Fanaticism.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Hogarth died 1764; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
       },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/William_Hogarth_-_Credulity,_Superstition,_and_Fanaticism.jpg?width=800"
     },
     {
       "id": "view-theosophical-revival",
@@ -233,7 +293,17 @@
         "region": "Britain",
         "stance": "psychological",
         "confidence": "medium",
-        "_research": "research/views/theosophical-revival.md"
+        "_research": "research/views/theosophical-revival.md",
+        "image_credit": {
+          "title": "'The Music of Gounod' — a thought-form plate",
+          "creator": "Annie Besant and C. W. Leadbeater (plates drawn under their direction)",
+          "date": "1901",
+          "source": "*Thought-Forms* (London: Theosophical Publishing Society, 1901); scan from Project Gutenberg eText 16269",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Music_of_Gounod_-_Annie_Besant_Thought_Form_-_Project_Gutenberg_eText_16269.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1901; Commons file page states public domain",
+          "verified": "2026-07-26"
+        }
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Music_of_Gounod_-_Annie_Besant_Thought_Form_-_Project_Gutenberg_eText_16269.jpg?width=800"
     },
@@ -262,7 +332,17 @@
         "region": "Britain, then the Anglophone press worldwide",
         "stance": "commercial-popular",
         "confidence": "medium",
-        "_research": "research/views/sun-sign-press.md"
+        "_research": "research/views/sun-sign-press.md",
+        "image_credit": {
+          "title": "The wreckage of the airship R101 at Allonne, France",
+          "creator": "Unknown photographer",
+          "date": "October 1930",
+          "source": "Press photograph of the R101 crash of 4-5 October 1930",
+          "file_page": "https://commons.wikimedia.org/wiki/File:R101_wreckage.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Anonymous photograph published 1930; Commons file page states public domain",
+          "verified": "2026-07-26"
+        }
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/R101_wreckage.jpg?width=800"
     },
@@ -290,8 +370,19 @@
         "region": "United States & Europe",
         "stance": "psychological",
         "confidence": "medium",
-        "_research": "research/views/humanistic-psychological.md"
-      }
+        "_research": "research/views/humanistic-psychological.md",
+        "image_credit": {
+          "title": "Clark University group photograph: Sigmund Freud, G. Stanley Hall and C. G. Jung (front row); Abraham Brill, Ernest Jones and Sándor Ferenczi (back row)",
+          "creator": "Unknown photographer",
+          "date": "September 1909",
+          "source": "Taken for Clark University, Worcester, Massachusetts",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Hall_Freud_Jung_in_front_of_Clark_1909.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1909; Commons file page states public domain",
+          "verified": "2026-07-26"
+        }
+      },
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hall_Freud_Jung_in_front_of_Clark_1909.jpg?width=800"
     },
     {
       "id": "view-empirical-test-tradition",
@@ -319,8 +410,7 @@
         "stance": "critical",
         "confidence": "medium",
         "_research": "research/views/empirical-test-tradition.md"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_mundani_Ptolemaici.jpg?width=800"
+      }
     },
     {
       "id": "view-contemporary-resurgence",
@@ -365,7 +455,17 @@
         "Why it matters": "Seen this way, the later 'science versus astrology' framing is itself historical, not eternal — for millennia astrology WAS the science of the sky's meaning. The autonomy floor still holds across all four: even at its most authoritative, the reading is examined here as a human meaning-making, never endorsed as prediction."
       },
       "metadata": {
-        "stance": "cross-cutting"
+        "stance": "cross-cutting",
+        "image_credit": {
+          "title": "Kepler's model of the solar system built from the five Platonic solids",
+          "creator": "Johannes Kepler",
+          "date": "1596",
+          "source": "*Mysterium Cosmographicum* (Tübingen, 1596)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Mysterium_Cosmographicum_solar_system_model.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Kepler died 1630; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mysterium_Cosmographicum_solar_system_model.jpg?width=800"
     },
@@ -384,8 +484,7 @@
       },
       "metadata": {
         "stance": "cross-cutting"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "pattern-critique",
@@ -403,11 +502,20 @@
       },
       "metadata": {
         "stance": "cross-cutting"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=800"
+      }
     }
   ],
   "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800",
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=ddffc0fa-7f05-49d1-82db-f2d636cf178e"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
+  "cover_image_credit": {
+    "title": "The Flammarion engraving — a traveller puts his head through the edge of the sky",
+    "creator": "Anonymous wood engraver",
+    "date": "1888",
+    "source": "Camille Flammarion, *L'atmosphère: météorologie populaire* (Paris, 1888)",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Flammarion.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Anonymous engraving published 1888; Commons file page states public domain (PD-old)",
+    "verified": "2026-07-26"
+  }
 }

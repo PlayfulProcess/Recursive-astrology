@@ -1,7 +1,7 @@
 {
   "name": "Mesopotamian Omen-Craft — The Seven Watched Powers",
   "description": "The seven classical planet-gods of Babylonian and Assyrian celestial divination — Sin, Šamaš, Ištar, Nergal, Marduk, Ninurta, and Nabû — each with a sample omen-form drawn from public-domain 19th/early-20th-century translations of the cuneiform omen literature (principally R. Campbell Thompson's 1900 edition of the Neo-Assyrian scholars' reports, and Morris Jastrow's 1898 'The Religion of Babylonia and Assyria'; both pre-1930, public domain). Honest framing, per this library's creed: this is the oldest documented layer of the astrological tradition, and it is not personal astrology at all — no birth chart exists here, only a conditional 'if X in the sky, then Y for the king and the land' addressed to the state. See grammars/historiographies-of-astrology (item view-mesopotamian-omens) and research/views/mesopotamian-omens.md for the fuller historiographical dossier. Newer scholarly editions (e.g. Reiner & Pingree's Babylonian Planetary Omens series) are NOT public domain and are not the source here — only the older PD translations and their genuinely-quoted omen lines are used.",
-  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_Tablet_of_Ammisaduqa.jpg?width=800",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/NINODeLiagreBohlLB1321.jpg?width=800",
   "grammar_type": "astrology",
   "provenance": "record",
   "dating": {
@@ -242,5 +242,15 @@
         "link": "https://recursive.eco"
       }
     ]
+  },
+  "cover_image_credit": {
+    "title": "Cuneiform tablet of lunar omens — the commentary series *Sîn ina tāmartīšu* (Böhl Collection LB 1321)",
+    "creator": "Unknown Assyrian scribe",
+    "date": "669-627 BCE",
+    "source": "De Liagre Böhl Collection, Nederlands Instituut voor het Nabije Oosten, Leiden",
+    "file_page": "https://commons.wikimedia.org/wiki/File:NINODeLiagreBohlLB1321.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Ancient work; Commons file page states public domain",
+    "verified": "2026-07-26"
   }
 }

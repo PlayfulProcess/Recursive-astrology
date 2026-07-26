@@ -411,21 +411,49 @@ function viewRibbon(sel){
   const opts=cardOptions(); const card=opts.includes(sel)?sel:(opts.includes('saturn')?'saturn':opts[0]);
   const pts=[];           // dated points only — these are the ones the axis can place
   const undatedDecks=[];  // grammars with no source date: shown as a labelled list
+  const missingDecks=[];  // selected grammars that have no entry for this entity at all
   for(const d of activeDecks()){
-    const it=activeItems().find(i=>i.deck===d.slug && i.cardKey===card); if(!it)continue;
-    const nativeText=`**${d.label}** (${yearText(d)}) — this entity as treated in this grammar.`;
-    if(isDated(d)) pts.push({year:d.year,kind:'native',label:d.label,full:d.full,
-      grammarLabel:d.label,yearLabel:d.yearLabel,img:it.image,deck:d.slug,id:it.id,text:nativeText});
-    else undatedDecks.push({...d,item:it,text:nativeText});
-    for(const [k,v] of Object.entries(it.sections)){
-      const a=lensAttr(v); if(!a)continue; const y=attrYear(a); if(y===Infinity)continue;
-      if(pts.some(p=>p.kind==='later'&&p.year===y&&p.src===k&&p.deck===d.slug))continue;
+    const it=activeItems().find(i=>i.deck===d.slug && i.cardKey===card);
+    if(!it){ missingDecks.push(d); continue; }
+    // Split this item's sections into the grammar's OWN treatment and its dated
+    // commentary. A section whose body opens with an "[attribution … 1647]" prefix
+    // becomes its own rust point on the axis below; everything else *is* this
+    // grammar's reading of the entity and belongs to the green point.
+    //
+    // Fixed Jul 26 2026: the green point used to carry a hardcoded one-line stub
+    // ("… — this entity as treated in this grammar") instead of the item's real
+    // sections, so clicking Alan Leo's Saturn showed a near-empty card and the
+    // builder reasonably asked "Alan Leo does not have saturn?" — he does, with a
+    // full record + Interpretation + Keywords. Only the rust points ever rendered
+    // real text. Now both kinds read from the data.
+    const own=[], dated=[];
+    for(const [k,v] of Object.entries(it.sections||{})){
+      if(typeof v!=='string'||!v.trim()) continue;
+      const a=lensAttr(v), y=a?attrYear(a):Infinity;
+      (a && y!==Infinity ? dated : own).push({k,v,attr:a,year:y});
+    }
+    // An attributed section with no parseable year can't be placed on the axis, so it
+    // stays with the grammar's own text rather than vanishing — its attribution is
+    // kept as an italic line so it is never read as the grammar's own voice.
+    const nativeText = own.length
+      ? own.map(e=>`### ${e.k}\n`+(e.attr?`*${e.attr}*\n\n`:'')+
+          (e.attr?e.v.trim().replace(/^\[[^\]]*\]\s*/,''):e.v.trim())).join('\n\n')
+      : `*${d.label} has an entry for ${cardLabel(card)}, but every section in it is dated `+
+        `commentary quoting someone else — those are the rust points on the axis.*`;
+    const nativePt={year:isDated(d)?d.year:null,kind:'native',label:d.label,full:d.full,
+      grammarLabel:d.label,entityName:it.name,yearLabel:d.yearLabel,img:it.image,
+      deck:d.slug,id:it.id,text:nativeText,secCount:own.length};
+    if(isDated(d)) pts.push(nativePt);
+    else undatedDecks.push({...d,item:it,point:nativePt});
+    for(const e of dated){
+      if(pts.some(p=>p.kind==='later'&&p.year===e.year&&p.src===e.k&&p.deck===d.slug))continue;
       // `grammarLabel` is the grammar this section actually LIVES in — without it a
       // rust point like "1647 · What dignity means" sitting next to the native Lilly
       // point read as if it were Lilly's own grammar, when it is dignities-rulerships
       // quoting Lilly. The [attribution] prefix in the data stays exactly as authored.
-      pts.push({year:y,kind:'later',label:k,src:k,attr:a,deck:d.slug,id:it.id,
-        grammarLabel:d.label,full:d.full,text:v.trim().replace(/^\[[^\]]*\]\s*/,'')});
+      pts.push({year:e.year,kind:'later',label:e.k,src:e.k,attr:e.attr,deck:d.slug,id:it.id,
+        grammarLabel:d.label,full:d.full,entityName:it.name,
+        text:e.v.trim().replace(/^\[[^\]]*\]\s*/,'')});
     }
   }
   pts.sort((a,b)=>a.year-b.year||(a.kind==='native'?-1:1));
@@ -473,11 +501,20 @@ function viewRibbon(sel){
       `</div>` : '';
   window._ribbonUndated=undatedDecks;
 
+  // A grammar that simply has no entry for this entity is said out loud rather than
+  // silently dropped — same "show the gap, don't hide it" convention as the picker
+  // and the undated list. A real absence is information; an invisible one is not.
+  const missingHTML = missingDecks.length
+    ? `<p style="font-size:11.5px;color:var(--muted);margin:9px 0 0;font-style:italic">`+
+      `No entry for ${esc(cardLabel(card))} in ${missingDecks.length} selected grammar`+
+      `${missingDecks.length>1?'s':''}: ${missingDecks.map(d=>esc(d.label)).join(' · ')}.</p>` : '';
+
   return `<div class="ctl"><label class="lbl">Entity</label><select id="rib-sel">${cardOptionsHTML(card)}</select>
-    <span style="color:var(--muted);font-size:12px">— one entity's whole record: each dated grammar's treatment (green) + each dated commentary (rust). Click a point to read that layer. Grammars with no source date are listed under the axis rather than given a year they don't have.</span></div>
+    <span style="color:var(--muted);font-size:12px">— one entity's whole record: each dated grammar's own treatment (green) + each dated commentary it carries (rust). Click a point to read that layer in full. Grammars with no source date are listed under the axis rather than given a year they don't have; grammars with no entry for this entity are named too.</span></div>
     ${synthHTML(card)}
     <div class="ribbon-scroll"><div class="ribbon" style="height:${ribbonH}px"><div class="axis"></div>${ticks}</div></div>
     ${undatedHTML}
+    ${missingHTML}
     <div id="ribbon-read"><span style="color:var(--muted)">Click a point on the timeline to read that layer.</span></div>`;
 }
 
@@ -527,16 +564,19 @@ function render(arg){
   on('mul-sel','onchange',e=>render(e.target.value));
   on('rib-sel','onchange',e=>render(e.target.value));
   document.querySelectorAll('.seg button[data-m]').forEach(b=>b.onclick=()=>{synMode=b.dataset.m;render(document.getElementById('syn-sel')?.value);});
-  // Detail card for a ribbon point. The header always names the grammar the layer
-  // LIVES IN ("in Essential Dignities & Rulerships") before the [attribution] line
-  // that says whom it quotes — otherwise a rust point sitting next to a native point
-  // of the same year reads as if it were that other grammar's own text. Body is
-  // rendered in full: truncating a source excerpt is what destroys its meaning.
+  // Detail card for a ribbon point. Both kinds get the same "<entity> — in <grammar>"
+  // header: the header always names the grammar the layer LIVES IN ("in Essential
+  // Dignities & Rulerships") before the [attribution] line that says whom it quotes —
+  // otherwise a rust point sitting next to a native point of the same year reads as if
+  // it were that other grammar's own text, and a green point reads as if the grammar
+  // itself were the subject rather than its reading of the entity. Body is rendered in
+  // full: truncating a source excerpt is what destroys its meaning.
   const ribbonCard=p=>{
     const kindColor=p.kind==='later'?'later':'native';
-    const head=p.kind==='later'
-      ? `${p.year} · ${esc(p.label)} <span style="text-transform:none;letter-spacing:0;color:var(--muted)">— in ${esc(p.grammarLabel||'')}</span>`
-      : `${p.year!=null?p.year:'undated'} · ${esc(p.label)}`;
+    const subject=p.kind==='later'?p.label:(p.entityName||p.label);
+    const inGrammar=p.grammarLabel||(p.kind==='later'?'':p.label);
+    const head=`${p.year!=null?p.year:'undated'} · ${esc(subject)}`+
+      (inGrammar?` <span style="text-transform:none;letter-spacing:0;color:var(--muted)">— in ${esc(inGrammar)}</span>`:'');
     return `<div style="font-size:11px;color:var(--${kindColor});text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">${head}</div>`+
       (p.yearLabel?`<span class="attr">${esc(p.yearLabel)}</span>`:'')+
       (p.attr?`<span class="attr">quoting ${esc(p.attr)}</span>`:'')+
@@ -546,12 +586,10 @@ function render(arg){
     document.querySelectorAll('.tick .pt').forEach(pt=>pt.onclick=()=>{
       document.getElementById('ribbon-read').innerHTML=ribbonCard(window._ribbonPts[+pt.dataset.i]);
     });
-    // Undated grammars are clickable too — they read the same way, they just have no
-    // place on the axis.
+    // Undated grammars are clickable too — they read the same way (the same fully
+    // built point object, so the same real sections), they just have no place on the axis.
     document.querySelectorAll('.ul-chip').forEach(c=>c.onclick=()=>{
-      const d=window._ribbonUndated[+c.dataset.u];
-      document.getElementById('ribbon-read').innerHTML=ribbonCard(
-        {kind:'native',year:null,label:d.label,yearLabel:d.yearLabel,text:d.text});
+      document.getElementById('ribbon-read').innerHTML=ribbonCard(window._ribbonUndated[+c.dataset.u].point);
     });
   }
   if(cur==='reader'){ on('rd-deck','onchange',e=>{readerDeck=e.target.value;readerIdx=0;render();});

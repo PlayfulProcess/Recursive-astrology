@@ -46,7 +46,19 @@
         "Min is the drenching in the sea so wan, Min is the prison in the derke cote, Min is the strangel and hanging by the throte... My loking is the fader of pestilence."
       ],
       "sort_order": 0,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Saturn.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Saturn.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "The planet Saturn — telescopic drawing",
+          "creator": "Étienne Léopold Trouvelot",
+          "date": "1881-1882",
+          "source": "*The Trouvelot Astronomical Drawings* (New York, 1882)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Trouvelot_-_The_Planet_Saturn.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Trouvelot died 1895; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "jupiter",
@@ -74,7 +86,19 @@
         "When Jupiter is afflicted, however, he denotes quacks and mountebanks, knaves, cheats, and drunkards."
       ],
       "sort_order": 1,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Jupiter.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Jupiter.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "The planet Jupiter — telescopic drawing",
+          "creator": "Étienne Léopold Trouvelot",
+          "date": "1881-1882",
+          "source": "*The Trouvelot Astronomical Drawings* (New York, 1882)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Trouvelot_-_The_Planet_Jupiter.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Trouvelot died 1895; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "mars",
@@ -102,7 +126,19 @@
         "'The influence of Saturn,' says an astrologer, 'may be compared to a lingering but fatal consumption; that of Mars to a burning fever.'"
       ],
       "sort_order": 2,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_The_Planet_Mars.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot-_The_Planet_Mars.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "The planet Mars — telescopic drawing",
+          "creator": "Étienne Léopold Trouvelot",
+          "date": "1881-1882",
+          "source": "*The Trouvelot Astronomical Drawings* (New York, 1882)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Trouvelot-_The_Planet_Mars.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Trouvelot died 1895; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "sun",
@@ -129,7 +165,19 @@
         "When 'afflicted,' the sun signifies pretenders either to power or knowledge."
       ],
       "sort_order": 3,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_Group_of_Sun_Spots_and_Veiled_Spots.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "Group of sun spots and veiled spots — telescopic drawing",
+          "creator": "Étienne Léopold Trouvelot",
+          "date": "1881-1882",
+          "source": "*The Trouvelot Astronomical Drawings* (New York, 1882)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Trouvelot_-_Group_of_Sun_Spots_and_Veiled_Spots.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Trouvelot died 1895; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "venus",
@@ -155,8 +203,7 @@
         "Venus is the protectrice of musicians, embroiderers, perfumers, classic modellers, and all who work in elegant attire or administer to the luxuries of the great.",
         "When she is afflicted, she represents 'the lower orders of the votaries of voluptuousness.'"
       ],
-      "sort_order": 4,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
+      "sort_order": 4
     },
     {
       "id": "mercury",
@@ -183,8 +230,7 @@
         "The persons signified by Mercury are astrologers, philosophers, mathematicians, politicians, merchants, travellers, teachers, poets, artificers, men of science, and all ingenious, clever men.",
         "When he is ill affected, however, he represents pettifoggers, cunning vile persons, thieves, messengers, footmen, and servants."
       ],
-      "sort_order": 5,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_mundani_Ptolemaici.jpg?width=800"
+      "sort_order": 5
     },
     {
       "id": "moon",
@@ -212,7 +258,19 @@
         "Also all who are engaged in inferior and common offices."
       ],
       "sort_order": 6,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mysterium_Cosmographicum_solar_system_model.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Trouvelot_-_Mare_Humorum_-_1875.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "Mare Humorum — the lunar surface — telescopic drawing",
+          "creator": "Étienne Léopold Trouvelot",
+          "date": "1881-1882",
+          "source": "*The Trouvelot Astronomical Drawings* (New York, 1882)",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Trouvelot_-_Mare_Humorum_-_1875.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Trouvelot died 1895; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "uranus",
@@ -238,8 +296,7 @@
         "He causes the native born under his influence to be of a very eccentric and original disposition, romantic, unsettled, addicted to change, a seeker after novelty.",
         "And in general, let the fair sex remember that Uranus is peculiarly hostile to them, and very evil in love."
       ],
-      "sort_order": 7,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800"
+      "sort_order": 7
     },
     {
       "id": "aries",
@@ -268,7 +325,19 @@
         "We may, however, infer generally from their accounts the influences which they assigned to the zodiacal signs."
       ],
       "sort_order": 10,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Aries_and_Musca_Borealis.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Aries_and_Musca_Borealis.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Aries and Musca Borealis' — celestial card, plate 16",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Aries_and_Musca_Borealis.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "taurus",
@@ -297,7 +366,19 @@
         "The signs of the zodiac in the various houses were in the first place to be noted, because not only had these signs special powers in special houses, but the effects of the planets in particular houses varied according to the signs in which the planets were situated."
       ],
       "sort_order": 11,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Taurus.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Taurus.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Taurus' — celestial card, plate 17",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Taurus.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "gemini",
@@ -326,7 +407,19 @@
         "And accordingly they tell us that the great fire of London, the plague, the building of London Bridge, and other events interesting to London, all occurred when this sign was in the ascendant, or when special planets were in this sign."
       ],
       "sort_order": 12,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Gemini.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Gemini.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Gemini' — celestial card, plate 18",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Gemini.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "cancer",
@@ -355,7 +448,19 @@
         "The moon, as she circles around the earth, exerts a manifest influence upon terrestrial matter—the tidal wave rising and sinking synchronously with the movements of the moon."
       ],
       "sort_order": 13,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Cancer.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Cancer.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Cancer' — celestial card, plate 19",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Cancer.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "leo",
@@ -384,7 +489,19 @@
         "The influence of a celestial body was supposed to depend on the magnitude of its sphere, in the sense of the old astronomy."
       ],
       "sort_order": 14,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Leo_Major_and_Leo_Minor.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Leo_Major_and_Leo_Minor.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Leo Major and Leo Minor' — celestial card, plate 20",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Leo_Major_and_Leo_Minor.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "virgo",
@@ -413,7 +530,19 @@
         "The Mercurial is busy and prattling. But when well affected, Mercury gives his subjects a strong, vigorous, active mind."
       ],
       "sort_order": 15,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Virgo.png?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Virgo.png?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Virgo' — celestial card, plate 21",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Virgo.png",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "libra",
@@ -442,7 +571,19 @@
         "It is a masculine sign, and fortunate."
       ],
       "sort_order": 16,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Libra.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Libra.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Libra' — celestial card, plate 22",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Libra.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "scorpio",
@@ -471,7 +612,19 @@
         "(It would appear likely, by the way, that astrology was a purely masculine science.)"
       ],
       "sort_order": 17,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Scorpio.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Scorpio.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Scorpio' — celestial card, plate 23",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Scorpio.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "sagittarius",
@@ -500,7 +653,19 @@
         "It is masculine, and of course fortunate."
       ],
       "sort_order": 18,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Sagittarius_and_Corona_Australis,_Microscopium,_and_Telescopium.png?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Sagittarius_and_Corona_Australis,_Microscopium,_and_Telescopium.png?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Sagittarius, with Corona Australis, Microscopium and Telescopium' — celestial card, plate 24",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Sagittarius_and_Corona_Australis,_Microscopium,_and_Telescopium.png",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "capricorn",
@@ -529,7 +694,19 @@
         "The persons signified symbolically by Saturn are grandparents, and other old persons, day labourers, paupers, beggars."
       ],
       "sort_order": 19,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Capricornus.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Capricornus.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Capricornus' — celestial card, plate 25",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Capricornus.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "aquarius",
@@ -558,7 +735,19 @@
         "Saturn produces cold and dryness, for he is most remote both from the Sun's heat and from the earth's vapours."
       ],
       "sort_order": 20,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Aquarius,_Piscis_Australis_&_Ballon_Aerostatique.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Aquarius,_Piscis_Australis_&_Ballon_Aerostatique.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Aquarius, with Piscis Australis and Ballon Aerostatique' — celestial card, plate 26",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Aquarius,_Piscis_Australis_&_Ballon_Aerostatique.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "pisces",
@@ -587,7 +776,19 @@
         "The moon comes last in planetary sequence, as nearest to the earth. She is regarded by astrologers as a cold, moist, watery, phlegmatic planet."
       ],
       "sort_order": 21,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Pisces.jpg?width=800"
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania's_Mirror_-_Pisces.jpg?width=800",
+      "metadata": {
+        "image_credit": {
+          "title": "'Pisces' — celestial card, plate 27",
+          "creator": "Sidney Hall (engraver)",
+          "date": "1824-1825",
+          "source": "*Urania's Mirror; or, A View of the Heavens*, London — a set of celestial cards issued with Jehoshaphat Aspin's *A Familiar Treatise on Astronomy*",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania's_Mirror_-_Pisces.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Published 1824-25, engraver died 1831; Commons states public domain (PD-old-100)",
+          "verified": "2026-07-26"
+        }
+      }
     },
     {
       "id": "house-1",
@@ -614,8 +815,7 @@
         "The houses were not all of equal potency. The angular houses, which are the first, the fourth, the seventh, and the tenth—lying east, north, west, and south—were first in power, whether for good or evil.",
         "Thus planets of good influence in the native's ascendant, or first house, signified generally a prosperous life."
       ],
-      "sort_order": 30,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 30
     },
     {
       "id": "house-2",
@@ -640,8 +840,7 @@
         "The position of the planets in the various houses at some epoch guided the astrologer's opinion as to the fortune of that hour.",
         "It will be easily understood how these houses were dealt with in erecting a scheme of nativity."
       ],
-      "sort_order": 31,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 31
     },
     {
       "id": "house-3",
@@ -667,8 +866,7 @@
         "Thoughts of the asker—the third house reveals the nature of inquiry.",
         "The celestial sphere placed as at the moment of the native's birth was divided into twelve parts by great circles supposed to pass through the point overhead."
       ],
-      "sort_order": 32,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 32
     },
     {
       "id": "house-4",
@@ -694,8 +892,7 @@
         "Money of brethren, children of private enemies, sickness of friends.",
         "The place of the sun at midnight marks the foundation and ending of all things."
       ],
-      "sort_order": 33,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 33
     },
     {
       "id": "house-5",
@@ -721,8 +918,7 @@
         "These three houses (the fifth, sixth, and seventh) followed in order from the fourth.",
         "All sorts of amusements, theatres, banquets, and merry-making belong to the fifth house."
       ],
-      "sort_order": 34,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 34
     },
     {
       "id": "house-6",
@@ -748,8 +944,7 @@
         "The sixth house corresponds to the part of the sun's path below the horizon.",
         "Service, labor, and the ailments that come with them fill the sixth house."
       ],
-      "sort_order": 35,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 35
     },
     {
       "id": "house-7",
@@ -776,8 +971,7 @@
         "But if at the same epoch a planet of malefic influence was in the seventh house, then the native, though on the whole prosperous, would be unfortunate in marriage.",
         "The angular houses were first in power, whether for good or evil."
       ],
-      "sort_order": 36,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 36
     },
     {
       "id": "house-8",
@@ -802,8 +996,7 @@
         "Dead men's goods, castles, treasure hid, the fate of the corpse in the grave.",
         "The eighth house follows the seventh—what marriage shares includes mortality."
       ],
-      "sort_order": 37,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 37
     },
     {
       "id": "house-9",
@@ -829,8 +1022,7 @@
         "The remaining four houses were called cadents, and were regarded as weakest in influence.",
         "The wisdom sought before worldly achievement resides in the ninth house."
       ],
-      "sort_order": 38,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 38
     },
     {
       "id": "house-10",
@@ -857,8 +1049,7 @@
         "The angular houses, which are the first, the fourth, the seventh, and the tenth—lying east, north, west, and south—were first in power.",
         "The peak of worldly achievement lies at the midheaven."
       ],
-      "sort_order": 39,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 39
     },
     {
       "id": "house-11",
@@ -883,8 +1074,7 @@
         "The allies who gather around our public position fill the eleventh house.",
         "Friends, hopes, and benefactors are signified by planets in the eleventh."
       ],
-      "sort_order": 40,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 40
     },
     {
       "id": "house-12",
@@ -910,8 +1100,7 @@
         "Receiving two shillings and sixpence, contrary to an Act made under and provided by the wise and virtuous King James.",
         "The twelfth house, House of Enemies, had caught up with him."
       ],
-      "sort_order": 41,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pegius_-_Geburtsstundenbuch.jpg?width=800"
+      "sort_order": 41
     },
     {
       "id": "conjunction",
@@ -936,8 +1125,7 @@
         "When planets occupy the same degree, their powers unite.",
         "Whether for good or ill, according to the nature of the stars involved."
       ],
-      "sort_order": 50,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      "sort_order": 50
     },
     {
       "id": "sextile",
@@ -962,8 +1150,7 @@
         "Mild benefit flows from the sextile, though not enough to overcome serious affliction.",
         "It was natural that the astrologers of old should regard the planetary influences as depending in the main on the position of the celestial bodies."
       ],
-      "sort_order": 51,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      "sort_order": 51
     },
     {
       "id": "square",
@@ -988,8 +1175,7 @@
         "Tension that motivates action may arise from the square.",
         "An enemy: a fiend lurks close behind the radiance of thy planet—oh! be warned!"
       ],
-      "sort_order": 52,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      "sort_order": 52
     },
     {
       "id": "trine",
@@ -1014,8 +1200,7 @@
         "Natural harmony flows when planets stand in trine.",
         "Thus each of these planets, being moderated by this combination, produces a favourable temperament."
       ],
-      "sort_order": 53,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      "sort_order": 53
     },
     {
       "id": "opposition",
@@ -1040,8 +1225,7 @@
         "A fearful sign stands in the house of life, an enemy: a fiend lurks close behind.",
         "The radiance of thy planet—oh! be warned!"
       ],
-      "sort_order": 54,
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      "sort_order": 54
     }
   ],
   "_grammar_commons": {
@@ -1068,5 +1252,15 @@
   },
   "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Richard_Anthony_Proctor2.jpg?width=800",
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=7e0a9452-7d34-4ada-a311-229ba13ecbe7",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=7e0a9452-7d34-4ada-a311-229ba13ecbe7"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=7e0a9452-7d34-4ada-a311-229ba13ecbe7",
+  "cover_image_credit": {
+    "title": "Richard A. Proctor (1837-1888), carte de visite",
+    "creator": "William Shaw Warren",
+    "date": "c. 1870",
+    "source": "Carte-de-visite photograph",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Richard_Anthony_Proctor2.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Nineteenth-century photograph; Commons file page states public domain",
+    "verified": "2026-07-26"
+  }
 }

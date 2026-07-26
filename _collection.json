@@ -260,18 +260,5 @@
       "year": 1647
     }
   ],
-  "duplicates": [
-    {
-      "slug": "archetypal-astrology-tarnas",
-      "duplicate_of": "archetypal-pairs",
-      "path": "grammars/archetypal-astrology-tarnas/grammar.json",
-      "note": "Byte-level duplicate of the grammar it points at (same name, same description, same item ids, same section text). Kept on disk but held out of `grammars` so it cannot appear twice in any view."
-    },
-    {
-      "slug": "mesopotamian-omen-craft",
-      "duplicate_of": "mesopotamian-omens",
-      "path": "grammars/mesopotamian-omen-craft/grammar.json",
-      "note": "Byte-level duplicate of the grammar it points at (same name, same description, same item ids, same section text). Kept on disk but held out of `grammars` so it cannot appear twice in any view."
-    }
-  ]
+  "duplicates": []
 }

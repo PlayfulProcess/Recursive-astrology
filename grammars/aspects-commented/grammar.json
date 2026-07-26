@@ -43,8 +43,7 @@
         "orb": 8,
         "confidence": "high",
         "_source": "Ptolemy, Tetrabiblos (Ashmand tr. 1822, PD, Gutenberg #70850), quotes via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology (1647, PD), paraphrased"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      }
     },
     {
       "id": "aspect-sextile",
@@ -72,8 +71,7 @@
         "orb": 6,
         "confidence": "medium",
         "_source": "Ptolemy, Tetrabiblos (Ashmand tr. 1822, PD), quotes via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology (1647, PD), phrases via secondary reproduction"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      }
     },
     {
       "id": "aspect-square",
@@ -101,8 +99,7 @@
         "orb": 7,
         "confidence": "medium",
         "_source": "Ptolemy, Tetrabiblos (Ashmand tr. 1822, PD), quotes via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology (1647, PD), phrase via secondary reproduction"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      }
     },
     {
       "id": "aspect-trine",
@@ -130,8 +127,7 @@
         "orb": 8,
         "confidence": "medium",
         "_source": "Ptolemy, Tetrabiblos (Ashmand tr. 1822, PD), quotes via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology (1647, PD), phrases via secondary reproduction"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      }
     },
     {
       "id": "aspect-opposition",
@@ -159,8 +155,7 @@
         "orb": 8,
         "confidence": "medium",
         "_source": "Ptolemy, Tetrabiblos (Ashmand tr. 1822, PD), quotes via grammars/tetrabiblos-ashmand; Lilly, Christian Astrology (1647, PD), phrase via secondary reproduction"
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800"
+      }
     }
   ],
   "_grammar_commons": {
@@ -183,5 +178,15 @@
         "role": "compiled as a recursive.eco grammar for The Recursive Astrology, Jul 2026; Canonical sections are original synthesis in the register of grammars/western-astrology-canonical (CC-BY-SA)"
       }
     ]
+  },
+  "cover_image_credit": {
+    "title": "Figure showing how the cusps of the several signs regard each other by aspect",
+    "creator": "Engraver unknown; Johann Herwagen (Hervagius), printer",
+    "date": "1533",
+    "source": "The 1533 Hervagius edition of Ptolemy's *Tetrabiblos*, Basel (Latin of Plato of Tivoli)",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Aspects-ptolemy-tetrabiblos-1533_Hervagius.png",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Printed 1533; Commons states public domain (PD-old)",
+    "verified": "2026-07-26"
   }
 }

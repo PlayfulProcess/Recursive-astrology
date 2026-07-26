@@ -859,5 +859,15 @@
     }
   ],
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=a1b2c3d4-5555-4a05-9e05-aa0000000005"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=a1b2c3d4-5555-4a05-9e05-aa0000000005",
+  "cover_image_credit": {
+    "title": "Scenographia systematis Copernicani — the Sun-centred cosmos, plate 5",
+    "creator": "Andreas Cellarius",
+    "date": "1661",
+    "source": "*Harmonia Macrocosmica* (Amsterdam, 1660/1661)",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Cellarius died 1665; Commons states public domain (PD-old-100)",
+    "verified": "2026-07-26"
+  }
 }

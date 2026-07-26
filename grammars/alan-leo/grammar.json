@@ -1,7 +1,7 @@
 {
   "name": "Alan Leo's Astrology",
   "description": "Classical astrological interpretations from Alan Leo (1860-1917), the father of modern astrology. Drawn from Astrology for All, The Art of Synthesis, and How to Judge a Nativity. — Source: the works of Alan Leo (1860–1917): *Astrology for All*, *The Art of Synthesis*, and *How to Judge a Nativity*; public domain (Leo died 1917). Imported verbatim from the recursive.eco-schemas commons; presented here as the Theosophical revival speaking in its own terms — character over event, growth over fate — never as prediction or command.",
-  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/AlanLeo.jpg?width=800",
   "grammar_type": "astrology",
   "provenance": "record",
   "dating": {
@@ -46,8 +46,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-taurus",
@@ -81,8 +80,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-gemini",
@@ -116,8 +114,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-cancer",
@@ -151,8 +148,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-leo",
@@ -186,8 +182,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-virgo",
@@ -221,8 +216,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-libra",
@@ -256,8 +250,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-scorpio",
@@ -291,8 +284,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-sagittarius",
@@ -326,8 +318,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-capricorn",
@@ -361,8 +352,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-aquarius",
@@ -396,8 +386,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "sign-pisces",
@@ -431,8 +420,7 @@
           "source_site": "https://archive.org/details/astrologyforall00leogoog",
           "publisher": "L.N. Fowler & Co., London"
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800"
+      }
     },
     {
       "id": "planet-sun",
@@ -461,8 +449,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-moon",
@@ -491,8 +478,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-mercury",
@@ -521,8 +507,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-venus",
@@ -551,8 +536,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-mars",
@@ -581,8 +565,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-jupiter",
@@ -611,8 +594,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-saturn",
@@ -641,8 +623,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-uranus",
@@ -671,8 +652,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "planet-neptune",
@@ -701,8 +681,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anima_Mundi_(by_Robert_Fludd,_Utriusque_Cosmi_Historia,_1617).png?width=800"
+      }
     },
     {
       "id": "house-1",
@@ -732,8 +711,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-2",
@@ -763,8 +741,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-3",
@@ -794,8 +771,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-4",
@@ -825,8 +801,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-5",
@@ -856,8 +831,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-6",
@@ -887,8 +861,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-7",
@@ -918,8 +891,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-8",
@@ -949,8 +921,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-9",
@@ -980,8 +951,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-10",
@@ -1011,8 +981,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-11",
@@ -1042,8 +1011,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "house-12",
@@ -1073,8 +1041,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Science_of_casting_horoscopes,_from_Utriusque_Cosmi_Historia,_by_Robert_Fludd.png?width=800"
+      }
     },
     {
       "id": "aspect-conjunction",
@@ -1105,8 +1072,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      }
     },
     {
       "id": "aspect-sextile",
@@ -1137,8 +1103,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      }
     },
     {
       "id": "aspect-square",
@@ -1169,8 +1134,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      }
     },
     {
       "id": "aspect-trine",
@@ -1201,8 +1165,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      }
     },
     {
       "id": "aspect-opposition",
@@ -1233,8 +1196,7 @@
           "source_site": "https://archive.org/details/howtojudgenativi00leoa",
           "note": "First published 1903; text quoted from the archive.org scan of the later (1928, Modern Astrology Office) London printing."
         }
-      },
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Typus_Aspectuum_oppositionum_et_coniunctionum_etz_in_planetis.jpg?width=800"
+      }
     }
   ],
   "_grammar_commons": {
@@ -1258,7 +1220,17 @@
       }
     ]
   },
-  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zodiac_woodcut.png?width=800",
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/AlanLeo.jpg?width=800",
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=6a50ce87-e54b-47f2-9fc5-70b19c06d179",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=6a50ce87-e54b-47f2-9fc5-70b19c06d179"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=6a50ce87-e54b-47f2-9fc5-70b19c06d179",
+  "cover_image_credit": {
+    "title": "Photograph of the astrologer Alan Leo (1860-1917)",
+    "creator": "Unknown photographer",
+    "date": "before 1917",
+    "source": "Portrait photograph",
+    "file_page": "https://commons.wikimedia.org/wiki/File:AlanLeo.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Commons file page states public domain",
+    "verified": "2026-07-26"
+  }
 }

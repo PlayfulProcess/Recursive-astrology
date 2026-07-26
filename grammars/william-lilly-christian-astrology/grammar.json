@@ -18,7 +18,7 @@
     "edition_note": "1647 first edition. The Wellcome Library scan linked above was cross-checked against a second independently scanned 1647-edition copy (https://archive.org/details/ChristianAstrologyByWilliamLilly); the modern re-typed Houlding/Ascella edition was NOT quoted from. Where a passage rests instead on Zadkiel's 1852 abridgment, the item says so and its confidence is lowered — see each item's metadata.source."
   },
   "author": "William Lilly (1602-1681)",
-  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Wenceslas_Hollar_-_William_Lilly.jpg?width=800",
   "tags": [
     "astrology",
     "renaissance",
@@ -319,13 +319,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Aries, heading the treatment of April",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_III_Aries.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 8
+      "number": 8,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_III_Aries.jpg?width=800"
     },
     {
       "id": "sign-taurus",
@@ -358,13 +369,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Taurus, heading the treatment of May",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_IV_Taurus.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 9
+      "number": 9,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_IV_Taurus.jpg?width=800"
     },
     {
       "id": "sign-gemini",
@@ -397,13 +419,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Gemini, heading the treatment of June",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_IV_Gemini.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 10
+      "number": 10,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_IV_Gemini.jpg?width=800"
     },
     {
       "id": "sign-cancer",
@@ -436,13 +469,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Cancer, heading the treatment of July",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_V_Cancer.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 11
+      "number": 11,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_V_Cancer.jpg?width=800"
     },
     {
       "id": "sign-leo",
@@ -476,13 +520,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Leo, heading the treatment of August",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_V_Leo.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 12
+      "number": 12,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_V_Leo.jpg?width=800"
     },
     {
       "id": "sign-virgo",
@@ -515,13 +570,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Virgo, heading the treatment of September",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_VI_Virgo.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 13
+      "number": 13,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_VI_Virgo.jpg?width=800"
     },
     {
       "id": "sign-libra",
@@ -554,13 +620,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Libra, heading the treatment of October",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_VI_Libra.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 14
+      "number": 14,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_VI_Libra.jpg?width=800"
     },
     {
       "id": "sign-scorpio",
@@ -593,13 +670,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Scorpio, heading the treatment of November",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_VII_Scorpio.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 15
+      "number": 15,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_VII_Scorpio.jpg?width=800"
     },
     {
       "id": "sign-sagittarius",
@@ -632,13 +720,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Sagittarius, heading the treatment of December",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_VII_Sagittarius.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 16
+      "number": 16,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_VII_Sagittarius.jpg?width=800"
     },
     {
       "id": "sign-capricorn",
@@ -671,13 +770,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Capricorn, heading the treatment of January",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_II_Capricorn.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 17
+      "number": 17,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_II_Capricorn.jpg?width=800"
     },
     {
       "id": "sign-aquarius",
@@ -710,13 +820,24 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Aquarius, heading the treatment of February",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_II_Aquarius.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 18
+      "number": 18,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_II_Aquarius.jpg?width=800"
     },
     {
       "id": "sign-pisces",
@@ -749,14 +870,35 @@
           "source_site": "https://archive.org/details/b30338724 (Wellcome Library copy of the 1647 first edition, ABBYY-OCR djvu.txt fetched directly this session) cross-checked against https://archive.org/details/ChristianAstrologyByWilliamLilly (a second independently scanned 1647-edition copy, also fetched this session)",
           "edition_note": "Same two 1647-edition archive.org scans as the Saturn item (see that item's metadata.source for the full editorial note on spelling modernization).",
           "chapter": "Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs')"
+        },
+        "image_credit": {
+          "title": "The woodcut of Pisces, heading the treatment of March",
+          "creator": "Georg Fabricius (Georgius Fabricius)",
+          "date": "1560 reprint of a 1549 work",
+          "source": "Georg Fabricius, *Calendarium Romanum Vetus* — his description of the Roman menologia rustica",
+          "file_page": "https://commons.wikimedia.org/wiki/File:Calendarium_Romanum_Vetus_III_Pisces.jpg",
+          "license": "Public domain (as stated on the Wikimedia Commons file page)",
+          "pd_basis": "Printed 1549/1560, Fabricius died 1571; Commons file page states public domain (PD-old-100)",
+          "verified": "2026-07-26"
         }
       },
       "section_labels": [
         "In the text",
         "What this lens reads"
       ],
-      "number": 19
+      "number": 19,
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Calendarium_Romanum_Vetus_III_Pisces.jpg?width=800"
     }
   ],
-  "_exported_from_app": "a1b2c3d4-3333-4a03-9e03-aa0000000003 on 2026-07-16"
+  "_exported_from_app": "a1b2c3d4-3333-4a03-9e03-aa0000000003 on 2026-07-16",
+  "cover_image_credit": {
+    "title": "Portrait of William Lilly",
+    "creator": "Wenceslaus Hollar",
+    "date": "17th century (Hollar 1607-1677)",
+    "source": "Etched portrait",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Wenceslas_Hollar_-_William_Lilly.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Hollar died 1677; Commons states public domain (PD-old-100)",
+    "verified": "2026-07-26"
+  }
 }

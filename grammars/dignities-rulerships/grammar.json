@@ -1,7 +1,7 @@
 {
   "name": "Essential Dignities & Rulerships — the traditional scheme, planet by planet and sign by sign",
   "description": "Essential dignities and rulerships as a LENS grammar: the seven classical planets, each carrying its domicile(s), exaltation (with the traditional degree), detriment, and fall — and the twelve signs, each stating its ruler, exaltation, detriment, and fall from the sign's side, so sign queries answer too. The scheme tabled here is the one Ptolemy and Lilly share. MATCHER KEYS: planet items carry category:'planet' + metadata.planet ('Sun'…'Saturn'); sign items carry category:'sign' + metadata.sign — the same convention grammars/western-astrology-canonical uses, so this grammar federates automatically into every 'every voice' stack (lenses, wheel, archetypal). Machine-readable dignity keys ride along in metadata: domicile[], exaltation, exaltation_degree, detriment[], fall on planet items; ruler, exaltation, exaltation_degree, detriment, fall (and modern_co_ruler where one exists) on sign items. PROVENANCE, honestly: the domicile/detriment scheme and the exaltation SIGNS are in Ptolemy (Tetrabiblos Book I — the houses of the planets, and the exaltations, with reasons but NO degrees) and in Lilly's table of essential dignities (Christian Astrology, 1647); the exaltation DEGREES are older than either English edition — the Dorotheus/al-Biruni lineage descending from Babylonian practice — and were cross-checked this session against multiple independent listings (Wikipedia's 'Exaltation (astrology)' article; al-Biruni's Book of Instruction and Dorotheus's Carmen Astrologicum as reported by secondary scholarship; renaissanceastrology.com's exaltation-degrees page): Sun 19° Aries, Moon 3° Taurus, Mercury 15° Virgo, Venus 27° Pisces (some sources give 28°), Mars 28° Capricorn, Jupiter 15° Cancer, Saturn 21° Libra — all sources consulted agree, with only the Venus 27°/28° variation noted. The strength-scoring point system quoted in the 'What dignity means' sections is Lilly's: domicile +5, exaltation +4, triplicity +3, term +2, face +1; detriment −5, fall −4; a planet with no essential dignity at all is 'peregrine.' Modern outer-planet co-rulerships (Uranus–Aquarius, Neptune–Pisces, Pluto–Scorpio) appear ONLY in the Canonical sections and are clearly marked as modern additions — they are not part of the traditional scheme. Triplicity, term, and face sub-rulers are NOT tabled here (they genuinely differ by tradition — Dorothean vs Ptolemaic triplicities, Egyptian vs Ptolemaic terms); contributors welcome to add them as their own clearly-sourced layer.",
-  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dendera_zodiac_louvre.JPG?width=800",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Signshousesplanets.jpg?width=800",
   "grammar_type": "astrology",
   "provenance": "contemporary",
   "dating": {
@@ -891,5 +891,15 @@
         "link": "https://archive.org/details/astrologyhowtoma46963gut"
       }
     ]
+  },
+  "cover_image_credit": {
+    "title": "'A Table exhibiting at one View the Natures…' — the signs with their triplicities and essential dignities, and the houses",
+    "creator": "Ebenezer Sibly",
+    "date": "1806",
+    "source": "Plate from Sibly's *A New and Complete Illustration of the Celestial Science of Astrology* (London ed. 1806)",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Signshousesplanets.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Sibly died 1799, plate published 1806; Commons states public domain (PD-old-100)",
+    "verified": "2026-07-26"
   }
 }
