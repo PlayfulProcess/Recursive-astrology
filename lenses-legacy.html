@@ -63,8 +63,12 @@
 <site-header active="lenses"></site-header>
 <div class="wrap">
   <header class="hero">
-    <div class="kicker">The Recursive Astrology · lenses</div>
+    <div class="kicker">The Recursive Astrology · lenses (superseded page)</div>
     <h1>One planet, sign, or house — every tradition</h1>
+    <p class="lede"><b>This is the older Lenses page</b>, kept for reference and no longer linked from
+      the site. The current one is <a href="viewers/lenses.html">Lenses</a>, which reads the whole
+      collection index rather than only the grammars marked public in <code>ids.json</code> — so it
+      shows more traditions than this page does.</p>
     <p class="lede" id="lede-p">Pick a planet, a sign, or a house and read how every tradition in this
       library treats the same chart feature, side by side, in chronological order — oldest voice
       first, contemporary last. Evolution across traditions is the point: where a tradition has no
@@ -150,21 +154,32 @@ function findItem(grammar, kind, key){
 // ── era / voice extraction — driven entirely by each grammar's OWN data.
 // No slug is ever named here; a new tradition just needs the same
 // attribution.source_year / author convention (or falls back to "contemporary"). ──
+const OWNER = 'PlayfulProcess';                              // repo owner, never a voice
+const isOwner = s => String(s || '').trim() === OWNER;
+const shortName = g => (g.name || '').split('—')[0].trim() || g.slug || '';  // em-dash only
+
 function extractEra(g){
   const attr = g.attribution || {};
   const rawYearStr = attr.source_year || null;
-  let year = null, eraLabel = null, voiceLabel = attr.source_author || null;
+  let year = null, eraLabel = null, isBCE = false;
+  let voiceLabel = isOwner(attr.source_author) ? null : (attr.source_author || null);
 
   if (rawYearStr) {
-    const ce = rawYearStr.match(/c\.\s*(\d{1,4})\s*CE/i);
-    if (ce) year = parseInt(ce[1], 10);
+    // "c. 8th–7th century BCE reports (Thompson ed. 1900); Jastrow 1898" — the digit
+    // grab below used to return 1900, so the oldest voice in the library was labelled
+    // "1900" on its chip and sorted after Proctor, on a page that promises oldest-first.
+    if (/\bBCE?\b/.test(rawYearStr)) { isBCE = true; year = -1e6; }
     else {
-      const y = rawYearStr.match(/(\d{3,4})/);
-      if (y) year = parseInt(y[1], 10);
+      const ce = rawYearStr.match(/c\.\s*(\d{1,4})\s*CE/i);
+      if (ce) year = parseInt(ce[1], 10);
+      else {
+        const y = rawYearStr.match(/(\d{3,4})/);
+        if (y) year = parseInt(y[1], 10);
+      }
     }
     eraLabel = rawYearStr;
   }
-  if (year == null && g.author) {
+  if (year == null && g.author && !isOwner(g.author)) {
     const range = g.author.match(/(\d{4})\s*-\s*(\d{4})/);
     if (range) {
       year = parseInt(range[2], 10); // death/career-end year as the sort anchor
@@ -173,12 +188,12 @@ function extractEra(g){
     if (!voiceLabel) voiceLabel = g.author.replace(/\s*\([^)]*\)\s*/g, '').trim();
   }
   if (!voiceLabel) {
-    voiceLabel = (g.creator_name && g.creator_name !== 'PlayfulProcess')
-      ? g.creator_name
-      : (g.name || '').split(/[—-]/)[0].trim();
+    voiceLabel = (g.creator_name && !isOwner(g.creator_name)) ? g.creator_name : shortName(g);
   }
   if (year == null) { year = Infinity; eraLabel = eraLabel || 'contemporary'; }
-  const eraShort = year === Infinity ? 'now' : (year < 500 ? `c. ${year}` : eraLabel.length > 14 ? String(year) : eraLabel);
+  const eraShort = isBCE ? 'BCE'
+    : year === Infinity ? 'now'
+    : (year < 500 ? `c. ${year}` : eraLabel.length > 14 ? String(year) : eraLabel);
   return { year, eraLabel, eraShort, voiceLabel };
 }
 
@@ -369,7 +384,7 @@ async function loadGrammar(slug){
     fb.hidden = false;
     fb.innerHTML = '<b>Could not load the grammar list.</b> Browsers block <code>file://</code> fetches, '
       + 'so open this over a tiny local server instead: run <code>python -m http.server 8000</code> '
-      + 'in this folder, then visit <code>http://localhost:8000/lenses.html</code>. '
+      + 'in this folder, then visit <code>http://localhost:8000/lenses-legacy.html</code>. '
       + '(On GitHub Pages / the live site it just works.)';
     return;
   }

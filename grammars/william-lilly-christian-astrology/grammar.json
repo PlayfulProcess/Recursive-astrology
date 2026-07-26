@@ -2,7 +2,22 @@
   "name": "William Lilly's Christian Astrology",
   "description": "The seven classical planets and the twelve zodiac signs as William Lilly (1602–1681) describes them in Christian Astrology (1647), the most influential English-language astrology text of the Renaissance/early-modern court-and-university tradition, and the single book most responsible for the survival of horary and natal technique into the modern revival. Each item carries a short excerpt or, where only a paraphrase could be safely corroborated (marked ○), a summary drawn from Lilly's original 1647 text where the archaic spelling could be confirmed via a source reproducing it verbatim, and from Zadkiel's 1852 abridgment (An Introduction to Astrology, itself public domain, hosted at sacred-texts.com) where that is what this session's search could confirm — each quote is labeled with which. Under this library's creed: a historical voice speaking in its own vivid, moralizing, occasionally superstitious terms, presented faithfully — never as prediction or command, and never smoothed into modern psychological language it doesn't use. See grammars/historiographies-of-astrology (item view-medieval-renaissance-court) and research/views/medieval-renaissance-court.md for the fuller historiographical dossier; this grammar is the primary-source voice library that dossier points toward, in the spirit of grammars/tetrabiblos-ashmand and grammars/alan-leo.",
   "grammar_type": "astrology",
-  "author": "PlayfulProcess",
+  "provenance": "record",
+  "dating": {
+    "year": 1647,
+    "label": "1647 — William Lilly, Christian Astrology (first edition)",
+    "confidence": "high",
+    "basis": "Anchored to the title-page date of the first edition, carried per item as metadata.source.year; the per-item source blocks name two independently scanned 1647-edition copies on archive.org that were cross-checked when this grammar was compiled. Where a quotation rests instead on Zadkiel's 1852 abridgment, the item says so and its confidence is lowered."
+  },
+  "attribution": {
+    "source_name": "Christian Astrology",
+    "source_author": "William Lilly",
+    "source_year": "1647",
+    "license": "Public Domain",
+    "source_url": "https://archive.org/details/b30338724",
+    "edition_note": "1647 first edition. The Wellcome Library scan linked above was cross-checked against a second independently scanned 1647-edition copy (https://archive.org/details/ChristianAstrologyByWilliamLilly); the modern re-typed Houlding/Ascella edition was NOT quoted from. Where a passage rests instead on Zadkiel's 1852 abridgment, the item says so and its confidence is lowered — see each item's metadata.source."
+  },
+  "author": "William Lilly (1602-1681)",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anatomical_Man.jpg?width=800",
   "tags": [
     "astrology",
@@ -143,7 +158,7 @@
       ],
       "metadata": {
         "school": "renaissance-court-astrology",
-        "_source": "Zadkiel (ed.), An Introduction to Astrology (1852 abridgment of Lilly), Ch. VIII, via sacred-texts.com/astro/aia/aia11.htm",
+        "_source": "Two sources, one per quoted section: 'Lilly's own words' = Zadkiel (ed.), An Introduction to Astrology (1852 abridgment of Lilly), Ch. VIII, via sacred-texts.com/astro/aia/aia11.htm — modernized-spelling reprint tradition, not Lilly's exact 1647 wording; 'The record' = Christian Astrology (1647), Book I, 'Of the Sun, His General and Particular Significations', from the 1647-edition archive.org scans named in metadata.source.",
         "era_view": "view-medieval-renaissance-court",
         "confidence": "low",
         "source": {
@@ -203,7 +218,7 @@
       "name": "Mercury",
       "category": "planet",
       "sections": {
-        "What Lilly reads": "'Author of subtilty, tricks, devices, perjury' is a considerably darker Mercury than the Hellenistic 'common, convertible' planet (grammars/tetrabiblos-ashmand) or the Vedic Budha's speech-and-cleverness portfolio (grammars/jyotisha-brihat-jataka) — Lilly's 17th-century English Mercury leans hard toward the trickster and the liar, a moralizing gloss the other two traditions' texts don't emphasize as strongly.",
+        "What Lilly reads": "'Author of subtilty, tricks, devices, perjury' is a considerably darker Mercury than the Hellenistic 'common, convertible' planet (grammars/tetrabiblos-ashmand) or the Vedic Budha's speech-and-cleverness portfolio (grammars/jyotisa-brhat-jataka) — Lilly's 17th-century English Mercury leans hard toward the trickster and the liar, a moralizing gloss the other two traditions' texts don't emphasize as strongly.",
         "Lilly's own words": "Mercury \"rules the animal spirit: he is author of subtilty, tricks, devices, perjury, &c.\" — his nature convertible, taking on the quality of whatever planet he associates with, fittingly for a planet Lilly elsewhere treats as neither wholly masculine nor feminine, neither fully fortunate nor unfortunate. (Quoted from Christian Astrology, 1647, Book I; confidence: ○.)",
         "The record — William Lilly (1647)": "Lilly's Mercury opens with the planet's classical names and its odd genderlessness, then gives its own well- and ill-dignified pair, in his own moralizing register:\n\n“It is called Hermes, Stilbon, Cyllenius, Archas. Mercury is the least of all the Planets… We may not call him either Masculine or Feminine, for he is either the one or other as joined to any Planet: if in conjunction with a Masculine Planet, he becomes Masculine; if with a Feminine then Feminine; but of his own nature he is cold and dry, and therefore Melancholy; with the good he is good, with the ill Planets ill.” Being well dignified: “he represents a man of a subtle and politic brain, intellect, and cogitation; an excellent disputant or Logician, arguing with learning and discretion, and using much eloquence in his speech, a searcher into all kinds of Mysteries, Learning, sharp and witty, learning almost any thing without a Teacher.” Ill-dignified: “A troublesome wit… his tongue and Pen against every man… a great liar, boaster, prattler, busybody, false, a tale-carrier, given to wicked Arts, as Necromancy, and such like ungodly knowledges.” (Christian Astrology, 1647, Book I, 'Of Mercury, His Signification, Nature and Property.')"
       },
@@ -396,7 +411,7 @@
       "category": "sign",
       "sections": {
         "In the text": "“Cancer is the onely house of the Moon, and is the first Sign of the Watry or Northern Triplicity, is Watry, Cold, Moyst, Flegmatick, Feminine, Nocturnal, Moveable, a Solstice Sign mute and slow of Voyce, Fruitful, Northern.” (Quoted from Christian Astrology, 1647, Book I, the chapter on Cancer; confidence: medium — identical wording corroborated across two independent secondary reproductions this session.)",
-        "What this lens reads": "'Mute and slow of Voyce' and 'Flegmatick' is Lilly's Cancer speaking the era's humoral medicine as much as its astrology, a fruitful but wordless watery sign quite unlike the nurturing, emotionally expressive Cancer of later astrology (compare grammars/western-astrology-canonical) and Jyotiṣa's own watery, Moon-ruled Karkaṭa (grammars/jyotisha-brihat-jataka).",
+        "What this lens reads": "'Mute and slow of Voyce' and 'Flegmatick' is Lilly's Cancer speaking the era's humoral medicine as much as its astrology, a fruitful but wordless watery sign quite unlike the nurturing, emotionally expressive Cancer of later astrology (compare grammars/western-astrology-canonical) and Jyotiṣa's own watery, Moon-ruled Karkaṭa (grammars/jyotisa-brhat-jataka).",
         "The record — William Lilly (1647)": "Past the formula already quoted for Cancer, the chapter turns to disease, place and body:\n\n“It signifies Imperfections all over, or in the Breast, Stomach and Paps, weak Digestion, cold Stomach, Ptisick, salt Phlegms, rotten Coughs, dropsical Humours, Imposthumations in the Stomach, Cancers which ever are in the Breast.” Of places: “The Sea, great Rivers, Navigable Waters; but in the Inland Countries it notes places near Rivers, Brooks, Springs, Wells, Cellars in Houses, Wash-houses, Marsh grounds, Ditches with Rushes, Sedges, Sea banks, Trenches, Cisterns.” Of the body: “Generally a low and small stature, the upper parts of more bigness than the lower, a round Visage; sickly, pale, a whitely Complexion, the Hair a sad brown, little Eyes.” (Christian Astrology, 1647, Book I, Chapter XVI ('The Nature, Place, Countries, general Description, and Diseases signified by the twelve Signs').)"
       },
       "keywords": [

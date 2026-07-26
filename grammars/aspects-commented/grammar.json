@@ -3,8 +3,19 @@
   "description": "The five classical (Ptolemaic) aspects — conjunction, sextile, square, trine, opposition — each as an item carrying tradition-sourced commentary from two public-domain voices plus a contemporary synthesis. Each item has three sections: 'Ptolemy (Tetrabiblos)' (c. 150 CE, in J. M. Ashmand's 1822 public-domain translation, Project Gutenberg #70850 — quotes reused verbatim from this repo's grammars/tetrabiblos-ashmand, where they were source-verified when that grammar was compiled); 'Lilly (1647)' (William Lilly, Christian Astrology, public domain — wording corroborated this session only via secondary reproductions, so confidence is marked per item: ○ where an exact phrase rests on a single reproduction, and plain paraphrase where wording could not be verified at all); and 'Canonical', a contemporary synthesis in the same psychological register as grammars/western-astrology-canonical. MATCHER KEYS, documented here because they are the contract other viewers and oracles federate on (the way metadata.planet already works): every item carries category:'aspect' and metadata.aspect (the capitalized aspect name, e.g. 'Square' — the same convention grammars/western-astrology-canonical uses), metadata.angle (degrees: 0 / 60 / 90 / 120 / 180), and metadata.nature ('soft' for sextile and trine, 'hard' for square and opposition, 'neutral' for the conjunction, whose tone depends wholly on the planets joined). metadata.orb carries the common contemporary orb, matching western-astrology-canonical's values — an interoperability convenience, NOT a traditional claim: Ptolemy's aspect doctrine is sign-based (whole-sign configurations of 'parts of the zodiac'), and Lilly attaches orbs to PLANETS, not aspects (each planet has its own orb; an aspect is taken to operate within the moiety — the half-sum — of the two planets' orbs). REALITY NOTE: orbs and the minor aspects (quincunx/inconjunct, semi-sextile, semi-square, sesquiquadrate, quintile…) vary by tradition and era — Ptolemy himself excludes even the conjunction from the aspects proper, since 'a part of the zodiac cannot be configurated with itself.' This grammar starts with the five classical configurations; contributors welcome to add the minor aspects as clearly-marked later layers.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aspects-ptolemy-tetrabiblos-1533_Hervagius.png?width=800",
   "grammar_type": "astrology",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — contemporary compilation. Its quoted layers are dated per item and per section (Ptolemy c. 150 CE in Ashmand's 1822 translation; Lilly 1647); the Canonical layer is present-day synthesis."
+  },
   "creator_name": "PlayfulProcess",
-  "tags": ["astrology", "aspects", "ptolemy", "lilly", "commented", "recursive-eco"],
+  "tags": [
+    "astrology",
+    "aspects",
+    "ptolemy",
+    "lilly",
+    "commented",
+    "recursive-eco"
+  ],
   "items": [
     {
       "id": "aspect-conjunction",
@@ -17,7 +28,14 @@
         "Lilly (1647)": "[William Lilly, Christian Astrology, 1647] Lilly counts the bodily (corporal) conjunction — two planets in the same degree of the same sign, 'partill' when exact — as the most immediate of unions, though like Ptolemy he treats it as a distinct thing from the aspects by which signs behold one another. Its promise is neither good nor ill in itself: it takes its whole character from the planets conjoined — benefics united signify concord and assistance, malefics united signify mischief doubled. (Paraphrase — this session could not verify Lilly's exact wording on the conjunction from a primary or secondary reproduction; confidence: low.)",
         "Canonical": "Fusion. Two principles occupy one point and act as a single, intensified force — the strongest of all configurations, neutral in itself: it amplifies whatever it joins. Light: concentrated power, unified purpose. Shadow: the blind spot of energies you can no longer see apart."
       },
-      "keywords": ["conjunction", "0 degrees", "union", "fusion", "intensity", "partill"],
+      "keywords": [
+        "conjunction",
+        "0 degrees",
+        "union",
+        "fusion",
+        "intensity",
+        "partill"
+      ],
       "metadata": {
         "aspect": "Conjunction",
         "angle": 0,
@@ -39,7 +57,14 @@
         "Lilly (1647)": "[William Lilly, Christian Astrology, 1647] The sextile and trine \"are arguments of Love, Unity and Friendship\" — the sextile the milder of the two, the trine \"more forcible.\" In Lilly's horary practice significators in sextile promise the matter may be brought to pass, though with some endeavour — a friendship that must still be acted on. (The quoted phrases are corroborated this session via a single secondary reproduction of the tradition's aspect doctrine, renaissanceastrology.com's Ptolemaic-aspects page; confidence: ○. The horary gloss is paraphrase.)",
         "Canonical": "Opportunity. Sixty degrees apart, in compatible elements — a door held open that still asks you to walk through it. Light: cooperation, communication between energies, easy exchange. Shadow: talents left idle because nothing forces them; the missed opening."
       },
-      "keywords": ["sextile", "60 degrees", "hexagonal", "opportunity", "friendship", "harmonious"],
+      "keywords": [
+        "sextile",
+        "60 degrees",
+        "hexagonal",
+        "opportunity",
+        "friendship",
+        "harmonious"
+      ],
       "metadata": {
         "aspect": "Sextile",
         "angle": 60,
@@ -61,7 +86,14 @@
         "Lilly (1647)": "[William Lilly, Christian Astrology, 1647] The quartile is \"an aspect of imperfect enmity\" — enmity, but not past mending: Lilly's horary tradition reads significators in square as a matter that may yet be effected, but only with labour, difficulty, and interruption, where the trine would have carried it easily. (The quoted phrase is corroborated this session via a single secondary reproduction, renaissanceastrology.com's Ptolemaic-aspects page; confidence: ○. The horary gloss is paraphrase.)",
         "Canonical": "Friction that builds. Ninety degrees — two drives at cross purposes, neither able to ignore the other. The square is where the work of a life tends to concentrate. Light: motivation, breakthrough, strength earned through challenge. Shadow: chronic conflict re-enacted instead of worked."
       },
-      "keywords": ["square", "quartile", "90 degrees", "challenge", "friction", "imperfect enmity"],
+      "keywords": [
+        "square",
+        "quartile",
+        "90 degrees",
+        "challenge",
+        "friction",
+        "imperfect enmity"
+      ],
       "metadata": {
         "aspect": "Square",
         "angle": 90,
@@ -83,7 +115,14 @@
         "Lilly (1647)": "[William Lilly, Christian Astrology, 1647] The sextile and trine \"are arguments of Love, Unity and Friendship,\" and the trine is the \"more forcible\" of the two — the aspect under which Lilly's horary tradition expects a matter to be brought to perfection easily, without the labour a square exacts. (The quoted phrases are corroborated this session via a single secondary reproduction, renaissanceastrology.com's Ptolemaic-aspects page; confidence: ○. The horary gloss is paraphrase.)",
         "Canonical": "Flow. One hundred and twenty degrees, same element — gifts that arrive without being asked for. Light: natural talent, grace, creative ease. Shadow: ease that becomes inertia; the gift taken for granted because it never had to be earned."
       },
-      "keywords": ["trine", "120 degrees", "triangular", "harmony", "flow", "same element"],
+      "keywords": [
+        "trine",
+        "120 degrees",
+        "triangular",
+        "harmony",
+        "flow",
+        "same element"
+      ],
       "metadata": {
         "aspect": "Trine",
         "angle": 120,
@@ -105,7 +144,14 @@
         "Lilly (1647)": "[William Lilly, Christian Astrology, 1647] The opposition is \"an aspect or argument of perfect hatred\" — the tradition's strongest word for a configuration. In Lilly's horary practice a matter perfected under an opposition is expected to end in strife, repentance, or a bargain both parties regret: completion without concord. (The quoted phrase is corroborated this session via a single secondary reproduction, renaissanceastrology.com's Ptolemaic-aspects page; confidence: ○. The horary gloss is paraphrase.)",
         "Canonical": "Polarity. One hundred and eighty degrees — the axis of self and other, where what you disown looks back at you. Light: awareness through contrast, balance, the mirror of partnership. Shadow: projection; the seesaw between extremes that never integrates."
       },
-      "keywords": ["opposition", "180 degrees", "polarity", "diametrical", "perfect hatred", "awareness"],
+      "keywords": [
+        "opposition",
+        "180 degrees",
+        "polarity",
+        "diametrical",
+        "perfect hatred",
+        "awareness"
+      ],
       "metadata": {
         "aspect": "Opposition",
         "angle": 180,
@@ -139,4 +185,3 @@
     ]
   }
 }
-

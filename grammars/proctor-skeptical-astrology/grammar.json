@@ -1,14 +1,22 @@
 {
   "name": "Proctor's Skeptical Astrology",
-  "description": "A critical examination of astrology based on Richard A. Proctor's 'Myths and Marvels of Astronomy' (1896). Presents traditional astrological concepts with sardonic Victorian commentary, exposing logical fallacies while documenting the historical claims. — Source: Richard A. Proctor, *Myths and Marvels of Astronomy* (1896 edition), public domain (Project Gutenberg #26556). Imported verbatim from the recursive.eco-schemas commons; presented here as a Victorian document of the Skeptical School — the critique speaking in its own sardonic idiom, part of the record, not this library's verdict.",
+  "description": "A critical examination of astrology based on Richard A. Proctor's 'Myths and Marvels of Astronomy' (first published 1877; this text is the 1896 'New Edition'). Presents traditional astrological concepts with sardonic Victorian commentary, exposing logical fallacies while documenting the historical claims. — Source: Richard A. Proctor, *Myths and Marvels of Astronomy* (first published 1877; this text is the posthumous 1896 'New Edition', Longmans, Green), public domain (Project Gutenberg #26556). Imported verbatim from the recursive.eco-schemas commons; presented here as a Victorian document of the Skeptical School — the critique speaking in its own sardonic idiom, part of the record, not this library's verdict.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Richard_Anthony_Proctor2.jpg?width=800",
   "grammar_type": "astrology",
+  "provenance": "record",
+  "dating": {
+    "year": 1877,
+    "label": "1877 — R. A. Proctor, Myths and Marvels of Astronomy (text used: the 1896 'New Edition', Longmans, Green)",
+    "confidence": "high",
+    "basis": "Anchored to first publication, verified this session: the Online Books Page catalogue lists G. P. Putnam's Sons, 1877 as the earliest edition (later Chatto & Windus 1880; Longmans, Green 1886, 1889, 1896). Proctor died in 1888, so the 1896 printing digitized as Project Gutenberg #26556 — whose title page reads 'Longmans, Green, and Co., London, New York, and Bombay, 1896 (New Edition)', verified this session — is a posthumous reprint, not the work's date. The grammar previously carried 1896 as if it were the work's date."
+  },
   "attribution": {
     "source_name": "Myths and Marvels of Astronomy",
     "source_author": "Richard A. Proctor",
-    "source_year": "1896",
+    "source_year": "1877 (first published, G. P. Putnam's Sons); this text = the 1896 'New Edition' (Longmans, Green), digitized as Project Gutenberg #26556",
     "license": "Public Domain",
-    "source_url": "https://www.gutenberg.org/ebooks/26556"
+    "source_url": "https://www.gutenberg.org/ebooks/26556",
+    "edition_note": "Proctor died in 1888, so the 1896 printing is a posthumous reprint. The earliest edition on record is G. P. Putnam's Sons, 1877 (Online Books Page catalogue, checked Jul 2026); the Gutenberg title page reads 'Longmans, Green, and Co., London, New York, and Bombay, 1896 (New Edition)'."
   },
   "items": [
     {
@@ -1047,7 +1055,7 @@
         "link": "https://github.com/PlayfulProcess/recursive.eco-schemas"
       },
       {
-        "name": "Myths and Marvels of Astronomy (1896 edition)",
+        "name": "Myths and Marvels of Astronomy (first published 1877; this text the 1896 'New Edition')",
         "role": "source text (public domain)",
         "link": "https://www.gutenberg.org/ebooks/26556"
       },

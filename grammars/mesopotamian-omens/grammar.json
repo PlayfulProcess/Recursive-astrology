@@ -3,6 +3,13 @@
   "description": "The seven classical planet-gods of Babylonian and Assyrian celestial divination — Sin, Šamaš, Ištar, Nergal, Marduk, Ninurta, and Nabû — each with a sample omen-form drawn from public-domain 19th/early-20th-century translations of the cuneiform omen literature (principally R. Campbell Thompson's 1900 edition of the Neo-Assyrian scholars' reports, and Morris Jastrow's 1898 'The Religion of Babylonia and Assyria'; both pre-1930, public domain). Honest framing, per this library's creed: this is the oldest documented layer of the astrological tradition, and it is not personal astrology at all — no birth chart exists here, only a conditional 'if X in the sky, then Y for the king and the land' addressed to the state. See grammars/historiographies-of-astrology (item view-mesopotamian-omens) and research/views/mesopotamian-omens.md for the fuller historiographical dossier. Newer scholarly editions (e.g. Reiner & Pingree's Babylonian Planetary Omens series) are NOT public domain and are not the source here — only the older PD translations and their genuinely-quoted omen lines are used.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_Tablet_of_Ammisaduqa.jpg?width=800",
   "grammar_type": "astrology",
+  "provenance": "record",
+  "dating": {
+    "year": -700,
+    "label": "c. 8th–7th c. BCE — Neo-Assyrian celestial omen reports (Thompson ed. 1900; Jastrow 1898)",
+    "confidence": "medium",
+    "basis": "Anchored to the date of the material actually quoted here, not to the origin of the tradition behind it: this grammar's own attribution.source_year reads 'c. 8th–7th century BCE reports (Thompson ed. 1900)', i.e. the Neo-Assyrian scholars' reports. The omen tradition they belong to is older (the Venus Tablet of Ammiṣaduqa layer is Old Babylonian), which is why the era is given as a range and the confidence is medium."
+  },
   "attribution": {
     "source_name": "The Reports of the Magicians and Astrologers of Nineveh and Babylon (1900); The Religion of Babylonia and Assyria (1898)",
     "source_author": "R. Campbell Thompson; Morris Jastrow, Jr.",
@@ -30,7 +37,14 @@
         "Who this power was": "Sin (Sumerian Nanna) is one of Mesopotamia's oldest attested gods, worshipped from at least c. 3500 BCE as moon-god and a god of wisdom, seated at his great ziggurat in Ur; by the Ur III period he was also cast as judge of the dead. See grammars/planetary-myths for the fuller myth-history of Sin/Nanna alongside the Greco-Roman and Vedic Moon figures.",
         "What this lens reads": "The Moon's own irregular disappearance and reappearance (its monthly phases, and especially an unscheduled early or late vanishing that signals an eclipse) is read directly as omen material — a system built entirely around watching what the sky visibly does, with no birth chart, no zodiac signs yet, and no claim on any one person's fate."
       },
-      "keywords": ["sin", "nanna", "moon", "eclipse", "omen", "ur"],
+      "keywords": [
+        "sin",
+        "nanna",
+        "moon",
+        "eclipse",
+        "omen",
+        "ur"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",
@@ -50,7 +64,14 @@
         "Who this power was": "Šamaš (Sumerian Utu) was sun-god and god of justice, believed to see every human act from his daily chariot-ride across the sky — Hammurabi's law code claims Šamaš as the source of its justice. With Sin (Moon) and Ištar (Venus) he formed an astral triad governing the Babylonian omen-sky. See grammars/planetary-myths for the fuller myth-history.",
         "What this lens reads": "Justice and truthful judgment are read directly off a Sun-Moon visibility pattern — the sun-god who 'sees every human act' is, fittingly, the power invoked when the omen concerns whether the king himself will judge rightly. The moral content of the deity and the content of the omen are the same idea, twice."
       },
-      "keywords": ["shamash", "utu", "sun", "justice", "omen", "hammurabi"],
+      "keywords": [
+        "shamash",
+        "utu",
+        "sun",
+        "justice",
+        "omen",
+        "hammurabi"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",
@@ -70,7 +91,14 @@
         "Who this power was": "Ištar's own Akkadian planetary name was Dilbat, \"the Announcer\" — also the name of a Babylonian city, likely her cult seat under this planetary form. See grammars/planetary-myths for Ištar/Inanna's fuller myth-history across traditions.",
         "What this lens reads": "Venus is the one planet whose two faces — morning star and evening star — are visibly different phenomena to a naked-eye observer (it disappears into the Sun's glare and reappears on the other side), and this omen tradition builds an entire calendar and its own goddess-title ('the Announcer') around exactly that visible duality, centuries before anyone could explain it as one planet's orbit."
       },
-      "keywords": ["ishtar", "dilbat", "venus", "morning-star", "evening-star", "omen"],
+      "keywords": [
+        "ishtar",
+        "dilbat",
+        "venus",
+        "morning-star",
+        "evening-star",
+        "omen"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",
@@ -90,7 +118,14 @@
         "Who this power was": "Nergal, Mars's Mesopotamian identification, was a god of war, plague, and the underworld — consort of Ereshkigal, ruler of the land of the dead. His association with the fiercest and most unpredictable of the visible wandering stars follows directly from that portfolio.",
         "What this lens reads": "Mars-approaches-Scorpio-and-the-prince-dies is a strikingly literal reading: the sting-bearing constellation and a violent, unlucky planet, read together as a stinging death. This is omen logic at its most image-driven — the sky's shapes are read almost like a rebus, not abstracted into a general 'malefic' principle the way Ptolemy later does (compare grammars/tetrabiblos-ashmand's Mars)."
       },
-      "keywords": ["nergal", "mars", "war", "underworld", "omen", "scorpio"],
+      "keywords": [
+        "nergal",
+        "mars",
+        "war",
+        "underworld",
+        "omen",
+        "scorpio"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",
@@ -110,7 +145,14 @@
         "Who this power was": "Marduk was Babylon's own patron god, head of the pantheon by the Old Babylonian period and hero of the creation epic Enūma Eliš; his identification with the brightest wandering star after Venus follows his supreme rank.",
         "What this lens reads": "Naming Jupiter's stations (rising, culmination) as distinct divine names (Sagmigar, Nibiru) shows the omen tradition wasn't reading one fixed 'Jupiter'; it was reading a sequence of appearances, each a different manifestation to be watched separately — a far more granular sky-reading practice than the single-fixed-planet-meaning model later traditions (Hellenistic, Jyotiṣa, Renaissance) largely settle into."
       },
-      "keywords": ["marduk", "jupiter", "nibiru", "sagmigar", "omen", "babylon"],
+      "keywords": [
+        "marduk",
+        "jupiter",
+        "nibiru",
+        "sagmigar",
+        "omen",
+        "babylon"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",
@@ -130,7 +172,13 @@
         "Who this power was": "Ninurta was a Sumerian warrior and farmer-god, associated with the plough, the hunt, and (in some but not all reconstructions) with Saturn's identification among the classical seven — the planetary attributions in this system are not uniformly agreed across tablets, periods, or modern scholars, and this grammar does not paper over that.",
         "What this lens reads": "Not every ancient planet-god mapping is as clean or as well-attested as Mars=Nergal or Venus=Ištar; Saturn's identification is comparatively under-documented in the sources this session could reach. An honest gap — flagged rather than filled with invented content — is itself informative about how uneven the surviving record is, five thousand years on."
       },
-      "keywords": ["ninurta", "saturn", "kayamanu", "omen", "gap"],
+      "keywords": [
+        "ninurta",
+        "saturn",
+        "kayamanu",
+        "omen",
+        "gap"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",
@@ -147,10 +195,17 @@
       "sort_order": 6,
       "sections": {
         "The omen": "As with Ninurta, this item is honestly thin on omen-specific material. Mercury moves too fast and stays too close to the Sun to have generated the same volume of surviving omen reports as the five slower, more easily tracked classical planets — this session did not locate a specific quoted Mercury/Nabû omen line from Thompson's 1900 reports or another PD source. What is well documented is Nabû's mythological and cultic profile: patron of scribes, writing, and wisdom, son of Marduk, rising to near-equal rank with his father by the Neo-Babylonian period, with his cult statue processing annually from his own city of Borsippa to pay respects to Marduk in Babylon, and his signature task the inscribing of the Tablet of Destinies. (Confidence: ○ — myth-and-cult material corroborated across sources including this repo's own grammars/planetary-myths item; no primary omen-report quotation located this session.)",
-        "Who this power was": "Nabû, patron of scribes and writing, is Mercury's Mesopotamian identification — the same fast, close-to-the-Sun planet the Greco-Roman Hermes/Mercury and the Vedic Budha also single out for communication and cleverness (see grammars/tetrabiblos-ashmand and grammars/jyotisha-brihat-jataka).",
+        "Who this power was": "Nabû, patron of scribes and writing, is Mercury's Mesopotamian identification — the same fast, close-to-the-Sun planet the Greco-Roman Hermes/Mercury and the Vedic Budha also single out for communication and cleverness (see grammars/tetrabiblos-ashmand and grammars/jyotisa-brhat-jataka).",
         "What this lens reads": "Three unrelated traditions — Babylonian, Greco-Roman, Vedic — independently attach a writing/speech/cleverness portfolio to the same fast, hard-to-see planet. That convergence is worth noting on its own; it is not, on the evidence this session could gather, backed by a Mesopotamian omen-report quotation the way Mars, Venus, Jupiter, the Sun, and the Moon are here — an honest asymmetry in what survives, not a claim that Mercury omens didn't exist."
       },
-      "keywords": ["nabu", "mercury", "scribe", "writing", "borsippa", "gap"],
+      "keywords": [
+        "nabu",
+        "mercury",
+        "scribe",
+        "writing",
+        "borsippa",
+        "gap"
+      ],
       "metadata": {
         "school": "mesopotamian-omen-craft",
         "era_view": "view-mesopotamian-omens",

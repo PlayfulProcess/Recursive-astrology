@@ -35,9 +35,13 @@
   .chan .actions .eco{color:#7c3aed;margin-left:auto}
   .chan .actions .unpub{color:var(--mut,#7a7060);margin-left:auto;font-weight:400;font-size:.78rem;font-style:italic}
   .loading{text-align:center;color:var(--mut,#7a7060);padding:60px 0;font-style:italic}
+  .count{text-align:center;font-size:.8rem;color:var(--mut,#7a7060);margin-top:22px}
+  .count a{color:var(--gold,#9a7322)}
 </style>
 </head>
 <body>
+<script src="site-header.js?v=46"></script>
+<site-header active="channels"></site-header>
 <main class="wrap">
   <div class="hero">
     <h1>The <span class="gold">Channels</span></h1>
@@ -48,14 +52,22 @@
     </a>
   </div>
   <div id="root"><p class="loading">Loading the library…</p></div>
+  <p class="count" id="count"></p>
 </main>
+
+<script src="site-footer.js?v=1"></script>
+<site-footer></site-footer>
 
 <script>
 (async function () {
   const CHANNELS_CONFIG = {
     collection: '_collection.json',
     ecoIds: 'ids.json',
-    readerUrl: slug => 'index.html?grammar=' + encodeURIComponent(slug),
+    // index.html has no ?grammar= handler — every "Read here" used to land on the
+    // homepage regardless of which channel was clicked. Open the Cards viewer on the
+    // grammar itself, the convention the header menu and the homepage gallery use.
+    // (?src is resolved relative to viewers/cards.html, hence the "../".)
+    readerUrl: slug => 'viewers/cards.html?src=../grammars/' + encodeURIComponent(slug) + '/grammar.json',
     appChannel: 'https://flow.recursive.eco/library/channels/astrology',
     appDeckUrl: uuid => 'https://flow.recursive.eco/?deckId=' + uuid,
   };
@@ -80,6 +92,21 @@
       '<div class="meta"><span class="pill">' + g.items + ' items</span>' + cats + '</div>' +
       '<div class="actions"><a class="read" href="' + esc(CHANNELS_CONFIG.readerUrl(g.slug)) + '">Read here →</a>' + app + '</div></article>';
   }).join('') + '</div>';
+
+  // _collection.json is a generated index and can lag the repo. Say what is actually
+  // on this page, and point at the full library when the two disagree, rather than
+  // letting the hero's "every grammar" quietly stand for a stale subset.
+  const shown = (col.grammars || []).length;
+  let total = shown;
+  try {
+    const live = await fetch('grammars/_collection.json').then(r => r.json());
+    total = (live.grammars || []).filter(g => !g.is_meta).length || shown;
+  } catch (e) { /* keep shown */ }
+  document.getElementById('count').innerHTML = shown === total
+    ? shown + ' grammars in this channel.'
+    : shown + ' of ' + total + ' grammars in this repo are listed here — this index is generated '
+      + '(<code>scripts/build_collection.py</code>) and is currently behind. '
+      + '<a href="index.html#all-grammars">See every grammar →</a>';
 })();
 </script>
 </body>

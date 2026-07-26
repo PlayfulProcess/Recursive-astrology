@@ -33,7 +33,11 @@ SOURCES = [
     ("jyotisa-brhat-jataka",        "Jyotiṣa (Bṛhat Jātaka)"),
     ("alan-leo",                    "Alan Leo"),
     ("planetary-myths",             "Planetary Myths"),
-    ("dignities-rulerships",        "Dignities (Raphael & Sepharial)"),
+    # Label names the SCHEME, not the two 19th/20th-c. reprints that enrich it: the
+    # dignities table itself is Ptolemy's and Lilly's, and Raphael (1828) / Sepharial
+    # (1920) supply the public-domain commentary sections. Naming only those two in the
+    # section header mis-attributed the table to them.
+    ("dignities-rulerships",        "Dignities & Rulerships (traditional table)"),
 ]
 
 # The 7 classical planets (visible to the naked eye — the set every historical voice
@@ -264,7 +268,17 @@ def build():
         "creator_link": "https://recursive.eco",
         "default_view": "cards",
         "default_preview": "cards",
-        "provenance": "living",
+        # Dating contract — see GRAMMAR_FORMAT.md "Dating & provenance". This meta is a
+        # projection, not an artifact: it has no source date of its own, so it carries NO
+        # `dating.year` and must never be given a sentinel year. The voices it aggregates
+        # are dated in their own grammar.json files.
+        "provenance": "contemporary",
+        "dating": {
+            "label": ("Undated — generated meta-voice projection over the voice grammars in "
+                      "this repo. The voices it stacks are dated individually (Ptolemy c. 150 CE, "
+                      "Lilly 1647, Bṛhat Jātaka c. 6th c. CE, Alan Leo 1899–1903); the projection "
+                      "itself is present-day and rebuilt on every run."),
+        },
         "is_published": True,
         "_generated": True,
         "_do_not_hand_edit": True,

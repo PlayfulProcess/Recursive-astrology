@@ -243,22 +243,47 @@ function contentBearing(item){
   return keys.some(k => k !== 'See also');
 }
 
-function extractEra(g){
+// "PlayfulProcess" is the repo owner, not a voice — it must never be printed as one
+// (four cards in this stack read "PlayfulProcess" before Jul 2026, including Lilly's
+// Christian Astrology and the Bṛhat Jātaka, which the note below names by name).
+const OWNER = 'PlayfulProcess';
+const isOwner = s => String(s || '').trim() === OWNER;
+// Splitting a grammar name on any hyphen mangled "Mesopotamian Omen-Craft" into
+// "Mesopotamian Omen"; only the em-dash separates a name from its subtitle here.
+const shortName = g => (g.name || '').split('—')[0].trim() || g.slug || '';
+
+// `col` is this grammar's entry in grammars/_collection.json (already fetched here for
+// the slug list). Several grammars — the Bṛhat Jātaka, Lilly's Christian Astrology —
+// carry no attribution.source_year of their own and were being labelled "contemporary"
+// beside a homepage that dates them c. 6th c. CE and 1647. The collection index is
+// authored data, so prefer the grammar's own attribution and fall back to it.
+function extractEra(g, col){
   const attr = g.attribution || {};
   const rawYearStr = attr.source_year || null;
-  let year = null, eraLabel = null, voiceLabel = attr.source_author || null;
+  let year = null, eraLabel = null, voiceLabel = isOwner(attr.source_author) ? null : (attr.source_author || null);
   if (rawYearStr) {
-    const ce = rawYearStr.match(/c\.\s*(\d{1,4})\s*CE/i);
-    if (ce) year = parseInt(ce[1], 10);
-    else { const y = rawYearStr.match(/(\d{3,4})/); if (y) year = parseInt(y[1], 10); }
+    // A BCE source carries a modern editor's publication year in the same string
+    // ("c. 8th–7th century BCE reports (Thompson ed. 1900)") — the plain digit grab
+    // read that as 1900 and sorted Babylon after Proctor. Don't pin a BCE year;
+    // just place it before everything CE.
+    if (/\bBCE?\b/.test(rawYearStr)) year = -1e6;
+    else {
+      const ce = rawYearStr.match(/c\.\s*(\d{1,4})\s*CE/i);
+      if (ce) year = parseInt(ce[1], 10);
+      else { const y = rawYearStr.match(/(\d{3,4})/); if (y) year = parseInt(y[1], 10); }
+    }
     eraLabel = rawYearStr;
   }
-  if (year == null && g.author) {
+  if (year == null && g.author && !isOwner(g.author)) {
     const range = g.author.match(/(\d{4})\s*-\s*(\d{4})/);
     if (range) { year = parseInt(range[2], 10); eraLabel = `${range[1]}–${range[2]}`; }
     if (!voiceLabel) voiceLabel = g.author.replace(/\s*\([^)]*\)\s*/g, '').trim();
   }
-  if (!voiceLabel) voiceLabel = (g.creator_name && g.creator_name !== 'PlayfulProcess') ? g.creator_name : (g.name || '').split(/[—-]/)[0].trim();
+  if (year == null && col && Number.isFinite(col.year)) {
+    year = col.year;
+    eraLabel = eraLabel || String(col.year_label || '').split(' — ')[0].trim() || String(col.year);
+  }
+  if (!voiceLabel) voiceLabel = (g.creator_name && !isOwner(g.creator_name)) ? g.creator_name : shortName(g);
   if (year == null) { year = Infinity; eraLabel = eraLabel || 'contemporary'; }
   return { year, eraLabel, voiceLabel };
 }
@@ -398,14 +423,14 @@ async function loadJSON(path){
 
   try {
     const col = await loadJSON('grammars/_collection.json');
-    const slugs = (col.grammars || []).map(g => g.slug);
-    const loaded = await Promise.all(slugs.map(async slug => {
-      try { return { slug, g: await loadJSON(`grammars/${slug}/grammar.json`) }; }
-      catch (e) { return { slug, g: null }; }
+    const entries = (col.grammars || []).filter(g => !g.is_meta);
+    const loaded = await Promise.all(entries.map(async entry => {
+      try { return { entry, g: await loadJSON(`grammars/${entry.slug}/grammar.json`) }; }
+      catch (e) { return { entry, g: null }; }
     }));
     TRADITIONS = loaded
       .filter(({ g }) => g && Array.isArray(g.items) && g.items.some(it => it.category === 'planet'))
-      .map(({ slug, g }) => ({ slug, grammar: g, ...extractEra(g) }))
+      .map(({ entry, g }) => ({ slug: entry.slug, grammar: g, ...extractEra(g, entry) }))
       .sort((x, y) => x.year - y.year || x.voiceLabel.localeCompare(y.voiceLabel));
   } catch (e) { TRADITIONS = []; }
 

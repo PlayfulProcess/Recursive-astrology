@@ -67,7 +67,7 @@
 <site-header active="course"></site-header>
 <div class="wrap">
   <aside>
-    <a class="toc-back" href="course.html">← All chapters</a>
+    <a class="toc-back" id="toc-back" href="course.html">← All chapters</a>
     <div class="toc-kicker" id="toc-kicker">History of Astrology</div>
     <nav class="toc" id="toc" aria-label="Course chapters"></nav>
   </aside>
@@ -118,10 +118,20 @@ const COURSES = {
   'the-right-size':       { manifest: '../course/the-right-size.manifest.json' },
   'three-doors':          { manifest: '../course/three-doors.manifest.json' },
 };
+// Every link this page generates must carry the active ?course= slug. Without it a
+// reader inside "The Right Size" or "Three Doors" clicked Next and landed silently
+// on chapter 1 of History of Astrology, because ?chapter=chapter-2 means nothing to
+// the default course and `current` fell back to its first chapter (fixed Jul 2026).
+let COURSE_SLUG = 'history-of-astrology';
+const chapterHref = id =>
+  'course-viewer.html?' + (COURSE_SLUG === 'history-of-astrology' ? '' : 'course=' + encodeURIComponent(COURSE_SLUG) + '&')
+  + 'chapter=' + encodeURIComponent(id);
+
 async function main(){
   let manifest, grammar, ids;
   const courseSlug = new URLSearchParams(location.search).get('course') || 'history-of-astrology';
   const course = COURSES[courseSlug] || COURSES['history-of-astrology'];
+  COURSE_SLUG = COURSES[courseSlug] ? courseSlug : 'history-of-astrology';
   try {
     manifest = await fetch(course.manifest).then(r => { if(!r.ok) throw new Error('manifest '+r.status); return r.json(); });
     // The manifest names its source grammar; fall back to the history grammar for the default course.
@@ -148,6 +158,7 @@ async function main(){
   const byId = Object.fromEntries(allItems.map(it => [it.id, it]));
 
   const requested = params.get('chapter');
+  const missing = requested && !byId[requested];   // a stale link into another course
   const current = byId[requested] || chapterItems[0];
   if (!current) {
     $('#loading').hidden = true;
@@ -159,10 +170,17 @@ async function main(){
 
   // —— sidebar TOC ——
   $('#toc-kicker').textContent = manifest.title;
+  // Only the default course has a chapter-list page; the readings don't, so their
+  // "All chapters" would silently hand the reader a different course's index.
+  if (COURSE_SLUG !== 'history-of-astrology') {
+    const back = $('#toc-back');
+    back.href = '../index.html#explore';
+    back.textContent = '← The library';
+  }
   const toc = $('#toc');
   chapterItems.forEach((it, i) => {
     const a = document.createElement('a');
-    a.href = 'course-viewer.html?chapter=' + encodeURIComponent(it.id);
+    a.href = chapterHref(it.id);
     a.className = it.id === current.id ? 'active' : '';
     a.innerHTML = `<span class="toc-num">${i + 1}.</span> ${it.name}`;
     toc.appendChild(a);
@@ -173,7 +191,7 @@ async function main(){
     label.textContent = manifest.appendixTitle || 'Patterns across eras'; toc.appendChild(label);
     appendixItems.forEach(it => {
       const a = document.createElement('a');
-      a.href = 'course-viewer.html?chapter=' + encodeURIComponent(it.id);
+      a.href = chapterHref(it.id);
       a.className = it.id === current.id ? 'active' : '';
       a.textContent = it.name;
       toc.appendChild(a);
@@ -237,15 +255,25 @@ async function main(){
   navrow.innerHTML = '';
   if (prev) {
     const a = document.createElement('a');
-    a.className = 'navbtn prev'; a.href = 'course-viewer.html?chapter=' + encodeURIComponent(prev.id);
+    a.className = 'navbtn prev'; a.href = chapterHref(prev.id);
     a.innerHTML = `<span class="dir">← Previous</span><span class="ttl">${esc(prev.name)}</span>`;
     navrow.appendChild(a);
   }
   if (next) {
     const a = document.createElement('a');
-    a.className = 'navbtn next'; a.href = 'course-viewer.html?chapter=' + encodeURIComponent(next.id);
+    a.className = 'navbtn next'; a.href = chapterHref(next.id);
     a.innerHTML = `<span class="dir">Next →</span><span class="ttl">${esc(next.name)}</span>`;
     navrow.appendChild(a);
+  }
+
+  // A link asking for a chapter this course doesn't have used to drop the reader on
+  // chapter 1 with no explanation. Say so instead of pretending it was the request.
+  if (missing) {
+    const warn = $('#err');
+    warn.hidden = false;
+    warn.innerHTML = `<b>No chapter “${esc(requested)}” in ${esc(manifest.title)}.</b> `
+      + `Showing the first chapter instead — the link you followed may belong to another course. `
+      + `<a href="../index.html#explore">See every course →</a>`;
   }
 
   $('#loading').hidden = true;

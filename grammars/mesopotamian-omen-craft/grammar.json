@@ -238,5 +238,7 @@
       "number": 7
     }
   ],
-  "_exported_from_app": "a1b2c3d4-2222-4a02-9e02-aa0000000002 on 2026-07-16"
+  "_exported_from_app": "a1b2c3d4-2222-4a02-9e02-aa0000000002 on 2026-07-16",
+  "_duplicate_of": "mesopotamian-omens",
+  "_duplicate_note": "Byte-level re-export of mesopotamian-omens (identical item ids, order and section text). Kept on disk pending the builder decision; held OUT of the published collection index so it cannot double-plot."
 }

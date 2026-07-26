@@ -43,6 +43,7 @@
     })();
     </script>
     <script src="../site-header.js?v=46"></script>
+    <script src="md.js?v=1"></script>
     <script src="../view-switcher.js?v=12"></script>
     <style>
         :root {
@@ -679,32 +680,11 @@
             return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // Lightweight markdown to HTML: images, bold, italic, links, line breaks
-        function mdToHtml(s) {
-            // Block-aware markdown (headers/blockquotes/lists/paragraphs + inline).
-            if (!s) return '';
-            const esc = x => x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-            const inline = t => esc(t)
-                .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;height:auto;margin:8px 0;border-radius:8px;">')
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
-            const lines = String(s).split(/\r?\n/);
-            let html = '', inList = false, inQuote = false, m;
-            const closeL = () => { if (inList) { html += '</ul>'; inList = false; } };
-            const closeQ = () => { if (inQuote) { html += '</blockquote>'; inQuote = false; } };
-            for (const raw of lines) {
-                const line = raw.trim();
-                if (!line) { closeL(); closeQ(); continue; }
-                if (m = line.match(/^(#{1,6})\s+(.*)$/)) { closeL(); closeQ(); html += `<div style="font-weight:700;font-size:1.05em;margin:.7em 0 .25em;">${inline(m[2])}</div>`; continue; }
-                if (m = line.match(/^>\s?(.*)$/)) { closeL(); if (!inQuote) { html += '<blockquote style="border-left:3px solid currentColor;opacity:.8;margin:.5em 0;padding:.1em 0 .1em .8em;">'; inQuote = true; } html += inline(m[1]) + ' '; continue; }
-                if (m = line.match(/^[-*+]\s+(.*)$/)) { closeQ(); if (!inList) { html += '<ul style="margin:.4em 0;padding-left:1.2em;">'; inList = true; } html += `<li>${inline(m[1])}</li>`; continue; }
-                closeL(); closeQ(); html += `<p style="margin:.5em 0;">${inline(line)}</p>`;
-            }
-            closeL(); closeQ();
-            return html;
-        }
+        // Markdown → HTML, from the shared viewers/md.js. This file used to carry its
+        // own older per-line copy, which emitted one <p> per SOURCE line (gappy
+        // paragraphs) and broke any bold/italic that crossed a wrap. Same renderer as
+        // every other viewer now; the local name keeps call sites unchanged.
+        function mdToHtml(s) { return MD.toHtml(s); }
 
         // ── Connected-grammar reference resolution (Capability 1, Jun 4 2026) ──
         // A grammar's items can reference OTHER grammars via item.grammars[] —

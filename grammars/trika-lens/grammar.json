@@ -4,6 +4,10 @@
   "name": "The Trika Lens — three doors into a chart",
   "description": "A way of reading the sky through the three goddesses of the Trika — Parā, Parāparā, and Aparā. Not a traditional teaching: this is PlayfulProcess's own synthesis, mapping a non-dual Shaiva grammar onto astrology, offered as a lens to hold a chart with, not a doctrine. Parā is the light that looks; Aparā is the world that is looked at; Parāparā — the middle door — is the relating between them, which is where meaning actually lives.",
   "grammar_type": "custom",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — contemporary synthesis. The Trika triad it draws on is a real structure of non-dual Kashmir Shaivism, but mapping it onto chart-reading is this repo's own lens, not a dated teaching; see _synthesis_note."
+  },
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
   "is_published": true,

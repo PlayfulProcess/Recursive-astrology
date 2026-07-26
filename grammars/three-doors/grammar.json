@@ -3,6 +3,10 @@
   "description": "Reading the sky through the Trika — Parā, Parāparā, Aparā. A synthesis, offered by a non-scholar.",
   "cover_image_url": null,
   "grammar_type": "custom",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — contemporary reading (essay), built from course/three-doors.mdx."
+  },
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
   "is_published": true,

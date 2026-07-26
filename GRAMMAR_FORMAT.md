@@ -175,6 +175,68 @@ purposes. The viewer ignores unknown keys.
 
 ---
 
+## Dating & provenance
+
+> **Recursive Astrology extension** (added Jul 2026). These two grammar-root fields
+> are not part of the upstream schemas-repo contract yet; the app ignores them, and
+> this repo's own viewers and `scripts/build_collection.py` consume them.
+
+A library about history needs to say, per grammar, *when its content is from* — and to
+say **"undated"** out loud rather than let a viewer invent a placeholder year. Two
+grammar-root fields carry that:
+
+```jsonc
+{
+  "grammar_type": "astrology",
+
+  "provenance": "record",          // REQUIRED. One of the three kinds below.
+  "dating": {
+    "year": 1647,                  // integer. PRESENT IFF provenance == "record".
+    "label": "1647 — William Lilly, Christian Astrology (first edition)",  // REQUIRED always
+    "confidence": "high",          // "high" | "medium" | "low". PRESENT IFF `year` is present.
+    "basis": "Anchored to the title-page date of the first edition, carried per item as …"
+                                   // PRESENT IFF `year` is present.
+  }
+}
+```
+
+### The three kinds of `provenance`
+
+| Value | What it means | `dating.year` |
+|---|---|---|
+| `"record"` | A dated historical source text — the voice speaks from a fixed point in time (Ptolemy, Lilly, Alan Leo, the Neo-Assyrian omen reports). | **required** |
+| `"contemporary"` | A present-day synthesis, reading, lens compilation, or generated projection. It has no source date, on purpose. | **must be absent** |
+| `"casting"` | A spread grammar — positions, not interpretations. A spread has no source date; it resolves against whichever interpretation grammar the reader picks. | **must be absent** |
+
+### Rules
+
+- **`dating.label` is required on every grammar, dated or not.** For an undated
+  grammar it must *say so in words* — `"Undated — contemporary synthesis, written
+  2026 after …"` — so a UI has honest text to render without a number.
+- **Absence of `dating.year` is the machine-readable signal for "undated".**
+  Consumers must skip the grammar or bucket it as undated. **Never substitute a
+  sentinel year** (`9999`, `0`, "now"): a sentinel puts a contemporary essay on a
+  historical timeline and silently lies about it.
+- **`year` is an integer and negative means BCE** — `-700` = c. 700 BCE. It exists to
+  sort, not to display; `label` is what a reader sees.
+- **`year` anchors to the ORIGINAL composition of the material actually quoted**, not
+  to the translation, edition, or scan the text was taken from. Ptolemy is `150`, not
+  `1822` (Ashmand's translation); Proctor is `1877`, not `1896` (a posthumous reprint).
+  Name the later edition in `label` and `basis`.
+- **Date reconstructed dates with `c.`** in `label` and set `confidence` accordingly —
+  `"c. 150 CE — Ptolemy, Tetrabiblos"`, confidence `medium`.
+- **`basis` must say what the number anchors to and how it was checked**, and it must
+  be checkable — from material already in the repo, or from a source actually fetched.
+  If neither is possible, leave `year` out. Never invent a date to fill the field.
+- **`_duplicate_of: "<slug>"`** marks a grammar directory that is a byte-level duplicate
+  of another. `scripts/build_collection.py` holds these out of `_collection.json`'s
+  `grammars` list (they are listed under `duplicates` instead) so they cannot plot twice.
+
+The derived `_collection.json` mirrors this contract flat, as `provenance`,
+`year_label`, `year`, and `year_confidence` — see that file's `_dating_contract` key.
+
+---
+
 ## Category & section roles (astrology customization)
 
 For `astrology` (and Vedic/Jyotish) grammars, the astrology viewer buckets

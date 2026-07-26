@@ -22,7 +22,11 @@
   .spacer{margin-left:auto}
 
   /* ── field tray + drop zones ───────────────────────────── */
-  #builder{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+  /* min-width:0 on the grid items: a grid item defaults to min-width:auto, so a long
+     unbreakable label inside #presets/#tray widened the whole column past the viewport. */
+  #builder{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);min-width:0}
+  #builder>*{min-width:0}
+  #presets .lab,#tray .lab{white-space:normal}
   #z-filters{ grid-column:1 / -1; background:rgba(47,93,138,.06); border-color:rgba(47,93,138,.35); }
   #z-filters.dragover{ border-color:#2f5d8a; background:rgba(47,93,138,.12); }
   #z-filters .zlab{ color:#2f5d8a; }
@@ -45,7 +49,10 @@
   #tray .lab{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-right:4px}
   /* field-hierarchy groups: fields that nest (inferred from the data) render as a
      chain "arcana ▸ suit ▸ …" sharing a hue — coarsest first, finest last */
-  .fgroup{display:inline-flex;align-items:center;gap:2px;padding:2px 4px;border-radius:10px;
+  /* A field group (parent chip ▸ its children) is inline-flex, so with several decks
+     loaded it grew past a 375px viewport and scrolled the whole PAGE sideways. Let it
+     wrap and cap it at the container. */
+  .fgroup{display:inline-flex;flex-wrap:wrap;max-width:100%;align-items:center;gap:2px;padding:2px 4px;border-radius:10px;
     background:rgba(47,93,138,.04);border:1px solid var(--line-soft)}
   .fgroup .sep{font-size:10px;color:var(--muted);opacity:.8;user-select:none}
   .zone{background:rgba(60,45,20,.04);border:1.5px dashed var(--chipline);border-radius:10px;min-height:54px;padding:8px}
@@ -140,6 +147,7 @@
 </head>
 <body>
 <script src="../site-header.js?v=46"></script>
+<script src="md.js?v=1"></script>
 <site-header active="explorer"></site-header>
 
 <div class="toolbar">
@@ -187,7 +195,7 @@
 <div id="lb" onclick="this.style.display='none'"><img id="lbimg" src="" alt=""><div class="cap" id="lbcap"></div></div>
 <div id="hovprev"><img alt=""></div>
 
-<script src="dimension-engine.js?v=1"></script>
+<script src="dimension-engine.js?v=2"></script>
 <script>
 (() => {
 const $ = s => document.querySelector(s);
@@ -266,11 +274,15 @@ function recHTML(r){
   const lvl = +(r.level?.[0]||'L1').slice(1);
   if (mode === 'sections'){
     const s = recSection(r);
-    if (!s) return `<span class="esec none" data-rid="${esc(r.__id)}" title="${esc(r.__name)}"><span class="nm">${esc(r.__name).slice(0,24)}</span>— none —</span>`;
+    if (!s) return `<span class="esec none" data-rid="${esc(r.__id)}" title="${esc(r.__name)}"><span class="nm">${esc(DimensionEngine.shortLabel(r.__name,24))}</span>— none —</span>`;
     const attr = lensAttr(s.val);
-    const body = attr ? s.val.trim().replace(/^\[[^\]]*\]\s*/,'') : s.val;
-    return `<span class="esec ${attr?'later':''}" data-rid="${esc(r.__id)}" title="${esc(r.__name)} — ${esc(s.name)} (click for full card · drag corner to resize)">
-      <span class="nm">${esc(r.__name).slice(0,24)}</span>${attr?`<span class="at">${esc(attr).slice(0,46)}</span>`:''}${esc(body)}</span>`;
+    const raw = attr ? s.val.trim().replace(/^\[[^\]]*\]\s*/,'') : s.val;
+    // Dense preview cell: markup can't render here, so strip the markers rather than
+    // let them leak — the public-domain "The record — …" sections are an italic
+    // caption plus a `> ` blockquote, and both showed as literal punctuation.
+    const body = MD.strip(raw);
+    return `<span class="esec ${attr?'later':''}" data-rid="${esc(r.__id)}" title="${esc(r.__name)} — ${esc(s.name)}${attr?' — '+esc(attr):''} (click for full card · drag corner to resize)">
+      <span class="nm">${esc(DimensionEngine.shortLabel(r.__name,24))}</span>${attr?`<span class="at">${esc(MD.clip(attr,46))}</span>`:''}${esc(body)}</span>`;
   }
   if (lvl === 1 && r.__img)
     return `<img loading="lazy" data-rid="${esc(r.__id)}" src="${esc(r.__img)}" title="${esc(r.__name)}">`;
@@ -278,7 +290,7 @@ function recHTML(r){
   const lo = Math.min(.5, .06 + .07*lvl), hi = Math.min(.85, .14 + .12*lvl);
   return `<span class="epill" data-rid="${esc(r.__id)}" title="${esc(r.__name)}"
     style="background:linear-gradient(135deg,${rgba(c,lo)},${rgba(c,hi)});border-left:3px solid ${c}">
-    <span class="lv">L${lvl}</span>${esc(r.__name.split(' — ')[0].slice(0,26))}</span>`;
+    <span class="lv">L${lvl}</span>${esc(DimensionEngine.shortLabel(r.__name,26))}</span>`;
 }
 function cellHTML(rs){
   if (!rs.length) return '<td><span class="empty">·</span></td>';
@@ -608,7 +620,7 @@ $('#deckbtn').onclick = () => {
   pop.innerHTML = `<p style="margin:2px 0 8px;font-size:11.5px;color:var(--muted);max-width:240px;line-height:1.45">
       Tick <b>several grammars</b> and Load — patterns appear when collections overlap. Each grammar becomes a filterable field.</p>
     <input type="text" placeholder="search grammars…">
-    <div class="vals">${decks.map(g=>`<label><input type="checkbox" value="${esc(g.slug)}" ${sel.has(g.slug)?'checked':''}> ${esc(g.name.split(' — ')[0].slice(0,34))}</label>`).join('')}</div>
+    <div class="vals">${decks.map(g=>`<label title="${esc(g.name)}${g.year_label?' · '+esc(g.year_label):''}"><input type="checkbox" value="${esc(g.slug)}" ${sel.has(g.slug)?'checked':''}> ${esc(DimensionEngine.shortLabel(g.name,34))}</label>`).join('')}</div>
     <div class="pbtns"><button data-a="meta">✦ Default (single grammar)</button></div>
     <div class="pbtns"><button data-a="all">All</button><button data-a="none">None</button><button data-a="ok">Load selected</button></div>`;
   pop.querySelector('input[type=text]').oninput = e => {
@@ -675,8 +687,12 @@ async function boot(){
       const loads = slugs.map(async slug => {
         const g = await (await fetch(`${PFX}grammars/${slug}/grammar.json`)).json();
         const cm = metas[slug] || {};
-        const inherit = { grammar: (cm.name || g.name || slug).split(' — ')[0].slice(0,34),
-                          year: cm.year || g.metadata?.year, branch: cm.branch || g.metadata?.branch,
+        // `year` is present only for provenance === 'record' (see the collection's
+        // `_dating_contract`); leave it undefined otherwise so no undated grammar is
+        // catalogued into a century it does not have.
+        const cmYear = typeof cm.year === 'number' ? cm.year : (typeof g.metadata?.year === 'number' ? g.metadata.year : undefined);
+        const inherit = { grammar: DimensionEngine.shortLabel(cm.name || g.name || slug, 34),
+                          year: cmYear, branch: cm.branch || g.metadata?.branch,
                           category: g.metadata?.category, tradition: g.metadata?.tradition };
         stash(g, slug);
         return flatten(g, inherit, slug);
@@ -687,7 +703,7 @@ async function boot(){
       const g = await (await fetch(src)).json();
       stash(g, null);
       records = flatten(g, null, null);
-      if (srcParam) $('#deckbtn').textContent = '✦ ' + (g.name||'grammar').split(' — ')[0].slice(0,22) + ' ▾';
+      if (srcParam) { const b=$('#deckbtn'); b.textContent = '✦ ' + DimensionEngine.shortLabel(g.name||'grammar',22) + ' ▾'; b.title = g.name || ''; }
     }
   } catch(e){ $('#out').innerHTML = '<div id="hint">Could not load the grammar(s).</div>'; return; }
   sectionGroups = inferSectionGroups();
@@ -696,7 +712,7 @@ async function boot(){
   for (const r of records) byId[r.__id] = r;
   // resolve emergence names now that byId is full
   for (const r of records) if (r.__parents.length)
-    r.emergence = r.__parents.map(p => (byId[p]?.__name || p).split(' — ')[0].slice(0,40));
+    r.emergence = r.__parents.map(p => DimensionEngine.shortLabel(byId[p]?.__name || p, 40));
   fields = discoverFields(records);
   fieldParent = inferHierarchy(records, fields);
   let restored = false;

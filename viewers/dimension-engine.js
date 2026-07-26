@@ -15,6 +15,18 @@
 (function (global) {
   'use strict';
 
+  /* Short display label for a grammar/item name: drop the em-dash subtitle, then cut
+     on a WORD boundary with a real ellipsis. A bare `.slice(0, n)` chopped names
+     mid-word into meaningless fragments ("The Contemporary Resurgenc"). Callers are
+     expected to keep the full name in a title attribute. */
+  function shortLabel(name, max) {
+    const head = String(name == null ? '' : name).split(' — ')[0].trim();
+    if (head.length <= max) return head;
+    const cut = head.slice(0, max);
+    const sp = cut.lastIndexOf(' ');
+    return (sp > max * 0.6 ? cut.slice(0, sp) : cut).trimEnd() + '…';
+  }
+
   function smartCmp(a, b) {
     const na = +a, nb = +b;
     if (!isNaN(na) && !isNaN(nb)) return na - nb;
@@ -43,6 +55,11 @@
       const md = it.metadata || {};
       for (const [k, v] of Object.entries(md)) {
         if (v == null) continue;
+        // `_`-prefixed metadata is internal provenance plumbing (`_research` holds a
+        // research/*.md path, `_source` a citation string). It was being discovered as
+        // a first-class pivot dimension, so the explorer offered "_research (11)" — an
+        // axis of near-unique file paths — next to real axes like era and region.
+        if (k.charAt(0) === '_') continue;
         if (k === 'print' && v.quality) { r['print quality'] = [String(v.quality)]; continue; }
         if (typeof v === 'string' && !/^https?:/.test(v) && v.length < 60) r[k] = [v];
         else if (typeof v === 'number') r[k] = [v];
@@ -60,7 +77,7 @@
       }
       if (it.category) r.category = [it.category];
       if (r.__parents.length)
-        r.emergence = r.__parents.map(p => ((nameOf && nameOf(p)) || p).split(' — ')[0].slice(0, 40));
+        r.emergence = r.__parents.map(p => shortLabel((nameOf && nameOf(p)) || p, 40));
       recs.push(r);
     }
     return recs;
@@ -132,6 +149,6 @@
   }
 
   global.DimensionEngine = {
-    smartCmp, flatten, discoverFields, inferHierarchy, vals, passes, groupBy
+    smartCmp, shortLabel, flatten, discoverFields, inferHierarchy, vals, passes, groupBy
   };
 })(typeof window !== 'undefined' ? window : globalThis);

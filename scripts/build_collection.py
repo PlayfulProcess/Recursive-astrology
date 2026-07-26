@@ -7,13 +7,22 @@ here vs tarot/ there). Port of recursive-tarot/scripts/build_tarot_collection.py
 refresh_collection.py, collapsed into one script since this repo has no separate
 "migrate from source repo" step — the grammars already live in grammars/*/grammar.json.
 
-The grammar files are the source of truth for name/type/items/cover_image_url/blurb;
-this script only ADDS curation this repo doesn't otherwise have anywhere (branch
-grouping + a historical year for the primary-source voice libraries that actually
-have one). Unlisted / future grammars still get included automatically (glob-driven,
-no hardcoded slug list to fall out of date) — they just land in the "synthesis"
-branch with no year, which reads honestly as "undated / contemporary" rather than
-inventing a false date.
+The grammar files are the source of truth for name/type/items/cover_image_url/blurb
+AND, since the Jul 2026 dating audit, for provenance/year/year_label too — each
+grammar.json carries its own `provenance` + `dating` block (see GRAMMAR_FORMAT.md
+"Dating & provenance"). This script only ADDS branch grouping, the one piece of
+curation that lives nowhere else. Unlisted / future grammars still get included
+automatically (glob-driven, no hardcoded slug list to fall out of date) — they just
+land in the "synthesis" branch.
+
+There is deliberately NO hardcoded YEARS table here any more. The old one was keyed on
+two slugs that never existed on disk, so Jyotiṣa and Lilly silently lost their dates and
+dropped off the timeline; and it stamped Proctor 1896 (a posthumous reprint) as if it
+were the work's date. Dates belong next to the sources they describe.
+
+RULE: every key in BRANCH_OF below must be a directory that exists under grammars/. Dead
+slugs are not kept around as comments — a slug named here that is not on disk is a bug,
+and the builder prints a WARN for any such key on every run.
 
 Run from the repo root:  python3 scripts/build_collection.py
 """
@@ -24,6 +33,10 @@ import glob
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 GRAMMARS_DIR = os.path.join(ROOT, "grammars")
 OUT = os.path.join(GRAMMARS_DIR, "_collection.json")
+# The repo-root index channels.html reads. Its own _note has always claimed this script
+# generates it; until the Jul 2026 audit that was untrue and the file had drifted (14 of
+# 21 grammars, one of them a duplicate, stale item counts). Now it really is generated.
+OUT_ROOT = os.path.join(ROOT, "_collection.json")
 
 REPO = "PlayfulProcess/Recursive-astrology"
 BRANCH = "main"
@@ -42,9 +55,9 @@ BRANCH_OF = {
     "tetrabiblos-ashmand":            "primary-sources",
     "alan-leo":                       "primary-sources",
     "proctor-skeptical-astrology":    "primary-sources",
-    "jyotisha-brihat-jataka":         "primary-sources",
+    "jyotisa-brhat-jataka":           "primary-sources",
     "mesopotamian-omens":             "primary-sources",
-    "renaissance-lilly":              "primary-sources",
+    "william-lilly-christian-astrology": "primary-sources",
     "historiographies-of-astrology":  "synthesis",
     "western-astrology-canonical":    "synthesis",
     "planetary-myths":                "synthesis",
@@ -60,17 +73,7 @@ BRANCH_OF = {
     "dignities-rulerships":            "synthesis",  # lens compilation of the traditional dignities table
 }
 
-# slug -> (sortable year, display label, provenance). Only the primary-source voice
-# libraries have a genuine anchor date; everything else is honestly "living" (a
-# contemporary synthesis/reading/casting, not a historically dated artifact).
-YEARS = {
-    "mesopotamian-omens":    (-1000, "Babylonian / Assyrian omen-craft, 2nd–1st millennium BCE", "record"),
-    "tetrabiblos-ashmand":   (150,   "c. 150 CE (Ptolemy) · Ashmand tr. 1822",               "record"),
-    "jyotisha-brihat-jataka":(550,   "c. 6th c. CE (Varāhamihira) · 1885 tr.",           "record"),
-    "renaissance-lilly":     (1647,  "1647 (William Lilly, Christian Astrology)",                 "record"),
-    "proctor-skeptical-astrology": (1896, "1896", "record"),
-    "alan-leo":              (1900,  "c. 1900 (Theosophical revival)",                            "record"),
-}
+VALID_PROVENANCE = {"record", "contemporary", "casting"}
 
 
 def blurb_of(g):
@@ -81,6 +84,17 @@ def blurb_of(g):
 def main():
     paths = sorted(glob.glob(os.path.join(GRAMMARS_DIR, "*", "grammar.json")))
     grammars_index = []
+    root_index = []
+    duplicates = []
+    warnings = []
+
+    # Guard against dead keys: BRANCH_OF is hand-curated, so a slug that has been renamed
+    # or deleted can linger here and silently "curate" nothing. Fail loud instead.
+    on_disk = {os.path.basename(os.path.dirname(p)) for p in paths}
+    for slug in sorted(set(BRANCH_OF) - on_disk):
+        warnings.append(f"BRANCH_OF has key {slug!r} with no grammars/{slug}/grammar.json "
+                        f"on disk — dead slug, remove it")
+
     for path in paths:
         slug = os.path.basename(os.path.dirname(path))
         try:
@@ -88,7 +102,44 @@ def main():
         except Exception as e:
             print(f"  SKIP {slug}: {e}")
             continue
+
+        # Exact-duplicate grammar directories are listed separately so they cannot
+        # double-plot on the timeline or double-count in a lens. See the "duplicates"
+        # key in the output and the note there.
+        if g.get("_duplicate_of"):
+            duplicates.append({
+                "slug": slug,
+                "duplicate_of": g["_duplicate_of"],
+                "path": f"grammars/{slug}/grammar.json",
+                "note": "Byte-level duplicate of the grammar it points at (same name, same "
+                        "description, same item ids, same section text). Kept on disk but held "
+                        "out of `grammars` so it cannot appear twice in any view.",
+            })
+            continue
+
         branch = BRANCH_OF.get(slug, "synthesis")
+        provenance = g.get("provenance")
+        dating = g.get("dating") or {}
+        if provenance not in VALID_PROVENANCE:
+            warnings.append(
+                f"{slug}: provenance {provenance!r} is not one of {sorted(VALID_PROVENANCE)} "
+                f"— see GRAMMAR_FORMAT.md 'Dating & provenance'")
+        if not dating.get("label"):
+            warnings.append(f"{slug}: dating.label is missing")
+        year = dating.get("year")
+        if provenance == "record" and year is None:
+            warnings.append(f"{slug}: provenance 'record' but no dating.year")
+        if provenance != "record" and year is not None:
+            warnings.append(f"{slug}: dating.year set on a non-record grammar — dropping it "
+                            f"rather than plotting an undated grammar on the timeline")
+            year = None
+
+        categories = {}
+        for it in g.get("items", []):
+            c = it.get("category")
+            if c:
+                categories[c] = categories.get(c, 0) + 1
+
         entry = {
             "slug": slug,
             "name": g.get("name"),
@@ -100,14 +151,32 @@ def main():
             "cover_image_url": g.get("cover_image_url"),
             "blurb": blurb_of(g),
             "path": f"grammars/{slug}/grammar.json",
-            "provenance": "living",
+            "provenance": provenance,
+            # ALWAYS present, for every grammar: an undated one says so in words rather
+            # than falling through to a sentinel year in a viewer.
+            "year_label": dating.get("label"),
         }
-        if slug in YEARS:
-            year, label, provenance = YEARS[slug]
+        # `year` is present ONLY for provenance == "record". Absent means undated —
+        # consumers must skip the grammar or bucket it as undated, NEVER substitute 9999.
+        if year is not None:
             entry["year"] = year
-            entry["year_label"] = label
-            entry["provenance"] = provenance
+            if dating.get("confidence"):
+                entry["year_confidence"] = dating["confidence"]
         grammars_index.append(entry)
+
+        root_entry = {
+            "slug": slug,
+            "name": g.get("name"),
+            "description": (g.get("description") or "").split(".")[0][:200],
+            "grammar_type": g.get("grammar_type"),
+            "items": len(g.get("items", [])),
+            "categories": categories,
+            "provenance": provenance,
+            "year_label": dating.get("label"),
+        }
+        if year is not None:
+            root_entry["year"] = year
+        root_index.append(root_entry)
 
     branch_index = [
         {"id": bid, "name": bname,
@@ -126,12 +195,38 @@ def main():
         "original_creator": None,
         "creator_name": "PlayfulProcess",
         "meta_grammar": "historiographies-of-astrology",
+        "_dating_contract": (
+            "Every entry carries `provenance` ('record' = a dated historical source | "
+            "'contemporary' = a present-day synthesis/reading | 'casting' = a spread grammar) "
+            "and `year_label` (a human string, always present). `year` (integer, negative = BCE) "
+            "is present ONLY when provenance == 'record'. ABSENT `year` means genuinely undated: "
+            "skip the grammar or bucket it as undated — never substitute a sentinel such as 9999. "
+            "Source of truth is each grammar.json's own `provenance` + `dating` block; this file "
+            "is derived by scripts/build_collection.py. See GRAMMAR_FORMAT.md 'Dating & provenance'."
+        ),
         "branches": branch_index,
         "grammars": grammars_index,
+        "duplicates": duplicates,
     }
     json.dump(collection, open(OUT, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+
+    root_collection = {
+        "repo": REPO,
+        "channel": "astrology",
+        "_note": "Derived index for channels.html — regenerate with scripts/build_collection.py; never hand-edit.",
+        "_dating_contract": collection["_dating_contract"],
+        "grammars": root_index,
+        "duplicates": duplicates,
+    }
+    json.dump(root_collection, open(OUT_ROOT, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+
     n_items = sum(e["items"] for e in grammars_index)
-    print(f"Wrote {OUT} — {len(grammars_index)} grammars ({n_items} items), {len(branch_index)} branches")
+    n_dated = sum(1 for e in grammars_index if e.get("year") is not None)
+    for w in warnings:
+        print("  WARN", w)
+    print(f"Wrote {OUT} — {len(grammars_index)} grammars ({n_items} items), "
+          f"{n_dated} dated, {len(duplicates)} duplicate(s) held out, {len(branch_index)} branches")
+    print(f"Wrote {OUT_ROOT} — {len(root_index)} grammars (channels.html index)")
 
 
 if __name__ == "__main__":

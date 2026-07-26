@@ -2,7 +2,22 @@
   "name": "Jyotiṣa — The Bṛhat Jātaka",
   "description": "The nine grahas and twelve rāśis as taught in Varāhamihira's Bṛhat Jātaka (c. 6th century CE), a foundational Sanskrit text of Hindu predictive astrology, in the 1885 English translation by N. Chidambaram Iyer (public domain; Foster Press, Madras). Honest framing, per this library's creed: Jyotiṣa, as transmitted in this one 1885 translation, summarized — not the whole of a living, plural, continuously-practiced tradition, and not this library's verdict on it. The single biggest thing a Western reader owes this lens is the ayanāṁśa: Jyotiṣa reads a SIDEREAL zodiac, referenced to the fixed stars, where the tropical zodiac this site otherwise uses is referenced to the equinox. The two zodiacs currently sit roughly 24° apart — a gap growing slowly every year from precession — and that disagreement between two honest ways of drawing a circle around the sky is itself the content here, not a bug to explain away. See grammars/historiographies-of-astrology (item view-jyotisha) and research/views/jyotisha.md for the fuller historiographical dossier, including the contested transmission question this grammar does not adjudicate.",
   "grammar_type": "astrology",
-  "author": "PlayfulProcess",
+  "provenance": "record",
+  "dating": {
+    "year": 550,
+    "label": "c. 6th c. CE — Varāhamihira, Bṛhat Jātaka · tr. N. Chidambaram Iyer, 1885",
+    "confidence": "medium",
+    "basis": "Anchored to the conventional dating of Varāhamihira's floruit (6th century CE) carried in this grammar's own description and per-item metadata.source.year_original; the composition date of the Bṛhat Jātaka itself is not independently fixed, hence 'c.' and medium confidence. The English text quoted throughout is the 1885 Chidambaram Iyer translation."
+  },
+  "attribution": {
+    "source_name": "Bṛhat Jātaka",
+    "source_author": "Varāhamihira",
+    "translator": "N. Chidambaram Iyer",
+    "source_year": "c. 550 CE (Varāhamihira's 6th-century floruit; translation 1885)",
+    "license": "Public Domain",
+    "source_url": "https://archive.org/details/wg1079"
+  },
+  "author": "Varāhamihira (c. 6th century CE)",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navagraha_Mandala.jpg?width=800",
   "tags": [
     "astrology",
@@ -42,7 +57,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -83,7 +98,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -124,7 +139,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -165,7 +180,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -206,7 +221,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -247,7 +262,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -288,7 +303,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -319,7 +334,7 @@
       ],
       "metadata": {
         "school": "jyotisha",
-        "_source": "General Jyotiṣa reference material, search-triangulated; not pinned to a specific Chidambaram Iyer Chapter II passage this session",
+        "_source": "Bṛhat Jātaka, tr. N. Chidambaram Iyer (1885), Chapter II stanza 3 — the nodes' naming stanza, the only passage in this chapter that names Rāhu; the translation gives the chāyā grahas no body/temperament stanza. Surrounding myth and nomenclature material is search-triangulated general Jyotiṣa reference, not from this translation.",
         "era_view": "view-jyotisha",
         "confidence": "low",
         "sanskrit_name": "Rāhu",
@@ -327,7 +342,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -358,7 +373,7 @@
       ],
       "metadata": {
         "school": "jyotisha",
-        "_source": "General Jyotiṣa reference material, search-triangulated; not pinned to a specific Chidambaram Iyer Chapter II passage this session",
+        "_source": "Bṛhat Jātaka, tr. N. Chidambaram Iyer (1885), Chapter II stanza 3 — the nodes' naming stanza, the only passage in this chapter that names Ketu; the translation gives the chāyā grahas no body/temperament stanza. Surrounding myth and nomenclature material is search-triangulated general Jyotiṣa reference, not from this translation.",
         "era_view": "view-jyotisha",
         "confidence": "low",
         "sanskrit_name": "Ketu",
@@ -366,7 +381,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -407,7 +422,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -448,7 +463,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -489,7 +504,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -530,7 +545,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -571,7 +586,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -612,7 +627,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -653,7 +668,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -694,7 +709,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -735,7 +750,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -776,7 +791,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -817,7 +832,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"
@@ -858,7 +873,7 @@
         "source": {
           "author": "Varāhamihira",
           "translator": "N. Chidambaram Iyer",
-          "year_original": "6th century CE",
+          "year_original": "c. 6th century CE",
           "year_translation": 1885,
           "title": "Brihat Jataka",
           "source_site": "https://archive.org/details/wg1079"

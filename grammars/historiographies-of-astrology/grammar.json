@@ -3,6 +3,10 @@
   "description": "A library of the major historiographical VIEWS of astrology — the eras and stances through which humans have read meaning into the sky, each presented faithfully in its own terms and held honestly to the record. Not a manual for casting charts and not a verdict on whether the sky speaks; a record of a five-thousand-year practice of meaning-making, autonomy-preserving throughout: a chart is a mirror and a calendar here, never a prediction and never a command. The astrology counterpart of The Recursive Tarot — same creed, different domain. No images yet: honest sourcing of public-domain plates is a later, separate job, and an honest gap beats a wrong picture.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800",
   "grammar_type": "custom",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — contemporary historiographical survey (this repo's meta-grammar). Each view item carries its own era range in metadata.era; the survey itself is present-day."
+  },
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
   "is_published": false,

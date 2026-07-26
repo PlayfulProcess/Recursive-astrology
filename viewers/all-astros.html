@@ -81,11 +81,20 @@
   .voice summary::before{content:"▸";color:var(--muted);font-size:11px;transition:transform .12s;flex-shrink:0}
   .voice[open] summary::before{transform:rotate(90deg)}
   .voice .vtitle{font-size:13.5px;font-weight:700;color:var(--ink)}
-  .voice .vfrom{font-size:10.5px;color:var(--faint);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38%}
+  .voice .vlen{font-size:10px;color:var(--faint);font-weight:600;white-space:nowrap}
+  .voice .vfrom{font-size:10.5px;color:var(--faint);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34%}
   .voice .vbody{padding:12px 14px;font-size:13px;color:var(--ink-soft);line-height:1.65}
   .voice .vbody p{margin:0 0 10px}
   .voice .vbody p:last-child{margin-bottom:0}
-  .voice .vbody b{color:var(--ink)}
+  .voice .vbody b,.voice .vbody strong{color:var(--ink)}
+  /* the public-domain "The record — …" excerpts are italic caption + blockquote;
+     give them room to read as quotations rather than as one undifferentiated slab */
+  .voice .vbody blockquote{border-left:3px solid var(--line)!important;color:var(--ink);opacity:1!important;
+    margin:.7em 0!important;padding:.15em 0 .15em .9em!important;font-size:12.5px}
+  .voice .vbody em{color:var(--mut)}
+  /* a section that opens with a bracketed [Author, Work, Year] carries its own inner
+     attribution — surface it as a line, not as literal brackets mid-sentence */
+  .voice .vattr{display:block;font-size:10.5px;font-style:italic;color:var(--mut);margin:0 0 8px}
   .voice .vopen{display:block;font-size:11px;color:var(--accent);text-decoration:none;margin-top:8px}
   .voice .vopen:hover{text-decoration:underline}
 
@@ -95,6 +104,7 @@
 </head>
 <body>
 <script src="../site-header.js?v=46"></script>
+<script src="md.js?v=1"></script>
 <site-header active="all-astros"></site-header>
 
 <main class="wrap">
@@ -124,14 +134,18 @@
 (() => {
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-// Same tiny markdown-ish renderer used by viewers/lenses.html: **bold** headers + paragraph
-// breaks. No external markdown library — the sections are already short, hand-authored prose.
-function md(s){
-  return esc(s)
-    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-    .replace(/\n{2,}/g, '</p><p>')
-    .replace(/\n/g, '<br>');
+// The ONE shared renderer (viewers/md.js). The old local two-liner only knew **bold**,
+// so the six public-domain "The record — <author> (<year>)" sections — italic caption
+// plus a `> ` blockquote — rendered their markers as literal asterisks and angle
+// brackets inside one unbroken slab of prose.
+const md = s => MD.toHtml(s);
+// A section body may open with its own [Author, Work, Year] attribution. Split it off
+// so it reads as an attribution line above the text; the data keeps the prefix as authored.
+function splitAttr(text){
+  const m = String(text || '').trim().match(/^\[([^\]]{3,200})\]\s*([\s\S]*)$/);
+  return m ? { attr: m[1].trim(), body: m[2] } : { attr: null, body: text };
 }
+const wordCount = s => (MD.strip(s).match(/\S+/g) || []).length;
 
 const CATS = [
   ['planet', 'Planets'],
@@ -173,13 +187,24 @@ function renderGrid(){
 
 function voiceBlock(label, text, wasOpen){
   const src = SOURCES.find(s => s.label === label);
+  const { attr, body } = splitAttr(text);
+  const words = wordCount(text);
   return `<details class="voice" ${wasOpen ? 'open' : ''}>
-    <summary><span class="vtitle">${esc(label)}</span>${src ? `<span class="vfrom" title="${esc(src.name)}">${esc(src.name.split(' — ')[0])}</span>` : ''}</summary>
-    <div class="vbody"><p>${md(text)}</p>
+    <summary><span class="vtitle">${esc(label)}</span><span class="vlen">${words} words</span>${src ? `<span class="vfrom" title="${esc(src.name)}">${esc(src.name.split(' — ')[0])}</span>` : ''}</summary>
+    <div class="vbody">${attr ? `<span class="vattr">${esc(attr)}</span>` : ''}${md(body)}
       ${src ? `<a class="vopen" href="cards.html?src=../grammars/${encodeURIComponent(src.slug)}/grammar.json" target="_blank" rel="noopener">Open ${esc(src.name.split(' — ')[0])} in Cards ↗</a>` : ''}
     </div>
   </details>`;
 }
+
+// Which voices open on arrival. The six public-domain books folded in as
+// "The record — <author> (<year>)" run 900–2 800 characters each, and opening the
+// first three unconditionally turned every planet into a wall of text you had to
+// scroll past to see there were seven voices at all. Rule: always open the first,
+// then any further SHORT voice — everything long stays one click away, with its
+// word count on the summary so the cost of opening it is visible.
+const SHORT_VOICE = 900;   // characters
+const openByDefault = (text, i) => i === 0 || (i < 3 && String(text || '').length < SHORT_VOICE);
 
 function openItem(id){
   const it = ITEMS.find(x => x.id === id); if (!it) return;
@@ -188,15 +213,17 @@ function openItem(id){
   const labels = Object.keys(it.sections || {});
   const metaBits = [];
   if (it.metadata?.element) metaBits.push(it.metadata.element);
-  if (it.category === 'house') metaBits.push('house ' + it.metadata.house);
+  // guard the house number: `house undefined` was one bad metadata field away
+  if (it.category === 'house' && it.metadata?.house != null) metaBits.push('house ' + it.metadata.house);
+  metaBits.push(labels.length + ' voice' + (labels.length === 1 ? '' : 's'));
   $('#reading').innerHTML = `
     <div class="rhead">
       <span class="rgl">${esc(it.symbol || ROMAN[it.metadata?.house] || '')}</span>
       <h2>${esc(it.name)}</h2>
-      <span class="rmeta">${esc(metaBits.join(' · '))} · ${labels.length} voice${labels.length===1?'':'s'}</span>
+      <span class="rmeta">${esc(metaBits.join(' · '))}</span>
       <span class="rnav"><button id="rd-prev" title="Previous in this category">← Prev</button><button id="rd-next" title="Next in this category">Next →</button></span>
     </div>
-    <div class="voices">${labels.map((l, i) => voiceBlock(l, it.sections[l], i < 3)).join('')}</div>`;
+    <div class="voices">${labels.map((l, i) => voiceBlock(l, it.sections[l], openByDefault(it.sections[l], i))).join('')}</div>`;
   const list = itemsOf(cat);
   const idx = list.findIndex(x => x.id === id);
   $('#rd-prev').onclick = () => openItem(list[(idx - 1 + list.length) % list.length].id);

@@ -3,6 +3,10 @@
   "description": "A reading on scale, awe, and the oldest shared calendar — in the spirit of How the Cards Can Work. Not whether the stars decide our fate, but what happens when we agree to relate to the visible sky as though it were alive.",
   "cover_image_url": null,
   "grammar_type": "custom",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — contemporary reading (essay), built from course/the-right-size.mdx."
+  },
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
   "is_published": true,

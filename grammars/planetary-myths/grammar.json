@@ -3,6 +3,10 @@
   "description": "One item per classical planet, carrying the myth that grew up around it in three unrelated traditions — Greco-Roman, Vedic (Jyotiṣa), and Babylonian/Mesopotamian — side by side, so the disagreement between them is visible rather than smoothed over. Each lens is presented as an owned lens: a summary with a link to real sources, never paraphrased as this site's own authority. Built for the History of Astrology course; see research/why-astrology/04-planetary-myths.md for the full source list with confidence markers. Provenance, honestly: this is a 2026 research compilation by an AI research pass for recursive.eco, drawing on public encyclopedic and scholarly-adjacent web sources (cited inline per section) — not a primary-source translation and not a claim of any tradition's own authority. For the historical registers in their own words, see grammars/tetrabiblos-ashmand and grammars/alan-leo in this repo.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800",
   "grammar_type": "custom",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — 2026 research compilation across three traditions (Greco-Roman, Vedic, Babylonian). Not a primary-source translation; per-item confidence and inline source lines carry the sourcing."
+  },
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
   "is_published": true,
@@ -37,7 +41,9 @@
         "planet": "Sun",
         "greco_roman_deity": "Helios / Apollo",
         "vedic_graha": "Sūrya",
-        "babylonian_deity": "Shamash / Utu"
+        "babylonian_deity": "Shamash / Utu",
+        "confidence": "medium",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Apollo_del_Belvedere.jpg?width=800"
     },
@@ -65,7 +71,9 @@
         "planet": "Moon",
         "greco_roman_deity": "Selene / Luna",
         "vedic_graha": "Chandra (Soma)",
-        "babylonian_deity": "Nanna / Sin"
+        "babylonian_deity": "Nanna / Sin",
+        "confidence": "medium",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bronze_lamp_representing_the_moon-goddess_Luna._Roman_1st_century_AD._British_Museum,_London.jpg?width=800"
     },
@@ -92,7 +100,9 @@
         "planet": "Mercury",
         "greco_roman_deity": "Hermes / Mercury",
         "vedic_graha": "Budha",
-        "babylonian_deity": "Nabu"
+        "babylonian_deity": "Nabu",
+        "confidence": "medium",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_Hermes_Chiaramonti.jpg?width=800"
     },
@@ -119,7 +129,9 @@
         "planet": "Venus",
         "greco_roman_deity": "Aphrodite / Venus",
         "vedic_graha": "Shukra",
-        "babylonian_deity": "Inanna / Ishtar"
+        "babylonian_deity": "Inanna / Ishtar",
+        "confidence": "medium",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Venus_de_Milo_Louvre_Ma399.jpg?width=800"
     },
@@ -145,7 +157,9 @@
         "planet": "Mars",
         "greco_roman_deity": "Ares / Mars",
         "vedic_graha": "Mangala (Aṅgāraka)",
-        "babylonian_deity": "Nergal"
+        "babylonian_deity": "Nergal",
+        "confidence": "medium",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mars_Borghese_(Louvre).jpg?width=800"
     },
@@ -171,7 +185,9 @@
         "planet": "Jupiter",
         "greco_roman_deity": "Zeus / Jupiter",
         "vedic_graha": "Bṛhaspati (Guru)",
-        "babylonian_deity": "Marduk"
+        "babylonian_deity": "Marduk",
+        "confidence": "medium",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Jupiter_statue,_Vaticana.jpg?width=800"
     },
@@ -197,7 +213,9 @@
         "planet": "Saturn",
         "greco_roman_deity": "Kronos / Saturn",
         "vedic_graha": "Shani",
-        "babylonian_deity": "Ninurta / Ninib (contested)"
+        "babylonian_deity": "Ninurta / Ninib (contested)",
+        "confidence": "low",
+        "_source": "research/why-astrology/04-planetary-myths.md — that dossier's per-claim confidence key (✔ corroborated / ○ secondary-or-single-source / ◆ contested-interpretive) is the basis for this rating; the inline source lines in each section carry the citations. Rated low because the Mesopotamian identification for this planet is genuinely contested in the sources themselves (Ninurta vs. the solar Ninib variant), as the Babylonian section says."
       },
       "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Francisco_de_Goya,_Saturno_devorando_a_su_hijo_(1819-1823).jpg?width=800"
     }

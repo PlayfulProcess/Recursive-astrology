@@ -89,7 +89,7 @@
   <header class="hero">
     <div class="kicker">The Recursive Astrology &middot; genealogy</div>
     <h1>The history of astrology, as a lineage</h1>
-    <p class="lede">Ten historiographical eras, oldest at the top, read as a family tree rather than a
+    <p class="lede"><span id="era-count">The</span> historiographical eras, oldest at the top, read as a family tree rather than a
       list — where one stance grows out of another, where it forks, and where a later voice answers or
       breaks from what came before. Every node's name, dates, and description come straight from this
       repo's own <code>historiographies-of-astrology</code> grammar; only the lines connecting them are
@@ -114,10 +114,10 @@
     <code>grammars/historiographies-of-astrology/grammar.json</code> — add or edit a <code>view-*</code>
     item there and it appears here automatically, no code change needed. The parent&rarr;child lines are
     a small hardcoded <code>EDGES</code> list in this page, because lineage is this page's own honest
-    simplification of a five-thousand-year practice, not a fact stored in the grammar itself. Four eras
-    here also have a full grammar in this repo you can open — Ptolemy's <em>Tetrabiblos</em>, Alan Leo,
-    Proctor's skeptical astrology, and the canonical Western interpretation set — look for their
-    Cards / Study / Tree links on the matching node.
+    simplification of a five-thousand-year practice, not a fact stored in the grammar itself.
+    <span id="grammar-count">Some</span> eras here also have a full grammar in this repo you can open —
+    Ptolemy's <em>Tetrabiblos</em>, Alan Leo, Proctor's skeptical astrology, and the canonical Western
+    interpretation set — look for their Cards / Study / Tree links on the matching node.
   </div>
 </div>
 
@@ -151,6 +151,18 @@ function firstProse(sections){
   const v = Object.values(sections || {})[0] || '';
   return String(v).replace(/[*`_#>]/g,'');
 }
+// Trim to a word boundary so a card blurb never ends mid-word ("…of the whole sk…").
+function snippet(text, max){
+  const s = String(text).trim();
+  if (s.length <= max) return { text: s, cut: false };
+  const cut = s.slice(0, max), sp = cut.lastIndexOf(' ');
+  return { text: (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,;:.—–-]+$/, ''), cut: true };
+}
+// Counts stated in prose are read from the data, never typed in — the page used to
+// claim "Ten eras" after an eleventh (the Sun-Sign Press) was added to the grammar.
+const NUMWORD = ['No','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten',
+                 'Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen'];
+const numWord = n => NUMWORD[n] || String(n);
 
 // ── the one hardcoded claim on this page: who grows out of whom.
 // [parent id, child id, isBranch] — isBranch = a parallel/diverging line, not
@@ -164,6 +176,12 @@ const EDGES = [
   ['view-decline-demarcation',       'view-theosophical-revival',        false],
   ['view-theosophical-revival',      'view-humanistic-psychological',    false],
   ['view-theosophical-revival',      'view-empirical-test-tradition',    true],
+  // The sun-sign column (Naylor, Sunday Express, 1930) is the popular commercial
+  // offshoot of the Theosophical revival's sign-centred astrology — a diverging
+  // branch, not a continuation of the historiographical mainline. Without this
+  // edge the era had no parent and rendered at the TOP of a tree whose whole
+  // claim is "oldest first", beside 2nd-millennium-BCE Babylon.
+  ['view-theosophical-revival',      'view-sun-sign-press',              true],
   ['view-humanistic-psychological',  'view-contemporary-resurgence',     false],
   ['view-empirical-test-tradition',  'view-contemporary-resurgence',     true],
 ];
@@ -207,11 +225,13 @@ function linkChips(slug){
 function nodeCardHTML(id){
   const it = NODES[id];
   const era = (it.metadata && it.metadata.era) || '';
+  // No plate on record → no plate. The old placeholder rendered a bare 104px grey
+  // slab that read as a broken image, on the two eras the grammar has no image for.
   const img = it.image_url
     ? `<img class="nimg" src="${escHtml(it.image_url)}" alt="" loading="lazy" onerror="this.remove()">`
-    : `<div class="nimg nimg-empty" aria-hidden="true"></div>`;
-  const prose = firstProse(it.sections);
-  const desc = escHtml(prose.slice(0, 168)) + (prose.length > 168 ? '&hellip;' : '');
+    : '';
+  const snip = snippet(firstProse(it.sections), 168);
+  const desc = escHtml(snip.text) + (snip.cut ? '&hellip;' : '');
   const slug = GRAMMAR_LINKS[id];
   const links = slug ? `<div class="nlinks">${linkChips(slug)}</div>` : '';
   return `<div class="node">
@@ -303,6 +323,8 @@ async function init(){
   } catch (e) { /* links are additive — the tree still renders without them */ }
 
   const ids = Object.keys(NODES);
+  $('#era-count').textContent = numWord(ids.length);
+  $('#grammar-count').textContent = numWord(ids.filter(id => GRAMMAR_LINKS[id] && PREVIEW[GRAMMAR_LINKS[id]]).length);
   const rows = levelsOf(ids, EDGES.filter(([p, c]) => NODES[p] && NODES[c]));
   const wrap = $('#tree-wrap');
   rows.forEach((rowIds, i) => {

@@ -39,6 +39,7 @@
     })();
     </script>
     <script src="../site-header.js?v=46"></script>
+    <script src="md.js?v=1"></script>
     <script src="../view-switcher.js?v=12"></script>
     <style>
         /* Unified Grammar Theme - adapts based on grammar type */
@@ -2007,25 +2008,35 @@
            stores nothing, compatible with recursive.eco's UnifiedItem shape. */
         .section-lens-bar {
             display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-            margin: 2px 0 10px; padding: 8px 10px;
-            background: rgba(255,255,255,.03);
-            border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
+            margin: 2px 0 10px; padding: 8px 10px; max-width: 100%;
+            /* theme tokens, not translucent white — on light paper the old values left
+               the bar and its chips with no visible surface or edge at all */
+            background: var(--panel2);
+            border: 1px solid var(--line); border-radius: 10px;
         }
         .section-lens-bar.hidden { display: none; }
         .lens-bar-label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
             color: var(--grammar-text-muted, #6b6457); margin-right: 2px; }
         .lens-display-select {
-            background: #f4f1ea; color: #221f1a; border: 1px solid #d8d2c6;
+            background: var(--bg); color: var(--ink); border: 1px solid var(--line);
             border-radius: 8px; padding: 5px 9px; font-size: 12px; font-weight: 600; cursor: pointer;
+            /* A <select> is sized by its LONGEST option. The public-domain sections are
+               named "The record — Sepharial (Astrology: How to Make and Read Your Own
+               Horoscope, 1920)", which blew this control out to 544px — wider than a
+               375px phone — and dragged the whole page (and the card modal with it) into
+               horizontal scroll. Cap it and let the closed control ellipsize. */
+            max-width: 100%; text-overflow: ellipsis;
         }
+        @media (max-width: 640px) { .lens-display-select { width: 100%; } }
         .lens-chip {
             display: inline-flex; align-items: center; gap: 5px;
             padding: 4px 9px; border-radius: 999px; cursor: pointer; user-select: none;
-            font-size: 12px; line-height: 1; border: 1px solid rgba(255,255,255,.16);
-            background: rgba(255,255,255,.06); color: var(--grammar-text, #221f1a);
+            font-size: 12px; line-height: 1; border: 1px solid var(--line);
+            background: var(--surface); color: var(--grammar-text, #221f1a);
             transition: opacity .12s, background .12s;
+            max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         }
-        .lens-chip:hover { background: rgba(255,255,255,.12); }
+        .lens-chip:hover { background: var(--chip); }
         .lens-chip.off { opacity: .38; text-decoration: line-through; }
         .lens-chip .lens-cov { font-size: 11.5px; opacity: .7; }
         .lens-chip.attributed { border-color: rgba(212,150,90,.5); }
@@ -2076,9 +2087,9 @@
 <body>
     <!-- Shared grammar loading component (local copy) -->
     <script src="grammar-loader.js"></script>
-    <script src="dimension-engine.js?v=1"></script>
-    <script src="deck-picker.js?v=2"></script>
-    <script src="eco-links.js?v=2"></script>
+    <script src="dimension-engine.js?v=2"></script>
+    <script src="deck-picker.js?v=3"></script>
+    <script src="eco-links.js?v=3"></script>
     <script>window.RecursiveEcoLinks && RecursiveEcoLinks.ready();</script>
 
     <!-- Site Header -->
@@ -2446,11 +2457,21 @@
                 // (window.recursiveAuth reads the .recursive.eco cookie the app sets, so a
                 // sign-in on flow.recursive.eco is seen here too). The static stub
                 // (window.RecursiveAuth) always returns null — that is why "Sign in to copy"
-                // never picked up the login. Wait briefly for the async widget to attach.
-                for (let _i = 0; _i < 40 && !window.recursiveAuth; _i++) { await new Promise(r => setTimeout(r, 100)); }
-                try { currentUser = window.recursiveAuth ? await window.recursiveAuth.getUser() : null; }
-                catch (_) { currentUser = null; }
+                // never picked up the login.
+                //
+                // This wait used to be AWAITED here, so on the static site — where nothing
+                // ever attaches window.recursiveAuth — every card page sat on "Loading
+                // grammar..." for the full 4 s before the first paint. Auth only decides
+                // whether the Edit/Copy buttons are live, so it now resolves in the
+                // background and refreshes those buttons when (if) it lands.
                 updateEditCopyButtons();
+                (async () => {
+                    for (let _i = 0; _i < 40 && !window.recursiveAuth; _i++) { await new Promise(r => setTimeout(r, 100)); }
+                    if (!window.recursiveAuth) return;          // static site: no auth widget, nothing to update
+                    try { currentUser = await window.recursiveAuth.getUser(); }
+                    catch (_) { currentUser = null; }
+                    updateEditCopyButtons();
+                })();
 
                 // Detect grammar type and ID from URL
                 const params = new URLSearchParams(window.location.search);
@@ -2590,7 +2611,8 @@
                 const loads = slugs.map(async slug => {
                     const g = await (await fetch(`../grammars/${slug}/grammar.json`)).json();
                     const cm = collMap[slug] || {};
-                    const deckName = (cm.name || g.name || slug).split(' — ')[0].slice(0, 34);
+                    // word-boundary clip with a real ellipsis, not a mid-word chop
+                    const deckName = DimensionEngine.shortLabel(cm.name || g.name || slug, 34);
                     const normalized = normalizeItems(grammarType, g);
                     // Stamp each item with deck metadata so it shows as a grouping field
                     normalized.forEach(item => {
@@ -2657,12 +2679,26 @@
         }
 
         // Chip tray for multi-deck mode: draggable dimension chips above the sidebar
+        // `categories.arcana` is the shared slot this viewer stores an item's top
+        // category in — for a tarot grammar that really is major/minor arcana, but for
+        // an astrology grammar it holds planet/sign/house/aspect, so the chip tray and
+        // the sidebar were labelling a category axis "arcana" and "By arcana". Show the
+        // tarot word only when the values are actually arcana values.
+        function fieldLabel(name) {
+            if (name !== 'arcana') return name;
+            const vals = new Set(items.map(i => i.categories?.arcana).filter(Boolean));
+            return (vals.has('major') || vals.has('minor')) ? 'arcana' : 'category';
+        }
+
         function buildDimChipTray(fields) {
             let tray = document.getElementById('dim-chip-tray');
             if (!tray) {
                 tray = document.createElement('div');
                 tray.id = 'dim-chip-tray';
-                tray.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;padding:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;';
+                // theme tokens, not the old translucent-white dark-theme values — on this
+                // light paper a white border on a white fill made the tray and its chips
+                // read as unstyled floating text.
+                tray.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;padding:8px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;';
                 // Mount ABOVE the sidebar+content row, not inside it. The row is a
                 // flex container; inserting the tray as a sibling of the sidebar made
                 // it a 3rd flex column that ate ~900px and collapsed the content to a
@@ -2675,8 +2711,9 @@
                 const chip = document.createElement('span');
                 chip.draggable = true;
                 chip.dataset.field = f.name;
-                chip.style.cssText = `display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:14px;font-size:12px;cursor:grab;border:1px solid rgba(255,255,255,.18);background:${deckGroupField===f.name?'#2f5d8a':'rgba(255,255,255,.07)'};color:${deckGroupField===f.name?'#fff':'var(--grammar-text-muted)'};user-select:none;`;
-                chip.textContent = f.name + ' (' + f.count + ')';
+                chip.style.cssText = `display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:14px;font-size:12px;cursor:grab;border:1px solid var(--line);background:${deckGroupField===f.name?'var(--accent)':'var(--surface)'};color:${deckGroupField===f.name?'#fff':'var(--grammar-text-muted)'};user-select:none;`;
+                chip.textContent = fieldLabel(f.name) + ' (' + f.count + ')';
+                chip.title = 'Group the cards by ' + fieldLabel(f.name);
                 chip.addEventListener('dragstart', e => {
                     e.dataTransfer.setData('text/plain', JSON.stringify({ field: f.name }));
                     chip.style.opacity = '.5';
@@ -2720,9 +2757,13 @@
             // Drop zone at the top of the sidebar
             const dropZone = document.createElement('div');
             dropZone.style.cssText = `padding:6px 8px;border-radius:6px;border:1.5px dashed rgba(255,255,255,.18);font-size:11.5px;color:var(--grammar-text-muted);margin-bottom:8px;text-align:center;transition:border-color .15s,background .15s;`;
-            dropZone.textContent = deckGroupField ? ('Grouped by: ' + deckGroupField + ' <rt-icon name="x"></rt-icon>') : '⊸ Tap a dimension above to group';
+            // was `textContent = '… <rt-icon name="x"></rt-icon>'`, which printed the raw
+            // element markup to the user as literal text. innerHTML so the icon renders.
+            dropZone.innerHTML = deckGroupField
+                ? ('Grouped by: ' + escapeHtml(fieldLabel(deckGroupField)) + ' <rt-icon name="x"></rt-icon>')
+                : '⊸ Tap a dimension above to group';
             dropZone.title = deckGroupField ? 'Tap to clear grouping' : 'Tap a dimension chip above (or drag it here) to group cards';
-            if (deckGroupField) { dropZone.style.borderColor = '#2f5d8a'; dropZone.style.color = '#b8902f'; dropZone.style.cursor = 'pointer'; dropZone.addEventListener('click', () => applyDeckGroupField(deckGroupField)); }
+            if (deckGroupField) { dropZone.style.borderColor = 'var(--accent)'; dropZone.style.color = 'var(--accent)'; dropZone.style.cursor = 'pointer'; dropZone.addEventListener('click', () => applyDeckGroupField(deckGroupField)); }
             dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = 'rgba(47,93,138,.18)'; dropZone.style.borderColor = '#2f5d8a'; });
             dropZone.addEventListener('dragleave', () => { dropZone.style.background = ''; dropZone.style.borderColor = 'rgba(255,255,255,.18)'; });
             dropZone.addEventListener('drop', e => {
@@ -2739,7 +2780,7 @@
 
             const hdr = document.createElement('div');
             hdr.className = 'sidebar-group-header';
-            hdr.textContent = 'By ' + (deckGroupField || 'Deck');
+            hdr.textContent = 'By ' + (deckGroupField ? fieldLabel(deckGroupField) : 'Deck');
             hierarchyIndex.appendChild(hdr);
 
             groups.forEach((grpItems, groupName) => {
@@ -3521,11 +3562,14 @@
             if (!el) return;
             if (!pillAxisId) { el.hidden = true; el.innerHTML = ''; return; }
             const axis = items.find(i => i.id === pillAxisId);
-            let html = `<b>${escapeHtml(axis ? axis.name : '')}</b> — ${escapeHtml(stripMd(axisExplanation(axis)).slice(0, 280))}`;
+            // MD.clip cuts on a word boundary and appends a real ellipsis; the untruncated
+            // blurb stays available in the title attribute.
+            const axisFull = stripMd(axisExplanation(axis));
+            let html = `<b>${escapeHtml(axis ? axis.name : '')}</b> — <span title="${escapeHtml(axisFull)}">${escapeHtml(MD.clip(axisFull, 280))}</span>`;
             if (hierarchyFilter && hierarchyFilter.id) {
                 const child = items.find(i => i.id === hierarchyFilter.id);
                 const cx = stripMd(axisExplanation(child));
-                if (child && cx) html += `<br><b>${escapeHtml(child.name)}</b> — ${escapeHtml(cx.slice(0, 220))}`;
+                if (child && cx) html += `<br><b>${escapeHtml(child.name)}</b> — <span title="${escapeHtml(cx)}">${escapeHtml(MD.clip(cx, 220))}</span>`;
             }
             el.innerHTML = html; el.hidden = false;
         }
@@ -3743,20 +3787,30 @@
         async function populateDeckSwitcher() {
             const sel = document.getElementById('deck-switcher'); if (!sel) return;
             const curSrc = new URLSearchParams(location.search).get('src') || '';
-            let list = [];
+            let list = [], metaSlug = null;
             try {
                 const c = await (await fetch('../grammars/_collection.json')).json();
-                list = (c.grammars || c.collection || c.decks || []).map(d => ({ slug: d.slug, name: d.name || d.slug, common_name: d.common_name, meta: !!d.is_meta, year: d.year })).filter(d => d.slug);
+                list = (c.grammars || c.collection || c.decks || []).map(d => ({ slug: d.slug, name: d.name || d.slug, common_name: d.common_name, meta: !!d.is_meta, year: d.year, year_label: d.year_label })).filter(d => d.slug);
+                // The collection names its OWN meta grammar. This used to hardcode the
+                // tarot repo's 'all-decks-many-lenses' and unshift it unconditionally, so
+                // the first option in the switcher pointed at a grammar that does not
+                // exist here — picking it 404'd.
+                metaSlug = c.meta_grammar || (list.find(d => d.meta) || {}).slug || null;
             } catch (e) { sel.style.display = 'none'; return; }
-            // ensure the fat meta is always offered, even if not listed in _collection
-            if (!list.some(d => d.slug === 'all-decks-many-lenses')) list.unshift({ slug: 'all-decks-many-lenses', name: 'All Decks (the meta)', meta: true });
-            const metaItem = list.find(d => d.slug === 'all-decks-many-lenses') || list.find(d => d.meta) || { slug: 'all-decks-many-lenses', name: 'All Decks (the meta)' };
-            const decks = list.filter(d => d.slug !== metaItem.slug).sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999) || (a.name || '').localeCompare(b.name || ''));
+            const metaItem = metaSlug ? list.find(d => d.slug === metaSlug) : null;
+            // Dating contract: `year` exists only for provenance === 'record'; absent means
+            // genuinely undated. Dated grammars first (oldest → newest), then undated by name.
+            const dated = d => typeof d.year === 'number';
+            const decks = list.filter(d => !metaItem || d.slug !== metaItem.slug)
+                .sort((a, b) => (dated(a) ? 0 : 1) - (dated(b) ? 0 : 1) ||
+                                (dated(a) ? a.year - b.year : 0) ||
+                                (a.name || '').localeCompare(b.name || ''));
             const srcFor = s => '../grammars/' + s + '/grammar.json';
             // Prefer the curated common_name (consistent short name, same string the timeline/index use);
             // fall back to auto-shortening the long grammar name at its first em-dash.
-            const opt = (s, label) => `<option value="${srcFor(s)}"${curSrc.includes('/' + s + '/') ? ' selected' : ''}>${label.replace(/\s+[—–-]\s+.*/, '')}</option>`;
-            sel.innerHTML = opt(metaItem.slug, '✦ All Decks (the meta)') + decks.map(d => opt(d.slug, d.common_name || d.name)).join('');
+            const opt = (s, label, title) => `<option value="${srcFor(s)}"${curSrc.includes('/' + s + '/') ? ' selected' : ''}${title ? ` title="${escapeHtml(title)}"` : ''}>${escapeHtml(String(label).replace(/\s+[—–-]\s+.*/, ''))}</option>`;
+            sel.innerHTML = (metaItem ? opt(metaItem.slug, '✦ ' + (metaItem.common_name || metaItem.name), metaItem.name + (metaItem.year_label ? ' · ' + metaItem.year_label : '')) : '')
+                + decks.map(d => opt(d.slug, d.common_name || d.name, d.name + (d.year_label ? ' · ' + d.year_label : ''))).join('');
         }
 
         // In-place dimension menu — NO redirect. Just changes how this dimension is
@@ -3775,16 +3829,20 @@
             const NAV = { genealogy: '../genealogy.html', timeline: 'timeline.html', tree: 'tree-viewer.html' };
             const menu = document.createElement('div');
             menu.className = 'lens-menu-pop';
-            menu.style.cssText = 'position:fixed;z-index:9999;background:#f4f1ea;border:1px solid #d8d2c6;border-radius:9px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.55);min-width:190px;';
+            menu.style.cssText = 'position:fixed;z-index:9999;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px;box-shadow:0 12px 32px rgba(60,45,20,.28);min-width:190px;';
             const r = anchor.getBoundingClientRect();
             menu.style.left = Math.min(r.left, window.innerWidth - 210) + 'px';
             menu.style.top = (r.bottom + 4) + 'px';
             opts.forEach(([label, mode]) => {
-                if (mode === 'sep') { const hr = document.createElement('div'); hr.style.cssText = 'height:1px;background:#d8d2c6;margin:5px 4px;'; menu.appendChild(hr); return; }
+                if (mode === 'sep') { const hr = document.createElement('div'); hr.style.cssText = 'height:1px;background:var(--line);margin:5px 4px;'; menu.appendChild(hr); return; }
                 const a = document.createElement('div');
-                a.textContent = label;
-                a.style.cssText = 'padding:7px 11px;border-radius:6px;cursor:pointer;color:#4a4439;font-size:13px;';
-                a.onmouseenter = () => a.style.background = '#241d3a';
+                // These labels carry <rt-icon> markup; `textContent` printed the raw tags
+                // to the user ("<rt-icon name="grid"></rt-icon> Filter the grid to this").
+                a.innerHTML = label;
+                a.style.cssText = 'padding:7px 11px;border-radius:6px;cursor:pointer;color:var(--ink-soft);font-size:13px;';
+                // hover was #241d3a — near-black behind near-black text, i.e. the row
+                // vanished on hover. Light-theme tint from the tokens instead.
+                a.onmouseenter = () => a.style.background = 'var(--chip)';
                 a.onmouseleave = () => a.style.background = '';
                 a.onclick = (ev) => {
                     ev.stopPropagation(); menu.remove();
@@ -5305,54 +5363,11 @@ ${reason}
             }
         };
 
-        // Lightweight markdown to HTML: images, bold, italic, links, line breaks
-        function mdToHtml(s) {
-            // Block-aware markdown: headers (#), blockquotes (>), lists (-/*/+),
-            // paragraphs, plus inline bold/italic/code/links/images. Self-styling
-            // (inline styles) so it looks right in any themed viewer.
-            if (!s) return '';
-            const esc = x => x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-            const inline = t => esc(t)
-                .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;height:auto;margin:8px 0;border-radius:8px;">')
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                // Research-source paths (e.g. `research/cards/foo.md`) become GitHub links —
-                // every "Research note" points at its dossier on GitHub, app-wide.
-                .replace(/<code>(research\/[^<\s]+?\.md)<\/code>/g,
-                    '<a href="https://github.com/PlayfulProcess/Recursive-astrology/blob/main/$1" target="_blank" rel="noopener noreferrer" title="View research source on GitHub">$1 ↗</a>')
-                .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
-            const lines = String(s).split(/\r?\n/);
-            let html = '', inList = false, inQuote = false, m;
-            // Block buffering (Jul 7 2026): prose in these grammars is hard-wrapped
-            // mid-sentence (and list items span several wrapped, indented lines), so
-            // processing each source line on its own broke bold/italic that crossed a
-            // wrap (the `**` opened on one line and closed on the next → literal
-            // asterisks) and split single sentences into many gappy <p>/<li>. Fix:
-            // buffer each block's lines and join them with a space (standard Markdown
-            // soft-break) before running inline(), flushing on a blank line, a new
-            // block, or a new list item.
-            //   - `para`  = the current paragraph's lines
-            //   - `liBuf` = the current list item's lines (bullet + its continuations)
-            let para = [], liBuf = null;
-            const flushP = () => { if (para.length) { html += `<p style="margin:.6em 0;">${inline(para.join(' '))}</p>`; para = []; } };
-            const flushLI = () => { if (liBuf) { html += `<li>${inline(liBuf.join(' '))}</li>`; liBuf = null; } };
-            const closeL = () => { flushLI(); if (inList) { html += '</ul>'; inList = false; } };
-            const closeQ = () => { if (inQuote) { html += '</blockquote>'; inQuote = false; } };
-            for (const raw of lines) {
-                const line = raw.trim();
-                if (!line) { flushP(); closeL(); closeQ(); continue; }
-                if (m = line.match(/^(#{1,6})\s+(.*)$/)) { flushP(); closeL(); closeQ(); html += `<div style="font-weight:700;font-size:1.05em;margin:.7em 0 .25em;">${inline(m[2])}</div>`; continue; }
-                if (m = line.match(/^>\s?(.*)$/)) { flushP(); closeL(); if (!inQuote) { html += '<blockquote style="border-left:3px solid currentColor;opacity:.8;margin:.5em 0;padding:.1em 0 .1em .8em;">'; inQuote = true; } html += inline(m[1]) + ' '; continue; }
-                if (m = line.match(/^[-*+]\s+(.*)$/)) { flushP(); closeQ(); flushLI(); if (!inList) { html += '<ul style="margin:.4em 0;padding-left:1.2em;">'; inList = true; } liBuf = [m[1]]; continue; }
-                // Plain line: a continuation of the open list item (no blank line broke
-                // it) folds into that item; otherwise it extends the current paragraph.
-                if (inList && liBuf) { liBuf.push(line); continue; }
-                closeL(); closeQ(); para.push(line);
-            }
-            flushP(); closeL(); closeQ();
-            return html;
-        }
+        // Markdown → HTML. The implementation this viewer used to carry inline now
+        // lives in viewers/md.js, shared by every viewer (see that file's header for
+        // why: four copies had drifted, and two of them leaked raw `*` / `>` markers).
+        // Kept as a thin local name so every call site below is unchanged.
+        function mdToHtml(s) { return MD.toHtml(s); }
 
         // Convert Spotify URL to embed URL
         function getSpotifyEmbedUrl(url) {

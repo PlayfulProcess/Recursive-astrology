@@ -62,8 +62,10 @@
       '.eco-btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;' +
       'text-decoration:none;padding:8px 14px;border-radius:9px;border:1px solid transparent;transition:filter .15s,background .15s}' +
       '.eco-cast{background:linear-gradient(135deg,#1f4468,#2f5d8a);color:#fff;box-shadow:0 3px 14px rgba(47,93,138,.35)}' +
-      '.eco-view{background:transparent;color:#b9a3f5;border-color:rgba(47,93,138,.45)}' +
-      '.eco-edit{background:transparent;color:#9ad0b5;border-color:rgba(129,178,154,.45)}' +
+      // pale lavender / pale mint were dark-theme values: unreadable on this light
+      // paper. Ink and the one blue accent, per theme.css.
+      '.eco-view{background:transparent;color:#2f5d8a;border-color:rgba(47,93,138,.45)}' +
+      '.eco-edit{background:transparent;color:#3f7a5c;border-color:rgba(63,122,92,.45)}' +
       '.eco-btn:hover{filter:brightness(1.12)}' +
       '.eco-view:hover{background:rgba(47,93,138,.12)} .eco-edit:hover{background:rgba(129,178,154,.10)}';
     document.head.appendChild(s);

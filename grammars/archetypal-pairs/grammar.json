@@ -20,11 +20,14 @@
   "description": "Archetypal Astrology — the planets in relationship, not sign by sign but pair by pair. Richard Tarnas's whole method began from a plain observation: every tradition that ever read the sky agreed on the SAME planetary relationships mattering, even when they disagreed about almost everything else — what a planet was, who ruled it, what it meant. Aspects between planets, not the planets alone, were the one thing Ptolemy, Lilly, Jyotiṣa, and the Mesopotamian omen-readers all independently reached for. That convergence was Tarnas's own impetus for archetypal cosmology: find what is common across all traditions by looking at what the traditions themselves kept agreeing to look at.\n\nInspired by Richard Tarnas's archetypal astrology (*Cosmos and Psyche*, 2006; *The Passion of the Western Mind*). These readings are PlayfulProcess's interpretation, written with an AI from its knowledge of his work — NOT Tarnas's words, not his endorsement. Go to the source: https://cosmosandpsyche.com/\n\nThe meta-layer this grammar's design implies is not a second generator script — it is the UI itself. Open any pair on archetypal.html and the parents' own entries from every voice grammar in this repo (Planetary Myths, Ptolemy's Tetrabiblos, Lilly's Christian Astrology, the Jyotiṣa Bṛhat Jātaka, Alan Leo, the Canonical synthesis) stack live beneath the pair's synthesis — Tarnas's real project, restaged: the planets, over time, across every tradition that has ever answered for them. See docs/DESIGN-archetypal.md.",
   "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Scenographia_Systematis_Copernicani.jpg?width=800",
   "grammar_type": "astrology",
+  "provenance": "contemporary",
+  "dating": {
+    "label": "Undated — contemporary synthesis, written 2026 after Richard Tarnas's archetypal astrology (Cosmos and Psyche, 2006). Not Tarnas's text; see _synthesis_note."
+  },
   "creator_name": "PlayfulProcess",
   "creator_link": "https://recursive.eco",
   "default_view": "cards",
   "default_preview": "cards",
-  "provenance": "living",
   "is_published": true,
   "tags": [
     "astrology",

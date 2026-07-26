@@ -77,6 +77,17 @@
 <script>
 const $ = s => document.querySelector(s);
 
+// Snippets used to be a blunt .slice(), which cut chapters off mid-word
+// ("a halo round ", "of the whole sky for the mo"). Trim back to the last
+// word boundary and mark the cut, so a fragment reads as a fragment.
+function snippet(text, max){
+  const s = String(text).replace(/\s*\[@[^\]]+\]/g, '').trim();
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const sp = cut.lastIndexOf(' ');
+  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,;:.—–-]+$/, '') + '…';
+}
+
 async function main(){
   let manifest, grammar;
   try {
@@ -116,7 +127,7 @@ async function main(){
       <div class="era">${meta.era ? meta.era : ''}</div>
       <div class="region">${meta.region || ''}</div>
       <b>${it.name}</b>
-      <div class="snip">${String(firstSection).replace(/\s*\[@[^\]]+\]/g, '').slice(0, 180)}</div>
+      <div class="snip">${snippet(firstSection, 180)}</div>
       ${companions.length ? `<div class="companion">Primary source in this repo →</div>` : ''}
     `;
     grid.appendChild(a);
@@ -133,7 +144,7 @@ async function main(){
       const a = document.createElement('a');
       a.className = 'apcard';
       a.href = 'course-viewer.html?chapter=' + encodeURIComponent(it.id);
-      a.innerHTML = `<b>${it.name}</b><div class="snip">${String(firstSection).replace(/\s*\[@[^\]]+\]/g, '').slice(0, 130)}</div>`;
+      a.innerHTML = `<b>${it.name}</b><div class="snip">${snippet(firstSection, 130)}</div>`;
       apgrid.appendChild(a);
     });
     $('#appendix').hidden = false;
