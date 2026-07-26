@@ -23,7 +23,9 @@
   .honesty a{color:var(--accent);font-weight:600}
 
   .stage-ring{display:flex;justify-content:center;margin:22px 0 4px}
-  svg.ring{max-width:420px;width:100%;height:auto}
+  /* viewBox carries a 25-unit side gutter for the outer planet labels; max-width
+     is raised to match so the ring itself keeps the size it had before. */
+  svg.ring{max-width:470px;width:100%;height:auto}
   .pnode{fill:var(--panel);stroke:var(--line);stroke-width:1.5;cursor:pointer;transition:fill .15s,stroke .15s}
   .pnode:hover,.pnode:focus{stroke:var(--accent);outline:none}
   .pnode.sel{fill:var(--chip,#eaf0f7);stroke:var(--accent);stroke-width:2.5}
@@ -100,7 +102,7 @@
   </div>
 
   <p class="pickhint">Tap <b>one planet</b> to read its archetype and hear every voice in this library; tap a <b>second</b> to read the complex between them.</p>
-  <div class="stage-ring"><svg class="ring" id="ring" viewBox="0 0 400 400" role="list"
+  <div class="stage-ring"><svg class="ring" id="ring" viewBox="-25 0 450 400" role="list"
     aria-label="The ten planets, tap two to read the complex between them"></svg></div>
   <div class="selrow" id="selrow"></div>
 
@@ -173,7 +175,10 @@ function drawRing(){
     const symtxt = el('text', {x, y, class: 'psym', 'data-planet': name}, sym);
     const outerA = (deg - 90) * Math.PI / 180;
     const cosA = Math.cos(outerA);
-    const lox = CX + (R + 20) * cosA, loy = CY + (R + 20) * Math.sin(outerA);
+    // The node discs have r=24, so a label ring at R+20 sat INSIDE them — the
+    // top and bottom labels (Sun, Jupiter) have no sideways escape and were
+    // printed over the disc. R+38 clears both the disc and the dotted guide.
+    const lox = CX + (R + 38) * cosA, loy = CY + (R + 38) * Math.sin(outerA);
     // dynamic anchor: labels on the right side start-align (grow rightward), left side
     // end-align (grow leftward), top/bottom stay centered — keeps every label inside the
     // viewBox instead of overflowing past the SVG edge at 0/180 degrees.

@@ -24,7 +24,10 @@
   .framepill.on{background:var(--chip,#f1ece1);border-color:var(--accent);color:var(--accent)}
   .frame-hint{text-align:center;font-size:12.5px;color:var(--muted);margin:6px 0 0}
   .stage{display:flex;justify-content:center;margin:26px 0 8px}
-  svg.wheel{max-width:560px;width:100%;height:auto}
+  /* the viewBox carries 50 units of side gutter so the horizontal house labels
+     have somewhere to sit outside the rim; max-width is raised to match so the
+     wheel itself keeps roughly the size it had before the gutter was added. */
+  svg.wheel{max-width:660px;width:100%;height:auto}
   .sector{fill:var(--panel);stroke:var(--line);cursor:pointer;transition:fill .15s,stroke .15s}
   .sector:hover,.sector:focus{fill:var(--chip,#f1ece1);outline:none}
   .sector.framed{fill:var(--chip,#f1ece1);stroke:var(--accent);stroke-width:2}
@@ -94,7 +97,7 @@
 
   <div id="grammar-picker"></div>
 
-  <div class="stage"><svg class="wheel" id="wheel" viewBox="0 0 460 460" role="list"
+  <div class="stage"><svg class="wheel" id="wheel" viewBox="-50 0 560 460" role="list"
     aria-label="The twelve houses of a chart, as a wheel"></svg></div>
 
   <div class="note">
@@ -283,7 +286,14 @@ function draw(){
     svg.appendChild(el('text', {x: nx, y: ny + 5, class: 'num', 'text-anchor': 'middle'}, n));
     const [lx, ly] = pt(RLAB, mid);
     const short = it.name.replace(/^\d+\.\s*House of\s*/i, '');
-    svg.appendChild(el('text', {x: lx, y: ly + 3, class: 'houselabel', 'text-anchor': 'middle'}, short));
+    // Horizontal text centred on a radial point straddles the rim: the labels
+    // beside the horizon ("The Hidden", "The Other", "Self", "Craft"…) were
+    // printed over the circle. Anchor each label so it grows AWAY from the
+    // wheel; only the top and bottom labels stay centred.
+    const c = Math.cos(mid * Math.PI / 180);
+    const anchor = c > 0.35 ? 'start' : (c < -0.35 ? 'end' : 'middle');
+    const lxa = anchor === 'start' ? lx + 4 : (anchor === 'end' ? lx - 4 : lx);
+    svg.appendChild(el('text', {x: lxa, y: ly + 3, class: 'houselabel', 'text-anchor': anchor}, short));
   });
   // the horizon (ASC–DSC) axis, painted over the sectors so it stays visible
   svg.appendChild(el('line', {x1: CX - R, y1: CY, x2: CX - R0, y2: CY, class: 'axis'}));

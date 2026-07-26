@@ -39,7 +39,7 @@
     })();
     </script>
     <script src="../site-header.js?v=46"></script>
-    <script src="md.js?v=1"></script>
+    <script src="md.js?v=2"></script>
     <script src="../view-switcher.js?v=12"></script>
     <style>
         /* Unified Grammar Theme - adapts based on grammar type */
@@ -1132,9 +1132,17 @@
             background: transparent; /* no mat — card sits on the light page */
         }
 
-        .item-visual .icon {
+        .item-visual .icon,
+        .modal-visual .icon {
             font-size: 2.5rem;
             color: var(--grammar-accent);
+            /* The twelve zodiac codepoints (U+2648–2653) default to EMOJI
+               presentation, so Chrome drew Aries…Pisces as saturated purple
+               app-icons in the middle of a wall of typographic planet glyphs
+               (U+2609, U+263D, …). Ask for the text presentation explicitly, so
+               all forty-three symbols are drawn in one hand and in this site's
+               own colour. (builder-visible, Jul 26 2026.) */
+            font-variant-emoji: text;
         }
 
         /* Delicate, neutral "no image yet" mark — override the accent colour so it
@@ -1372,6 +1380,17 @@
 
         .modal-visual img:hover {
             transform: scale(1.02);
+        }
+
+        /* Provenance caption under a plate (viewers/md.js → MD.credit). Quiet by
+           design: it should read as a museum label, not compete with the card. */
+        .modal-visual figure { max-width: 100%; }
+        .modal-visual .md-credit {
+            color: var(--muted);
+            text-align: center;
+            max-width: 34ch;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Image Lightbox */
@@ -2087,7 +2106,7 @@
 <body>
     <!-- Shared grammar loading component (local copy) -->
     <script src="grammar-loader.js"></script>
-    <script src="dimension-engine.js?v=2"></script>
+    <script src="dimension-engine.js?v=3"></script>
     <script src="deck-picker.js?v=3"></script>
     <script src="eco-links.js?v=3"></script>
     <script>window.RecursiveEcoLinks && RecursiveEcoLinks.ready();</script>
@@ -2213,7 +2232,10 @@
     <!-- Image Lightbox -->
     <div id="image-lightbox" class="image-lightbox">
         <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-        <img id="lightbox-image" src="" alt="Enlarged image" onclick="event.stopPropagation()">
+        <!-- no src="" here: an empty src makes the browser re-request the PAGE as an
+             image on every load — a wasted round-trip and a phantom "broken image"
+             in any audit. openLightbox() sets .src when it opens. -->
+        <img id="lightbox-image" alt="Enlarged image" onclick="event.stopPropagation()">
     </div>
 
     <!-- Report Modal -->
@@ -4419,7 +4441,16 @@
             // Render visual - prefer explicit image, fall through to YouTube thumb, then icon
             const detailThumbUrl = getItemThumbnailUrl(item);
             if (detailThumbUrl) {
-                modalVisual.innerHTML = `<img src="${detailThumbUrl}" alt="${escapeHtml(item.name)}" onclick="openLightbox('${detailThumbUrl}')" title="Click to enlarge">`;
+                // The illustration pass records `metadata.image_credit` for every
+                // public-domain plate it added; until Jul 26 2026 nothing rendered
+                // it, so the sourcing was recorded but invisible. The shared caption
+                // (viewers/md.js → MD.credit) names the plate and links its Commons
+                // file page, where the public-domain status is actually stated.
+                const _credit = (window.MD && MD.credit)
+                    ? MD.credit((item.metadata || {}).image_credit) : '';
+                modalVisual.innerHTML = `<figure style="margin:0">`
+                    + `<img src="${detailThumbUrl}" alt="${escapeHtml(item.name)}" onclick="openLightbox('${detailThumbUrl}')" title="Click to enlarge">`
+                    + _credit + `</figure>`;
                 modalVisual.style.display = '';
             } else if (item.icon) {
                 modalVisual.innerHTML = `<span class="icon">${item.icon}</span>`;
@@ -5252,13 +5283,25 @@ ${reason}
             }
 
             // Ensure Special:FilePath URLs have proper encoding (handles parentheses, etc.)
-            const filePathMatch = url.match(/^(https?:\/\/[^\/]+\/wiki\/Special:FilePath\/)(.+)$/);
+            //
+            // Fixed Jul 26 2026 — this broke EVERY illustration on the page. The
+            // pattern used to be `(.+)$`, i.e. it swallowed the query string into
+            // the filename and then ran encodeURIComponent over the lot, so
+            //   …/Special:FilePath/Trouvelot_-_The_Planet_Saturn.jpg?width=800
+            // was rewritten to
+            //   …/Special:FilePath/Trouvelot_-_The_Planet_Saturn.jpg%3Fwidth%3D800
+            // — a filename that does not exist, hence a 404 and a broken-image
+            // icon on all 11 illustrated cards. The illustration pass gave every
+            // image_url a `?width=800`, which is what turned a latent bug live.
+            // Encode the FILENAME only; carry the query and fragment through as-is.
+            const filePathMatch = url.match(/^(https?:\/\/[^\/]+\/wiki\/Special:FilePath\/)([^?#]+)(\?[^#]*)?(#.*)?$/);
             if (filePathMatch) {
                 const baseUrl = filePathMatch[1];
                 const filename = filePathMatch[2];
+                const tail = (filePathMatch[3] || '') + (filePathMatch[4] || '');
                 try {
                     const decodedFilename = decodeURIComponent(filename);
-                    return baseUrl + encodeURIComponent(decodedFilename);
+                    return baseUrl + encodeURIComponent(decodedFilename) + tail;
                 } catch (e) {
                     // If decoding fails, use the original URL
                 }

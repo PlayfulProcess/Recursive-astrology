@@ -58,6 +58,12 @@
   .symtile:hover,.symtile:focus-visible{transform:translateY(-2px);border-color:var(--accent);
     box-shadow:0 10px 22px -14px rgba(60,45,20,.5)}
   .symtile.on{background:var(--chip);border-color:var(--gold)}
+  /* The twelve zodiac codepoints (U+2648–2653) default to EMOJI presentation, so
+     Chrome drew the signs as saturated purple app-icons while the planets
+     (U+2609, U+263D, …) stayed typographic — twelve of thirty-one symbols in a
+     palette this site does not own. Ask for the text presentation explicitly.
+     (builder-visible, Jul 26 2026 — the Signs tab was the giveaway.) */
+  .symtile .gl,.rhead .rgl{font-variant-emoji:text}
   .symtile .gl{font-size:26px;line-height:1;color:var(--gold)}
   .symtile .nm{font-size:12px;font-weight:600;color:var(--ink)}
   .symtile .sub{font-size:10px;color:var(--muted)}
@@ -73,8 +79,18 @@
     border:1px solid var(--line);background:var(--panel);color:var(--ink-soft);cursor:pointer}
   .rhead .rnav button:hover{border-color:var(--accent);color:var(--accent)}
 
-  .voices{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
-  .voice{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  /* ── the voices ─────────────────────────────────────────────────────────────
+     Masonry, not a grid (builder-visible fix, Jul 26 2026). This was a CSS grid,
+     and in a grid a row is as tall as its tallest cell: the first voice opens by
+     default and runs several hundred pixels, so the two collapsed voices beside
+     it each sat on top of ~400px of blank page, and the next three voices started
+     below that void. Seven voices then read as three cards and a hole. A
+     multi-column flow lets each collapsed voice sit directly under the one above,
+     so opening or closing any voice re-packs the column instead of punching a gap.
+     `columns` also means the count follows the width — no media queries needed. */
+  .voices{columns:300px;column-gap:14px}
+  .voice{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    break-inside:avoid;margin:0 0 14px;width:100%}
   .voice summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;align-items:baseline;
     gap:8px;background:var(--panel2);border-bottom:1px solid var(--line);user-select:none}
   .voice summary::-webkit-details-marker{display:none}
@@ -104,7 +120,7 @@
 </head>
 <body>
 <script src="../site-header.js?v=46"></script>
-<script src="md.js?v=1"></script>
+<script src="md.js?v=2"></script>
 <site-header active="all-astros"></site-header>
 
 <main class="wrap">

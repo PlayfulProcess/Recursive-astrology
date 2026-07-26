@@ -21,8 +21,11 @@
     transition:transform .15s, border-color .15s, box-shadow .15s}
   .chapter:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 28px rgba(0,0,0,.10)}
   .chapter .num{position:absolute;top:14px;right:16px;font-family:"Fraunces",Georgia,serif;font-size:22px;color:var(--line-soft)}
-  .chapter .era{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
-  .chapter .region{font-size:11.5px;color:var(--muted);margin:1px 0 8px}
+  /* the numeral is absolutely positioned top-right; the title already reserves
+     room for it, but a long era line (chapter 8) ran underneath it — reserve
+     the same 26px here and on the region line. */
+  .chapter .era{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);padding-right:26px}
+  .chapter .region{font-size:11.5px;color:var(--muted);margin:1px 0 8px;padding-right:26px}
   .chapter b{display:block;font-family:"Fraunces",Georgia,serif;font-size:18px;margin:0 0 8px;padding-right:26px}
   .chapter .snip{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .chapter .companion{font-size:11.5px;color:var(--accent);margin-top:9px}
@@ -81,7 +84,14 @@ const $ = s => document.querySelector(s);
 // ("a halo round ", "of the whole sky for the mo"). Trim back to the last
 // word boundary and mark the cut, so a fragment reads as a fragment.
 function snippet(text, max){
-  const s = String(text).replace(/\s*\[@[^\]]+\]/g, '').trim();
+  // These previews are plain text (no markdown pass, unlike course-viewer), so
+  // emphasis markers showed up literally — chapter 9 read "Dane Rudhyar's *The
+  // Astrology of Personality* (1936)". Unwrap them and drop blockquote marks.
+  const s = String(text)
+    .replace(/\s*\[@[^\]]+\]/g, '')
+    .replace(/\*\*?([^*]+)\*\*?/g, '$1')
+    .replace(/^\s*>\s*/gm, '')
+    .trim();
   if (s.length <= max) return s;
   const cut = s.slice(0, max);
   const sp = cut.lastIndexOf(' ');

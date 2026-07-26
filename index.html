@@ -16,13 +16,17 @@
 
   /* hero — plate left, text right (same pattern as tarot's hero) */
   .herowrap{display:flex;gap:clamp(28px,5vw,56px);align-items:center;max-width:1060px;margin:18px auto 0;padding:8px}
-  .herowrap .plate{margin:0;flex:0 0 auto;text-align:center}
+  .herowrap .plate{margin:0;flex:0 1 auto;min-width:0;max-width:100%;text-align:center}
   .herowrap .htext{flex:1 1 auto;min-width:0;text-align:left}
-  .plate .mat{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:3px;
+  .plate .mat{display:inline-block;max-width:100%;box-sizing:border-box;background:#fff;
+    border:1px solid var(--line);border-radius:3px;
     padding:13px;box-shadow:0 34px 64px -34px rgba(20,30,45,.4)}
-  .plate .mat img{display:block;height:clamp(280px,48vh,460px);width:auto;border:1px solid var(--line);background:var(--panel2)}
+  .plate .mat img{display:block;height:clamp(280px,48vh,460px);width:auto;max-width:100%;object-fit:contain;
+    border:1px solid var(--line);background:var(--panel2)}
   .plate .cap{font-family:Inter,system-ui,sans-serif;font-size:11px;letter-spacing:.08em;color:var(--muted);
     text-transform:uppercase;margin-top:13px}
+  .plate .cap a{color:var(--muted);text-decoration:underline}
+  .plate .cap a:hover{color:var(--accent)}
   .htext h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(30px,4.6vw,50px);
     line-height:1.06;letter-spacing:.2px;margin:0;color:var(--ink)}
   .htext h1 .accent{color:var(--accent)}
@@ -50,6 +54,12 @@
     .htext .subtitle,.lede{margin-left:auto;margin-right:auto;text-align:center}
     .cta-row{justify-content:center}
     .plate .mat img{height:clamp(240px,38vh,360px)}
+  }
+  /* Phone widths: the plate is sized by HEIGHT, so on a narrow-but-tall screen
+     it grew wider than the column and overhung both edges — the caption was
+     clipped mid-word at 375px. Below 700px drive the plate by width instead. */
+  @media(max-width:700px){
+    .plate .mat img{height:auto;width:100%}
   }
 
   /* three ways in */
@@ -169,7 +179,9 @@
       <div class="mat">
         <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flammarion.jpg?width=800" alt="The Flammarion engraving — a traveller reaches through the sky to see the machinery beyond it">
       </div>
-      <figcaption class="cap">The Flammarion engraving · anonymous, published 1888</figcaption>
+      <!-- provenance, from the grammar's cover_image_credit: the file page states the PD status -->
+      <figcaption class="cap">The Flammarion engraving · anonymous, published 1888 · public domain via
+        <a href="https://commons.wikimedia.org/wiki/File:Flammarion.jpg" target="_blank" rel="noopener">Wikimedia Commons ↗</a></figcaption>
     </figure>
     <div class="htext">
       <h1>The <span class="accent">Recursive Astrology</span></h1>

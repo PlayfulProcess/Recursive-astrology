@@ -47,6 +47,10 @@
       const lvl = it.level || (it.composite_of?.length ? 2 : 1);
       const r = {
         __name: it.name, __img: it.image_url || it.metadata?.image_url || '',
+        // The plate's public-domain provenance, carried alongside the URL so a
+        // viewer can credit the picture it shows (viewers/md.js → MD.credit).
+        // Object, not a discovered dimension — it is never something to pivot on.
+        __credit: it.metadata?.image_credit || null,
         __id: pid(it.id),
         __children: (it.composite_of || []).map(pid),
         __parents: memberOf[pid(it.id)] || []

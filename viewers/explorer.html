@@ -6,10 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.25">
 <title>Emergence Explorer — Pivot the Sky · Recursive Astrology</title>
 <style>
-  :root{
-         
-      
-  }
+  /* No :root here on purpose — every colour token lives in theme.css (CLAUDE.md).
+     What remains was an empty `:root{}` left behind when the local palette was
+     stripped; removed rather than left as dead CSS. */
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);
     font-family:Inter,system-ui,-apple-system,sans-serif}
@@ -131,6 +130,10 @@
   #det .meta{font-size:12px;color:var(--muted);margin-bottom:10px}
   #det h4{margin:14px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
   #det .rel{display:flex;flex-wrap:wrap;gap:5px}
+  /* A relation pill is capped at 150px in the dense grid, but in this 340px panel
+     that cap cut names off mid-word with no ellipsis to admit it ("Astrology as
+     the Scienc"). Here there is room: let the pill take the panel width and wrap. */
+  #det .rel .epill{max-width:100%;white-space:normal;overflow-wrap:anywhere}
   #det .rel img{height:52px;border-radius:4px;cursor:pointer;background:#f4f1ea}
 
   /* lightbox */
@@ -147,7 +150,7 @@
 </head>
 <body>
 <script src="../site-header.js?v=46"></script>
-<script src="md.js?v=1"></script>
+<script src="md.js?v=2"></script>
 <site-header active="explorer"></site-header>
 
 <div class="toolbar">
@@ -175,7 +178,10 @@
     <button class="preset" data-r="category,subcategory">Category ▸ Subcategory</button>
     <button class="preset" data-r="category" data-c="grammar">Category × Grammar</button>
     <button class="preset" data-r="grammar" data-c="category">Grammar × Category</button>
-    <button class="preset" data-r="keywords">Keywords</button>
+    <!-- was data-r="keywords" — the field is `keyword` (singular), so this preset
+         matched nothing and silently CLEARED the view on every click instead of
+         grouping by keyword. Fixed Jul 26 2026. -->
+    <button class="preset" data-r="keyword">Keywords</button>
     <button class="preset" data-r="branch,grammar">Branch ▸ Grammar</button>
     <button class="preset preset-clear" data-clear="1">Clear</button>
   </div>
@@ -195,7 +201,7 @@
 <div id="lb" onclick="this.style.display='none'"><img id="lbimg" src="" alt=""><div class="cap" id="lbcap"></div></div>
 <div id="hovprev"><img alt=""></div>
 
-<script src="dimension-engine.js?v=2"></script>
+<script src="dimension-engine.js?v=3"></script>
 <script>
 (() => {
 const $ = s => document.querySelector(s);
@@ -284,8 +290,13 @@ function recHTML(r){
     return `<span class="esec ${attr?'later':''}" data-rid="${esc(r.__id)}" title="${esc(r.__name)} — ${esc(s.name)}${attr?' — '+esc(attr):''} (click for full card · drag corner to resize)">
       <span class="nm">${esc(DimensionEngine.shortLabel(r.__name,24))}</span>${attr?`<span class="at">${esc(MD.clip(attr,46))}</span>`:''}${esc(body)}</span>`;
   }
-  if (lvl === 1 && r.__img)
-    return `<img loading="lazy" data-rid="${esc(r.__id)}" src="${esc(r.__img)}" title="${esc(r.__name)}">`;
+  if (lvl === 1 && r.__img) {
+    // A card-wall thumbnail is far too small for a visible caption, but the plate's
+    // public-domain provenance still travels with it — in the tooltip here, and in
+    // full under the hero image in the detail panel (openDetail).
+    const ct = MD.creditText(r.__credit);
+    return `<img loading="lazy" data-rid="${esc(r.__id)}" src="${esc(r.__img)}" title="${esc(r.__name)}${ct?' — '+ct:''}">`;
+  }
   const c = branchColor(r);
   const lo = Math.min(.5, .06 + .07*lvl), hi = Math.min(.85, .14 + .12*lvl);
   return `<span class="epill" data-rid="${esc(r.__id)}" title="${esc(r.__name)}"
@@ -382,7 +393,7 @@ function openDetail(id){
     .filter(k=>r[k]).map(k=>`${k}: <b>${esc(r[k].join(', '))}</b>`).join(' · ');
   det.innerHTML = `
     <span class="close" onclick="document.getElementById('det').classList.remove('open')">✕</span>
-    ${r.__img ? `<img class="hero" src="${esc(r.__img)}" onclick="window.__lb('${esc(r.__img)}','${esc(r.__name)}')">` : ''}
+    ${r.__img ? `<figure style="margin:0"><img class="hero" src="${esc(r.__img)}" onclick="window.__lb('${esc(r.__img)}','${esc(r.__name)}')">${MD.credit(r.__credit)}</figure>` : ''}
     <h2>${esc(r.__name)}</h2>
     <div class="meta">${metaBits}</div>
     <h4>⬆ Part of (${r.__parents.length})</h4>
@@ -648,6 +659,24 @@ function populateSectionPick(){
   pick.innerHTML = sectionGroups.map(s =>
     `<option value="${esc(s.key)}"${s.key===sectionField?' selected':''}>${esc(s.label)} (${s.count})${s.attributed?' · later':''}</option>`).join('');
 }
+/* A preset can only pivot on a field the CURRENT grammar selection actually has —
+   `grammar`, for instance, only exists once two or more grammars are loaded. Say so
+   instead of leaving a live-looking button that quietly does nothing when clicked
+   (same "show the gap, don't hide it" convention as the timeline's undated lane). */
+function syncPresets(){
+  const avail = new Set(fields.map(f => f.name));
+  document.querySelectorAll('#presets button.preset').forEach(b => {
+    if (b.dataset.clear) return;
+    const want = [b.dataset.r, b.dataset.c].filter(Boolean).join(',').split(',').filter(Boolean);
+    const missing = want.filter(x => !avail.has(x));
+    b.disabled = missing.length === want.length;   // nothing it asks for exists
+    b.style.opacity = b.disabled ? '.4' : '';
+    b.style.cursor = b.disabled ? 'not-allowed' : '';
+    b.title = missing.length
+      ? `Needs ${missing.join(' + ')} — not in the loaded grammar${missing.length>1?'s':''} yet`
+      : '';
+  });
+}
 // Preset pivots — one click sets Rows/Columns (only with fields the data actually has).
 document.querySelectorAll('#presets button').forEach(b => b.onclick = () => {
   if (b.dataset.clear) { spec.rows = []; spec.cols = []; spec.filters = {}; sync(); return; }
@@ -715,6 +744,7 @@ async function boot(){
     r.emergence = r.__parents.map(p => DimensionEngine.shortLabel(byId[p]?.__name || p, 40));
   fields = discoverFields(records);
   fieldParent = inferHierarchy(records, fields);
+  syncPresets();
   let restored = false;
   try { const s = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         if (s && s.rows) { spec = s; restored = true; } } catch(e){}

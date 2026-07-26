@@ -13,8 +13,10 @@
  * Self-styling (inline styles) so it looks right in any themed viewer; colour comes
  * from `currentColor`, never a hardcoded hex, so theme.css stays the only palette.
  *
- * Usage:  <script src="md.js?v=1"></script>   then   MD.toHtml(text)
+ * Usage:  <script src="md.js?v=2"></script>   then   MD.toHtml(text)
  *         MD.strip(text) → plain text with the markers removed (dense previews).
+ *         MD.credit(item.metadata.image_credit) → the PD provenance caption for an
+ *         image (see below); MD.creditText(…) → the same as a plain title string.
  */
 (function (global) {
   'use strict';
@@ -89,5 +91,52 @@
     return (sp > max * 0.6 ? cut.slice(0, sp) : cut).trimEnd() + '…';
   }
 
-  global.MD = { toHtml, strip, clip, inline, escHtml };
+  /* ── image provenance ──────────────────────────────────────────────────────
+     Added Jul 26 2026. The illustration pass records, for every plate it added,
+     a `metadata.image_credit` object:
+
+       { title, creator, date, source, file_page, license, pd_basis, verified }
+
+     …and until now NOTHING rendered it: the sourcing was recorded but invisible,
+     which is only half of CLAUDE.md's "public-domain only, sourced and recorded".
+     This is the one shared caption, so every viewer credits a picture the same
+     way: the plate's own title, its creator/date where known, and a link to the
+     Wikimedia Commons file page where the public-domain status is stated.
+
+     Deliberately small and quiet — it sits under the image, in the muted token,
+     and never competes with the item's own text. Colour comes from currentColor
+     / opacity, never a hex, so theme.css stays the only palette.
+     Returns '' when there is no credit, so callers can concatenate blindly. */
+  function creditParts(c) {
+    if (!c || typeof c !== 'object') return null;
+    const title = String(c.title || '').trim();
+    if (!title) return null;
+    const by = [c.creator, c.date].map(x => String(x || '').trim()).filter(Boolean).join(', ');
+    return { title, by, page: String(c.file_page || '').trim(), source: String(c.source || '').trim() };
+  }
+
+  /* Plain-text form — for a title="" tooltip on a thumbnail too small to caption. */
+  function creditText(c) {
+    const p = creditParts(c);
+    if (!p) return '';
+    return [strip(p.title), p.by, p.source, 'Public domain — via Wikimedia Commons']
+      .filter(Boolean).join(' · ');
+  }
+
+  /* HTML caption. opts.compact drops the creator line for tight spaces. */
+  function credit(c, opts) {
+    const p = creditParts(c);
+    if (!p) return '';
+    const compact = !!(opts && opts.compact);
+    const link = p.page
+      ? `<a href="${escHtml(p.page)}" target="_blank" rel="noopener noreferrer"
+           title="Wikimedia Commons file page — where the public-domain status is stated"
+           style="color:inherit;text-decoration:underline;text-underline-offset:2px">Commons ↗</a>`
+      : 'public domain';
+    const by = (!compact && p.by) ? `<span style="opacity:.85"> · ${inline(p.by)}</span>` : '';
+    return `<figcaption class="md-credit" style="font-size:10.5px;line-height:1.45;opacity:.72;
+      margin:5px 0 0;font-style:normal">${inline(p.title)}${by} · ${link}</figcaption>`;
+  }
+
+  global.MD = { toHtml, strip, clip, inline, escHtml, credit, creditText };
 })(typeof window !== 'undefined' ? window : globalThis);

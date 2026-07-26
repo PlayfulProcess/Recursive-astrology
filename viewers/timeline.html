@@ -52,9 +52,16 @@
   #undated .chip .cdot{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
   #undated .chip .cno{font-size:10.5px;font-weight:600;font-style:italic;color:var(--muted);white-space:nowrap}
 
-  aside#detail{width:330px;max-width:84vw;background:var(--panel);border-left:1px solid var(--line);padding:18px;overflow:auto;display:none;position:relative}
+  /* padding-bottom is 0 on purpose: the prev/next bar below is position:sticky
+     bottom:0, which sticks to the bottom of the SCROLLPORT — with 18px of bottom
+     padding, 18px of the card's text stayed visible in the gap underneath it, so
+     a line of prose bled out below the footer. The footer supplies that spacing. */
+  aside#detail{width:330px;max-width:84vw;background:var(--panel);border-left:1px solid var(--line);padding:18px 18px 0;overflow:auto;display:none;position:relative}
   aside#detail.open{display:block}
-  aside#detail img{width:100%;max-height:240px;object-fit:contain;background:var(--thumb-bg);border-radius:8px;margin-bottom:12px}
+  aside#detail img{width:100%;max-height:240px;object-fit:contain;background:var(--thumb-bg);border-radius:8px;margin-bottom:4px}
+  /* cover plate + its public-domain provenance (viewers/md.js → MD.credit) */
+  aside#detail figure.cover{margin:0 0 12px}
+  aside#detail figure.cover .md-credit{color:var(--muted);text-align:center}
   aside#detail h2{margin:.2em 0 .1em;font-size:18px;overflow-wrap:anywhere}
   aside#detail .when{color:var(--accent);font-size:13px;margin-bottom:2px}
   aside#detail .whence{color:var(--muted);font-size:11.5px;margin-bottom:10px}
@@ -71,7 +78,7 @@
   /* Prev/next deck paging — sticky footer bar at the bottom of the detail
      panel, same pattern as viewers/cards.html's .modal-nav-footer. */
   .modal-nav-footer{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;
-    gap:1rem;margin:1.25rem -18px -18px;padding:0.7rem 18px;background:var(--panel);border-top:1px solid var(--line)}
+    gap:1rem;margin:1.25rem -18px 0;padding:0.7rem 18px;background:var(--panel);border-top:1px solid var(--line)}
   .modal-nav-btn{flex-shrink:0;width:40px;height:40px;border-radius:50%;background:rgba(47,93,138,.1);
     border:1px solid var(--line);color:var(--ink);font-size:1.2rem;cursor:pointer;display:flex;
     align-items:center;justify-content:center;transition:background .15s,opacity .15s}
@@ -113,7 +120,8 @@
   <aside id="detail"></aside>
 </div>
 
-<script src="dimension-engine.js?v=1"></script>
+<script src="md.js?v=2"></script>
+<script src="dimension-engine.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script>
 // Branch colours mirror grammars/_collection.json's four curated branches (see
@@ -408,7 +416,31 @@ function trace(id,g){
   g.classed('dim',d=>!keep.has(d.id)).classed('hot',d=>keep.has(d.id));
 }
 
-function mdToHtml(s){ if(!s) return ''; return String(s).split(/\n{2,}/).map(p=>`<p style="margin:.4em 0">${p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}</p>`).join(''); }
+// The ONE shared renderer (viewers/md.js) — this page used to carry its own
+// **bold**-only two-liner, which is exactly the drift md.js was made to end.
+function mdToHtml(s){ return MD.toHtml(s); }
+
+/* ── late-bound grammar detail ────────────────────────────────────────────────
+   The chart is built from grammars/_collection.json, which is deliberately small:
+   it carries a CLIPPED blurb (it ends mid-word in a "…") and no image credit at
+   all. Rendering that clipped blurb as the panel's whole "Overview" made the
+   library look like it stops mid-sentence, and the cover plate appeared with no
+   sourcing even though the grammar file records it. So: fetch the one grammar
+   file the reader actually opened — never all nineteen — and fill in the real
+   description and the plate's provenance. Cached per slug; failures are silent
+   and simply leave the collection's own values in place. */
+const grammarDetail = {};
+async function enrichDeck(d){
+  if (!d || !d.id || grammarDetail[d.id] !== undefined) return grammarDetail[d.id];
+  grammarDetail[d.id] = null;             // in-flight marker: never fetch twice
+  try{
+    const r = await fetch(`../grammars/${encodeURIComponent(d.id)}/grammar.json`);
+    if (!r.ok) throw new Error(r.status);
+    const g = await r.json();
+    grammarDetail[d.id] = { description: g.description || '', credit: g.cover_image_credit || null };
+  }catch(e){ grammarDetail[d.id] = null; }
+  return grammarDetail[d.id];
+}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function navigateDeck(direction){
   if(!currentPlaced.length) return;
@@ -421,8 +453,12 @@ function navigateDeck(direction){
 function showDetail(d){
   const el=document.getElementById('detail'); const slug=d.id;
   el.dataset.deckId=d.id;
+  const extra = grammarDetail[d.id] || null;
   let html=`<span class="modal-close" onclick="document.getElementById('detail').classList.remove('open')" title="Close" aria-label="Close">&times;</span>`;
-  if(d.image) html+=`<img src="${esc(d.image)}" alt="${esc(d.name)}" loading="lazy">`;
+  if(d.image) html+=`<figure class="cover">`
+    + `<img src="${esc(d.image)}" alt="${esc(d.name)}" loading="lazy">`
+    + (extra ? MD.credit(extra.credit) : '')
+    + `</figure>`;
   // Full name — never the truncated axis label.
   html+=`<h2>${esc(d.name)}</h2>`;
   // The date line states only what the data holds: the curated label if there is
@@ -431,7 +467,12 @@ function showDetail(d){
   html+=`<div class="when">${esc(when)}</div>`;
   const branchLabel=laneField==='branch'?(BRANCH_LABEL[laneOf(d)]||laneOf(d)):laneOf(d);
   html+=`<div class="whence">${esc(branchLabel)} · grammars/${esc(slug)}</div>`;
-  for(const [k,v] of Object.entries(d.sections)){ if(v) html+=`<div class="sec"><h4>${esc(k)}</h4>${mdToHtml(String(v))}</div>`; }
+  for(const [k,v] of Object.entries(d.sections)){
+    // Prefer the grammar's own full description over the collection's clipped
+    // blurb, once the grammar file has arrived (see enrichDeck).
+    const body = (k==='Overview' && extra && extra.description) ? extra.description : v;
+    if(body) html+=`<div class="sec"><h4>${esc(k)}</h4>${mdToHtml(String(body))}</div>`;
+  }
   if(slug) html+=`<a class="opencards" href="cards.html?src=${encodeURIComponent('../grammars/'+slug+'/grammar.json')}">Open ${esc(d.name.replace(/\s+[—–-].*/,''))} cards →</a>`;
   // Prev/next footer — pages the dated points in the order the axis draws them,
   // then continues through the undated lane.
@@ -444,6 +485,11 @@ function showDetail(d){
     </div>`;
   }
   el.innerHTML=html; el.classList.add('open');
+  // First open of a grammar: pull its file, then repaint THIS card if it is still
+  // the one on screen (a fast click-through must not overwrite a later card).
+  if(grammarDetail[d.id]===undefined){
+    enrichDeck(d).then(got=>{ if(got && el.dataset.deckId===d.id) showDetail(d); });
+  }
 }
 function buildLegend(){
   const lg=document.getElementById('legend'); lg.innerHTML='';

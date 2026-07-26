@@ -43,7 +43,7 @@
     })();
     </script>
     <script src="../site-header.js?v=46"></script>
-    <script src="md.js?v=1"></script>
+    <script src="md.js?v=2"></script>
     <script src="../view-switcher.js?v=12"></script>
     <style>
         :root {
@@ -516,6 +516,13 @@
             font-weight: 400;
             margin-bottom: 0.5rem;
         }
+        /* Zodiac codepoints (U+2648–2653) default to EMOJI presentation and would
+           otherwise render as saturated purple app-icons beside the typographic
+           planet glyphs. Ask for the text presentation wherever a symbol shows. */
+        .modal-item-symbol, .focused-symbol, .node-visual,
+        .breadcrumb-item, .breadcrumb-current, .modal-component-chip {
+            font-variant-emoji: text;
+        }
         .modal-item-symbol {
             font-size: 2rem;
             margin-bottom: 0.5rem;
@@ -557,8 +564,11 @@
             max-height: 200px;
             object-fit: contain;
             border-radius: 0.5rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.25rem;
         }
+        /* Public-domain provenance caption under the plate (viewers/md.js). */
+        .modal-item-figure { margin: 0 0 0.75rem; }
+        .modal-item-figure .md-credit { color: var(--muted); text-align: center; }
         .modal-focus-btn {
             display: inline-block;
             margin-top: 0.75rem;
@@ -1152,7 +1162,9 @@
 
                 let rootHtml = '';
                 if (focusedItem.image_url) {
-                    rootHtml += `<img class="focused-image" src="${escapeHtml(focusedItem.image_url)}" alt="${escapeHtml(focusedItem.name)}">`;
+                    // Circular crop, too small for a caption — the provenance rides
+                    // in the tooltip, and in full in the modal this node opens.
+                    rootHtml += `<img class="focused-image" src="${escapeHtml(focusedItem.image_url)}" alt="${escapeHtml(focusedItem.name)}" title="${escapeHtml(MD.creditText((focusedItem.metadata || {}).image_credit))}">`;
                 } else if (focusedItem.symbol) {
                     rootHtml += `<div class="focused-symbol">${escapeHtml(focusedItem.symbol)}</div>`;
                 }
@@ -1241,7 +1253,7 @@
             // Visual
             let visualContent = '';
             if (item.image_url) {
-                visualContent = `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" loading="lazy">`;
+                visualContent = `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" loading="lazy" title="${escapeHtml(MD.creditText((item.metadata || {}).image_credit))}">`;
             } else if (item.symbol) {
                 visualContent = escapeHtml(item.symbol);
             } else if (item.icon) {
@@ -1434,7 +1446,13 @@
             let html = '';
 
             if (item.image_url) {
-                html += `<img class="modal-item-image" src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}">`;
+                // Plate + its public-domain provenance (viewers/md.js → MD.credit).
+                // The item records where the picture came from and why it is PD;
+                // this is the place that makes that record visible to a reader.
+                html += `<figure class="modal-item-figure">`
+                     + `<img class="modal-item-image" src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}">`
+                     + MD.credit((item.metadata || {}).image_credit)
+                     + `</figure>`;
             }
 
             if (item.symbol) {

@@ -93,8 +93,15 @@
   /* Ribbon — the wide content scrolls inside its OWN container so a 375px page
      never scrolls sideways; the ribbon keeps a readable minimum width. */
   .ribbon-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:6px}
-  .ribbon{position:relative;min-height:230px;margin:30px 0 10px;min-width:700px}
-  .axis{position:absolute;left:0;right:0;top:130px;height:2px;background:linear-gradient(90deg,#d8d2c6,#2f5d8a)}
+  /* --axis-y is set per render (viewRibbon): the band above the line is reserved
+     only when there is a plate thumbnail to hang in it. */
+  .ribbon{position:relative;margin:22px 0 10px;min-width:700px;--axis-y:130px}
+  .axis{position:absolute;left:0;right:0;top:var(--axis-y);height:2px;background:linear-gradient(90deg,var(--line-soft),var(--accent))}
+  /* Ruled gradations on the time axis — a linear year scale you can actually read,
+     so a long blank run is legible AS elapsed time rather than as a broken chart. */
+  .gtick{position:absolute;top:var(--axis-y);width:1px;height:7px;background:var(--line-soft);transform:translateX(-50%)}
+  .gtick .gy{position:absolute;top:8px;left:0;transform:translateX(-50%);font-size:9px;
+    color:var(--faint);white-space:nowrap;letter-spacing:.02em}
   /* Grammars with no source date are listed here instead of being parked at a fake
      year on the axis. Same "show the gap, don't hide it" convention as the picker. */
   .undated-list{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:2px 0 10px;
@@ -103,7 +110,7 @@
   .undated-list .ul-chip{font:inherit;font-size:11.5px;padding:4px 10px;border-radius:999px;
     border:1px solid var(--line);background:var(--panel);color:var(--ink-soft);cursor:pointer}
   .undated-list .ul-chip:hover{border-color:var(--accent);color:var(--accent)}
-  .tick{position:absolute;top:130px}
+  .tick{position:absolute;top:var(--axis-y)}
   .tick .pt{width:13px;height:13px;border-radius:50%;border:2px solid var(--bg);cursor:pointer;transform:translate(-50%,-50%)}
   .tick .stem{position:absolute;left:0;width:1px;background:rgba(0,0,0,.10);transform:translateX(-50%)}
   /* labels WRAP to two lines instead of being cut mid-word; the full text is always
@@ -117,15 +124,28 @@
   #ribbon-read{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px;min-height:60px;font-size:13px}
 
   /* Small multiples */
-  .multiples{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
-  .mtile{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .mtile .mimg{height:190px;background:#faf8f3 center/contain no-repeat}
+  /* Masonry, not a grid. Tiles are now genuinely different heights (an illustrated
+     tile carries a 190px plate + its credit; an unillustrated one carries a single
+     line), and in a grid every row is as tall as its tallest tile — so one plate
+     punched a column of blank page through the whole row. A multi-column flow packs
+     them. Same fix, same reason, as all-astros.html's .voices. */
+  .multiples{columns:230px;column-gap:14px}
+  .mtile{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    break-inside:avoid;margin:0 0 14px;width:100%}
+  .mtile .mimg{height:190px;background:var(--thumb-bg) center/contain no-repeat}
+  /* the honest stand-in for a tile with no plate — a line of text, not 190px of grey */
+  .mtile .mnoimg{padding:16px 10px;font-size:10.5px;font-style:italic;text-align:center;
+    color:var(--faint);background:var(--panel2);border-bottom:1px solid var(--line)}
+  .mtile .mcredit{padding:0 9px}
+  .mtile .mcredit .md-credit{color:var(--muted);font-size:9.5px}
   .mtile .mcap{padding:7px 9px;font-size:11px;color:var(--muted)}
   .mtile .mcap b{color:var(--text);display:block;font-size:12px}
 
   /* Reader */
   .reader{max-width:640px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .reader .rimg{height:280px;background:#faf8f3 center/contain no-repeat;margin:18px}
+  .reader .rimg{height:280px;background:var(--thumb-bg) center/contain no-repeat;margin:18px 18px 4px}
+  .reader .rcredit{margin:0 26px 12px}
+  .reader .rcredit .md-credit{color:var(--muted);text-align:center}
   .reader .rbody{padding:0 26px 26px}
   .reader h2{font-size:22px;margin:0 0 4px}
   .reader .rsec{margin:0 0 16px}
@@ -145,7 +165,7 @@
 </head>
 <body>
 <script src="../site-header.js?v=46"></script>
-<script src="md.js?v=1"></script>
+<script src="md.js?v=2"></script>
 <site-header active="lenses"></site-header>
 <header>
   <h1>Lens prototypes <span style="color:var(--muted);font-weight:400">· five ways to see the same data</span></h1>
@@ -252,6 +272,9 @@ async function load(){
         out.push({deck:d.slug,label:d.label,full:d.full,year:d.year,yearLabel:d.yearLabel,
           id:it.id,name:it.name||it.id,
           sections:secs,image:it.image_url||'',
+          // the plate's public-domain provenance travels with the URL so the views
+          // that SHOW a picture can credit it (viewers/md.js → MD.credit)
+          credit:(it.metadata||{}).image_credit||null,
           category:it.category||'other', cardKey, cardOrder});
       }
     }catch(e){ console.warn('skip',d.slug,e); }
@@ -399,6 +422,11 @@ function viewSynopsis(sel){
   return h+`</div>`;
 }
 
+// Honest year text: the collection stores a signed integer (-700 = 700 BCE), and
+// printing that raw put "-700" on the ribbon and in its detail card as if it were
+// a date. Same rule as viewers/timeline.html's fmtYear.
+const fmtY=y=>(y==null||!isFinite(y))?'':(y<0?Math.abs(y)+' BCE':(y<1000?y+' CE':String(y)));
+
 // ── VIEW 3: PROVENANCE RIBBON ─────────────────────────────────────────────────
 // Rebuilt Jul 26 2026 after the builder caught four defects here (this is the tab
 // in the bug screenshot): a "9999" sentinel printed as a real year, names cut to
@@ -441,7 +469,7 @@ function viewRibbon(sel){
       : `*${d.label} has an entry for ${cardLabel(card)}, but every section in it is dated `+
         `commentary quoting someone else — those are the rust points on the axis.*`;
     const nativePt={year:isDated(d)?d.year:null,kind:'native',label:d.label,full:d.full,
-      grammarLabel:d.label,entityName:it.name,yearLabel:d.yearLabel,img:it.image,
+      grammarLabel:d.label,entityName:it.name,yearLabel:d.yearLabel,img:it.image,credit:it.credit,
       deck:d.slug,id:it.id,text:nativeText,secCount:own.length};
     if(isDated(d)) pts.push(nativePt);
     else undatedDecks.push({...d,item:it,point:nativePt});
@@ -459,10 +487,28 @@ function viewRibbon(sel){
   pts.sort((a,b)=>a.year-b.year||(a.kind==='native'?-1:1));
 
   // ── axis: dated points only, so nothing is placed at a year it does not have ──
+  // The mapping is and stays STRICTLY LINEAR in years: an empty stretch of ribbon
+  // is a real gap in the record, and squeezing it (log/ordinal) would make the
+  // library look denser than it is. What was missing was any way to READ that gap
+  // — the axis carried no scale at all, so the run from Ptolemy to Lilly looked
+  // like a rendering fault rather than fifteen centuries. It is now ruled.
   const yrs=pts.map(p=>p.year);
   const min=yrs.length?Math.min(...yrs):150, max=yrs.length?Math.max(...yrs):2026;
-  const L=4, R=94;                                  // usable % band
+  // Usable % band. A label is 108px wide and centred on its point, so the band has
+  // to start at least half a label in from each edge or the first and last names
+  // get sliced by the container (at 375px the ribbon opened on "emy's Tetrabiblos").
+  // 8% of the 700px minimum ribbon is 56px — just over half a label.
+  const L=8, R=90;
   const X=y=>((y-min)/(max-min||1))*(R-L)+L;
+  // Ruled scale: a round step that yields roughly 4–9 gradations across the span.
+  function scaleTicks(){
+    const span=max-min; if(!(span>0)) return [];
+    const steps=[10,25,50,100,200,250,500,1000,2000];
+    const step=steps.find(s=>span/s<=9)||2000;
+    const out=[];
+    for(let y=Math.ceil(min/step)*step; y<=max; y+=step){ if(y===0) continue; out.push(y); }
+    return out;
+  }
   // Collision dodge: a label box is LABEL_W px wide inside a ribbon at least
   // RIBBON_MIN px, so two labels collide within ~LABEL_W/RIBBON_MIN of each other.
   // Compare against every label already placed in a lane (not just the previous
@@ -477,21 +523,33 @@ function viewRibbon(sel){
     laneLastX[lane]=x; p._lane=lane; p._x=x;
   });
   window._ribbonPts=pts;
-  const AXIS_Y=130, LANE0=22, LANE_H=44;
+  // The band above the axis exists only to hold the plate thumbnails, and most
+  // entities have at most one. It was a fixed 130px, so a typical ribbon opened
+  // with a hand's width of blank page above the line before anything was drawn.
+  // Reserve the room only when there is actually a thumbnail to put in it.
+  const hasThumb=pts.some(p=>p.kind==='native'&&p.img);
+  const AXIS_Y=hasThumb?92:34, LANE0=36, LANE_H=44;
   const maxLane=pts.reduce((m,p)=>Math.max(m,p._lane),0);
   // Height follows the deepest lane so labels can never spill past the container.
-  const ribbonH=Math.max(230, AXIS_Y+LANE0+(maxLane+1)*LANE_H+16);
+  const ribbonH=Math.max(150, AXIS_Y+LANE0+(maxLane+1)*LANE_H+16);
+
+  // Ruled gradations, drawn under the axis and above the first label lane, so the
+  // reader can see WHERE the empty stretches are rather than only that they exist.
+  const scale=scaleTicks().map(y=>
+    `<div class="gtick" style="left:${X(y).toFixed(2)}%"><span class="gy">${esc(fmtY(y))}</span></div>`).join('');
 
   let ticks='';
   pts.forEach((p,i)=>{
     const labY=LANE0+p._lane*LANE_H;            // dodge downward
     const tip=`${p.kind==='later'?p.label+' — in '+(p.grammarLabel||''):(p.full||p.label)}`+
-              ` · ${p.year}`+(p.attr?` · ${p.attr}`:'');
+              ` · ${fmtY(p.year)}`+(p.attr?` · ${p.attr}`:'');
+    const thumbTip=p.kind==='native'&&p.img
+      ? (MD.creditText(p.credit)||'') : '';
     ticks+=`<div class="tick ${p.kind}" style="left:${p._x.toFixed(1)}%">
-      ${p.kind==='native'&&p.img?`<img class="thumb card-open" src="${esc(p.img)}" data-od="${p.deck}|${esc(p.id)}" title="Open this item in the Cards viewer" style="top:-68px">`:''}
+      ${p.kind==='native'&&p.img?`<img class="thumb card-open" src="${esc(p.img)}" data-od="${p.deck}|${esc(p.id)}" title="${esc(thumbTip?thumbTip+' — click to open this item in the Cards viewer':'Open this item in the Cards viewer')}" style="top:-68px">`:''}
       <div class="stem" style="top:7px;height:${labY-7}px"></div>
       <div class="pt" data-i="${i}" title="${esc(tip)}"></div>
-      <div class="lbl" style="top:${labY}px" title="${esc(tip)}"><span class="nm">${esc(p.label)}</span><span class="yr">${p.year}</span></div></div>`;
+      <div class="lbl" style="top:${labY}px" title="${esc(tip)}"><span class="nm">${esc(p.label)}</span><span class="yr">${esc(fmtY(p.year))}</span></div></div>`;
   });
 
   // Undated grammars get an honest list, not a fake position at the right edge.
@@ -512,7 +570,7 @@ function viewRibbon(sel){
   return `<div class="ctl"><label class="lbl">Entity</label><select id="rib-sel">${cardOptionsHTML(card)}</select>
     <span style="color:var(--muted);font-size:12px">— one entity's whole record: each dated grammar's own treatment (green) + each dated commentary it carries (rust). Click a point to read that layer in full. Grammars with no source date are listed under the axis rather than given a year they don't have; grammars with no entry for this entity are named too.</span></div>
     ${synthHTML(card)}
-    <div class="ribbon-scroll"><div class="ribbon" style="height:${ribbonH}px"><div class="axis"></div>${ticks}</div></div>
+    <div class="ribbon-scroll"><div class="ribbon" style="height:${ribbonH}px;--axis-y:${AXIS_Y}px"><div class="axis"></div>${scale}${ticks}</div></div>
     ${undatedHTML}
     ${missingHTML}
     <div id="ribbon-read"><span style="color:var(--muted)">Click a point on the timeline to read that layer.</span></div>`;
@@ -525,7 +583,16 @@ function viewMultiples(sel){
   for(const d of activeDecks()){
     const matches=activeItems().filter(i=>i.deck===d.slug && i.cardKey===card);
     const it=matches.find(m=>m.image)||matches[0]; if(!it)continue;
-    tiles+=`<div class="mtile card-open" data-od="${it.deck}|${esc(it.id)}" title="${esc(d.full)}${d.yearLabel?' · '+esc(d.yearLabel):''} — open this item in the Cards viewer"><div class="mimg" style="background-image:url('${esc(it.image||'')}')"></div><div class="mcap"><b>${esc(d.label)}</b>${esc(yearText(d))} · ${esc(clip(it.name,34))}</div></div>`;
+    // Only a minority of entries carry a plate. The tile used to reserve the full
+    // 190px picture box either way, so a typical entity (Sun: 1 of 9 illustrated)
+    // rendered as eight identical empty grey rectangles — a grid that looked
+    // broken rather than sparse. An unillustrated tile now says so, in one short
+    // line, and takes only the room that line needs: honest gap, not dead space.
+    const visual = it.image
+      ? `<div class="mimg" style="background-image:url('${esc(it.image||'')}')"></div>`
+        + `<div class="mcredit">${MD.credit(it.credit,{compact:true})||''}</div>`
+      : `<div class="mnoimg">no illustration yet</div>`;
+    tiles+=`<div class="mtile card-open" data-od="${it.deck}|${esc(it.id)}" title="${esc(d.full)}${d.yearLabel?' · '+esc(d.yearLabel):''} — open this item in the Cards viewer">${visual}<div class="mcap"><b>${esc(d.label)}</b>${esc(yearText(d))} · ${esc(clip(it.name,34))}</div></div>`;
   }
   return `<div class="ctl"><label class="lbl">Entity</label><select id="mul-sel">${cardOptionsHTML(card)}</select>
     <span style="color:var(--muted);font-size:12px">— the same entity interpreted by every selected tradition.</span></div><div class="multiples">${tiles||'<span style="color:var(--muted)">No images.</span>'}</div>`;
@@ -547,7 +614,7 @@ function viewReader(){
     return `<div class="rsec ${e.attributed?'later':''}"><div class="st">${esc(e.k)}</div>${e.attr?`<span class="attr">${esc(e.attr)}</span>`:''}<div>${md(bv)}</div></div>`;};
   return `<div class="ctl"><label class="lbl">Grammar</label><select id="rd-deck">${decks.map(d=>`<option value="${d.slug}"${d.slug===readerDeck?' selected':''}>${esc(d.label)}</option>`).join('')}</select>
     <span style="color:var(--muted);font-size:12px">— one entity per spread; later layers in an expander.</span></div>
-   <div class="reader">${it.image?`<div class="rimg card-open" data-od="${it.deck}|${esc(it.id)}" title="Open this item in the Cards viewer" style="background-image:url('${esc(it.image)}')"></div>`:''}
+   <div class="reader">${it.image?`<figure style="margin:0"><div class="rimg card-open" data-od="${it.deck}|${esc(it.id)}" title="Open this item in the Cards viewer" style="background-image:url('${esc(it.image)}')"></div><div class="rcredit">${MD.credit(it.credit)||''}</div></figure>`:''}
      <div class="rbody"><h2>${esc(it.name||'—')}</h2><div class="sub" style="color:var(--muted);margin-bottom:14px" title="${esc(deckOf(readerDeck).full)}${deckOf(readerDeck).yearLabel?' · '+esc(deckOf(readerDeck).yearLabel):''}">${esc(deckOf(readerDeck).label)} · ${esc(yearText(deckOf(readerDeck)))} · ${readerIdx+1} / ${list.length}</div>
        ${native.map(secHtml).join('')}${later.length?`<details open><summary>${later.length} later interpretation${later.length>1?'s':''} ▾</summary>${later.map(secHtml).join('')}</details>`:''}</div>
      <div class="nav"><button id="rd-prev">← Prev</button><button id="rd-next">Next →</button></div></div>`;
@@ -575,7 +642,7 @@ function render(arg){
     const kindColor=p.kind==='later'?'later':'native';
     const subject=p.kind==='later'?p.label:(p.entityName||p.label);
     const inGrammar=p.grammarLabel||(p.kind==='later'?'':p.label);
-    const head=`${p.year!=null?p.year:'undated'} · ${esc(subject)}`+
+    const head=`${p.year!=null?esc(fmtY(p.year)):'undated'} · ${esc(subject)}`+
       (inGrammar?` <span style="text-transform:none;letter-spacing:0;color:var(--muted)">— in ${esc(inGrammar)}</span>`:'');
     return `<div style="font-size:11px;color:var(--${kindColor});text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">${head}</div>`+
       (p.yearLabel?`<span class="attr">${esc(p.yearLabel)}</span>`:'')+
