@@ -3,7 +3,7 @@
  * isolated via Shadow DOM so each page's own CSS can't override it. Path-aware so
  * links resolve from any nesting depth.
  *
- * Usage:  <script src="<path-to>site-header.js?v=44"></script>
+ * Usage:  <script src="<path-to>site-header.js?v=46"></script>
  *         <site-header active="cards"></site-header>
  * The `active` attribute highlights the matching tab; if omitted it is
  * auto-detected from the filename.
@@ -12,10 +12,10 @@
  * the dropdown hover/gap fix, commit 84934e6) — adapted: crescent + star branding
  * (astro's own, kept from the pre-port header), and this repo's own menus:
  *   Home | Views (Cards, Explorer, Lenses, Tree · Timeline, Genealogy, Chart Wheel,
- *   Chart Viewer, All grammars) | Courses (History of Astrology, The Right Size,
- *   Three Doors) | Grammars (every grammar in grammars/*, fetched live from
- *   grammars/_collection.json so the menu never goes stale as grammars are added)
- *   | GitHub.
+ *   Archetypal, All Astros, Chart Viewer, All grammars) | Courses (History of
+ *   Astrology, The Right Size, Three Doors) | Grammars (every grammar in grammars/*,
+ *   fetched live from grammars/_collection.json so the menu never goes stale as
+ *   grammars are added) | GitHub.
  */
 (function () {
   if (customElements.get('site-header')) return;
@@ -52,6 +52,7 @@
     ['genealogy',  'Genealogy',                  PFX + 'genealogy.html'],
     ['wheel',      'Chart Wheel',                PFX + 'wheel.html'],
     ['archetypal', 'Archetypal — planet pairs',  PFX + 'archetypal.html'],
+    ['all-astros', 'All Astros — one symbol, every voice', PFX + 'viewers/all-astros.html'],
     ['viewer',     'Chart Viewer',                PFX + 'viewer/astrology-viewer.html'],
     ['all',        'All grammars',                PFX + 'index.html#all-grammars'],
   ];
@@ -71,6 +72,7 @@
     if (f.startsWith('cards')) return 'cards';
     if (f.startsWith('explorer')) return 'explorer';
     if (f.startsWith('lenses')) return 'lenses';
+    if (f.startsWith('all-astros')) return 'all-astros';
     if (f.startsWith('tree-viewer')) return 'tree';
     if (f.startsWith('timeline')) return 'timeline';
     if (f.startsWith('genealogy')) return 'genealogy';

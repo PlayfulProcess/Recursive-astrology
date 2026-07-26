@@ -33,6 +33,7 @@ SOURCES = [
     ("jyotisa-brhat-jataka",        "Jyotiṣa (Bṛhat Jātaka)"),
     ("alan-leo",                    "Alan Leo"),
     ("planetary-myths",             "Planetary Myths"),
+    ("dignities-rulerships",        "Dignities (Raphael & Sepharial)"),
 ]
 
 # The 7 classical planets (visible to the naked eye — the set every historical voice
@@ -151,6 +152,12 @@ def build():
     planet_text = {p: {} for p in PLANETS}
     sign_text = {s: {} for s in SIGNS}
     house_text = {h: {} for h in HOUSES}
+    # entity -> symbol glyph, read straight off whichever source item carries one first
+    # (western-astrology-canonical, first in SOURCES, has one per planet/sign/house —
+    # a Unicode glyph, not invented data; other sources rarely set `symbol` but could).
+    planet_symbol = {}
+    sign_symbol = {}
+    house_symbol = {}
     source_names = {}
     coverage = {p: [] for p in PLANETS}
     coverage.update({s: [] for s in SIGNS})
@@ -166,23 +173,31 @@ def build():
                 continue  # skip any emergence/axis nodes — only L1 entity items count
             cat = (it.get("category") or "").lower()
             text = render_sections(it)
-            if not text:
-                continue
+            sym = it.get("symbol") or None
             if cat == "planet":
                 p = canonical_planet(it)
                 if p:
-                    planet_text[p][label] = text
-                    coverage[p].append(label)
+                    if sym and p not in planet_symbol:
+                        planet_symbol[p] = sym
+                    if text:
+                        planet_text[p][label] = text
+                        coverage[p].append(label)
             elif cat == "sign":
                 s = canonical_sign(it)
                 if s:
-                    sign_text[s][label] = text
-                    coverage[s].append(label)
+                    if sym and s not in sign_symbol:
+                        sign_symbol[s] = sym
+                    if text:
+                        sign_text[s][label] = text
+                        coverage[s].append(label)
             elif cat == "house":
                 h = canonical_house(it)
                 if h in house_text:
-                    house_text[h][label] = text
-                    coverage[h].append(label)
+                    if sym and h not in house_symbol:
+                        house_symbol[h] = sym
+                    if text:
+                        house_text[h][label] = text
+                        coverage[h].append(label)
 
     items = []
 
@@ -203,18 +218,23 @@ def build():
             item["symbol"] = symbol
         items.append(item)
 
+    # Fallback glyphs for the 7 classical planets, used only if no source item
+    # supplied its own `symbol` (western-astrology-canonical always does, so this
+    # is a defensive backstop, not the primary path).
     PLANET_SYMBOLS = {"Sun": "☉", "Moon": "☽", "Mercury": "☿", "Venus": "♀",
                       "Mars": "♂", "Jupiter": "♃", "Saturn": "♄"}
     for p in PLANETS:
         add_entity("planet-%s" % p.lower(), p, "planet", {"planet": p},
-                   planet_text[p], symbol=PLANET_SYMBOLS.get(p))
+                   planet_text[p], symbol=planet_symbol.get(p, PLANET_SYMBOLS.get(p)))
     for s in SIGNS:
         add_entity("sign-%s" % s.lower(), s, "sign",
-                   {"sign": s, "element": SIGN_ELEMENT.get(s)}, sign_text[s])
+                   {"sign": s, "element": SIGN_ELEMENT.get(s)}, sign_text[s],
+                   symbol=sign_symbol.get(s))
     for h in HOUSES:
         ORDINAL = {1: "First", 2: "Second", 3: "Third", 4: "Fourth", 5: "Fifth", 6: "Sixth",
                    7: "Seventh", 8: "Eighth", 9: "Ninth", 10: "Tenth", 11: "Eleventh", 12: "Twelfth"}
-        add_entity("house-%d" % h, "%s House" % ORDINAL[h], "house", {"house": h}, house_text[h])
+        add_entity("house-%d" % h, "%s House" % ORDINAL[h], "house", {"house": h}, house_text[h],
+                   symbol=house_symbol.get(h))
 
     grammar = {
         "_grammar_commons": {
