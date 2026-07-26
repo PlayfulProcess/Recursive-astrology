@@ -39,9 +39,7 @@
     "aspects-commented": "dee46a22-3848-433e-a793-8c7a2206e8cb",
     "dignities-rulerships": "1ab72d9f-f283-475e-951a-1841215e1274",
     "jyotisa-brhat-jataka": "64d62441-2cf3-4824-94b8-787d3e333ed4",
-    "william-lilly-christian-astrology": "54622c06-0a8d-4268-b020-3490ad5c5201",
-    "archetypal-astrology-tarnas": "05d27e85-61f3-44f8-86f1-a3e101a74b1b",
-    "mesopotamian-omen-craft": "cfb7aafb-14e3-4aee-a906-8c10b87c8d8f"
+    "william-lilly-christian-astrology": "54622c06-0a8d-4268-b020-3490ad5c5201"
   },
   "preview_links": {
     "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. Completed to full coverage in the Jul 2026 dating audit (it had drifted to 11 of 19 real grammars). `raw` always resolves (no UUID needed); `cards`/`study`/`tree`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
@@ -206,5 +204,17 @@
     "slugs": [
       "the-right-size"
     ]
+  },
+  "_retired_app_rows": {
+    "archetypal-astrology-tarnas": {
+      "uuid": "05d27e85-61f3-44f8-86f1-a3e101a74b1b",
+      "why": "Byte-identical duplicate of the survivor; folder deleted from this repo Jul 26 2026. The app re-imported it and wrote this mapping back — the row should be deleted app-side.",
+      "survivor": "archetypal-pairs"
+    },
+    "mesopotamian-omen-craft": {
+      "uuid": "cfb7aafb-14e3-4aee-a906-8c10b87c8d8f",
+      "why": "Byte-identical duplicate of the survivor; folder deleted from this repo Jul 26 2026. The app re-imported it and wrote this mapping back — the row should be deleted app-side.",
+      "survivor": "mesopotamian-omens"
+    }
   }
 }
