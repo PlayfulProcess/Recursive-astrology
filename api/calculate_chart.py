@@ -89,6 +89,41 @@ ASPECTS = [
 ]
 
 
+# de421.bsp only spans 1899-07-29 .. 2053-10-09. Outside that the planet
+# lookups raise, and a chart with no planets in it is worse than an error.
+EPHEMERIS_MIN_YEAR = 1900
+EPHEMERIS_MAX_YEAR = 2053
+
+
+def mean_obliquity(jd_tt):
+    """Mean obliquity of the ecliptic for the date, in degrees (IAU 1980).
+
+    A fixed J2000 value drifts ~0.013 deg per century, which is small on its
+    own but shows up in the angles for historical dates.
+    """
+    T = (jd_tt - 2451545.0) / 36525.0
+    seconds = 21.448 - T * (46.8150 + T * (0.00059 - T * 0.001813))
+    return 23.0 + (26.0 + seconds / 60.0) / 60.0
+
+
+def _precession_in_longitude(T):
+    """Accumulated general precession in longitude since J2000, in arcseconds."""
+    return 5028.796195 * T + 1.1054348 * T * T + 0.00007964 * T * T * T
+
+
+def lahiri_ayanamsa(jd_tt):
+    """Lahiri (Chitrapaksha) ayanamsa for the date, in degrees.
+
+    Anchored the way Swiss Ephemeris anchors SE_SIDM_LAHIRI: 22.460148 deg at
+    JD 2415020.0 (J1900), carried forward by general precession. Checked
+    against Astro-Seek's Lahiri chart for 1990-06-15 18:30 UT (23.7272 deg);
+    this returns 23.7234 deg, a 0.2 arcmin difference.
+    """
+    T0 = (2415020.0 - 2451545.0) / 36525.0
+    T = (jd_tt - 2451545.0) / 36525.0
+    return 22.460148 + (_precession_in_longitude(T) - _precession_in_longitude(T0)) / 3600.0
+
+
 def degrees_to_zodiac(degrees):
     """Convert ecliptic longitude to zodiac sign and degree."""
     degrees = degrees % 360
@@ -111,10 +146,8 @@ def calculate_sidereal_time(t, longitude):
     return lst
 
 
-def calculate_ascendant(lst, latitude):
+def calculate_ascendant(lst, latitude, obliquity=23.4393):
     """Calculate the Ascendant (rising sign) from LST and latitude."""
-    # Obliquity of the ecliptic
-    obliquity = 23.4393
     obl_rad = math.radians(obliquity)
     lat_rad = math.radians(latitude)
     lst_rad = math.radians(lst)
@@ -129,9 +162,8 @@ def calculate_ascendant(lst, latitude):
     return asc
 
 
-def calculate_midheaven(lst):
+def calculate_midheaven(lst, obliquity=23.4393):
     """Calculate the Midheaven (MC) from LST."""
-    obliquity = 23.4393
     obl_rad = math.radians(obliquity)
     lst_rad = math.radians(lst)
 
@@ -347,8 +379,7 @@ def calculate_lunar_nodes(t, eph, zodiac='tropical'):
 
     # Apply ayanamsa for sidereal
     if zodiac == 'sidereal':
-        ayanamsa = 24.0
-        north_node_lon = (north_node_lon - ayanamsa) % 360
+        north_node_lon = (north_node_lon - lahiri_ayanamsa(jd)) % 360
 
     south_node_lon = (north_node_lon + 180) % 360
 
@@ -382,6 +413,13 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
     # Get Earth for geocentric observations
     earth = eph['earth']
 
+    # Everything below is referred to the ecliptic OF THE DATE, which is what
+    # astrology means by a zodiacal longitude. Skyfield's ecliptic_latlon()
+    # defaults to the J2000 ecliptic; without epoch=t every planet comes out
+    # displaced by the precession since 2000 (~0.014 deg per year).
+    obliquity = mean_obliquity(t.tt)
+    ayanamsa = lahiri_ayanamsa(t.tt) if zodiac == 'sidereal' else 0.0
+
     # Calculate planetary positions
     planets_data = {}
 
@@ -393,14 +431,13 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
             astrometric = earth.at(t).observe(planet)
             apparent = astrometric.apparent()
 
-            # Get ecliptic coordinates
-            lat, lon, distance = apparent.ecliptic_latlon()
+            # Get ecliptic coordinates (ecliptic of date)
+            lat, lon, distance = apparent.ecliptic_latlon(epoch=t)
             longitude_deg = lon.degrees
             latitude_deg = lat.degrees
 
             # Apply ayanamsa for sidereal zodiac (Lahiri)
             if zodiac == 'sidereal':
-                ayanamsa = 24.0
                 longitude_deg = (longitude_deg - ayanamsa) % 360
 
             zodiac_pos = degrees_to_zodiac(longitude_deg)
@@ -417,6 +454,16 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         except Exception as e:
             print(f"Error calculating {name}: {e}")
 
+    # A chart missing planets is not a chart. Say so rather than returning
+    # houses and angles with an empty sky, which reads as a valid result.
+    missing = [n for n in PLANET_NAMES if n not in planets_data]
+    if missing:
+        raise ValueError(
+            "Could not place " + ", ".join(missing) +
+            f". The DE421 ephemeris only covers roughly {EPHEMERIS_MIN_YEAR}-{EPHEMERIS_MAX_YEAR}; "
+            f"{year} is outside it."
+        )
+
     # Calculate retrograde status for planets (compare with position 1 day later)
     t_next = ts.utc(utc_dt.year, utc_dt.month, utc_dt.day + 1,
                     utc_dt.hour, utc_dt.minute, utc_dt.second)
@@ -426,8 +473,9 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
             continue  # Sun and Moon don't go retrograde
         try:
             planet = eph[eph_name]
-            pos_now = earth.at(t).observe(planet).apparent().ecliptic_latlon()[1].degrees
-            pos_next = earth.at(t_next).observe(planet).apparent().ecliptic_latlon()[1].degrees
+            # Both samples in the SAME frame, so the difference is motion only.
+            pos_now = earth.at(t).observe(planet).apparent().ecliptic_latlon(epoch=t)[1].degrees
+            pos_next = earth.at(t_next).observe(planet).apparent().ecliptic_latlon(epoch=t)[1].degrees
 
             # Handle wrap-around at 0/360
             diff = pos_next - pos_now
@@ -467,11 +515,10 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
 
     # Calculate angles (Ascendant, Midheaven)
     lst = calculate_sidereal_time(t, longitude)
-    ascendant = calculate_ascendant(lst, latitude)
-    midheaven = calculate_midheaven(lst)
+    ascendant = calculate_ascendant(lst, latitude, obliquity)
+    midheaven = calculate_midheaven(lst, obliquity)
 
     if zodiac == 'sidereal':
-        ayanamsa = 24.0
         ascendant = (ascendant - ayanamsa) % 360
         midheaven = (midheaven - ayanamsa) % 360
 
@@ -509,7 +556,19 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         'aspects': aspects,
         'settings': {
             'houseSystem': house_system,
+            # Be honest about what was actually divided. The quadrant systems
+            # below are all served by the same trisection-of-the-quadrant
+            # geometry, which is Porphyry, not Placidus/Koch/Campanus/etc.
+            'houseSystemActual': (
+                'porphyry' if house_system in
+                ('placidus', 'koch', 'campanus', 'regiomontanus', 'topocentric')
+                else house_system
+            ),
             'zodiac': zodiac,
+            'ayanamsa': ('lahiri' if zodiac == 'sidereal' else None),
+            'ayanamsaDegrees': (round(ayanamsa, 4) if zodiac == 'sidereal' else None),
+            'obliquity': round(obliquity, 6),
+            'frame': 'ecliptic of date',
             'ephemeris': 'Skyfield (JPL DE421)'
         }
     }
@@ -548,6 +607,11 @@ class handler(BaseHTTPRequestHandler):
             zodiac = data.get('zodiac', 'tropical')
 
             # Validate ranges
+            if not (EPHEMERIS_MIN_YEAR <= year <= EPHEMERIS_MAX_YEAR):
+                raise ValueError(
+                    f"Year {year} is outside the DE421 ephemeris range "
+                    f"({EPHEMERIS_MIN_YEAR}-{EPHEMERIS_MAX_YEAR})"
+                )
             if not (1 <= month <= 12):
                 raise ValueError(f"Invalid month: {month}")
             if not (1 <= day <= 31):
