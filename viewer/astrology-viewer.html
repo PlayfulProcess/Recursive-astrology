@@ -6919,31 +6919,27 @@
         // HUMAN DESIGN INTEGRATION
         // ============================================================
 
-        // Gate sequence around the mandala (degrees in tropical zodiac)
-        const HD_GATE_SEQUENCE = [
-            { gate: 17, start: 3.875 }, { gate: 21, start: 9.5 }, { gate: 51, start: 15.125 },
-            { gate: 42, start: 20.75 }, { gate: 3, start: 26.375 }, { gate: 27, start: 32 },
-            { gate: 24, start: 37.625 }, { gate: 2, start: 43.25 }, { gate: 23, start: 48.875 },
-            { gate: 8, start: 54.5 }, { gate: 20, start: 60.125 }, { gate: 16, start: 65.75 },
-            { gate: 35, start: 71.375 }, { gate: 45, start: 77 }, { gate: 12, start: 82.625 },
-            { gate: 15, start: 88.25 }, { gate: 52, start: 93.875 }, { gate: 39, start: 99.5 },
-            { gate: 53, start: 105.125 }, { gate: 62, start: 110.75 }, { gate: 56, start: 116.375 },
-            { gate: 31, start: 122 }, { gate: 33, start: 127.625 }, { gate: 7, start: 133.25 },
-            { gate: 4, start: 138.875 }, { gate: 29, start: 144.5 }, { gate: 59, start: 150.125 },
-            { gate: 40, start: 155.75 }, { gate: 64, start: 161.375 }, { gate: 47, start: 167 },
-            { gate: 6, start: 172.625 }, { gate: 46, start: 178.25 }, { gate: 18, start: 183.875 },
-            { gate: 48, start: 189.5 }, { gate: 57, start: 195.125 }, { gate: 32, start: 200.75 },
-            { gate: 50, start: 206.375 }, { gate: 28, start: 212 }, { gate: 44, start: 217.625 },
-            { gate: 1, start: 223.25 }, { gate: 43, start: 228.875 }, { gate: 14, start: 234.5 },
-            { gate: 34, start: 240.125 }, { gate: 9, start: 245.75 }, { gate: 5, start: 251.375 },
-            { gate: 26, start: 257 }, { gate: 11, start: 262.625 }, { gate: 10, start: 268.25 },
-            { gate: 58, start: 273.875 }, { gate: 38, start: 279.5 }, { gate: 54, start: 285.125 },
-            { gate: 61, start: 290.75 }, { gate: 60, start: 296.375 }, { gate: 41, start: 302 },
-            { gate: 19, start: 307.625 }, { gate: 13, start: 313.25 }, { gate: 49, start: 318.875 },
-            { gate: 30, start: 324.5 }, { gate: 55, start: 330.125 }, { gate: 37, start: 335.75 },
-            { gate: 63, start: 341.375 }, { gate: 22, start: 347 }, { gate: 36, start: 352.625 },
-            { gate: 25, start: 358.125 }
+        // The wheel of 64 gates, in mandala order, starting from the one that
+        // opens at 3°52'30" Aries. Each gate is exactly 5°37'30" (5.625°) of
+        // ecliptic longitude, so every boundary is DERIVED below rather than
+        // typed out — a hand-written table had gate 25 starting at 358.125°
+        // instead of 358.25° (Jul 27 2026), which quietly moved every line
+        // boundary inside gate 25 by an eighth of a degree.
+        const HD_GATE_ORDER = [
+            17, 21, 51, 42, 3, 27, 24, 2, 23, 8, 20, 16, 35, 45, 12, 15,
+            52, 39, 53, 62, 56, 31, 33, 7, 4, 29, 59, 40, 64, 47, 6, 46,
+            18, 48, 57, 32, 50, 28, 44, 1, 43, 14, 34, 9, 5, 26, 11, 10,
+            58, 38, 54, 61, 60, 41, 19, 13, 49, 30, 55, 37, 63, 22, 36, 25
         ];
+        const HD_WHEEL_START = 3.875;   // ecliptic longitude where gate 17 opens
+        const HD_GATE_ARC = 360 / 64;   // 5.625° — one hexagram
+        const HD_LINE_ARC = HD_GATE_ARC / 6; // 0.9375° — one line
+
+        // Gate sequence around the mandala (degrees in tropical zodiac)
+        const HD_GATE_SEQUENCE = HD_GATE_ORDER.map((gate, i) => ({
+            gate,
+            start: (HD_WHEEL_START + i * HD_GATE_ARC) % 360
+        }));
 
         // Centers and their gates (with chakra correspondence)
         const HD_CENTERS = {
@@ -7216,14 +7212,35 @@
             }
         }
 
-        // Find the exact date when Sun was at targetLongitude using binary search
-        async function findDesignDate(birthDate, targetSunLongitude, latitude, longitude, signal) {
-            // Helper to get Sun longitude at a specific date.
+        // Wall-clock helpers for the Design search.
+        //
+        // The chart API reads {year, month, day, hour, minute} as *local time at
+        // the birth place* and does its own timezone/DST conversion. So the
+        // search below carries a bare wall clock, not an instant: it holds the
+        // fields in a Date built from Date.UTC and reads them back with the UTC
+        // getters. That keeps the arithmetic (subtract 95 days, bisect) free of
+        // the *browser's* own DST jumps, which used to be able to shift the
+        // Design moment by an hour when a clock change fell inside the search
+        // window (Jul 27 2026).
+        function wallClockToDate(w) {
+            return new Date(Date.UTC(w.year, w.month - 1, w.day, w.hour, w.minute));
+        }
+        function dateToWallClock(d) {
+            return {
+                year: d.getUTCFullYear(), month: d.getUTCMonth() + 1, day: d.getUTCDate(),
+                hour: d.getUTCHours(), minute: d.getUTCMinutes()
+            };
+        }
+
+        // Find the exact moment the Sun sat at targetLongitude, by bisection
+        async function findDesignDate(birthWallClock, targetSunLongitude, latitude, longitude, signal) {
+            // Helper to get Sun longitude at a specific wall clock.
             // One retry after a short backoff (Jul 24 2026): the binary search
             // fires ~20 rapid API calls and a single transient "Failed to fetch"
             // (serverless cold start / network blip) used to abort the whole
             // Human-Design calc into the ±88-day fallback.
             async function getSunLongitude(date) {
+                const w = dateToWallClock(date);
                 for (let attempt = 0; attempt < 2; attempt++) {
                     try {
                         const response = await fetch(CHART_API_URL, {
@@ -7231,11 +7248,11 @@
                             headers: { 'Content-Type': 'application/json' },
                             signal,
                             body: JSON.stringify({
-                                year: date.getFullYear(),
-                                month: date.getMonth() + 1,
-                                day: date.getDate(),
-                                hour: date.getHours(),
-                                minute: date.getMinutes(),
+                                year: w.year,
+                                month: w.month,
+                                day: w.day,
+                                hour: w.hour,
+                                minute: w.minute,
                                 latitude: parseFloat(latitude),
                                 longitude: parseFloat(longitude),
                                 houseSystem: 'placidus',
@@ -7263,17 +7280,21 @@
                 return diff;
             }
 
-            // Start with estimate: ~88 days before birth
-            let lowDate = new Date(birthDate);
-            lowDate.setDate(lowDate.getDate() - 95); // Start a bit earlier
+            // 88° of solar arc takes between ~86.4 days (near perihelion, when
+            // the Sun runs ~1.019°/day) and ~92.3 days (near aphelion, ~0.953°/
+            // day), so bracket generously and bisect.
+            const birthDate = wallClockToDate(birthWallClock);
+            let lowDate = new Date(birthDate.getTime() - 95 * 86400000);
+            let highDate = new Date(birthDate.getTime() - 80 * 86400000);
 
-            let highDate = new Date(birthDate);
-            highDate.setDate(highDate.getDate() - 80); // End a bit later than 88 days
-
-            // Binary search to find when Sun was at target longitude
-            // Sun moves ~1° per day, so we need precision of about 1-2 hours for line accuracy
-            const maxIterations = 20;
-            const precisionMs = 60 * 60 * 1000; // 1 hour precision
+            // Bisect down to the API's own resolution — it takes whole minutes,
+            // so anything finer is noise. A minute of solar motion is 0.0007°,
+            // i.e. 1/1300th of a line: the Design Sun's line is then decided by
+            // the ephemeris, not by where the search happened to stop. (Before
+            // Jul 27 2026 this stopped at one hour, ~0.04°, which was enough to
+            // put the Design Moon in the neighbouring gate on a boundary case.)
+            const precisionMs = 60 * 1000; // one minute
+            const maxIterations = 30;      // 15 days → 1 minute needs ~15
 
             for (let i = 0; i < maxIterations; i++) {
                 if (highDate - lowDate < precisionMs) break;
@@ -7284,19 +7305,10 @@
                 if (sunLong === null) {
                     console.error('Failed to get Sun longitude during binary search');
                     // Fall back to approximate date
-                    const fallback = new Date(birthDate);
-                    fallback.setDate(fallback.getDate() - 88);
-                    return fallback;
+                    return dateToWallClock(new Date(birthDate.getTime() - 88 * 86400000));
                 }
 
                 const diff = angularDiff(sunLong, targetSunLongitude);
-
-                // If we're very close, refine further
-                if (Math.abs(diff) < 0.1) {
-                    // Found it within 0.1° (~2.4 hours of Sun movement)
-                    // Do a few more iterations for precision
-                    if (highDate - lowDate < precisionMs * 2) break;
-                }
 
                 // Sun moves forward in zodiac, so:
                 // - If current Sun is AHEAD of target (diff > 0), we're too LATE, need earlier
@@ -7310,8 +7322,8 @@
                 }
             }
 
-            // Return midpoint of final range
-            return new Date((lowDate.getTime() + highDate.getTime()) / 2);
+            // Return midpoint of final range, as a wall clock at the birth place
+            return dateToWallClock(new Date((lowDate.getTime() + highDate.getTime()) / 2));
         }
 
         // Calculate Human Design from current astrology chart
@@ -7354,11 +7366,11 @@
 
             const [year, month, day] = date.split('-').map(Number);
             const [hours, minutes] = time.split(':').map(Number);
-            const birthDate = new Date(year, month - 1, day, hours, minutes);
+            const birthWallClock = { year, month, day, hour: hours, minute: minutes };
 
-            // Find exact Design date using binary search
-            // Sun moves ~1 degree per day, so 88 degrees ≈ 88 days, but varies
-            const designDate = await findDesignDate(birthDate, targetSunLongitude, latitude, longitude, hdSignal);
+            // Find the Design moment: the Sun 88° of arc back, which lands
+            // roughly — but only roughly — 88 days before birth
+            const designDate = await findDesignDate(birthWallClock, targetSunLongitude, latitude, longitude, hdSignal);
 
             // Update loading message
             if (hdViewMode !== 'astrology') {
@@ -7373,11 +7385,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     signal: hdSignal,
                     body: JSON.stringify({
-                        year: designDate.getFullYear(),
-                        month: designDate.getMonth() + 1,
-                        day: designDate.getDate(),
-                        hour: designDate.getHours(),
-                        minute: designDate.getMinutes(),
+                        year: designDate.year,
+                        month: designDate.month,
+                        day: designDate.day,
+                        hour: designDate.hour,
+                        minute: designDate.minute,
                         latitude: parseFloat(latitude),
                         longitude: parseFloat(longitude),
                         houseSystem: 'placidus',
@@ -7478,25 +7490,16 @@
             }
         }
 
+        // Longitude → gate + line, straight from the wheel geometry: how far
+        // past the start of gate 17 the point sits, in 5.625° steps. Same
+        // formula the open-source implementations use — no table walk, so no
+        // boundary can be off by a rounding.
         function getHDGateFromLongitude(longitude) {
-            const norm = ((longitude % 360) + 360) % 360;
-            for (let i = 0; i < HD_GATE_SEQUENCE.length; i++) {
-                const curr = HD_GATE_SEQUENCE[i];
-                const next = HD_GATE_SEQUENCE[(i + 1) % HD_GATE_SEQUENCE.length];
-                let end = next.start;
-                if (end < curr.start) {
-                    if (norm >= curr.start || norm < end) {
-                        const line = Math.floor(((norm - curr.start + 360) % 360) / 0.9375) + 1;
-                        return { gate: curr.gate, line: Math.min(line, 6) };
-                    }
-                } else {
-                    if (norm >= curr.start && norm < end) {
-                        const line = Math.floor((norm - curr.start) / 0.9375) + 1;
-                        return { gate: curr.gate, line: Math.min(line, 6) };
-                    }
-                }
-            }
-            return { gate: 41, line: 1 };
+            const fromWheelStart = (((longitude - HD_WHEEL_START) % 360) + 360) % 360;
+            const index = Math.floor(fromWheelStart / HD_GATE_ARC);
+            const intoGate = fromWheelStart - index * HD_GATE_ARC;
+            const line = Math.min(Math.floor(intoGate / HD_LINE_ARC) + 1, 6);
+            return { gate: HD_GATE_ORDER[index % 64], line };
         }
 
         function determineHDType(definedCenters, definedChannels) {
@@ -7520,6 +7523,10 @@
         }
 
         function determineHDAuthority(definedCenters) {
+            // Nothing defined at all is the Reflector's chart, and the tradition
+            // gives it a lunar authority — a full cycle of the Moon — rather
+            // than the "mental/environment" fallback below (Jul 27 2026).
+            if (definedCenters.size === 0) return 'Lunar';
             if (definedCenters.has('solar')) return 'Emotional';
             if (definedCenters.has('sacral')) return 'Sacral';
             if (definedCenters.has('spleen')) return 'Splenic';
