@@ -7917,6 +7917,28 @@
                     if (cost < bestCost) { bestCost = cost; best = off; }
                 }
                 gates.forEach((g,i) => { GP[g] = slots[(i + best) % gates.length]; });
+
+                // Even spacing *along the edge* still bunches at a sharp corner —
+                // two slots either side of the Splenic or Solar Plexus point end up
+                // almost on top of each other. Ease any pair that lands closer than
+                // a disc's width apart, sliding them along the edge they share.
+                const here = gates.map(g => GP[g]);
+                for (let pass = 0; pass < 12; pass++) {
+                    let moved = false;
+                    for (let i = 0; i < here.length; i++) {
+                        for (let j = i + 1; j < here.length; j++) {
+                            const dx = here[j][0]-here[i][0], dy = here[j][1]-here[i][1];
+                            const d = Math.hypot(dx, dy);
+                            if (d >= 20.5 || d === 0) continue;
+                            const push = (20.5 - d) / 2, ux = dx/d, uy = dy/d;
+                            here[i] = [here[i][0]-ux*push, here[i][1]-uy*push];
+                            here[j] = [here[j][0]+ux*push, here[j][1]+uy*push];
+                            moved = true;
+                        }
+                    }
+                    if (!moved) break;
+                }
+                gates.forEach((g,i) => { GP[g] = here[i]; });
             });
 
             // defined state from the real chart
