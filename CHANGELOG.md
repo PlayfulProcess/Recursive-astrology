@@ -1,5 +1,50 @@
 # Changelog — The Recursive Astrology
 
+## July 27, 2026 — New grammar: The Dwarf Planets (`grammars/dwarf-planets`)
+
+The twentieth library, and the only one whose subject is **unfinished**. Every other
+grammar here reads a tradition whose assembly is already behind it; this one takes the
+IAU's 2006 reclassification as a meaning-making event and watches a symbol set being
+built in real time — Pluto demoted, Ceres promoted (having been a planet from 1801 until
+the 1860s), Eris named for the discord it had already caused, and Haumea and Makemake
+given the names of gods from living cultures by astronomers in California.
+
+**Nine items:** six L1 — Pluto, Ceres, Eris, Haumea, Makemake, and one consolidated item
+for the four candidates the IAU has never added (Sedna, Quaoar, Gonggong, Orcus) — under
+two L2 patterns (`the vote`, `borrowed names`) and one L3 root (`watching a symbol form`).
+Four sections each: *The astronomy* (sourced inline), *The name, and who chose it*,
+*The symbolism so far*, *A question*.
+
+**The confidence gradient is the content.** `metadata.confidence` is high for Pluto
+(c. 95 years of use, and no new reading is asserted — the item points at the existing
+Pluto entries in `western-astrology-canonical` and `archetypal-pairs` and asks what the
+demotion did to them), medium for Ceres (c. 50 years, from the 1973 asteroid ephemeris,
+not the nineteenth century as is often assumed), and low for Eris, Haumea and Makemake
+(c. 20 years, no canon, meanings visibly read off the names). The candidates item offers
+**no** symbolic reading at all rather than manufacture one.
+
+**Care taken with the borrowed names.** Haumea, Makemake, Sedna, Quaoar and Gonggong come
+from living traditions. The grammar reports the naming as something *astronomers did*,
+records that the Quaoar team asked living Tongva people for permission and that the record
+shows no equivalent for the others, refuses to upgrade "the record does not show a
+consultation" into "none occurred", reproduces no sacred imagery, and points readers to
+each tradition's own keepers.
+
+**Images:** four public-domain, one deliberate gap. Pluto — New Horizons true-colour mosaic
+(NASA). Ceres — Occator on the limb, Dawn (NASA PIA21078). Eris — Jordaens's *Golden Apple
+of Discord* (Prado, PD-old-100), because Eris has never been resolved as a disk. Makemake —
+the Hubble moon discovery frame. **Haumea and the candidates carry no image on purpose:**
+there is no public-domain picture of them because there is no picture of them, and the
+alternative — an image of a Hawaiian deity — is exactly the borrowing the item is about.
+Cover is STScI's April 2006 size comparison, four months before the vote, in which three of
+these worlds are still catalogue numbers.
+
+Not added to `scripts/build_meta_astro.py`. That meta stacks voices per shared entity across
+the seven classical planets, twelve signs and twelve houses; none of these bodies is in that
+set (Pluto included — it is not one of the seven), so every item would carry exactly one
+section and prove nothing. No UUID invented: the slug sits in `ids.json` → `_missing_ids`
+until the app assigns one. `python check.py` → **OK, 20 grammars.**
+
 ## July 15, 2026 — Chart snapshot for AI interpretation (the "KEY")
 
 The Flow app can now attach an **image of the chart wheel** to its AI-interpretation
