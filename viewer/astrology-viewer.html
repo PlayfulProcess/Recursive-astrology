@@ -1874,7 +1874,10 @@
                                 <button onclick="setBodygraphLegendMode('activation')" class="bodygraph-legend-btn active text-xs px-3 py-1.5 rounded-full border transition-colors" data-mode="activation">By Activation</button>
                                 <button onclick="setBodygraphLegendMode('center')" class="bodygraph-legend-btn text-xs px-3 py-1.5 rounded-full border transition-colors" data-mode="center">By Center</button>
                             </div>
-                            <div id="hd-bodygraph" style="max-width: 400px; margin: 0 auto;"></div>
+                            <!-- 400px left the board sitting in the middle of a
+                                 680px panel with dead margins either side, and the
+                                 gate numbers small enough to squint at -->
+                            <div id="hd-bodygraph" style="max-width: 560px; margin: 0 auto;"></div>
                         </div>
                     </div>
 
@@ -7832,16 +7835,19 @@
             const VB_W = 400, VB_H = 668;
 
             // Centre layout (standard vertical bodygraph). Gates come from HD_CENTERS[id].gates.
+            // Sizes went up a notch (the Throat carries eleven gates, the G eight):
+            // at the old sizes the gate discs sat shoulder to shoulder and overlapped
+            // each other on the smaller centres.
             const LAY = {
-                head:  { x:200, y:70,  shape:'triU', s:34 },
-                ajna:  { x:200, y:158, shape:'triD', s:34 },
-                throat:{ x:200, y:250, shape:'sq',   s:38 },
-                g:     { x:200, y:360, shape:'dia',  s:38 },
-                heart: { x:312, y:372, shape:'triR', s:30 },
-                spleen:{ x:90,  y:466, shape:'triR', s:36 },
-                sacral:{ x:200, y:478, shape:'sq',   s:38 },
-                solar: { x:310, y:466, shape:'triL', s:36 },
-                root:  { x:200, y:580, shape:'sq',   s:38 }
+                head:  { x:200, y:68,  shape:'triU', s:36 },
+                ajna:  { x:200, y:158, shape:'triD', s:38 },
+                throat:{ x:200, y:252, shape:'sq',   s:44 },
+                g:     { x:200, y:362, shape:'dia',  s:44 },
+                heart: { x:314, y:370, shape:'triR', s:32 },
+                spleen:{ x:86,  y:468, shape:'triR', s:40 },
+                sacral:{ x:200, y:480, shape:'sq',   s:42 },
+                solar: { x:314, y:468, shape:'triL', s:40 },
+                root:  { x:200, y:582, shape:'sq',   s:42 }
             };
             function verts(c){ const x=c.x, y=c.y, s=c.s;
                 if(c.shape==='triU') return [[x,y-s],[x+s,y+s*0.62],[x-s,y+s*0.62]];
