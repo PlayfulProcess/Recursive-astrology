@@ -7669,7 +7669,10 @@
 
                 const midAngle = startAngle + (2.8125 * Math.PI / 180);
                 const tx = cx + gateR * Math.cos(midAngle), ty = cy + gateR * Math.sin(midAngle);
-                svg += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" fill="${isActivated ? '#fff' : '#555'}" font-size="8" font-weight="${isActivated ? 'bold' : 'normal'}" style="cursor:pointer" onclick="showHDGateDetail(${gate.gate})">${gate.gate}</text>`;
+                // #555 on this plate was below the floor of legibility for the
+                // 40-odd gates a chart does not activate — they are the context
+                // the activated ones are read against, so they have to be visible
+                svg += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" fill="${isActivated ? '#fff' : '#8b86a0'}" font-size="9" font-weight="${isActivated ? 'bold' : 'normal'}" style="cursor:pointer" onclick="showHDGateDetail(${gate.gate})">${gate.gate}</text>`;
             });
 
             // Inner zodiac ring (inside the gate wheel)
@@ -7737,30 +7740,57 @@
                     });
                 }
 
-                // Sort and handle overlaps
-                planetsToPlot.sort((a, b) => a.lon - b.lon);
-                const plotted = [];
-                let radiusOffset = 0;
+                // Two rings, and crowding resolved sideways rather than inward.
+                //
+                // Planets used to be pushed 18px towards the centre for every
+                // neighbour within 10°, so a stellium walked inward until its
+                // markers sat almost on the hub, where the angle — the only thing
+                // a wheel is for — could no longer be read, and they still
+                // overlapped. Now Personality keeps one ring and Design another,
+                // and inside each ring crowded markers are nudged *along* the ring
+                // until they clear, with a hairline back to the true longitude.
+                const RING = { personality: 112, design: 84 };
 
-                planetsToPlot.forEach(planet => {
-                    const angle = (planet.lon - 90) * Math.PI / 180;
-                    let r = planetR;
+                function spread(group, r) {
+                    if (!group.length) return [];
+                    // minimum angular gap that keeps two 10px markers apart at this radius
+                    const minGap = (23 / r) * 180 / Math.PI;
+                    const placed = group
+                        .map(p => ({ p, lon: p.lon, at: p.lon }))
+                        .sort((a, b) => a.lon - b.lon);
+                    // relax: push neighbours apart, wrapping around the wheel
+                    for (let pass = 0; pass < 60; pass++) {
+                        let moved = false;
+                        for (let i = 0; i < placed.length; i++) {
+                            const a = placed[i], b = placed[(i + 1) % placed.length];
+                            let gap = b.at - a.at;
+                            while (gap < 0) gap += 360;
+                            if (gap < minGap - 0.001) {
+                                const push = (minGap - gap) / 2;
+                                a.at = ((a.at - push) % 360 + 360) % 360;
+                                b.at = ((b.at + push) % 360 + 360) % 360;
+                                moved = true;
+                            }
+                        }
+                        if (!moved) break;
+                    }
+                    return placed;
+                }
 
-                    // Offset overlapping planets concentrically
-                    let overlapCount = 0;
-                    plotted.forEach(p => {
-                        const diff = Math.abs(planet.lon - p.lon);
-                        if (diff < 10 || diff > 350) overlapCount++;
+                ['personality', 'design'].forEach(type => {
+                    const r = RING[type];
+                    spread(planetsToPlot.filter(p => p.type === type), r).forEach(({ p, lon, at }) => {
+                        const trueAngle = (lon - 90) * Math.PI / 180;
+                        const angle = (at - 90) * Math.PI / 180;
+                        const px = cx + r * Math.cos(angle), py = cy + r * Math.sin(angle);
+                        // hairline from the marker out to where the planet really
+                        // is, stopping just short of the inner zodiac band
+                        const tx = cx + (innerZodiacInnerR - 3) * Math.cos(trueAngle);
+                        const ty = cy + (innerZodiacInnerR - 3) * Math.sin(trueAngle);
+                        svg += `<line x1="${px}" y1="${py}" x2="${tx}" y2="${ty}" stroke="${p.color}" stroke-width="0.7" opacity="0.35"/>`;
+                        svg += `<circle cx="${px}" cy="${py}" r="10" fill="rgba(10,10,15,0.95)" stroke="${p.color}" stroke-width="2"/>`;
+                        svg += `<text x="${px}" y="${py}" text-anchor="middle" dominant-baseline="middle" fill="${p.color}" font-size="11" font-weight="bold">${p.symbol}</text>`;
                     });
-                    r = planetR - (overlapCount * 18);
-
-                    const px = cx + r * Math.cos(angle);
-                    const py = cy + r * Math.sin(angle);
-
-                    svg += `<circle cx="${px}" cy="${py}" r="10" fill="rgba(10,10,15,0.95)" stroke="${planet.color}" stroke-width="2"/>`;
-                    svg += `<text x="${px}" y="${py}" text-anchor="middle" dominant-baseline="middle" fill="${planet.color}" font-size="11" font-weight="bold">${planet.symbol}</text>`;
-
-                    plotted.push(planet);
                 });
             }
 
@@ -7797,7 +7827,9 @@
             const container = document.getElementById('hd-bodygraph');
             if (!container) return;
             // ---- Harmony renderer: orderly gates on each centre, curved channels, two colours ----
-            const VB_W = 400, VB_H = 640;
+            // The extra 30 units of height are the legend's own strip: it used to
+            // sit at y=614 and run straight across the Root centre and its gates.
+            const VB_W = 400, VB_H = 668;
 
             // Centre layout (standard vertical bodygraph). Gates come from HD_CENTERS[id].gates.
             const LAY = {
@@ -7829,12 +7861,56 @@
                 return out;
             }
 
-            // gate -> {x,y} spread evenly on its centre's perimeter; gate -> centreId
-            const GP = {}, GCEN = {};
+            // gate -> centreId, and the centre each of its channel partners sits in
+            const GCEN = {}, PARTNERS = {};
             Object.keys(LAY).forEach(id => {
+                ((HD_CENTERS[id] && HD_CENTERS[id].gates) || []).forEach(g => GCEN[g] = id);
+            });
+            Object.keys(HD_CHANNELS).forEach(id => {
+                const [a,b] = id.split('-').map(Number);
+                (PARTNERS[a] = PARTNERS[a] || []).push(b);
+                (PARTNERS[b] = PARTNERS[b] || []).push(a);
+            });
+
+            // Gates still sit evenly around their centre's edge — that even spacing
+            // is the look — but they are no longer placed in numerical order. Each
+            // gate wants to face the centre its channel runs to, so the slots are
+            // handed out by direction: the wheel of evenly spaced slots is rotated
+            // to whichever offset best matches where each gate is pulled. Channels
+            // then leave from the side they are going to, instead of crossing the
+            // whole body to reach a partner sitting on the far edge.
+            const GP = {};
+            Object.keys(LAY).forEach(id => {
+                const c = LAY[id];
                 const gates = (HD_CENTERS[id] && HD_CENTERS[id].gates) || [];
-                const pos = perim(verts(LAY[id]), gates.length);
-                gates.forEach((g,i) => { GP[g] = pos[i]; GCEN[g] = id; });
+                const slots = perim(verts(c), gates.length);
+                const ang = p => Math.atan2(p[1] - c.y, p[0] - c.x);
+                // where each gate is pulled: the mean direction of its partners' centres
+                const pull = gates.map(g => {
+                    let sx = 0, sy = 0;
+                    (PARTNERS[g] || []).forEach(p => {
+                        const other = LAY[GCEN[p]];
+                        if (!other || GCEN[p] === id) return;
+                        const d = Math.hypot(other.x - c.x, other.y - c.y) || 1;
+                        sx += (other.x - c.x) / d; sy += (other.y - c.y) / d;
+                    });
+                    return (sx === 0 && sy === 0) ? null : Math.atan2(sy, sx);
+                });
+                // keep the gates in their given order around the ring, then rotate
+                // the ring to the offset with the least total pull-vs-slot error
+                const slotAng = slots.map(ang);
+                let best = 0, bestCost = Infinity;
+                for (let off = 0; off < gates.length; off++) {
+                    let cost = 0;
+                    gates.forEach((g,i) => {
+                        if (pull[i] === null) return;
+                        let d = Math.abs(slotAng[(i + off) % gates.length] - pull[i]);
+                        if (d > Math.PI) d = 2 * Math.PI - d;
+                        cost += d;
+                    });
+                    if (cost < bestCost) { bestCost = cost; best = off; }
+                }
+                gates.forEach((g,i) => { GP[g] = slots[(i + best) % gates.length]; });
             });
 
             // defined state from the real chart
@@ -7852,12 +7928,14 @@
                 const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
                 const dx=p2[0]-p1[0], dy=p2[1]-p1[1], len=Math.hypot(dx,dy)||1;
                 let nx=-dy/len, ny=dx/len;
-                const bow=Math.min(24, len*0.16);
+                // a gentler bow: with the gates now facing their partners the long
+                // swooping arcs were doing nothing but crossing each other
+                const bow=Math.min(12, len*0.09);
                 if((mx<200&&nx>0)||(mx>200&&nx<0)){ nx=-nx; ny=-ny; }
                 const cx=mx+nx*bow, cy=my+ny*bow;
                 return `<path d="M ${p1[0]} ${p1[1]} Q ${cx} ${cy} ${p2[0]} ${p2[1]}" fill="none" `
-                    + `stroke="${def?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${def?3.2:1.6}" `
-                    + `stroke-linecap="round" opacity="${def?1:0.42}"/>`;
+                    + `stroke="${def?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${def?3.4:1.2}" `
+                    + `stroke-linecap="round" opacity="${def?1:0.3}"/>`;
             }
             const chIds = Object.keys(HD_CHANNELS);
             chIds.forEach(id => { if(!defChSet.has(id)) svg += channelPath(id); });
@@ -7867,8 +7945,11 @@
             Object.keys(LAY).forEach(id => {
                 const def = defCenters.has(id);
                 const pts = verts(LAY[id]).map(p => p.join(',')).join(' ');
+                // an open centre outlined in --bgc-line was all but invisible on the
+                // dark plate — the nine shapes are the frame of the whole drawing,
+                // so an open one is drawn in --bgc-dim and still reads as empty
                 svg += `<polygon points="${pts}" fill="${def?'var(--bgc-accent-soft)':'var(--bgc-surface)'}" `
-                    + `stroke="${def?'var(--bgc-accent)':'var(--bgc-line)'}" stroke-width="${def?2.2:1.6}" `
+                    + `stroke="${def?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${def?2.4:1.6}" `
                     + `stroke-linejoin="round" style="cursor:pointer" onclick="showCenterDetail('${id}')">`
                     + `<title>${(HD_CENTERS[id]&&HD_CENTERS[id].name)||id}${def?' — defined':' — open'}</title></polygon>`;
             });
@@ -7878,19 +7959,22 @@
                 const p = GP[g]; if(!p) continue;
                 const on = gateActive(g);
                 const cen = GCEN[g];
-                svg += `<circle cx="${p[0]}" cy="${p[1]}" r="8" fill="${on?'var(--bgc-accent)':'var(--bgc-surface)'}" `
+                // r 8 / 7.5px type left the numbers at four or five screen pixels
+                // once the 400-wide board was scaled into the panel — unreadable
+                svg += `<circle cx="${p[0]}" cy="${p[1]}" r="9.6" fill="${on?'var(--bgc-accent)':'var(--bgc-surface)'}" `
                     + `stroke="${on?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${on?0:1.4}" `
                     + `style="cursor:pointer" onclick="showHDGateDetail(${g})">`
                     + `<title>Gate ${g}${HD_GATE_MEANINGS[g]?(' — '+HD_GATE_MEANINGS[g].name):''} (${(HD_CENTERS[cen]&&HD_CENTERS[cen].name)||''})</title></circle>`;
-                svg += `<text x="${p[0]}" y="${p[1]+2.8}" text-anchor="middle" font-size="7.5" font-weight="700" `
+                svg += `<text x="${p[0]}" y="${p[1]+3.4}" text-anchor="middle" font-size="9.5" font-weight="700" `
                     + `font-family="ui-monospace,Menlo,monospace" fill="${on?'var(--bgc-gate-on-text)':'var(--bgc-mut)'}" style="pointer-events:none">${g}</text>`;
             }
 
             // ---- 4. compact legend ----
-            svg += `<g transform="translate(14, 614)" font-family="-apple-system,Segoe UI,sans-serif" font-size="10" fill="var(--bgc-mut)">`
-                + `<line x1="0" y1="-3" x2="20" y2="-3" stroke="var(--bgc-accent)" stroke-width="3.2" stroke-linecap="round"/><text x="26" y="0">Defined</text>`
-                + `<line x1="92" y1="-3" x2="112" y2="-3" stroke="var(--bgc-dim)" stroke-width="1.6" stroke-linecap="round"/><text x="118" y="0">Undefined</text>`
-                + `<circle cx="205" cy="-3" r="5" fill="var(--bgc-accent)"/><text x="215" y="0">Active gate</text>`
+            svg += `<line x1="24" y1="638" x2="376" y2="638" stroke="var(--bgc-line)" stroke-width="1"/>`;
+            svg += `<g transform="translate(58, 657)" font-family="-apple-system,Segoe UI,sans-serif" font-size="11" fill="var(--bgc-mut)">`
+                + `<line x1="0" y1="-3.5" x2="20" y2="-3.5" stroke="var(--bgc-accent)" stroke-width="3.4" stroke-linecap="round"/><text x="27" y="0">Defined</text>`
+                + `<line x1="94" y1="-3.5" x2="114" y2="-3.5" stroke="var(--bgc-dim)" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/><text x="121" y="0">Undefined</text>`
+                + `<circle cx="216" cy="-3.5" r="5.5" fill="var(--bgc-accent)"/><text x="227" y="0">Active gate</text>`
                 + `</g>`;
 
             svg += '</svg>';
