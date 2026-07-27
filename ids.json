@@ -39,7 +39,8 @@
     "aspects-commented": "dee46a22-3848-433e-a793-8c7a2206e8cb",
     "dignities-rulerships": "1ab72d9f-f283-475e-951a-1841215e1274",
     "jyotisa-brhat-jataka": "64d62441-2cf3-4824-94b8-787d3e333ed4",
-    "william-lilly-christian-astrology": "54622c06-0a8d-4268-b020-3490ad5c5201"
+    "william-lilly-christian-astrology": "54622c06-0a8d-4268-b020-3490ad5c5201",
+    "dwarf-planets": "c9057941-2073-4965-9e8d-b4315a0adf1d"
   },
   "preview_links": {
     "_note": "Additive, per-slug mirror of the `_preview_links` template above (recursive-astrology/eco/landing-previews, Jul 6 2026) — one entry per grammar in grammars/*/grammar.json, kept in sync with index.html's 'Browse every grammar' gallery. Completed to full coverage in the Jul 2026 dating audit (it had drifted to 11 of 19 real grammars). `raw` always resolves (no UUID needed); `cards`/`study`/`tree`/`play` are null until the slug gets a UUID in `ids` above, at which point they can be filled in by substituting <id> into the `_preview_links` template. `casting` marks the three spread-grammars (positions, not interpretations — grouped separately on the landing page).",
