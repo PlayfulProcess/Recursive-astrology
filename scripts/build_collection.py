@@ -71,6 +71,7 @@ BRANCH_OF = {
     "archetypal-pairs":                "synthesis",  # hand-authored, after Tarnas — see docs/DESIGN-archetypal.md
     "aspects-commented":               "synthesis",  # multi-voice compilation (Ptolemy + Lilly + Canonical), not a single primary source
     "dignities-rulerships":            "synthesis",  # lens compilation of the traditional dignities table
+    "dwarf-planets":                   "synthesis",  # contemporary synthesis on the IAU 2006 reclassification — an interpretation set, not a single source
 }
 
 VALID_PROVENANCE = {"record", "contemporary", "casting"}

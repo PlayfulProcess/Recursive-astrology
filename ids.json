@@ -107,6 +107,14 @@
       "play": "https://flow.recursive.eco/play?id=1ab72d9f-f283-475e-951a-1841215e1274",
       "casting": false
     },
+    "dwarf-planets": {
+      "raw": "grammars/dwarf-planets/grammar.json",
+      "cards": null,
+      "study": null,
+      "tree": null,
+      "play": null,
+      "casting": false
+    },
     "historiographies-of-astrology": {
       "raw": "grammars/historiographies-of-astrology/grammar.json",
       "cards": "https://recursive.eco/pages/grammar-viewer.html?type=astrology&id=ddffc0fa-7f05-49d1-82db-f2d636cf178e",
@@ -202,6 +210,7 @@
   "_missing_ids": {
     "_note": "On disk and in the collection, but with no recursive.eco UUID yet — no UUID is invented here. Add the real one when the grammar is created on recursive.eco.",
     "slugs": [
+      "dwarf-planets",
       "the-right-size"
     ]
   },

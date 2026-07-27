@@ -31,6 +31,7 @@
         "aspects-commented",
         "astro-of-all-astros",
         "dignities-rulerships",
+        "dwarf-planets",
         "historiographies-of-astrology",
         "planetary-myths",
         "trika-lens",
@@ -169,6 +170,20 @@
       "path": "grammars/dignities-rulerships/grammar.json",
       "provenance": "contemporary",
       "year_label": "Undated — contemporary lens compilation of the traditional dignities table. Its layers are dated in the item sections (Ptolemy c. 150 CE; Lilly 1647; public-domain enrichment from Raphael 1828 and Sepharial 1920); the table itself belongs to no single edition."
+    },
+    {
+      "slug": "dwarf-planets",
+      "name": "The Dwarf Planets — a symbol system caught in the act of forming",
+      "type": "astrology",
+      "branch": "synthesis",
+      "is_meta": false,
+      "default_preview": "cards",
+      "items": 9,
+      "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/2006-16-d-print.jpg?width=800",
+      "blurb": "On 24 August 2006, in a conference hall in Prague, a show of hands changed what Pluto is called. The same vote promoted Ceres, which had been demoted once already, and gave the name Eris to the object…",
+      "path": "grammars/dwarf-planets/grammar.json",
+      "provenance": "contemporary",
+      "year_label": "Undated — contemporary synthesis, written 2026, about the IAU's 2006 reclassification and the astrological writing that has appeared since. The astronomy it reports is dated and sourced per item; the symbolism is a literature still forming, so the grammar carries no source year rather than pretending to one."
     },
     {
       "slug": "historiographies-of-astrology",

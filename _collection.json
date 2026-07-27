@@ -109,6 +109,19 @@
       "year_label": "Undated — contemporary lens compilation of the traditional dignities table. Its layers are dated in the item sections (Ptolemy c. 150 CE; Lilly 1647; public-domain enrichment from Raphael 1828 and Sepharial 1920); the table itself belongs to no single edition."
     },
     {
+      "slug": "dwarf-planets",
+      "name": "The Dwarf Planets — a symbol system caught in the act of forming",
+      "description": "On 24 August 2006, in a conference hall in Prague, a show of hands changed what Pluto is called",
+      "grammar_type": "astrology",
+      "items": 9,
+      "categories": {
+        "dwarf-planet": 6,
+        "reclassification": 3
+      },
+      "provenance": "contemporary",
+      "year_label": "Undated — contemporary synthesis, written 2026, about the IAU's 2006 reclassification and the astrological writing that has appeared since. The astronomy it reports is dated and sourced per item; the symbolism is a literature still forming, so the grammar carries no source year rather than pretending to one."
+    },
+    {
       "slug": "historiographies-of-astrology",
       "name": "Historiographies of Astrology",
       "description": "A library of the major historiographical VIEWS of astrology — the eras and stances through which humans have read meaning into the sky, each presented faithfully in its own terms and held honestly to ",
