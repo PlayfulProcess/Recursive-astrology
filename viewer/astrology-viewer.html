@@ -3752,7 +3752,7 @@
                             name: document.getElementById('chart-name')?.value?.trim() || 'Birth Chart',
                             birthData: currentChart.birthData,
                             settings: currentChart.settings,
-                            planets: serializeCelestialBodies(currentChart.horoscope.CelestialBodies),
+                            planets: serializeCelestialBodies(currentChart.horoscope.CelestialBodies, currentChart.horoscope),
                             houses: serializeHouses(currentChart.horoscope.Houses),
                             aspects: serializeAspects(currentChart.horoscope.Aspects),
                             ascendant: currentChart.horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees,
@@ -3802,7 +3802,7 @@
                 name: chartName,
                 birthData: chart.birthData,
                 settings: chart.settings,
-                planets: serializeCelestialBodies(chart.horoscope.CelestialBodies),
+                planets: serializeCelestialBodies(chart.horoscope.CelestialBodies, chart.horoscope),
                 houses: serializeHouses(chart.horoscope.Houses),
                 aspects: serializeAspects(chart.horoscope.Aspects),
                 ascendant: chart.horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees,
@@ -5237,7 +5237,10 @@
 
             const degree = body.ChartPosition?.Ecliptic?.DecimalDegrees || 0;
             const isRetrograde = body.isRetrograde || false;
-            const houseNum = body.House?.label || body.House || 1;
+            // Computed from the cusps, like the planet panels — so the detail
+            // modal can never disagree with the list it was opened from.
+            const computedHouse = calculateHouseForPlanet(degree, currentChart?.horoscope);
+            const houseNum = (typeof computedHouse === 'number' ? computedHouse : null) || body.House?.label || body.House || 1;
             const houseData = HOUSES[houseNum] || HOUSES[1];
 
             // Check for schema overrides - look for planet and sign in schema
@@ -6035,7 +6038,7 @@
                     birthData: currentChart.birthData,
                     settings: currentChart.settings,
                     // Store calculated positions as serializable data
-                    planets: serializeCelestialBodies(currentChart.horoscope.CelestialBodies),
+                    planets: serializeCelestialBodies(currentChart.horoscope.CelestialBodies, currentChart.horoscope),
                     houses: serializeHouses(currentChart.horoscope.Houses),
                     aspects: serializeAspects(currentChart.horoscope.Aspects),
                     ascendant: currentChart.horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees,
@@ -6114,7 +6117,7 @@
                     placements: Object.entries(currentChart.horoscope.CelestialBodies || {}).map(([key, body]) => ({
                         planet: key,
                         sign: body.Sign?.label,
-                        house: parseInt(body.House?.label) || undefined,
+                        house: calculateHouseForPlanet(body.ChartPosition?.Ecliptic?.DecimalDegrees, currentChart.horoscope),
                         degree: body.ChartPosition?.Ecliptic?.DecimalDegrees % 30,
                         retrograde: body.isRetrograde
                     })),
@@ -6386,17 +6389,28 @@
         // SERIALIZATION HELPERS
         // ============================================================
 
-        function serializeCelestialBodies(bodies) {
+        function serializeCelestialBodies(bodies, horoscope) {
             if (!bodies) return {};
 
             const result = {};
             Object.keys(bodies).forEach(key => {
                 const body = bodies[key];
                 if (body) {
+                    // Save the house as a plain NUMBER computed from the cusps.
+                    // It used to save `body.House` — a record object, which read
+                    // downstream as "House [object Object]" and, worse, carried
+                    // whatever number the calculator had stamped on it. The house
+                    // is derivable, so derive it and store one unambiguous value.
+                    const degree = body.ChartPosition?.Ecliptic?.DecimalDegrees;
+                    let house = calculateHouseForPlanet(degree, horoscope);
+                    if (typeof house !== 'number') {
+                        house = parseInt(body.House?.label ?? body.House, 10);
+                        if (!Number.isFinite(house)) house = null;
+                    }
                     result[key] = {
                         sign: body.Sign?.label,
-                        degree: body.ChartPosition?.Ecliptic?.DecimalDegrees,
-                        house: body.House,
+                        degree,
+                        house,
                         isRetrograde: body.isRetrograde
                     };
                 }
@@ -6825,26 +6839,25 @@
             }
 
 
-            // Sort cusps by DEGREE to find sectors
-            const sortedByDeg = [...houseCusps].sort((a, b) => a.deg - b.deg);
+            // Order the cusps the way houses actually run: counter-clockwise
+            // from the 1st cusp (the Ascendant). Sorting by ABSOLUTE degree was
+            // wrong whenever the Ascendant is not the smallest longitude, and
+            // returning the cusp's own `num` trusted a label that is provably
+            // wrong on charts saved before ~Mar 2026 (the old calculator emitted
+            // Placidus cusps with 5↔6 and 11↔12 swapped). The offset ordering
+            // reconstructs the correct 1..12 sequence from the geometry alone,
+            // so the sector's INDEX is the house number. (Jul 26 2026 — the
+            // builder's Sun showed in the 5th when it is in the 10th.)
+            const first = houseCusps.find(c => c.num === 1) || houseCusps[0];
+            const off = (d) => (((d - first.deg) % 360) + 360) % 360;
+            const ordered = [...houseCusps].sort((a, b) => off(a.deg) - off(b.deg));
 
-            // Find which sector the planet degree falls into
-            // A planet is in house N if it's between house N's cusp and the next cusp (by degree)
+            const p = off(planetDegree);
             for (let i = 0; i < 12; i++) {
-                const current = sortedByDeg[i];
-                const next = sortedByDeg[(i + 1) % 12];
-
-                let isInSector = false;
-                if (current.deg <= next.deg) {
-                    // Normal case
-                    isInSector = planetDegree >= current.deg && planetDegree < next.deg;
-                } else {
-                    // Wrap around 0° (last sector spans 0°)
-                    isInSector = planetDegree >= current.deg || planetDegree < next.deg;
-                }
-
-                if (isInSector) {
-                    return current.num;
+                const start = off(ordered[i].deg);
+                const end = i === 11 ? 360 : off(ordered[i + 1].deg);
+                if (p >= start && p < end) {
+                    return i + 1;
                 }
             }
 
