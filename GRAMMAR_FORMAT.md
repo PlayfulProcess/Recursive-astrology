@@ -283,8 +283,20 @@ lives in a credit object:
   furnished — that is decoration, and the honest gap is better.
 - **No anachronism.** Don't illustrate a twentieth-century psychological item with a
   Renaissance woodcut, or a Renaissance item with a modern diagram.
-- **Spread (`casting-*`) grammars carry no images at all** — they are position
-  scaffolds, not content.
+- **Spread (`casting-*`) grammars may carry a COVER, but no per-item images.**
+  *(Amended Jul 27 2026. The rule until then was "carry no images at all."* The
+  builder set covers on all three casting grammars in the recursive.eco app, which
+  is a reasonable wish — a spread with no picture is a blank tile in a gallery of
+  illustrated ones. So a `cover_image_url` (+ mirrored `thumbnail_url`) is now
+  allowed on a casting grammar, under exactly the same provenance burden as any
+  other image: PD only, `cover_image_credit` filled in, file page checked. What
+  does **not** change: a casting grammar's *items* stay bare. They are position
+  scaffolds — "your Sun", "your 7th house" — and any picture on them would be
+  decoration standing in for content the reader is supposed to supply from their
+  own chart.*
+  **The repo stays canonical.** A cover chosen here overwrites the app's on the
+  next pull; when the two disagree, this file wins, because the app has no licence
+  check and this repo is public-domain-only.
 - **URL form.** Use `https://commons.wikimedia.org/wiki/Special:FilePath/<File_Name>?width=800`
   — a stable canonical URL that serves a sized rendition of the original (several of
   these originals are 20 000 px wide). Keep the human-readable file page in

@@ -1,6 +1,8 @@
 {
   "name": "One Aspect — the smallest casting",
   "description": "The minimal casting, and the purest statement of this channel's rule: one position, filled by ANY single aspect of your own chart — a planet in its sign, a house and what stands in it, or an aspect between two planets. You choose it (or a chart calculation surfaces the day's exact aspect); it is never drawn at random, because the deck being 'drawn' from is your own chart. Read against the flagship interpretation set (western-astrology-canonical) or any voice library. A chart is a mirror and a calendar, never a command.",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Typus_Aspectuum,_Oppositionum_et_Conjunctionum.jpg?width=800",
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Typus_Aspectuum,_Oppositionum_et_Conjunctionum.jpg?width=800",
   "grammar_type": "sequence",
   "provenance": "casting",
   "dating": {
@@ -61,5 +63,16 @@
     ]
   },
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=d157cb7d-33d4-4cd2-82b8-77fc63c0e34f",
+  "cover_image_credit": {
+    "title": "Typus aspectuum, oppositionum et coniunctionum etz in planetis — the aspects, oppositions and conjunctions among the planets, plate 15",
+    "creator": "Andreas Cellarius",
+    "date": "1661",
+    "source": "*Harmonia Macrocosmica* (Amsterdam, 1660/1661)",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Cellarius_Harmonia_Macrocosmica_-_Typus_Aspectuum,_Oppositionum_et_Conjunctionum.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Cellarius died 1665; Commons states public domain (PD-old-100)",
+    "verified": "2026-07-27",
+    "_why_this_image": "A whole lattice of aspect geometry over the zodiac circle — the square, trine and sextile figures drawn and named, with conjunction under one sign at the centre. The casting asks for ONE of those relations; the plate is the field it is chosen from. (The 1533 Hervagius aspect figure would have suited too, but it is already the cover of grammars/aspects-commented, and one file carries at most one cover.)"
+  }
 }

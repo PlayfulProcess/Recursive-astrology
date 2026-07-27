@@ -1,6 +1,8 @@
 {
   "name": "The Big Three — a reflection casting",
   "description": "A three-position casting that mirrors the tarot three-card spread so it works in the oracle from day one — but nothing here is drawn at random: every position resolves to an aspect of YOUR OWN chart (Sun, Moon, Ascendant). The chart is a mirror and a calendar, never a command: each position hands you a prompt about something already yours, and you author what it means. Positions are read against the flagship interpretation set (western-astrology-canonical) or any interpretation grammar the reader chooses (the historical voices work too — Ptolemy, Leo, the skeptics).",
+  "cover_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Situs_Terrae_Circulis_coelestibus_Circundatae.jpg?width=800",
+  "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cellarius_Harmonia_Macrocosmica_-_Situs_Terrae_Circulis_coelestibus_Circundatae.jpg?width=800",
   "grammar_type": "sequence",
   "provenance": "casting",
   "dating": {
@@ -102,5 +104,16 @@
     ]
   },
   "_recursive_eco_url": "https://flow.recursive.eco/play?id=bbcba06e-0a82-4959-ad69-439ac963bd54",
-  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=bbcba06e-0a82-4959-ad69-439ac963bd54"
+  "_recursive_eco_edit_url": "https://flow.recursive.eco/create/dashboard/unified/new?id=bbcba06e-0a82-4959-ad69-439ac963bd54",
+  "cover_image_credit": {
+    "title": "Situs Terrae circulis coelestibus circundatae — the Earth encircled by the celestial circles, plate 11",
+    "creator": "Andreas Cellarius",
+    "date": "1661",
+    "source": "*Harmonia Macrocosmica* (Amsterdam, 1660/1661)",
+    "file_page": "https://commons.wikimedia.org/wiki/File:Cellarius_Harmonia_Macrocosmica_-_Situs_Terrae_Circulis_coelestibus_Circundatae.jpg",
+    "license": "Public domain (as stated on the Wikimedia Commons file page)",
+    "pd_basis": "Cellarius died 1665; Commons states public domain (PD-old-100)",
+    "verified": "2026-07-27",
+    "_why_this_image": "The plate draws the HORIZON as a broad named band cutting the globe, with the zodiac band crossing it and zenith and nadir marked. That is precisely the geometry this casting stands on: the Ascendant is the degree of the ecliptic rising on the eastern horizon, so the two lights plus the horizon circle are the whole of the Big Three in one figure."
+  }
 }
