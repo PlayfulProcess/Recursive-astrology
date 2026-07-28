@@ -43,10 +43,26 @@
         tailwind.config = { corePlugins: { preflight: true } };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <script src="assets/js/auth-init.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="assets/css/components.css">
+    <!-- Root-absolute, not relative (Jul 28 2026): vercel.json rewrites "/" to
+         this file's content so flow can iframe chart.recursive.eco/ directly,
+         but the rewrite only swaps what HTML is served at "/" — it does not
+         change the request URL, so browser-relative paths like "config.js"
+         resolved against "/" instead of "/viewer/" and 404'd. That took
+         window.RecursiveAuth out entirely (auth-init.js never loaded), which
+         crashed the unguarded `window.RecursiveAuth.init()` below and, with
+         it, every top-level statement after it in this script — including
+         every DOMContentLoaded listener (birth-date/time dropdowns never
+         populated, the form's submit handler never attached) and the
+         calculateChart/showChart wrappers that trigger Human Design. That's
+         why Calculate did nothing: no listener was ever attached to catch
+         the click. Both deployments (chart.recursive.eco via Vercel, and
+         astro.recursive.eco via GitHub Pages) keep this file under /viewer/,
+         so a root-absolute path resolves correctly from either origin,
+         however the page itself was reached. -->
+    <script src="/viewer/config.js"></script>
+    <script src="/viewer/assets/js/auth-init.js"></script>
+    <link rel="stylesheet" href="/viewer/style.css">
+    <link rel="stylesheet" href="/viewer/assets/css/components.css">
 
     <!-- Astrology Libraries -->
     <!-- Custom SVG visualization (no external dependencies) -->
@@ -1638,7 +1654,7 @@
                             <div class="saved-charts-dropdown">
                                 <button type="button" class="saved-charts-btn" onclick="toggleSavedChartsMenu(event)">
                                     My Charts
-                                    <svg width="14" height="14" aria-hidden="true"><use href="icons.svg#chevron-down-thin"/></svg>
+                                    <svg width="14" height="14" aria-hidden="true"><use href="/viewer/icons.svg#chevron-down-thin"/></svg>
                                 </button>
                                 <div id="saved-charts-menu" class="saved-charts-menu">
                                     <div class="saved-charts-menu-header">Saved Charts</div>
@@ -1845,7 +1861,7 @@
                         </div>
 
                         <div id="chart-wheel-container" class="hidden relative">
-                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
+                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="/viewer/icons.svg#expand"/></svg></button>
                             <div class="zoom-controls">
                                 <button onclick="chartZoom(-1)" title="Zoom out">−</button>
                                 <button onclick="chartZoomReset()" title="Reset zoom">⟲</button>
@@ -1857,18 +1873,18 @@
                                     <option value="">Default Interpretations</option>
                                 </select>
                                 <button onclick="interpretWithAI('astrology')" class="px-3 py-1.5 text-xs rounded-lg bg-purple-900/20 border border-purple-700/40 text-purple-300 hover:bg-purple-900/35 hover:text-purple-200 transition-all flex items-center gap-1.5" title="Get AI interpretation of your birth chart">
-                                    <svg class="w-4 h-4" aria-hidden="true"><use href="icons.svg#star"/></svg>
+                                    <svg class="w-4 h-4" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg>
                                     Interpret with AI
                                 </button>
                             </div>
                             <div id="chart-wheel"></div>
                         </div>
                         <div id="hd-mandala-container" class="hidden relative">
-                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
+                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="/viewer/icons.svg#expand"/></svg></button>
                             <div id="hd-mandala" style="max-width: 500px; margin: 0 auto;"></div>
                         </div>
                         <div id="hd-bodygraph-container" class="hidden relative">
-                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
+                            <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="/viewer/icons.svg#expand"/></svg></button>
                             <!-- Legend Mode Toggle -->
                             <div id="bodygraph-legend-toggle" class="flex justify-center gap-2 mb-3">
                                 <button onclick="setBodygraphLegendMode('activation')" class="bodygraph-legend-btn active text-xs px-3 py-1.5 rounded-full border transition-colors" data-mode="activation">By Activation</button>
@@ -1985,14 +2001,14 @@
                             <div id="ai-context-preview" class="ai-context-preview">
                                 <div class="ai-context-header" onclick="toggleAIContextPreview()">
                                     <div class="ai-context-title">
-                                        <span style="display:inline-flex;vertical-align:-2px"><svg width="16" height="16" aria-hidden="true"><use href="icons.svg#chat"/></svg></span>
+                                        <span style="display:inline-flex;vertical-align:-2px"><svg width="16" height="16" aria-hidden="true"><use href="/viewer/icons.svg#chat"/></svg></span>
                                         <span>Astro Context for AI</span>
                                         <span id="ai-context-count" class="ai-context-count" style="display: none;">0</span>
                                     </div>
                                     <div class="ai-context-actions">
                                         <button class="ai-context-btn delete-all" onclick="event.stopPropagation(); clearAllSelectionsFromIframe()">Delete All</button>
                                         <button class="ai-context-btn" onclick="event.stopPropagation(); toggleAIContextJSON()">JSON</button>
-                                        <button class="ai-context-btn fullscreen" onclick="event.stopPropagation(); openAIContextFullscreen()"><svg width="12" height="12" style="vertical-align:-1px;margin-right:3px" aria-hidden="true"><use href="icons.svg#expand"/></svg>Full</button>
+                                        <button class="ai-context-btn fullscreen" onclick="event.stopPropagation(); openAIContextFullscreen()"><svg width="12" height="12" style="vertical-align:-1px;margin-right:3px" aria-hidden="true"><use href="/viewer/icons.svg#expand"/></svg>Full</button>
                                     </div>
                                 </div>
                                 <div id="ai-context-body" class="ai-context-body">
@@ -2059,7 +2075,7 @@
     <!-- Gate Detail Modal -->
     <div id="gate-modal" class="modal-overlay">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeGateModal()" aria-label="Close" title="Close (Esc)"><svg width="20" height="20" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
+            <button class="modal-close" onclick="closeGateModal()" aria-label="Close" title="Close (Esc)"><svg width="20" height="20" aria-hidden="true"><use href="/viewer/icons.svg#close"/></svg></button>
             <div id="gate-modal-content"></div>
         </div>
     </div>
@@ -2067,13 +2083,13 @@
     <!-- Planet Details Modal -->
     <div id="planet-modal" class="modal-overlay">
         <button class="modal-nav modal-nav-prev" onclick="navigateDetail(-1)" aria-label="Previous item" title="Previous (←)">
-            <svg width="22" height="22" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
+            <svg width="22" height="22" aria-hidden="true"><use href="/viewer/icons.svg#chevron-left"/></svg>
         </button>
         <button class="modal-nav modal-nav-next" onclick="navigateDetail(1)" aria-label="Next item" title="Next (→)">
-            <svg width="22" height="22" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+            <svg width="22" height="22" aria-hidden="true"><use href="/viewer/icons.svg#chevron-right"/></svg>
         </button>
         <div class="modal-content">
-            <button class="modal-close" onclick="closePlanetModal()" aria-label="Close" title="Close (Esc)"><svg width="20" height="20" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
+            <button class="modal-close" onclick="closePlanetModal()" aria-label="Close" title="Close (Esc)"><svg width="20" height="20" aria-hidden="true"><use href="/viewer/icons.svg#close"/></svg></button>
             <div id="planet-modal-content"></div>
         </div>
     </div>
@@ -2081,7 +2097,7 @@
     <!-- Sign-in Modal -->
     <div id="signin-modal" class="signin-modal-overlay">
         <div class="signin-modal">
-            <button class="modal-close" onclick="closeSigninModal()" aria-label="Close" title="Close"><svg width="20" height="20" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
+            <button class="modal-close" onclick="closeSigninModal()" aria-label="Close" title="Close"><svg width="20" height="20" aria-hidden="true"><use href="/viewer/icons.svg#close"/></svg></button>
             <h2 class="text-xl font-semibold text-white mb-4">Sign In</h2>
             <p class="text-gray-400 text-sm mb-4">
                 Sign in to save your charts and access them later.
@@ -2113,8 +2129,8 @@
     <site-footer></site-footer>
 
     <!-- Component Scripts -->
-    <script src="assets/js/components/site-shell-inline.js"></script>
-    <script src="spiral/spiral.js"></script>
+    <script src="/viewer/assets/js/components/site-shell-inline.js"></script>
+    <script src="/viewer/spiral/spiral.js"></script>
 
     <script>
         // ============================================================
@@ -2132,8 +2148,30 @@
         }
         const createClient = window.supabase?.createClient;
 
-        // Initialize Supabase via shared auth module
-        const supabaseClient = window.RecursiveAuth.init();
+        // Initialize Supabase via shared auth module. Defensive fallback
+        // (Jul 28 2026, matches the "Supabase might fail to load" check
+        // just above): if assets/js/auth-init.js didn't load for any
+        // reason — 404, ad blocker, CDN hiccup — window.RecursiveAuth is
+        // undefined, and calling .init() on it used to throw right here,
+        // unguarded, at the TOP LEVEL of this script. That's a silent
+        // killer: every statement after it — every DOMContentLoaded
+        // listener (birth-date/time dropdowns never populated, the form's
+        // submit handler never attached, HD tab clicks wired to nothing)
+        // and the calculateChart/showChart wrappers — never ran. Calculate
+        // looked like it did nothing because nothing was listening for the
+        // click. A missing auth module should degrade sign-in, not take
+        // the whole calculator down with it.
+        const supabaseClient = window.RecursiveAuth
+            ? window.RecursiveAuth.init()
+            : (() => {
+                console.error('RecursiveAuth not loaded (assets/js/auth-init.js failed) — falling back to a bare Supabase client. Sign-in/session features will not work.');
+                return createClient
+                    ? createClient(
+                        window.ENV?.SUPABASE_URL || 'https://xtviwcznhbrsvkitepvm.supabase.co',
+                        window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0dml3Y3puaGJyc3ZraXRlcHZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1NDA1MDMsImV4cCI6MjA4MzExNjUwM30.eBXM6NTe3Sz3SfdtI0pTHQyJzd6PXJl5ZvpNg7yFSII'
+                      )
+                    : null;
+              })();
 
         // ============================================================
         // ZODIAC & PLANET DATA WITH JUNGIAN/CBT INTERPRETATIONS
@@ -4813,9 +4851,9 @@
         // 'aspect', or 'house').
         function detailActionRow(schemaToken) {
             const grammarBtn = astrologySchemaOptions.length > 0
-                ? `<button onclick="toggleAstrologySchemaSelector('${schemaToken}')" class="detail-action-btn" title="Change or compare grammar" aria-label="Change or compare grammar"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#book"/></svg></button>`
+                ? `<button onclick="toggleAstrologySchemaSelector('${schemaToken}')" class="detail-action-btn" title="Change or compare grammar" aria-label="Change or compare grammar"><svg width="18" height="18" aria-hidden="true"><use href="/viewer/icons.svg#book"/></svg></button>`
                 : '';
-            const aiBtn = `<button onclick="interpretWithAI('astrology')" class="detail-action-btn" title="Interpret with AI" aria-label="Interpret with AI"><svg width="18" height="18" aria-hidden="true"><use href="icons.svg#star"/></svg></button>`;
+            const aiBtn = `<button onclick="interpretWithAI('astrology')" class="detail-action-btn" title="Interpret with AI" aria-label="Interpret with AI"><svg width="18" height="18" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></button>`;
             return `<div class="detail-action-row">${grammarBtn}${aiBtn}</div>`;
         }
 
@@ -4900,8 +4938,8 @@
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${mergedHouse.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${mergedHouse.question}</li>` : ''}
-                        ${mergedSign.reframe ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${mergedSign.reframe}</li>` : ''}
+                        ${mergedHouse.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>${mergedHouse.question}</li>` : ''}
+                        ${mergedSign.reframe ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>${mergedSign.reframe}</li>` : ''}
                     </ul>
                 </div>
 
@@ -5206,9 +5244,9 @@
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${mergedAspect.question || mergedAspect.questions ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${mergedAspect.question || mergedAspect.questions}</li>` : ''}
-                        <li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>How do these two needs or drives show up in your life?</li>
-                        <li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>When do they support each other? When do they conflict?</li>
+                        ${mergedAspect.question || mergedAspect.questions ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>${mergedAspect.question || mergedAspect.questions}</li>` : ''}
+                        <li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>How do these two needs or drives show up in your life?</li>
+                        <li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>When do they support each other? When do they conflict?</li>
                     </ul>
                 </div>
 
@@ -5374,9 +5412,9 @@
                 <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                     <h3 class="text-sm uppercase tracking-wide text-purple-300 mb-2">Questions for Reflection${sourceTag(schemaPlanet, 'questions')}</h3>
                     <ul class="space-y-2 text-sm text-gray-300">
-                        ${p.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${p.question}</li>` : ''}
-                        ${sign.reframe || sign.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${sign.reframe || sign.question}</li>` : ''}
-                        ${house.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="icons.svg#star"/></svg></span>${house.question}</li>` : ''}
+                        ${p.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>${p.question}</li>` : ''}
+                        ${sign.reframe || sign.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>${sign.reframe || sign.question}</li>` : ''}
+                        ${house.question ? `<li class="flex items-start"><span class="reflect-mark"><svg width="12" height="12" aria-hidden="true"><use href="/viewer/icons.svg#star"/></svg></span>${house.question}</li>` : ''}
                     </ul>
                 </div>
 
@@ -6244,14 +6282,14 @@
             return `
                 <div class="grammar-carousel-nav">
                     <button onclick="prevGrammar()" class="carousel-nav-btn" title="Previous grammar">
-                        <svg class="w-5 h-5" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
+                        <svg class="w-5 h-5" aria-hidden="true"><use href="/viewer/icons.svg#chevron-left"/></svg>
                     </button>
                     <div class="carousel-grammar-info">
                         <span class="text-sm font-medium text-purple-300">${currentGrammar?.name || 'Unknown'}</span>
                         <span class="text-xs text-gray-500">${currentGrammarIndex + 1} of ${loadedGrammars.length}</span>
                     </div>
                     <button onclick="nextGrammar()" class="carousel-nav-btn" title="Next grammar">
-                        <svg class="w-5 h-5" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+                        <svg class="w-5 h-5" aria-hidden="true"><use href="/viewer/icons.svg#chevron-right"/></svg>
                     </button>
                 </div>
             `;
@@ -6539,7 +6577,7 @@
                 btn.className = 'fs-close-btn';
                 btn.setAttribute('aria-label', 'Exit fullscreen');
                 btn.title = 'Exit fullscreen (Esc)';
-                btn.innerHTML = '<svg width="24" height="24" aria-hidden="true"><use href="icons.svg#close"/></svg>';
+                btn.innerHTML = '<svg width="24" height="24" aria-hidden="true"><use href="/viewer/icons.svg#close"/></svg>';
                 btn.addEventListener('click', exitCssFullscreen);
                 document.body.appendChild(btn);
             }
@@ -7096,7 +7134,7 @@
 
         // Human Design state
         let hdChart = null;
-        let hdCalculating = false; // Guard against concurrent calculateHumanDesign calls
+        let hdCalculating = false; // True while a calculateHumanDesign() run is in flight (state only — see the abort/supersede comment in calculateHumanDesign)
         let hdViewMode = 'astrology';
         let bodygraphLegendMode = 'activation'; // 'activation' or 'center'
         let bodygraphHighlightFilter = null; // null for none, or activation type/center name
@@ -7332,11 +7370,28 @@
         // Calculate Human Design from current astrology chart
         async function calculateHumanDesign() {
             if (!currentChart || !currentChart.birthData) return;
-            // Abort any in-flight HD calculation
+            // Abort any in-flight HD calculation — a newer call always
+            // supersedes an older one (e.g. the eager background calc
+            // showChart() kicks off 100ms after any chart load races
+            // against a tab switch to HD Mandala/Bodygraph that arrives
+            // while it's still mid-flight). There used to be an
+            // `if (hdCalculating) return;` guard here, AFTER the abort —
+            // but the old call's own `finally` only clears hdCalculating
+            // once its aborted fetch/await actually unwinds, which happens
+            // asynchronously, after this line runs. So the new call almost
+            // always saw hdCalculating still true (set by the very call it
+            // just aborted) and bailed out immediately too — aborting the
+            // old attempt AND refusing to start the new one. hdChart never
+            // got set, and the tab that lost the race stayed on the
+            // "Calculating Design..." spinner forever, no error, nothing
+            // (Jul 28 2026: this is what an HD Bodygraph that renders empty
+            // while HD Mandala, from the same chart, renders fine turned
+            // out to be — whichever tab was switched to while a calc was
+            // still resolving hit the deadlock; the other, viewed only
+            // after the calc had already settled, was never in the race).
             if (hdAbortController) hdAbortController.abort();
             hdAbortController = new AbortController();
             const hdSignal = hdAbortController.signal;
-            if (hdCalculating) return; // Prevent concurrent/duplicate calls
             hdCalculating = true;
             try {
 
@@ -8158,7 +8213,7 @@
                             ${ichingGrammarOptions.length > 0 ? `<button onclick="event.stopPropagation(); toggleGrammarSelector(${gateNum})"
                                 class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-yellow-900/30 hover:bg-yellow-900/50 text-yellow-500 hover:text-yellow-400 transition-colors"
                                 title="Change I Ching grammar">
-                                <svg class="w-4 h-4" aria-hidden="true"><use href="icons.svg#book"/></svg>
+                                <svg class="w-4 h-4" aria-hidden="true"><use href="/viewer/icons.svg#book"/></svg>
                             </button>` : ''}
                             <div class="text-6xl mb-2" style="color: var(--astro-gold);">${hexSymbol}</div>
                             <div class="text-yellow-200 text-xl font-semibold">${hexName}</div>
@@ -8243,7 +8298,7 @@
                         ${ichingGrammarOptions.length > 0 ? `
                             <div class="pt-3 border-t border-yellow-800/30">
                                 <p class="text-xs text-yellow-500/70 mb-2 font-semibold uppercase flex items-center gap-2">
-                                    <svg class="w-4 h-4" aria-hidden="true"><use href="icons.svg#book"/></svg>
+                                    <svg class="w-4 h-4" aria-hidden="true"><use href="/viewer/icons.svg#book"/></svg>
                                     Load I Ching Grammar for deeper meaning
                                 </p>
                                 <select id="popup-grammar-select" onchange="selectGrammarAndRefresh(this.value, ${gateNum})" class="w-full p-2 rounded-lg bg-gray-800 border border-gray-600 text-white text-sm focus:border-yellow-500 focus:outline-none">
@@ -9229,7 +9284,7 @@
             setTimeout(() => calculateHumanDesign(), 100);
         };
     </script>
-    <script src="js/image-reachout.js" defer></script>
+    <script src="/viewer/js/image-reachout.js" defer></script>
     <!-- Shared recursive.eco assistant sidebar (star FAB → tabbed panel). No-ops
          when this viewer is iframed by the flow app, which has its own assistant. -->
     <!-- assistant.js now loads conditionally from the site-shell loader next to
