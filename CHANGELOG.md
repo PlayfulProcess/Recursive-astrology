@@ -1,5 +1,39 @@
 # Changelog — The Recursive Astrology
 
+## August 2, 2026 — The chart engine divides Placidus, and says what time it used
+
+**Placidus is now Placidus.** `api/calculate_chart.py` used to answer a Placidus request
+with Porphyry cusps — it said so in `houseSystemActual`, which was honest, but it was not
+the system anyone selected. The real thing is implemented now: each intermediate cusp is
+solved by iteration for the ecliptic degree standing one or two thirds of the way through
+its **own** semi-arc, diurnal for cusps 11 and 12, nocturnal for cusps 2 and 3. Verified
+three ways — against an independently written solver, against a separately authored
+implementation (`circular-natal-horoscope-js`), and against the defining property itself,
+which the cusps satisfy to within a rounding error rather than approximately. At the
+equator it reduces exactly to equal division of right ascension, as it must.
+
+Beyond about 66° of latitude the degrees a Placidus cusp would divide never rise or set,
+so the system has nothing to divide. There the engine falls back to Porphyry and **says
+so** — `houseSystemActual` reports `porphyry` and a new `houseSystemNote` explains why.
+Porphyry is also a selectable system in its own right now (asking for it used to hand back
+equal houses), and Koch, Campanus, Regiomontanus and Topocentric remain served by Porphyry
+geometry, still named as such rather than passed off.
+
+**The timezone was never wrong — the interface said otherwise.** An audit read the
+calculator as sending birth times unconverted, because the location picker fetched a
+reverse-geocode, threw the answer away, and wrote the literal string `UTC` into a hidden
+field that nothing ever read. The engine has always resolved the zone from the birth
+coordinates (timezonefinder + pytz), including the DST rule in force on that date. The
+vestigial field and the wasted request are gone, and the API now returns the local time,
+the UTC time and the zone it used — displayed under Chart Settings, so a mis-picked city
+is visible instead of silent.
+
+Also: the sign-in modal is loaded relative to its own script rather than to the page, so
+it stops 404-ing on the root-served viewer; `grammars/_collection.json` is fetched once per
+page instead of three or four times; `viewers/lenses.html` is titled *Lenses* rather than
+*Lens prototypes*; and the ten `_recursive_eco_url` fields still pointing at the retired
+`/play?id=` shape now use the `/g/<id>?view=reading` resolver.
+
 ## July 27, 2026 — New grammar: The Dwarf Planets (`grammars/dwarf-planets`)
 
 The twentieth library, and the only one whose subject is **unfinished**. Every other
