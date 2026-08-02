@@ -174,12 +174,117 @@ def calculate_midheaven(lst, obliquity=23.4393):
     return mc
 
 
-def calculate_houses_placidus(ascendant, midheaven, latitude):
-    """Calculate Placidus house cusps (semi-arc method)."""
+# Beyond the polar circle part of the ecliptic never rises or sets, so a
+# Placidus cusp has no semi-arc to trisect and the system is simply undefined.
+# It also degrades badly on the approach, so stop short of 66 deg 33'.
+PLACIDUS_MAX_LATITUDE = 66.0
+
+
+def ecliptic_point_at_ra(ra_degrees, obliquity):
+    """Ecliptic longitude of the point ON the ecliptic with the given RA."""
+    ra = math.radians(ra_degrees)
+    obl = math.radians(obliquity)
+    return math.degrees(math.atan2(math.sin(ra) / math.cos(obl), math.cos(ra))) % 360
+
+
+def declination_of_ecliptic_point(longitude, obliquity):
+    """Declination of the point on the ecliptic at that longitude."""
+    return math.degrees(math.asin(
+        math.sin(math.radians(obliquity)) * math.sin(math.radians(longitude))
+    ))
+
+
+def semi_diurnal_arc(declination, latitude):
+    """Half the time (as an arc, in degrees) the point spends above the horizon.
+
+    None when the point is circumpolar or never rises there — which is exactly
+    the case in which Placidus has nothing to divide.
+    """
+    x = -math.tan(math.radians(latitude)) * math.tan(math.radians(declination))
+    if x <= -1.0 or x >= 1.0:
+        return None
+    return math.degrees(math.acos(x))
+
+
+def placidus_cusp(ramc, latitude, obliquity, which):
+    """One intermediate Placidus cusp (11, 12, 2 or 3), or None if it will not solve.
+
+    Placidus divides each point's OWN semi-arc, not the ecliptic and not the
+    equator: cusp 11 is the ecliptic degree standing one third of its own
+    semi-diurnal arc past the MC, cusp 12 two thirds, the Ascendant three
+    thirds (it is rising), and cusps 2 and 3 one and two thirds of their own
+    semi-NOCTURNAL arc past that. In hour angle, with H = RAMC - RA:
+
+        cusp 11: H = -SD/3          cusp 2: H = -(SD + SN/3)
+        cusp 12: H = -2*SD/3        cusp 3: H = -(SD + 2*SN/3)
+
+    SD depends on the cusp's own declination, which depends on the cusp, so
+    this is solved by fixed-point iteration from the Porphyry-like first guess.
+    """
+    first_guess = {11: 30.0, 12: 60.0, 2: 120.0, 3: 150.0}[which]
+    longitude = ecliptic_point_at_ra(ramc + first_guess, obliquity)
+
+    for _ in range(100):
+        sd = semi_diurnal_arc(declination_of_ecliptic_point(longitude, obliquity), latitude)
+        if sd is None:
+            return None
+        sn = 180.0 - sd
+        if which == 11:
+            ra = ramc + sd / 3.0
+        elif which == 12:
+            ra = ramc + 2.0 * sd / 3.0
+        elif which == 2:
+            ra = ramc + sd + sn / 3.0
+        else:
+            ra = ramc + sd + 2.0 * sn / 3.0
+
+        nxt = ecliptic_point_at_ra(ra, obliquity)
+        moved = abs(((nxt - longitude + 180.0) % 360.0) - 180.0)
+        longitude = nxt
+        if moved < 1e-10:
+            return longitude
+
+    # Oscillating rather than settling — better to say so and fall back than to
+    # return a cusp that only looks like a Placidus cusp.
+    return None
+
+
+def calculate_placidus_cusps(ramc, ascendant, midheaven, latitude, obliquity):
+    """The twelve Placidus cusps, or None if Placidus does not apply here.
+
+    Cusps 1 and 10 are the Ascendant and the MC themselves (the Ascendant is
+    already the exact solution of the semi-arc condition for cusp 1), and
+    Placidus cusps come in exact oppositions, so only 11, 12, 2 and 3 are solved.
+    """
+    if abs(latitude) > PLACIDUS_MAX_LATITUDE:
+        return None
+
+    solved = {}
+    for which in (11, 12, 2, 3):
+        value = placidus_cusp(ramc, latitude, obliquity, which)
+        if value is None:
+            return None
+        solved[which] = value
+
+    cusps = [0.0] * 12
+    cusps[0] = ascendant % 360
+    cusps[9] = midheaven % 360
+    cusps[6] = (ascendant + 180) % 360
+    cusps[3] = (midheaven + 180) % 360
+    cusps[10] = solved[11]
+    cusps[11] = solved[12]
+    cusps[1] = solved[2]
+    cusps[2] = solved[3]
+    cusps[4] = (solved[11] + 180) % 360
+    cusps[5] = (solved[12] + 180) % 360
+    cusps[7] = (solved[2] + 180) % 360
+    cusps[8] = (solved[3] + 180) % 360
+    return cusps
+
+
+def calculate_houses_porphyry(ascendant, midheaven):
+    """Porphyry house cusps: trisect each quadrant of the ecliptic itself."""
     houses = []
-    lat_rad = math.radians(latitude)
-    obliquity = 23.4393
-    obl_rad = math.radians(obliquity)
 
     # Houses 1, 4, 7, 10 are the angles
     houses_cusps = [0] * 12
@@ -188,7 +293,6 @@ def calculate_houses_placidus(ascendant, midheaven, latitude):
     houses_cusps[6] = (ascendant + 180) % 360  # 7th house = DSC
     houses_cusps[3] = (midheaven + 180) % 360  # 4th house = IC
 
-    # Simplified intermediate house calculation
     # Trisect MC→ASC arc (counter-clockwise): MC → house 11 → house 12 → ASC
     # fraction 2/3 from ASC toward MC = closer to MC = house 11
     # fraction 1/3 from ASC toward MC = closer to ASC = house 12
@@ -232,38 +336,62 @@ def calculate_houses_placidus(ascendant, midheaven, latitude):
     return houses
 
 
-def calculate_houses(ascendant, midheaven, latitude, house_system='placidus'):
-    """Calculate house cusps based on the house system."""
+def calculate_houses(ascendant, midheaven, latitude, house_system='placidus',
+                     ramc=None, obliquity=23.4393, ayanamsa=0.0):
+    """House cusps for the requested system.
+
+    Returns (houses, actual_system, note). `actual_system` is what was really
+    divided — it differs from `house_system` for the quadrant systems that are
+    still served by Porphyry geometry, and for a Placidus request that could
+    not be solved. `ascendant`/`midheaven` arrive already in the requested
+    zodiac; `ramc` and `obliquity` are equatorial and so zodiac-independent,
+    which is why Placidus solves tropically and subtracts the ayanamsa after.
+    """
     houses = []
+    note = None
+
+    def wrap(cusps):
+        return [{
+            'house': i + 1,
+            'cusp': round(cusps[i] % 360, 4),
+            'sign': degrees_to_zodiac(cusps[i] % 360)
+        } for i in range(12)]
 
     if house_system == 'whole-sign':
         asc_sign = int(ascendant / 30) * 30
-        for i in range(12):
-            houses.append({
-                'house': i + 1,
-                'cusp': (asc_sign + i * 30) % 360,
-                'sign': degrees_to_zodiac((asc_sign + i * 30) % 360)
-            })
-    elif house_system == 'equal-house':
-        for i in range(12):
-            cusp = (ascendant + i * 30) % 360
-            houses.append({
-                'house': i + 1,
-                'cusp': cusp,
-                'sign': degrees_to_zodiac(cusp)
-            })
-    elif house_system in ['placidus', 'koch', 'campanus', 'regiomontanus', 'topocentric']:
-        houses = calculate_houses_placidus(ascendant, midheaven, latitude)
-    else:
-        for i in range(12):
-            cusp = (ascendant + i * 30) % 360
-            houses.append({
-                'house': i + 1,
-                'cusp': cusp,
-                'sign': degrees_to_zodiac(cusp)
-            })
+        return wrap([(asc_sign + i * 30) % 360 for i in range(12)]), 'whole-sign', None
 
-    return houses
+    if house_system == 'equal-house':
+        return wrap([(ascendant + i * 30) % 360 for i in range(12)]), 'equal-house', None
+
+    if house_system == 'placidus' and ramc is not None:
+        cusps = calculate_placidus_cusps(
+            ramc,
+            (ascendant + ayanamsa) % 360,
+            (midheaven + ayanamsa) % 360,
+            latitude, obliquity
+        )
+        if cusps is not None:
+            return wrap([(c - ayanamsa) % 360 for c in cusps]), 'placidus', None
+        note = (
+            'Placidus is undefined at this latitude (beyond about '
+            f'{PLACIDUS_MAX_LATITUDE:g} degrees the ecliptic degrees a cusp would '
+            'divide never rise or set), so Porphyry cusps were used instead.'
+        )
+        return calculate_houses_porphyry(ascendant, midheaven), 'porphyry', note
+
+    if house_system in ('porphyry', 'placidus', 'koch', 'campanus',
+                        'regiomontanus', 'topocentric'):
+        # Porphyry proper, plus the quadrant systems this engine does not yet
+        # implement separately. Named honestly rather than silently.
+        if house_system != 'porphyry':
+            note = (
+                f'{house_system.capitalize()} is not implemented in this engine; '
+                'Porphyry cusps were used instead.'
+            )
+        return calculate_houses_porphyry(ascendant, midheaven), 'porphyry', note
+
+    return wrap([(ascendant + i * 30) % 360 for i in range(12)]), 'equal-house', None
 
 
 def get_house_for_planet(longitude, houses):
@@ -311,7 +439,15 @@ def calculate_aspects(planets):
 
 
 def local_to_utc(year, month, day, hour, minute, latitude, longitude):
-    """Convert local time to UTC based on coordinates."""
+    """Convert local time at the birth PLACE to UTC.
+
+    The incoming {year..minute} is wall-clock time as it was read off a clock
+    at those coordinates. The zone is resolved from the coordinates, never from
+    anything the caller says, and pytz's localize() picks the offset that was
+    actually in force on that date — so historical DST rules apply.
+
+    Returns (naive utc datetime, description of the zone that was used).
+    """
     local_dt = datetime(year, month, day, hour, minute, 0)
 
     if TZ_AVAILABLE and tf:
@@ -319,16 +455,30 @@ def local_to_utc(year, month, day, hour, minute, latitude, longitude):
             tz_name = tf.timezone_at(lat=latitude, lng=longitude)
             if tz_name:
                 local_tz = pytz.timezone(tz_name)
-                local_dt = local_tz.localize(local_dt)
-                utc_dt = local_dt.astimezone(pytz.UTC)
-                return utc_dt.replace(tzinfo=None)  # Return naive UTC datetime
+                aware = local_tz.localize(local_dt)
+                utc_dt = aware.astimezone(pytz.UTC).replace(tzinfo=None)
+                offset = aware.utcoffset()
+                return utc_dt, {
+                    'name': tz_name,
+                    'abbreviation': aware.tzname(),
+                    'utcOffsetHours': round(offset.total_seconds() / 3600.0, 4),
+                    'dst': bool(aware.dst()),
+                    'source': 'resolved from birth coordinates (timezonefinder + pytz)',
+                }
         except Exception as e:
             print(f"Timezone conversion error: {e}")
 
-    # Fallback: estimate timezone from longitude
+    # Fallback: estimate the zone from longitude alone. This ignores political
+    # borders and DST, so say so rather than let it pass for a resolved zone.
     tz_offset_hours = round(longitude / 15)
-    utc_dt = local_dt - timedelta(hours=tz_offset_hours)
-    return utc_dt
+    return local_dt - timedelta(hours=tz_offset_hours), {
+        'name': None,
+        'abbreviation': None,
+        'utcOffsetHours': float(tz_offset_hours),
+        'dst': None,
+        'source': 'estimated from longitude — no timezone database available, '
+                  'so DST and zone borders are not accounted for',
+    }
 
 
 def calculate_lunar_nodes(t, eph, zodiac='tropical'):
@@ -403,8 +553,8 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
     # Get ephemeris and timescale
     eph, ts = get_ephemeris()
 
-    # Convert local time to UTC
-    utc_dt = local_to_utc(year, month, day, hour, minute, latitude, longitude)
+    # Convert local time at the birth place to UTC
+    utc_dt, tz_used = local_to_utc(year, month, day, hour, minute, latitude, longitude)
 
     # Create Skyfield time object
     t = ts.utc(utc_dt.year, utc_dt.month, utc_dt.day,
@@ -523,7 +673,10 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         midheaven = (midheaven - ayanamsa) % 360
 
     # Calculate houses
-    houses = calculate_houses(ascendant, midheaven, latitude, house_system)
+    houses, house_system_actual, house_system_note = calculate_houses(
+        ascendant, midheaven, latitude, house_system,
+        ramc=lst, obliquity=obliquity, ayanamsa=ayanamsa
+    )
 
     # Add house positions to planets
     for name in planets_data:
@@ -556,14 +709,17 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         'aspects': aspects,
         'settings': {
             'houseSystem': house_system,
-            # Be honest about what was actually divided. The quadrant systems
-            # below are all served by the same trisection-of-the-quadrant
-            # geometry, which is Porphyry, not Placidus/Koch/Campanus/etc.
-            'houseSystemActual': (
-                'porphyry' if house_system in
-                ('placidus', 'koch', 'campanus', 'regiomontanus', 'topocentric')
-                else house_system
-            ),
+            # Be honest about what was actually divided: Placidus is really
+            # Placidus now, but Koch/Campanus/Regiomontanus/Topocentric are
+            # still served by Porphyry geometry, and Placidus itself falls back
+            # to Porphyry beyond the polar circle.
+            'houseSystemActual': house_system_actual,
+            'houseSystemNote': house_system_note,
+            'birthTime': {
+                'local': f'{year:04d}-{month:02d}-{day:02d} {hour:02d}:{minute:02d}',
+                'utc': utc_dt.strftime('%Y-%m-%d %H:%M'),
+                'timezone': tz_used,
+            },
             'zodiac': zodiac,
             'ayanamsa': ('lahiri' if zodiac == 'sidereal' else None),
             'ayanamsaDegrees': (round(ayanamsa, 4) if zodiac == 'sidereal' else None),

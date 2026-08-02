@@ -1617,7 +1617,7 @@
             var hasLibraryShell = /(^|\.)astro\.recursive\.eco$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
             if (isEmbed || !hasLibraryShell) return;
             var sh = document.createElement('script');
-            sh.src = '../site-header.js?v=46';
+            sh.src = '../site-header.js?v=47';
             document.head.appendChild(sh);
             var as = document.createElement('script');
             as.src = '../assistant.js';
@@ -1733,7 +1733,10 @@
                                 <div id="location-suggestions" class="location-suggestions"></div>
                                 <input type="hidden" id="birth-lat">
                                 <input type="hidden" id="birth-lng">
-                                <input type="hidden" id="birth-timezone">
+                                <!-- No timezone field: birth time is entered as the clock
+                                     read at the birth place, and the API resolves the zone
+                                     (and the DST rule in force on that date) from the
+                                     coordinates. What it used is shown under Chart Settings. -->
                             </div>
 
                             <!-- Calculate Button -->
@@ -1761,13 +1764,22 @@
                             <label class="form-label" for="house-system">House System</label>
                             <select id="house-system" class="form-select">
                                 <option value="placidus" selected>Placidus (Most Common)</option>
-                                <option value="koch">Koch</option>
+                                <option value="porphyry">Porphyry</option>
                                 <option value="whole-sign">Whole Sign</option>
                                 <option value="equal-house">Equal House</option>
-                                <option value="campanus">Campanus</option>
-                                <option value="regiomontanus">Regiomontanus</option>
-                                <option value="topocentric">Topocentric</option>
+                                <option value="koch">Koch (served by Porphyry)</option>
+                                <option value="campanus">Campanus (served by Porphyry)</option>
+                                <option value="regiomontanus">Regiomontanus (served by Porphyry)</option>
+                                <option value="topocentric">Topocentric (served by Porphyry)</option>
                             </select>
+                        </div>
+
+                        <!-- What the engine actually used. Filled after a calculation:
+                             the resolved birth-place timezone (so a wrong city choice is
+                             visible rather than silent) and any house-system fallback. -->
+                        <div id="calc-provenance" class="hidden text-xs text-gray-400 leading-relaxed border-t border-white/10 pt-3 mt-1">
+                            <div id="calc-provenance-tz"></div>
+                            <div id="calc-provenance-houses" class="mt-1"></div>
                         </div>
 
                         <!-- Ayanamsa (for Sidereal) -->
@@ -3645,24 +3657,18 @@
             }
         }
 
+        // Aug 2 2026: this used to fire a Nominatim reverse-geocode and then throw
+        // the answer away, writing the literal string 'UTC' into a hidden
+        // birth-timezone field that nothing ever read. The API has always
+        // resolved the zone itself from lat/lng (timezonefinder + pytz, DST rule
+        // of the birth date included), so the field was vestigial and the extra
+        // request was pure waste — and the pair of them read, to an auditor, as
+        // if birth times were being sent unconverted. Both are gone; what the
+        // API actually used is now displayed under Chart Settings.
         async function selectLocation(location) {
             locationInput.value = location.display_name;
             document.getElementById('birth-lat').value = location.lat;
             document.getElementById('birth-lng').value = location.lon;
-
-            // Get timezone for the location
-            try {
-                const tzResponse = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.lat}&lon=${location.lon}&zoom=10`
-                );
-                const tzData = await tzResponse.json();
-                // For now, we'll use a simple timezone estimation
-                // In production, you'd use a timezone API
-                document.getElementById('birth-timezone').value = 'UTC';
-            } catch (error) {
-                console.error('Timezone lookup error:', error);
-            }
-
             locationSuggestions.classList.remove('active');
         }
 
@@ -3706,6 +3712,44 @@
                 alert('Error calculating chart: ' + error.message);
                 showPlaceholder();
             }
+        }
+
+        // Show what the engine actually used, rather than what was asked for.
+        // Two things can quietly differ from the form: the timezone (resolved
+        // server-side from the birth coordinates, with the DST rule in force on
+        // that date) and the house system (some are served by Porphyry).
+        function renderCalculationProvenance(settings) {
+            const box = document.getElementById('calc-provenance');
+            if (!box || !settings) return;
+            const tzEl = document.getElementById('calc-provenance-tz');
+            const hEl = document.getElementById('calc-provenance-houses');
+
+            const bt = settings.birthTime;
+            if (bt && tzEl) {
+                const tz = bt.timezone || {};
+                const off = (typeof tz.utcOffsetHours === 'number')
+                    ? (tz.utcOffsetHours >= 0 ? '+' : '−') +
+                      String(Math.floor(Math.abs(tz.utcOffsetHours))).padStart(2, '0') + ':' +
+                      String(Math.round((Math.abs(tz.utcOffsetHours) % 1) * 60)).padStart(2, '0')
+                    : '';
+                const zone = tz.name
+                    ? `${tz.name}${tz.abbreviation ? ' (' + tz.abbreviation + ')' : ''} UTC${off}`
+                    : `UTC${off} — estimated from longitude`;
+                tzEl.innerHTML =
+                    `<strong class="text-gray-300">Time used:</strong> ${bt.local} local at the ` +
+                    `birth place → ${bt.utc} UTC.<br><strong class="text-gray-300">Zone:</strong> ` +
+                    `${zone}${tz.dst ? ', daylight saving in force' : ''}.`;
+            }
+
+            if (hEl) {
+                const asked = settings.houseSystem;
+                const used = settings.houseSystemActual;
+                hEl.innerHTML = (used && used !== asked)
+                    ? `<strong class="text-amber-300">Houses:</strong> ${used} cusps were used, ` +
+                      `not ${asked}. ${settings.houseSystemNote || ''}`
+                    : `<strong class="text-gray-300">Houses:</strong> ${used || asked} cusps.`;
+            }
+            box.classList.remove('hidden');
         }
 
         async function calculateChart(date, time, lat, lng, locationName) {
@@ -3760,12 +3804,21 @@
                 },
                 settings: {
                     houseSystem: houseSystem,
-                    zodiacSystem: zodiacSystem
+                    // What the engine really divided — may differ from the request
+                    // (Koch/Campanus/… are served by Porphyry, and Placidus falls
+                    // back to Porphyry beyond the polar circle).
+                    houseSystemActual: apiResult.settings?.houseSystemActual,
+                    zodiacSystem: zodiacSystem,
+                    // The zone the API resolved from the birth coordinates, so a
+                    // saved chart records which offset its houses were built on.
+                    timezone: apiResult.settings?.birthTime?.timezone?.name || null
                 },
                 horoscope: horoscope,
                 apiResult: apiResult,
                 calculatedAt: new Date().toISOString()
             };
+
+            renderCalculationProvenance(apiResult.settings);
 
             // Render chart
             renderChart(horoscope);
@@ -7280,8 +7333,17 @@
             // fires ~20 rapid API calls and a single transient "Failed to fetch"
             // (serverless cold start / network blip) used to abort the whole
             // Human-Design calc into the ±88-day fallback.
+            // Same-payload dedupe (Aug 2 2026). The bisection mostly asks about a
+            // fresh instant each round, so this is not the fix for the ~15 posts a
+            // Calculate costs — that count is the search doing its job. It only
+            // stops the search paying twice when a bracket endpoint recurs after
+            // the minute-resolution wall clock stops moving.
+            const sunCache = new Map();
+
             async function getSunLongitude(date) {
                 const w = dateToWallClock(date);
+                const key = `${w.year}-${w.month}-${w.day}T${w.hour}:${w.minute}`;
+                if (sunCache.has(key)) return sunCache.get(key);
                 for (let attempt = 0; attempt < 2; attempt++) {
                     try {
                         const response = await fetch(CHART_API_URL, {
@@ -7296,13 +7358,19 @@
                                 minute: w.minute,
                                 latitude: parseFloat(latitude),
                                 longitude: parseFloat(longitude),
-                                houseSystem: 'placidus',
+                                // Only the Sun's longitude is read from this
+                                // response, so ask for the cheapest houses the
+                                // engine can draw rather than making it solve
+                                // Placidus cusps a dozen times for nothing.
+                                houseSystem: 'whole-sign',
                                 zodiac: 'tropical'
                             })
                         });
                         if (response.ok) {
                             const data = await response.json();
-                            return data.planets?.sun?.longitude;
+                            const lon = data.planets?.sun?.longitude;
+                            if (typeof lon === 'number') sunCache.set(key, lon);
+                            return lon;
                         }
                     } catch (e) {
                         if (e.name === 'AbortError') throw e; // Let abort propagate
