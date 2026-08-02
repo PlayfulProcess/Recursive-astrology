@@ -240,7 +240,7 @@ async function main(){
         });
         const play = document.createElement('a');
         play.className = 'eco-chip'; play.target = '_blank'; play.rel = 'noopener';
-        play.href = `https://flow.recursive.eco/play?id=${uuid}`;
+        play.href = `https://flow.recursive.eco/g/${uuid}?view=reading`;
         play.textContent = label + ' — Play';
         clinks.appendChild(play);
       }

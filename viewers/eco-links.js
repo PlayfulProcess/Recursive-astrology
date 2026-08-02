@@ -1,7 +1,7 @@
 /* Recursive.eco per-grammar links — shared across viewers.
  * Reads the hardcoded slug -> deckId map (ids.json, at the repo root) and builds
  * three links for any grammar that's in the map:
- *   <rt-icon name="oracle"></rt-icon> Cast  → https://flow.recursive.eco/?deckId=<id>                (open the grammar for a reading)
+ *   <rt-icon name="oracle"></rt-icon> Cast  → https://flow.recursive.eco/g/<id>?view=reading          (open the grammar for a reading)
  *   <rt-icon name="eye"></rt-icon> View  → https://recursive.eco/pages/grammar-viewer.html?type=<type>&id=<id>[&item=<n>]
  *   ✏️ Edit  → https://flow.recursive.eco/create/dashboard/unified/new?forkId=<id>
  * Links only RESOLVE for visitors once that grammar is is_public on recursive.eco —
@@ -36,7 +36,7 @@
     const item = (opts.item != null && opts.item !== '') ? ('&item=' + encodeURIComponent(opts.item)) : '';
     return {
       id,
-      cast: 'https://flow.recursive.eco/?deckId=' + id,
+      cast: 'https://flow.recursive.eco/g/' + id + '?view=reading',
       view: 'https://recursive.eco/pages/grammar-viewer.html?type=' + encodeURIComponent(type) + '&id=' + id + item,
       edit: 'https://flow.recursive.eco/create/dashboard/unified/new?forkId=' + id,
     };

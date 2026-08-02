@@ -77,7 +77,7 @@
     readerUrl: slug => 'viewers/cards.html?src=../grammars/' + encodeURIComponent(slug) + '/grammar.json',
     // recursive.eco's own concept: this repo is one channel over there.
     ecoChannel: 'https://flow.recursive.eco/library/channels/astrology',
-    appDeckUrl: uuid => 'https://flow.recursive.eco/?deckId=' + uuid,
+    appDeckUrl: uuid => 'https://flow.recursive.eco/g/' + uuid + '?view=reading',
   };
   const root = document.getElementById('root');
   let col, eco;
