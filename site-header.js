@@ -17,6 +17,43 @@
  *   fetched live from grammars/_collection.json so the menu never goes stale as
  *   grammars are added) | GitHub.
  */
+/* One fetch of grammars/_collection.json per page load.
+ *
+ * Aug 2 2026: the collection index is the site's shared spine — the header
+ * dropdown, the deck picker, the view switcher and a viewer's own bootstrap all
+ * want it, and each was fetching it independently, so a single page load asked
+ * for the same file three or four times. There is no shared loader to put the
+ * cache in (each caller resolves its own relative path), so the memo sits here,
+ * in the one script every page loads first, and is keyed on the resolved URL.
+ * Deliberately narrow: GET requests for that one filename only — everything
+ * else, including the chart API's POSTs, goes straight through untouched. */
+(function () {
+  if (typeof window === 'undefined' || window.__raCollectionMemo || !window.fetch) return;
+  const memo = new Map();
+  window.__raCollectionMemo = memo;
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    try {
+      const url = typeof input === 'string' ? input : (input && input.url) || null;
+      const method = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+      if (url && method === 'GET' && url.split(/[?#]/)[0].endsWith('_collection.json')) {
+        const key = new URL(url, location.href).href;
+        let pending = memo.get(key);
+        if (!pending) {
+          // Hand out clones and never read the original, so every caller gets
+          // its own readable body. A failure is not cached — the next caller
+          // gets a real retry rather than a memoised rejection.
+          pending = nativeFetch(input, init);
+          pending.catch(() => memo.delete(key));
+          memo.set(key, pending);
+        }
+        return pending.then(function (r) { return r.clone(); });
+      }
+    } catch (_) { /* anything unexpected: fall through to a plain fetch */ }
+    return nativeFetch(input, init);
+  };
+})();
+
 (function () {
   if (customElements.get('site-header')) return;
 

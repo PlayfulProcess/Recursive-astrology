@@ -984,9 +984,24 @@
   // landing pages by hand — page-level boilerplate that any future
   // page would forget. Defer-loaded, idempotent (skip if already
   // present), gated on document.head existing.
+  //
+  // Aug 2 2026: the src used to be the page-relative 'assets/js/components/…',
+  // which only resolved when the page itself sat in the same directory as
+  // assets/. chart.recursive.eco serves this viewer at the site root, so every
+  // load asked for /assets/js/components/signin-modal.js and got a 404 (the
+  // file lives under /viewer/assets/…). Resolve against THIS script's own URL
+  // instead — signin-modal.js is its sibling in every deployment, so the
+  // injection now follows the shell wherever it is mounted.
   if (typeof document !== 'undefined' && document.head && !window.SigninModal && !document.querySelector('script[data-signin-modal-autoload]')) {
+    const here = (document.currentScript && document.currentScript.src) ||
+      (() => {
+        const tag = document.querySelector('script[src*="site-shell-inline.js"]');
+        return tag ? tag.src : '';
+      })();
     const s = document.createElement('script');
-    s.src = 'assets/js/components/signin-modal.js';
+    s.src = here
+      ? new URL('signin-modal.js', here).href
+      : 'assets/js/components/signin-modal.js';
     s.defer = true;
     s.dataset.signinModalAutoload = '1';
     document.head.appendChild(s);
