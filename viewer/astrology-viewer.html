@@ -1782,15 +1782,23 @@
                             <div id="calc-provenance-houses" class="mt-1"></div>
                         </div>
 
-                        <!-- Ayanamsa (for Sidereal) -->
+                        <!-- Ayanamsa (for Sidereal).
+                             Aug 4 2026: this list holds ONLY the schools the engine
+                             really implements. It used to also offer Raman and
+                             Krishnamurti, and the selector was not even read on
+                             submit — every choice silently produced Lahiri, which
+                             for a 1970s chart is nearly a degree wrong with no
+                             warning. The wiring is real now, and a school gets an
+                             entry here only once the API can actually cast it. -->
                         <div id="ayanamsa-section" class="mb-4 hidden">
                             <label class="form-label" for="ayanamsa">Ayanamsa</label>
                             <select id="ayanamsa" class="form-select">
                                 <option value="lahiri">Lahiri (Chitrapaksha)</option>
-                                <option value="raman">Raman</option>
-                                <option value="krishnamurti">Krishnamurti</option>
                                 <option value="fagan-bradley">Fagan-Bradley</option>
                             </select>
+                            <p class="text-xs text-gray-500 mt-2">
+                                Only the schools this engine actually computes are listed.
+                            </p>
                         </div>
                     </div>
 
@@ -3576,6 +3584,15 @@
                 }
             });
 
+            // Ayanamsa change. Until Aug 4 2026 this control had no listener and
+            // was never read at submit time either, so switching schools changed
+            // nothing at all.
+            document.getElementById('ayanamsa').addEventListener('change', () => {
+                if (currentChart) {
+                    recalculateChart();
+                }
+            });
+
             // Tabs
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -3632,10 +3649,23 @@
         async function searchLocations(query) {
             try {
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`,
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=8`,
                     { headers: { 'Accept-Language': 'en' } }
                 );
-                const results = await response.json();
+                const raw = await response.json();
+
+                // Nominatim happily returns the same place twice — "New York"
+                // and "Sao Paulo" each came back as two identical rows, which a
+                // user cannot tell apart before clicking. Collapse rows that
+                // share a label AND land within about a hundred metres of each
+                // other; anything genuinely distinct survives.
+                const seen = new Set();
+                const results = (Array.isArray(raw) ? raw : []).filter(r => {
+                    const key = `${r.display_name}|${Number(r.lat).toFixed(3)}|${Number(r.lon).toFixed(3)}`;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                }).slice(0, 5);
 
                 locationSuggestions.innerHTML = '';
 
@@ -3718,6 +3748,19 @@
         // Two things can quietly differ from the form: the timezone (resolved
         // server-side from the birth coordinates, with the DST rule in force on
         // that date) and the house system (some are served by Porphyry).
+        // The ayanamsa the user actually picked. Falls back to Lahiri only when
+        // the control is missing or holds something the engine does not
+        // implement — never as a silent substitution for a live choice, since
+        // the dropdown now lists implemented schools only.
+        const IMPLEMENTED_AYANAMSAS = ['lahiri', 'fagan-bradley'];
+        const DEFAULT_AYANAMSA = 'lahiri';
+
+        function getSelectedAyanamsa() {
+            const el = document.getElementById('ayanamsa');
+            const value = el && el.value;
+            return IMPLEMENTED_AYANAMSAS.includes(value) ? value : DEFAULT_AYANAMSA;
+        }
+
         function renderCalculationProvenance(settings) {
             const box = document.getElementById('calc-provenance');
             if (!box || !settings) return;
@@ -3744,10 +3787,25 @@
             if (hEl) {
                 const asked = settings.houseSystem;
                 const used = settings.houseSystemActual;
-                hEl.innerHTML = (used && used !== asked)
+                let html = (used && used !== asked)
                     ? `<strong class="text-amber-300">Houses:</strong> ${used} cusps were used, ` +
                       `not ${asked}. ${settings.houseSystemNote || ''}`
                     : `<strong class="text-gray-300">Houses:</strong> ${used || asked} cusps.`;
+
+                // Say which sidereal school was really applied and by how much,
+                // so the selector can be checked against the result instead of
+                // trusted. Nothing to say for a tropical chart.
+                if (settings.zodiac === 'sidereal' && settings.ayanamsaUsed) {
+                    const deg = (typeof settings.ayanamsaDegrees === 'number')
+                        ? ` (${settings.ayanamsaDegrees.toFixed(4)}°)` : '';
+                    html += `<br><strong class="text-gray-300">Ayanamsa:</strong> ` +
+                            `${settings.ayanamsaLabel || settings.ayanamsaUsed}${deg}.`;
+                }
+                if (settings.nodeType) {
+                    html += `<br><strong class="text-gray-300">Lunar node:</strong> ` +
+                            `${settings.nodeType} node, from the ephemeris.`;
+                }
+                hEl.innerHTML = html;
             }
             box.classList.remove('hidden');
         }
@@ -3762,6 +3820,7 @@
             const [hours, minutes] = time.split(':').map(Number);
 
             const houseSystem = document.getElementById('house-system').value;
+            const ayanamsa = getSelectedAyanamsa();
 
             // Call the Python API for chart calculation
             const response = await fetch(CHART_API_URL, {
@@ -3779,7 +3838,11 @@
                     latitude: lat,
                     longitude: lng,
                     houseSystem: houseSystem,
-                    zodiac: zodiacSystem
+                    zodiac: zodiacSystem,
+                    // Sent always, not only for sidereal, so the value that
+                    // gets saved with the chart is the value that was on
+                    // screen — the API ignores it for a tropical cast.
+                    ayanamsa: ayanamsa
                 })
             });
 
@@ -3809,6 +3872,13 @@
                     // back to Porphyry beyond the polar circle).
                     houseSystemActual: apiResult.settings?.houseSystemActual,
                     zodiacSystem: zodiacSystem,
+                    // The sidereal school. Recorded on tropical charts too, so
+                    // reopening one and flipping to sidereal reproduces the same
+                    // numbers rather than quietly reverting to the default.
+                    ayanamsa: ayanamsa,
+                    ayanamsaUsed: apiResult.settings?.ayanamsaUsed || null,
+                    ayanamsaDegrees: (typeof apiResult.settings?.ayanamsaDegrees === 'number')
+                        ? apiResult.settings.ayanamsaDegrees : null,
                     // The zone the API resolved from the birth coordinates, so a
                     // saved chart records which offset its houses were built on.
                     timezone: apiResult.settings?.birthTime?.timezone?.name || null
@@ -4443,7 +4513,8 @@
                         latitude: lat,
                         longitude: lng,
                         houseSystem: 'placidus',
-                        zodiac: zodiacSystem
+                        zodiac: zodiacSystem,
+                        ayanamsa: getSelectedAyanamsa()
                     })
                 });
 
@@ -6446,6 +6517,15 @@
                 document.querySelectorAll('[data-zodiac]').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.zodiac === zodiacSystem);
                 });
+                document.getElementById('ayanamsa-section')
+                    .classList.toggle('hidden', zodiacSystem !== 'sidereal');
+
+                // Charts saved before the selector was wired (Aug 4 2026) carry no
+                // ayanamsa. They were all cast with Lahiri, so that is what they
+                // reopen as — stated, not inferred silently.
+                const savedAyanamsa = docData.settings.ayanamsaUsed || docData.settings.ayanamsa;
+                document.getElementById('ayanamsa').value =
+                    IMPLEMENTED_AYANAMSAS.includes(savedAyanamsa) ? savedAyanamsa : DEFAULT_AYANAMSA;
 
                 // Recalculate chart (with flag to skip postMessage to parent)
                 isLoadingFromDatabase = true;
@@ -7698,9 +7778,27 @@
             });
         }
 
-        // Sidereal offset state (ayanamsa - roughly 24° for Lahiri)
+        // Sidereal offset state for the mandala's zodiac ring.
         let hdZodiacMode = 'tropical'; // 'tropical' or 'sidereal'
-        const SIDEREAL_OFFSET = 24.1; // Lahiri ayanamsa approximation
+
+        // Aug 4 2026: this used to be a hardcoded 24.1°, which is neither Lahiri
+        // nor any other school at any particular date — it was "roughly 24" and
+        // it ignored both the selected ayanamsa and the chart's epoch, so the
+        // sidereal ring could sit most of a degree off its own chart. It now
+        // asks the engine for the real value at this chart's moment, and only
+        // falls back to a stated Lahiri approximation if no chart is loaded.
+        const SIDEREAL_OFFSET_FALLBACK = 24.1;
+
+        function currentAyanamsaDegrees() {
+            // The HD chart is always cast tropically, so read the "at this
+            // moment" figure, which the API reports for tropical casts too.
+            const s = currentChart?.apiResult?.settings;
+            if (typeof s?.ayanamsaDegreesAtMoment === 'number') return s.ayanamsaDegreesAtMoment;
+            if (typeof s?.ayanamsaDegrees === 'number') return s.ayanamsaDegrees;
+            const saved = currentChart?.settings?.ayanamsaDegrees;
+            if (typeof saved === 'number') return saved;
+            return SIDEREAL_OFFSET_FALLBACK;
+        }
 
         function toggleHDZodiacMode() {
             hdZodiacMode = hdZodiacMode === 'tropical' ? 'sidereal' : 'tropical';
@@ -7717,8 +7815,9 @@
             const innerZodiacR = 138; // Inner zodiac ring radius
             const innerZodiacInnerR = 125; // Inner edge of inner zodiac ring
 
-            // Zodiac offset based on mode
-            const zodiacOffset = hdZodiacMode === 'sidereal' ? -SIDEREAL_OFFSET : 0;
+            // Zodiac offset based on mode — the real ayanamsa for this chart's
+            // moment and selected school, not a constant.
+            const zodiacOffset = hdZodiacMode === 'sidereal' ? -currentAyanamsaDegrees() : 0;
 
             // Zodiac signs and their starting degrees
             const ZODIAC_SIGNS = [

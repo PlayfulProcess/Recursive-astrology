@@ -1,5 +1,59 @@
 # Changelog — The Recursive Astrology
 
+## August 4, 2026 — The lunar node comes from the ephemeris, and the ayanamsa selector works
+
+An independent accuracy benchmark run on 3 August found the engine's planets, houses,
+angles and timezone handling correct to about an arc-second against Swiss Ephemeris. It
+found two things that were not. Both are fixed here.
+
+**The node is now a real osculating node.** `calculate_lunar_nodes` used to compute the
+true node from a five-term periodic series out of Meeus, bind the ephemeris objects at the
+top of the function, and then never use them — the node never touched DE421. It landed
+3.5′ to 5.9′ from the Swiss true node, sign-varying: the signature of a truncated series.
+The node is not a body, so it is now derived the way it is defined — from the Moon's
+geocentric position and velocity in DE421. The orbital angular momentum **h = r × v** is
+normal to the plane the Moon is instantaneously orbiting in; the ascending node is where
+that plane cuts the ecliptic, **n = ẑ × h**, and its longitude is `atan2(h_x, −h_y)`. Both
+vectors are rotated into the true ecliptic and equinox of date — the same frame the planets
+are reported in — before the cross product, or the whole precession since J2000 would sit
+in the answer. Measured against Swiss Ephemeris on the benchmark's five moments, the node
+now agrees to **0.36″ – 1.44″**, down from 3.5′ – 5.9′: roughly a 250-fold improvement.
+
+This matters in Human Design, where 384 slices of 56′ each mean a 6′ error flips a line
+near a boundary. It did: the São Paulo design chart read node 41.5 / 31.5 where every other
+calculator said 41.4 / 31.4. It now reads 41.4 / 31.4, and the other 50 activations across
+the two benchmark charts are unchanged.
+
+**The node's direction is measured, not assumed.** Both nodes carried a hardcoded
+`isRetrograde: True`. The true node genuinely turns direct for stretches — it was direct at
+the benchmark's transit moment, and Swiss said so — so the flag now comes from the actual
+d(node)/dt, and the node reports its `speedLongitude` in degrees per day. We serve the
+**true** node deliberately, not the mean node; the response says `nodeType: "true"`.
+
+**The Ayanamsa dropdown did nothing at all.** It offered Lahiri, Raman, Krishnamurti and
+Fagan-Bradley. The control was never read on submit, the value was never sent, the API had
+no such parameter, and every choice silently produced Lahiri — for a 1972 chart, picking
+Fagan-Bradley left a Vedic reader nearly a degree (53′) out with no warning. It is wired
+end to end now: the viewer reads it, sends it, saves it with the chart and restores it on
+reopening; the API applies it and reports `ayanamsaUsed` and `ayanamsaDegrees` back.
+
+Fagan-Bradley is implemented properly, as its own anchor — 24°02′31.36″ at JD 2433282.5,
+the figure Fagan and Bradley published — and not as a constant offset from Lahiri, which
+would drift. Verified against Astro-Seek's Fagan-Bradley chart for 1990-06-15 18:30 UT: all
+ten planets and the Ascendant agree to a uniform **+12.0″ to +12.8″**, so the entire residual
+is the ayanamsa constant itself, slightly tighter than the 14.3″ already measured for Lahiri.
+
+**Raman and Krishnamurti are gone from the dropdown**, because this engine does not compute
+them and a menu entry that quietly serves something else is worse than a shorter menu. The
+API now *rejects* an unimplemented ayanamsa rather than substituting one, and reports
+`ayanamsasAvailable`. The HD mandala's sidereal ring also stops using a hardcoded 24.1° —
+neither Lahiri nor any other school at any particular date — and asks the engine for the
+real value at that chart's moment. Charts saved before today carry no ayanamsa; they were
+all cast with Lahiri, so that is what they reopen as, stated rather than inferred.
+
+Also: the location picker no longer offers the same city twice ("New York" and "São Paulo"
+each came back from Nominatim as two identical rows a user could not tell apart).
+
 ## August 2, 2026 — The chart engine divides Placidus, and says what time it used
 
 **Placidus is now Placidus.** `api/calculate_chart.py` used to answer a Placidus request

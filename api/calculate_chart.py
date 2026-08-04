@@ -11,8 +11,13 @@ from datetime import datetime, timezone, timedelta
 import os
 
 # Skyfield imports
+import numpy as np
 from skyfield.api import Loader
 from skyfield import almanac
+# The true ecliptic and equinox of date — the same frame ecliptic_latlon(epoch=t)
+# reports the planets in. The node is built from vectors, so it needs the frame
+# as a rotation rather than as a pair of angles.
+from skyfield.framelib import ecliptic_frame
 
 # Try to import timezone libraries for accurate conversion
 try:
@@ -111,17 +116,62 @@ def _precession_in_longitude(T):
     return 5028.796195 * T + 1.1054348 * T * T + 0.00007964 * T * T * T
 
 
-def lahiri_ayanamsa(jd_tt):
-    """Lahiri (Chitrapaksha) ayanamsa for the date, in degrees.
+# A sidereal school is one number: where it fixes the sidereal zero point, said
+# once, at one epoch. Everything after that is the same accumulated precession
+# for every school — so an ayanamsa is (anchor JD in TT, ayanamsa in degrees
+# there), which is how Swiss Ephemeris stores them too.
+#
+# ONLY schools listed here exist. There is deliberately no fallback: asking for
+# an unimplemented ayanamsa is an error, not a quiet serving of Lahiri, because
+# the schools sit nearly a degree apart and a silent substitution is the largest
+# wrong number this API could hand back without saying anything.
+AYANAMSAS = {
+    # Lahiri (Chitrapaksha), the Indian government standard. Anchored the way
+    # Swiss Ephemeris anchors SE_SIDM_LAHIRI: 22.460148 deg at JD 2415020.0
+    # (J1900). Checked against Astro-Seek's Lahiri chart for 1990-06-15
+    # 18:30 UT (23.7272 deg); this returns 23.7234 deg, 0.2 arcmin off.
+    'lahiri': {
+        'anchorJd': 2415020.0,
+        'anchorDegrees': 22.460148,
+        'label': 'Lahiri (Chitrapaksha)',
+    },
+    # Fagan-Bradley, the Western sidereal standard: 24 deg 02' 31.36" at
+    # JD 2433282.5 (1950 Jan 0.5 ET), the figure Fagan and Bradley published
+    # and the one Swiss Ephemeris carries as SE_SIDM_FAGAN_BRADLEY. It is NOT
+    # a constant offset from Lahiri — it is its own anchor, and the two drift
+    # apart, which is exactly why it has to be its own entry.
+    'fagan-bradley': {
+        'anchorJd': 2433282.5,
+        'anchorDegrees': 24.042044444,
+        'label': 'Fagan-Bradley',
+    },
+}
 
-    Anchored the way Swiss Ephemeris anchors SE_SIDM_LAHIRI: 22.460148 deg at
-    JD 2415020.0 (J1900), carried forward by general precession. Checked
-    against Astro-Seek's Lahiri chart for 1990-06-15 18:30 UT (23.7272 deg);
-    this returns 23.7234 deg, a 0.2 arcmin difference.
+DEFAULT_AYANAMSA = 'lahiri'
+
+
+def ayanamsa_degrees(jd_tt, name=DEFAULT_AYANAMSA):
+    """Ayanamsa for the date, in degrees, for one of the implemented schools.
+
+    Raises ValueError for any school this engine does not actually implement —
+    see the note on AYANAMSAS about why there is no fallback.
     """
-    T0 = (2415020.0 - 2451545.0) / 36525.0
+    school = AYANAMSAS.get(name)
+    if school is None:
+        raise ValueError(
+            f"Unknown ayanamsa '{name}'. This engine implements only: "
+            + ", ".join(sorted(AYANAMSAS)) + "."
+        )
+    T0 = (school['anchorJd'] - 2451545.0) / 36525.0
     T = (jd_tt - 2451545.0) / 36525.0
-    return 22.460148 + (_precession_in_longitude(T) - _precession_in_longitude(T0)) / 3600.0
+    return school['anchorDegrees'] + (
+        _precession_in_longitude(T) - _precession_in_longitude(T0)
+    ) / 3600.0
+
+
+def lahiri_ayanamsa(jd_tt):
+    """Lahiri (Chitrapaksha) ayanamsa for the date, in degrees."""
+    return ayanamsa_degrees(jd_tt, 'lahiri')
 
 
 def degrees_to_zodiac(degrees):
@@ -481,62 +531,63 @@ def local_to_utc(year, month, day, hour, minute, latitude, longitude):
     }
 
 
-def calculate_lunar_nodes(t, eph, zodiac='tropical'):
-    """Calculate True Lunar Nodes using Skyfield."""
-    # Get positions
-    earth = eph['earth']
-    moon = eph['moon']
-    sun = eph['sun']
+# How far either side of the moment the node's motion is sampled, in days.
+# The osculating node's speed swings through zero several times a month, so a
+# wide baseline smooths a genuine stationary point into the wrong direction;
+# an hour or two either side is stable to five decimals and still cheap.
+NODE_RATE_HALF_STEP_DAYS = 0.05
 
-    # For true node calculation, we use the Moon's orbital elements
-    # Skyfield doesn't directly give us the node, so we calculate it
 
-    # Get Julian date for calculations
-    jd = t.tt  # Terrestrial Time Julian Date
-    T = (jd - 2451545.0) / 36525.0  # Centuries since J2000.0
+def true_node_longitude(t, eph):
+    """Osculating ('true') north node longitude in degrees, ecliptic of date.
 
-    # Mean longitude of ascending node (degrees) - high precision formula
-    mean_node = (
-        125.0445479
-        - 1934.1362891 * T
-        + 0.0020754 * T * T
-        + T * T * T / 467441.0
-        - T * T * T * T / 60616000.0
+    The node is not a body and has no ephemeris entry — it is a property of the
+    plane the Moon is instantaneously orbiting in, so it comes straight out of
+    the Moon's geocentric state vector in DE421:
+
+        h = r x v          angular momentum, normal to the orbital plane
+        n = zhat x h       the line where that plane cuts the ecliptic
+        Omega = atan2(n_y, n_x) = atan2(h_x, -h_y)
+
+    Both r and v are rotated into the true ecliptic and equinox of date FIRST —
+    the same frame ecliptic_latlon(epoch=t) reports the planets in. Taking the
+    cross product in ICRF and reading the answer as a longitude of date would
+    leave the whole precession since J2000 in it.
+
+    The vectors are geometric (no light-time, no aberration): the node is an
+    orbital element of where the Moon actually is, not of where it is seen to
+    be. This is what Swiss Ephemeris means by the true node, and it agrees with
+    Swiss to about an arcsecond — versus the 3.5-5.9 arcmin of the truncated
+    Meeus series this replaced, which never touched the ephemeris at all.
+    """
+    position, velocity = (eph['moon'] - eph['earth']).at(t).frame_xyz_and_velocity(
+        ecliptic_frame
     )
-    mean_node = mean_node % 360
-
-    # True node corrections (main periodic terms)
-    D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T * T + T * T * T / 545868.0
-    M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T * T + T * T * T / 24490000.0
-    Mp = 134.9633964 + 477198.8675055 * T + 0.0087414 * T * T + T * T * T / 69699.0
-    F = 93.2720950 + 483202.0175233 * T - 0.0036539 * T * T - T * T * T / 3526000.0
-
-    D_rad = math.radians(D % 360)
-    M_rad = math.radians(M % 360)
-    Mp_rad = math.radians(Mp % 360)
-    F_rad = math.radians(F % 360)
-
-    # True node correction (Meeus, Astronomical Algorithms)
-    correction = (
-        -1.4979 * math.sin(2 * (D_rad - F_rad))
-        - 0.1500 * math.sin(M_rad)
-        - 0.1226 * math.sin(2 * D_rad)
-        + 0.1176 * math.sin(2 * F_rad)
-        - 0.0801 * math.sin(2 * (Mp_rad - F_rad))
-    )
-
-    north_node_lon = (mean_node + correction) % 360
-
-    # Apply ayanamsa for sidereal
-    if zodiac == 'sidereal':
-        north_node_lon = (north_node_lon - lahiri_ayanamsa(jd)) % 360
-
-    south_node_lon = (north_node_lon + 180) % 360
-
-    return north_node_lon, south_node_lon
+    h = np.cross(position.au, velocity.au_per_d)
+    return math.degrees(math.atan2(h[0], -h[1])) % 360
 
 
-def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_system='equal-house', zodiac='tropical'):
+def calculate_lunar_nodes(t, eph, ts, ayanamsa=0.0):
+    """True lunar nodes and the direction they are actually moving.
+
+    Returns (north longitude, south longitude, degrees per day of the north
+    node). The true node is usually retrograde but genuinely turns direct for
+    short stretches, so the direction is measured rather than assumed.
+    """
+    north = true_node_longitude(t, eph)
+
+    step = NODE_RATE_HALF_STEP_DAYS
+    before = true_node_longitude(ts.tt_jd(t.tt - step), eph)
+    after = true_node_longitude(ts.tt_jd(t.tt + step), eph)
+    rate = (((after - before + 180.0) % 360.0) - 180.0) / (2.0 * step)
+
+    north = (north - ayanamsa) % 360
+    return north, (north + 180.0) % 360, rate
+
+
+def calculate_chart(year, month, day, hour, minute, latitude, longitude,
+                    house_system='equal-house', zodiac='tropical',
+                    ayanamsa_name=DEFAULT_AYANAMSA):
     """
     Calculate a complete natal chart using Skyfield (JPL ephemeris).
 
@@ -546,6 +597,8 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         latitude, longitude: Birth location coordinates
         house_system: 'equal-house', 'whole-sign', 'placidus', etc.
         zodiac: 'tropical' or 'sidereal'
+        ayanamsa_name: which sidereal school, when zodiac is 'sidereal'.
+            Ignored for tropical. Unknown names raise rather than fall back.
 
     Returns:
         Dictionary with planets, houses, aspects, and angles
@@ -568,7 +621,16 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
     # defaults to the J2000 ecliptic; without epoch=t every planet comes out
     # displaced by the precession since 2000 (~0.014 deg per year).
     obliquity = mean_obliquity(t.tt)
-    ayanamsa = lahiri_ayanamsa(t.tt) if zodiac == 'sidereal' else 0.0
+    # Resolve the school even for a tropical chart, so an unimplemented name is
+    # rejected up front instead of sitting unused and then surprising whoever
+    # switches the same request to sidereal.
+    ayanamsa_used = ayanamsa_name if ayanamsa_name in AYANAMSAS else None
+    if ayanamsa_used is None:
+        raise ValueError(
+            f"Unknown ayanamsa '{ayanamsa_name}'. This engine implements only: "
+            + ", ".join(sorted(AYANAMSAS)) + "."
+        )
+    ayanamsa = ayanamsa_degrees(t.tt, ayanamsa_used) if zodiac == 'sidereal' else 0.0
 
     # Calculate planetary positions
     planets_data = {}
@@ -638,8 +700,13 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         except:
             pass
 
-    # Calculate Lunar Nodes
-    north_node_lon, south_node_lon = calculate_lunar_nodes(t, eph, zodiac)
+    # Calculate Lunar Nodes. The direction is measured, not assumed: the true
+    # node is retrograde most of the time but does go direct, and a glyph that
+    # always says R is simply wrong on those days.
+    north_node_lon, south_node_lon, node_rate = calculate_lunar_nodes(
+        t, eph, ts, ayanamsa
+    )
+    node_is_retrograde = bool(node_rate < 0)
 
     zodiac_pos = degrees_to_zodiac(north_node_lon)
     planets_data['northnode'] = {
@@ -649,7 +716,8 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         'sign': zodiac_pos['sign'],
         'signIndex': zodiac_pos['signIndex'],
         'degree': round(zodiac_pos['degree'], 2),
-        'isRetrograde': True
+        'isRetrograde': node_is_retrograde,
+        'speedLongitude': round(node_rate, 6)
     }
 
     zodiac_pos = degrees_to_zodiac(south_node_lon)
@@ -660,7 +728,8 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
         'sign': zodiac_pos['sign'],
         'signIndex': zodiac_pos['signIndex'],
         'degree': round(zodiac_pos['degree'], 2),
-        'isRetrograde': True
+        'isRetrograde': node_is_retrograde,
+        'speedLongitude': round(node_rate, 6)
     }
 
     # Calculate angles (Ascendant, Midheaven)
@@ -721,9 +790,26 @@ def calculate_chart(year, month, day, hour, minute, latitude, longitude, house_s
                 'timezone': tz_used,
             },
             'zodiac': zodiac,
-            'ayanamsa': ('lahiri' if zodiac == 'sidereal' else None),
+            # What was ASKED for and what was USED are reported separately, and
+            # for the ayanamsa they can never differ — an unimplemented school
+            # is a 400, not a substitution.
+            'ayanamsa': (ayanamsa_used if zodiac == 'sidereal' else None),
+            'ayanamsaUsed': (ayanamsa_used if zodiac == 'sidereal' else None),
+            'ayanamsaLabel': (AYANAMSAS[ayanamsa_used]['label']
+                              if zodiac == 'sidereal' else None),
             'ayanamsaDegrees': (round(ayanamsa, 4) if zodiac == 'sidereal' else None),
+            # The same school's value AT THIS MOMENT whether or not it was
+            # applied — what a tropical chart would be shifted by if it were
+            # read sidereally. The HD mandala's sidereal ring needs exactly
+            # this, and used to carry a hardcoded 24.1 instead.
+            'ayanamsaDegreesAtMoment': round(ayanamsa_degrees(t.tt, ayanamsa_used), 4),
+            'ayanamsasAvailable': sorted(AYANAMSAS),
             'obliquity': round(obliquity, 6),
+            # Which node is served. Deliberately the TRUE (osculating) node,
+            # computed from the DE421 lunar state vector; the mean node is a
+            # different body and is not offered.
+            'nodeType': 'true',
+            'node_type': 'true',
             'frame': 'ecliptic of date',
             'ephemeris': 'Skyfield (JPL DE421)'
         }
@@ -761,6 +847,20 @@ class handler(BaseHTTPRequestHandler):
 
             house_system = data.get('houseSystem', 'placidus')
             zodiac = data.get('zodiac', 'tropical')
+            # Accept either spelling; an omitted ayanamsa means Lahiri, said
+            # out loud in the response rather than assumed silently.
+            ayanamsa_name = (data.get('ayanamsa')
+                             or data.get('ayanamsaName')
+                             or DEFAULT_AYANAMSA)
+            if not isinstance(ayanamsa_name, str):
+                raise ValueError(f"Invalid ayanamsa: {ayanamsa_name!r}")
+            ayanamsa_name = ayanamsa_name.strip().lower()
+            if ayanamsa_name not in AYANAMSAS:
+                raise ValueError(
+                    f"Unknown ayanamsa '{ayanamsa_name}'. This engine implements "
+                    "only: " + ", ".join(sorted(AYANAMSAS)) + ". It will not "
+                    "silently serve a different one."
+                )
 
             # Validate ranges
             if not (EPHEMERIS_MIN_YEAR <= year <= EPHEMERIS_MAX_YEAR):
@@ -785,7 +885,7 @@ class handler(BaseHTTPRequestHandler):
             result = calculate_chart(
                 year, month, day, hour, minute,
                 latitude, longitude,
-                house_system, zodiac
+                house_system, zodiac, ayanamsa_name
             )
 
             # Send response
@@ -834,6 +934,8 @@ class handler(BaseHTTPRequestHandler):
                 'ephemeris_loaded': ephemeris_loaded,
                 'timezone_available': TZ_AVAILABLE,
                 'message': 'Astrology Chart Calculator API (Skyfield/JPL DE421). Send POST request with birth data.',
+                'ayanamsasAvailable': sorted(AYANAMSAS),
+                'nodeType': 'true',
                 'example': {
                     'year': 1990,
                     'month': 6,
@@ -843,7 +945,8 @@ class handler(BaseHTTPRequestHandler):
                     'latitude': 40.7128,
                     'longitude': -74.0060,
                     'houseSystem': 'placidus',
-                    'zodiac': 'tropical'
+                    'zodiac': 'tropical',
+                    'ayanamsa': 'lahiri'
                 }
             }).encode('utf-8'))
         except Exception as e:
