@@ -6844,13 +6844,12 @@
             cssFsContainer = container;
             container.classList.add('css-fullscreen');
             getFsCloseBtn().classList.add('active');
-            // Whenever we're inside an iframe, ask the parent to grow the iframe so
-            // the overlay fills the whole viewport (the phone screen) rather than
-            // just the iframe box. The flow app listens for this and expands to the
-            // full viewport. Sent on enter here and on exit below.
-            if (window.parent !== window) {
-                window.parent.postMessage({ type: 'astrology-request-fullscreen', chartId: currentChartId, state: 'enter' }, '*');
-            }
+            // An 'astrology-request-fullscreen' postMessage used to go out here and
+            // on exit, asking an embedding parent to grow the iframe so the overlay
+            // could fill the real viewport. Flow has ignored it since round 64e, and
+            // as of Aug 4 2026 fullscreen cannot be entered from inside a frame at
+            // all, so it could never fire. Removed with the rest of the dead
+            // fullscreen machinery (audit §3).
             if (onEnter) { try { onEnter(); } catch (e) { console.warn('fullscreen onEnter failed', e); } }
         }
 
@@ -6862,9 +6861,6 @@
             const btn = document.getElementById('fs-close-btn');
             if (btn) btn.classList.remove('active');
             resetFullscreenSizing();
-            if (window.parent !== window) {
-                window.parent.postMessage({ type: 'astrology-request-fullscreen', chartId: currentChartId, state: 'exit' }, '*');
-            }
         }
 
         // Undo the inline sizing the per-view onEnter callbacks apply.
@@ -6887,10 +6883,8 @@
         // just the active chart element ("now I just get the wheel and not the
         // whole list", builder, Jul 15 2026). The section becomes a scrollable
         // full-viewport column (see #chart-display-section.css-fullscreen CSS);
-        // the active chart is enlarged inside it. Standalone gets the CSS
-        // overlay; embedded also asks the parent to expand the iframe to the
-        // full viewport (enterCssFullscreen's astrology-request-fullscreen
-        // postMessage, sent on enter AND exit). X top-right + Esc exit both.
+        // the active chart is enlarged inside it. Standalone only — the ⛶ does
+        // not exist inside a frame. X top-right + Esc exit both.
         function toggleActiveFullscreen() {
             // In a frame there is no ⛶ to click (body.in-frame hides it). The
             // embed branch that used to live here opened a NEW TAB — an icon
