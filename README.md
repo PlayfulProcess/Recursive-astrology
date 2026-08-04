@@ -146,3 +146,26 @@ grammar's `The record`), never in the short `intention`. Every voice obeys the o
   `docs/RECURSIVE-ECO-INTEGRATION.md` shows how a repo wires to a channel.
 
 Take the method home. Found your own.
+
+## Licensing — software vs. content
+
+This repo is dual-licensed, deliberately:
+
+| What | License |
+|------|---------|
+| **Code** — `viewer/`, `viewers/`, `api/`, `scripts/`, `course/`, any HTML/CSS/JS/Python | **MIT** — see [`LICENSE`](LICENSE) |
+| **Content** — `grammars/`, `research/`, `docs/`, `plan/`, `voices.json`, and the prose in the Markdown files | **CC-BY-SA-4.0** — see [`LICENSE-CONTENT.txt`](LICENSE-CONTENT.txt) |
+
+MIT on the code because the calculation engine is the part worth passing on freely: it is built on
+[Skyfield](https://rhodesmill.org/skyfield/) and JPL's DE421 rather than the Swiss Ephemeris, so it
+carries no copyleft obligation inherited from a dependency — a rare thing in open astrology
+software, and more useful to everyone unencumbered. CC-BY-SA on the content because a commons of
+readings should stay a commons: reuse it, adapt it, keep it open, and keep the attribution.
+
+Third-party material referenced by the grammars carries its own status: the source texts
+(Ashmand's Ptolemy, Alan Leo, Proctor) and the illustrations are **public domain**, each recorded
+with its provenance in the item that uses it. Astronomical data comes from JPL's DE421 ephemeris.
+Human Design terminology describes a system originated by Ra Uru Hu; the calculations here are our
+own and the prose is being rewritten in our own words.
+
+Author: **PlayfulProcess**. Built with [Claude](https://claude.com/claude-code) for recursive.eco.
