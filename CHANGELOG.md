@@ -1,5 +1,88 @@
 # Changelog — The Recursive Astrology
 
+## August 4, 2026 — One fullscreen, and every control either works or is gone
+
+A control-by-control walk of the chart viewer on 3 August found the word "fullscreen"
+meaning four different things in a single flow — and the only one that meant "expand this"
+was broken. This is the fix wave. Nothing here changes a number; it is all about controls
+telling the truth.
+
+**The fullscreen bug.** `#chart-display-section.css-fullscreen` is a flex column pinned to
+the viewport. Flex items default to `flex-shrink: 1`, so whenever the column's content was
+taller than the screen — always — the browser compressed the children to fit, and
+`.chart-container` was the one that gave: 581px of content squashed into **50px**. The
+wheel stayed in layout, overflowed its 50px parent, and painted behind `#chart-details`.
+Fullscreen showed the view tabs, the transit toggle and the entire planet list, and no
+chart. One line — the children keep their natural height and the column scrolls instead.
+Verified on all three views: wheel 514×475, mandala 514×574, bodygraph 328×547, where all
+three were previously invisible.
+
+**The three impostors are gone.** The embedded chart's ⛶ opened a *new tab* — an icon that
+says "expand in place" performing a redirect. It is removed, along with its branch: inside
+**any** frame — the sidebar embed and the Create/Edit Chart modal alike — there is now no ⛶
+at all, because a fixed overlay inside a frame can only ever fill the frame's own box, and
+the flow app deliberately ignores the request to grow it. The host page's "Open full chart
+↗" is the redirect, and it says so. The Astro-Context box's "Full" button pointed at
+`/pages/astrology-viewer.html`, which 404s on this host — the viewer lives at `/viewer/`,
+and `vercel.json` only builds `viewer/**` — while passing a `viewContext` flag nothing read
+and writing a localStorage key nothing read. Button, function and orphan key all removed.
+
+**A paid button stopped losing its own clicks.** The ⛶ sat bodily inside the "Interpret
+with AI" button and won the hit test at its centre, so clicking the middle of the AI action
+opened a tab instead. The controls row is now a *sibling* of the wheel stage rather than a
+child of its positioning context — structural separation, not a z-index patch — and the row
+wraps instead of overflowing its own centred flex box on narrow screens.
+
+**"Interpret with AI" sent a chart with no chart in it.** It read `currentChart.planets`
+and `currentChart.Ephemeris`; neither has ever existed, because the placements live under
+`horoscope.CelestialBodies`. The loop body never ran, so what reached the model was a
+header and a birth date. It now carries all twelve placements with degree-in-sign, house
+and retrograde flag, the Ascendant, the full aspect list with orbs, whether the chart is
+tropical or sidereal and on which house system, and the selected grammar's reading for each
+planet, sign, house and aspect — 1,980 characters where there had been a stub. Its guard
+tested the same non-existent field, so it could refuse with a chart plainly on screen; it
+now asks whether there are placements to describe. And it always redirected to
+**production** flow, because it inferred the environment from `chart.recursive.eco`, which
+carries no `dev.` prefix; it now learns the environment from whoever opened or embedded it,
+validates that origin against a list, and remembers it.
+
+**The chosen interpretation set survives the hop.** Picking "Western Astrology — Canonical"
+in flow and opening the full chart used to land on "Default Interpretations". The selection
+is now remembered and restored on the standalone page, and honoured from `?schema=`.
+Verified end to end: a set chosen in the embedded chart under `dev.flow.recursive.eco` was
+carried into a fresh `chart.recursive.eco` tab.
+
+**"My Charts" printed `undefined-undefined-undefined`** for every row — it read
+`birthData.year/.month/.day`, and the saved shape has `.date`. Six charts now read their
+real birth dates, and the raw geocoder string ("Bloemfontein, Mangaung Metropolitan
+Municipality, Free State, 9310, South Africa") is cut to place and country.
+
+**"By Activation" / "By Center" rendered byte-identical SVG.** They now mean what they say.
+*By activation* colours each active gate by which side switched it on — Design red,
+Personality accent, both sides gold, the standard Human Design reading and the same colours
+the gates list already used — and names it in the tooltip. *By centre* drops the activation
+colouring and reads the board as nine centres in one accent, so what stands out is which
+centres are lit. The legend follows the mode. The never-called `setBodygraphHighlight` and
+its never-read filter are gone.
+
+**Also swept:** the Human Design "Interpret with AI" button, which `updateHDSummary()`
+overwrote on every render so it was never on screen — and would have thrown, calling
+`.join()` on a string profile; the gates filter re-binding its click listeners on every
+render, so each click re-rendered the lists N times; the interpretation-set dropdown's 33
+options carrying eleven duplicate titles, one plain and one suffixed "(Altar)" — now
+deduplicated by title, with the retired vocabulary retired (28 distinct options, no
+duplicates); "Sign in to save your chart" rendering directly above "✓ Signed in as …"; the
+transit date button being visible but blank until transits were switched on; and leaving
+fullscreen shrinking the bodygraph to 400px, below the 560px it had before entering.
+
+**LICENSE.** The repository was public with no licence file at all, which in law means all
+rights reserved — the opposite of what it is for. Now split the way the sibling repos split
+it: **MIT** on the code (`LICENSE`), **CC-BY-SA-4.0** on the grammars and research
+(`LICENSE-CONTENT.txt`), with the boundary set out in the README. MIT on the code because
+the engine is built on Skyfield and JPL's DE421 rather than the Swiss Ephemeris, so it
+inherits no copyleft — which was the point of building it that way.
+
+
 ## August 4, 2026 — The lunar node comes from the ephemeris, and the ayanamsa selector works
 
 An independent accuracy benchmark run on 3 August found the engine's planets, houses,
