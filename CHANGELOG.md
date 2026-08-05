@@ -1,5 +1,61 @@
 # Changelog — The Recursive Astrology
 
+## August 4, 2026 — A shared wheel, and every view pointing at the same thing
+
+The wheel is no longer ours. It is [AstroChart](https://github.com/AstroDraw/AstroChart)
+(MIT, zero dependencies, ~97 KB), vendored into `viewer/assets/js/vendor/` because this is
+a static site with no build step. About 350 lines of hand-rolled SVG geometry retired.
+
+**The gate it had to pass first.** The condition set in the plan was legibility *as a
+raster*, because `requestChartImage` hands a PNG of the wheel to the AI and to anything
+else that wants a picture. So before committing to anything: vendor the library, render the
+same synthetic chart (1990-06-15 14:30 New York) from our own engine at 500 px, 900 px and
+340 px, push it through the *actual* capture path — `XMLSerializer` → data URL → 2× canvas
+— and look at the result beside the old wheel at the same size. **Pass, and not narrowly.**
+AstroChart draws signs and planets as stroked SVG paths, so they stay sharp at every scale
+and every planet carries its degree, sign and ℞ mark. The old wheel drew zodiac signs as
+emoji codepoints, which the font renders as filled tiles: at 500 px the outer ring read as
+twelve coloured blobs, and rasterised it read as twelve coloured blobs. That difference,
+not aesthetics, is what decided it.
+
+**It draws; we still do the maths.** Every position, cusp and aspect handed to AstroChart
+comes from `api/calculate_chart.py` (Skyfield/DE421). Its own aspect calculator is bypassed
+entirely — `aspects()` takes a precomputed list, and ours is the one already on screen in
+the Aspects tab, so the wheel and the list cannot disagree. (Bypassing it was also forced:
+`Radix.aspects()` ignores `settings.ASPECTS` and always uses the library defaults, which
+paint conjunctions transparent and omit sextiles.) Theming is by CSS custom property rather
+than resolved colour, so the wheel follows light/dark with no re-render and the existing
+capture path keeps working untouched.
+
+**Transits are a real bi-wheel now** — AstroChart's `Transit` class, natal ring inside,
+transiting bodies outside, read against the natal houses. Both webs are drawn: the natal
+aspects (solid) and the transit-to-natal ones (dashed). The transiting end of each transit
+line is name-prefixed so the two can never be confused — "Sun square Mars" and "*transiting*
+Sun square natal Mars" are different claims and must not share a key.
+
+**Linked views.** Tap a planet on the wheel and its row lights up in the Planets list; tap a
+row and the planet and all its aspect lines light up on the wheel; tap an aspect line or an
+aspect row and both ends light up. One ~100-line bus, one selection at a time. The part
+worth naming is not the bus but the **join key**, which no charting library supplies: a
+planet is its engine key (`mars`), an aspect is its two planet keys sorted and joined
+(`mars-sun`), a pattern is its type plus its sorted members. Every view addresses everything
+by those strings.
+
+**Named patterns, computed not eyeballed.** A strip above the wheel names the Grand Trines,
+T-Squares and Stelliums in the chart; tapping one dims everything else and leaves the figure
+standing — the Grand Trine really does draw itself as a triangle. These are computable
+predicates over the aspect graph the engine already produced, which is the whole point: the
+red triangles astrologers draw are a *rendering* of a fact about angles, and the model
+should be handed the fact, not asked to read shapes out of pixels. The viewer knows three
+figures so it stands alone; the flow app's pattern engine knows twenty-one and can post them
+in wholesale via a documented `astrology-set-patterns` message.
+
+**Two small truths fixed on the way.** `Midheaven` was read in three places and populated in
+none, so the wheel guessed the MC as ASC+270° and every saved chart recorded
+`midheaven: undefined`; the engine had been returning it all along. And `?form=open` now
+keeps the birth-info form expanded on first render — flow sends it when the viewer *is* the
+edit-chart modal, where collapsing the form hides the only thing the user came for.
+
 ## August 4, 2026 — One fullscreen, and every control either works or is gone
 
 A control-by-control walk of the chart viewer on 3 August found the word "fullscreen"

@@ -162,6 +162,13 @@ carries no copyleft obligation inherited from a dependency — a rare thing in o
 software, and more useful to everyone unencumbered. CC-BY-SA on the content because a commons of
 readings should stay a commons: reuse it, adapt it, keep it open, and keep the attribution.
 
+One third-party library is vendored into the code: **AstroChart** (AstroDraw/AstroChart 3.0.2,
+MIT, Copyright © 2015-2025 Arthur Fücher) draws the Western chart wheel, at
+[`viewer/assets/js/vendor/astrochart.js`](viewer/assets/js/vendor/astrochart.js), with its licence
+beside it. It is vendored rather than installed because this is a static site with no build step.
+It draws only; every position, house cusp and aspect it renders comes from our own Skyfield/DE421
+engine.
+
 Third-party material referenced by the grammars carries its own status: the source texts
 (Ashmand's Ptolemy, Alan Leo, Proctor) and the illustrations are **public domain**, each recorded
 with its provenance in the item that uses it. Astronomical data comes from JPL's DE421 ephemeris.

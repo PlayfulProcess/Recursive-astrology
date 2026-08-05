@@ -65,7 +65,20 @@
     <link rel="stylesheet" href="/viewer/assets/css/components.css">
 
     <!-- Astrology Libraries -->
-    <!-- Custom SVG visualization (no external dependencies) -->
+    <!-- AstroChart (AstroDraw/AstroChart 3.0.2, MIT) — the Western chart wheel.
+         VENDORED, not npm-installed: this is a static site with no build step,
+         and a same-origin file also means no CDN in the dependency path. The
+         licence ships beside it (assets/js/vendor/astrochart.LICENSE.txt) and
+         is credited in LICENSE + README.
+         It draws signs, planets, cusps and aspect lines as stroked SVG paths,
+         which is why it survived the raster-legibility spike the current
+         hand-rolled wheel motivated: the old wheel drew zodiac signs as emoji
+         codepoints, which render as coloured tiles once rasterised for
+         requestChartImage. AstroChart also gives every planet a deterministic
+         id and every aspect line data-point/data-toPoint attributes — the
+         join keys the linked-views bus needs. The HD mandala and bodygraph
+         renderers stay ours; AstroChart has no equivalent. -->
+    <script src="/viewer/assets/js/vendor/astrochart.js"></script>
 
     <style>
         /* Critical fallback for Tailwind classes - ensures page works if CDN fails */
@@ -355,14 +368,19 @@
             transition: transform 0.1s ease-out;
         }
 
-        /* Planet focus mode — dim non-focused elements */
-        #chart-wheel.planet-focus .aspect-line {
+        /* Focus mode — dim everything that is not part of the selection.
+           One rule set serves all three selection kinds (planet, aspect,
+           pattern): the bus marks members with .focused and puts
+           .planet-focus on the container. */
+        #chart-wheel.planet-focus .aspect-line,
+        #chart-wheel.planet-focus .transit-aspect-line,
+        #chart-wheel.planet-focus .transit-planet {
             opacity: 0.05;
             transition: opacity 0.2s;
         }
         #chart-wheel.planet-focus .aspect-line.focused {
             opacity: 1;
-            stroke-width: 2;
+            stroke-width: 2.6;
             transition: opacity 0.2s;
         }
         #chart-wheel.planet-focus .planet-clickable {
@@ -372,6 +390,48 @@
         #chart-wheel.planet-focus .planet-clickable.focused {
             opacity: 1;
             transition: opacity 0.2s;
+        }
+        #chart-wheel .planet-clickable { cursor: pointer; }
+
+        /* Named-pattern strip */
+        .chart-patterns {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-bottom: 0.75rem;
+        }
+        .pattern-pill {
+            font-size: 0.7rem;
+            line-height: 1.2;
+            padding: 0.3rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgb(var(--v-accent-rgb) / 0.35);
+            background: rgb(var(--v-accent-rgb) / 0.08);
+            color: var(--v-ink-soft);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .pattern-pill:hover {
+            border-color: rgb(var(--v-accent-rgb) / 0.7);
+            background: rgb(var(--v-accent-rgb) / 0.16);
+        }
+        .pattern-pill.linked {
+            border-color: var(--astro-gold);
+            background: rgb(var(--v-accent-rgb) / 0.24);
+            color: var(--v-ink);
+        }
+        .pattern-pill .pattern-members {
+            opacity: 0.7;
+            margin-left: 0.35rem;
+        }
+
+        /* Linked-views highlight on list rows (planets / aspects). Kept
+           visually distinct from .selected, which means "picked for AI
+           context" — a different axis entirely. */
+        .planet-panel.linked {
+            border-color: var(--astro-gold);
+            box-shadow: inset 3px 0 0 var(--astro-gold);
         }
 
         /* Zoom controls */
@@ -1919,6 +1979,12 @@
                                     Interpret with AI
                                 </button>
                             </div>
+                            <!-- Named-pattern strip (Phase 2, Aug 4 2026). Filled by
+                                 renderChartPatterns() from the viewer's own detection, or
+                                 replaced wholesale by richer pattern data postMessage'd in
+                                 from flow — see the ASTROLOGY-SET-PATTERNS contract below.
+                                 Tapping a pill drives the linked-views bus. -->
+                            <div id="chart-patterns" class="chart-patterns hidden"></div>
                             <div class="chart-wheel-stage relative">
                                 <button onclick="toggleActiveFullscreen()" class="fs-enter-btn absolute top-2 right-2 text-gray-500 hover:text-white p-1.5 bg-gray-900/80 rounded z-10" title="Fullscreen" aria-label="Enter fullscreen"><svg width="18" height="18" aria-hidden="true"><use href="/viewer/icons.svg#expand"/></svg></button>
                                 <div class="zoom-controls">
@@ -3203,6 +3269,17 @@
                         selectAstrologySchema(val);
                     }
                 }
+
+                // Named patterns computed by the parent (flow's
+                // lib/astro/pattern-engine.ts knows 21 figures; the viewer's own
+                // detection knows three). Full contract documented beside
+                // renderChartPatterns — an empty array hands detection back to us.
+                if (event.data?.type === 'astrology-set-patterns') {
+                    externalChartPatterns = Array.isArray(event.data.patterns) && event.data.patterns.length
+                        ? event.data.patterns
+                        : null;
+                    if (currentChart?.horoscope) renderChartPatterns(currentChart.horoscope);
+                }
             });
 
             populateDateTimeDropdowns();
@@ -4042,6 +4119,19 @@
                         Ecliptic: { DecimalDegrees: apiResult.angles?.ascendant?.longitude || 0 }
                     }
                 },
+                // Midheaven was read in three places (the wheel's MC axis, and the
+                // `midheaven` field of both save paths) but never populated here, so
+                // the wheel fell back to ASC+270 and every saved chart recorded
+                // midheaven: undefined. The engine has always returned it.
+                Midheaven: {
+                    ChartPosition: {
+                        Ecliptic: {
+                            DecimalDegrees: typeof apiResult.angles?.midheaven?.longitude === 'number'
+                                ? apiResult.angles.midheaven.longitude
+                                : (((apiResult.angles?.ascendant?.longitude || 0) + 270) % 360)
+                        }
+                    }
+                },
                 Aspects: apiResult.aspects || [],
                 _apiResult: apiResult
             };
@@ -4100,359 +4190,649 @@
         }
 
         // ============================================================
-        // CHART RENDERING (Custom SVG)
+        // CHART RENDERING — AstroChart wheel + linked views
+        // ------------------------------------------------------------
+        // Phase 2 (Aug 4 2026). The wheel used to be ~350 lines of
+        // hand-rolled SVG here. It is now AstroChart (MIT, vendored — see
+        // the script tag in <head> for why), configured from this page's
+        // theme tokens and fed by OUR engine: every position, cusp and
+        // aspect below comes from api/calculate_chart.py, never from
+        // AstroChart's own aspect calculator. That matters twice over —
+        // the wheel and the Aspects tab can never disagree, and the
+        // arc-second-accurate Skyfield/DE421 numbers stay the source of
+        // truth for what is drawn.
+        //
+        // Kept deliberately: the HD mandala and bodygraph renderers (no
+        // equivalent exists in any permissive library), the zoom/pan
+        // transform, the CSS-overlay fullscreen, the planet-focus dimming
+        // CSS, and captureActiveChartImage's `#chart-wheel svg` contract.
         // ============================================================
+
+        // Engine key (lowercase, as api/calculate_chart.py emits) ⇄ AstroChart
+        // point name. This pair IS the join key between the wheel's DOM and
+        // every list in the tabs — see the linked-views bus below.
+        const AC_POINT_BY_KEY = {
+            sun: 'Sun', moon: 'Moon', mercury: 'Mercury', venus: 'Venus', mars: 'Mars',
+            jupiter: 'Jupiter', saturn: 'Saturn', uranus: 'Uranus', neptune: 'Neptune',
+            pluto: 'Pluto', chiron: 'Chiron', lilith: 'Lilith',
+            northnode: 'NNode', southnode: 'SNode'
+        };
+        const AC_KEY_BY_POINT = Object.fromEntries(
+            Object.entries(AC_POINT_BY_KEY).map(([k, v]) => [v, k])
+        );
+
+        // Aspect colours, by name, in theme tokens. Passed as var() strings:
+        // AstroChart writes them into SVG presentation attributes, which
+        // browsers parse as CSS values, so the wheel re-themes with the page
+        // and captureActiveChartImage's existing custom-property inlining
+        // keeps working unchanged.
+        const WHEEL_ASPECT_COLORS = {
+            conjunction: 'rgb(var(--v-accent-rgb) / 0.75)',
+            opposition: 'rgb(var(--v-danger-rgb) / 0.6)',
+            square: 'rgb(var(--v-danger-rgb) / 0.5)',
+            trine: 'rgb(var(--v-success-rgb) / 0.6)',
+            sextile: 'rgb(var(--v-info-rgb) / 0.6)',
+            quincunx: 'var(--v-aspect-minor)',
+            semisextile: 'var(--v-aspect-minor)'
+        };
+        const wheelAspectColor = (name) =>
+            WHEEL_ASPECT_COLORS[String(name || '').toLowerCase()] || 'var(--v-aspect-minor)';
+
+        // Element tint per sign, Aries→Pisces (Fire/Earth/Air/Water × 3).
+        const WHEEL_SIGN_COLORS = ['fire', 'earth', 'air', 'water', 'fire', 'earth',
+            'air', 'water', 'fire', 'earth', 'air', 'water']
+            .map(el => `rgb(var(--v-${el}-rgb) / 0.18)`);
+
+        function wheelSettings(hasTransits) {
+            return {
+                // The margin has to clear TWO things drawn outside the zodiac
+                // ring: the As/Ds/Mc/Ic axis labels, and — when transits are on
+                // — the whole transit ring. Too small and they clip at the
+                // viewBox edge.
+                MARGIN: hasTransits ? 62 : 48,
+                PADDING: 14,
+                SYMBOL_SCALE: hasTransits ? 0.95 : 1.05,
+                COLOR_BACKGROUND: 'var(--v-wheel-bg)',
+                POINTS_COLOR: 'var(--v-ink)',
+                POINTS_TEXT_SIZE: 8,
+                POINTS_STROKE: 1.6,
+                SIGNS_COLOR: 'var(--v-ink)',
+                SIGNS_STROKE: 1.3,
+                CIRCLE_COLOR: 'var(--v-line)',
+                CIRCLE_STRONG: 1.6,
+                LINE_COLOR: 'var(--v-line)',
+                CUSPS_STROKE: 1,
+                CUSPS_FONT_COLOR: 'rgb(var(--v-wheel-violet-rgb) / 0.85)',
+                SYMBOL_AXIS_FONT_COLOR: 'var(--astro-gold)',
+                COLORS_SIGNS: WHEEL_SIGN_COLORS,
+                // Enlarged invisible hit targets — the wheel is tapped on a phone.
+                ADD_CLICK_AREA: true,
+                COLLISION_RADIUS: 12
+            };
+        }
+
+        // ---- Engine data → AstroChart data -------------------------------
+
+        function wheelRadixData(horoscope) {
+            const planets = {};
+            Object.entries(horoscope.CelestialBodies || {}).forEach(([key, body]) => {
+                const name = AC_POINT_BY_KEY[key.toLowerCase()];
+                const lon = body?.ChartPosition?.Ecliptic?.DecimalDegrees;
+                if (!name || typeof lon !== 'number') return;
+                // Second element is speed; AstroChart only reads its sign, to
+                // stamp the ℞ mark. Our engine reports the flag, not the rate.
+                planets[name] = [lon, body.isRetrograde ? -1 : 1];
+            });
+
+            const cusps = [];
+            (horoscope.Houses || []).forEach(house => {
+                const cusp = house?.ChartPosition?.StartPosition?.Ecliptic?.DecimalDegrees;
+                if (typeof cusp === 'number') cusps.push(cusp);
+            });
+            if (cusps.length !== 12) {
+                // Equal-house fallback from the ASC, as the old renderer did.
+                const asc = horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees || 0;
+                cusps.length = 0;
+                for (let i = 0; i < 12; i++) cusps.push((asc + i * 30) % 360);
+            }
+
+            return { planets, cusps };
+        }
+
+        function wheelAxes(horoscope) {
+            const asc = horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees;
+            if (typeof asc !== 'number') return null;
+            const mc = horoscope.Midheaven?.ChartPosition?.Ecliptic?.DecimalDegrees;
+            const mcDeg = typeof mc === 'number' ? mc : (asc + 270) % 360;
+            return {
+                As: [asc],
+                Ds: [(asc + 180) % 360],
+                Mc: [mcDeg],
+                Ic: [(mcDeg + 180) % 360]
+            };
+        }
+
+        // AstroChart's own AspectCalculator is bypassed: aspects() accepts a
+        // precomputed list, and ours is already on screen in the Aspects tab.
+        // (It would also have to be bypassed anyway — Radix.aspects() ignores
+        // settings.ASPECTS and always uses the library defaults, which have
+        // conjunction painted "transparent" and no sextile at all.)
+        function wheelRadixAspects(horoscope, radixData) {
+            const out = [];
+            const list = Array.isArray(horoscope.Aspects) ? horoscope.Aspects : [];
+            const seen = new Set();
+            list.forEach(a => {
+                const n1 = AC_POINT_BY_KEY[String(a.planet1 || '').toLowerCase()];
+                const n2 = AC_POINT_BY_KEY[String(a.planet2 || '').toLowerCase()];
+                if (!n1 || !n2 || n1 === n2) return;
+                const p1 = radixData.planets[n1];
+                const p2 = radixData.planets[n2];
+                if (!p1 || !p2) return;
+                const dedupe = [n1, n2].sort().join('|') + '|' + a.aspect;
+                if (seen.has(dedupe)) return;
+                seen.add(dedupe);
+                out.push({
+                    aspect: {
+                        name: a.aspect,
+                        degree: a.angle || 0,
+                        orbit: a.orb || 0,
+                        color: wheelAspectColor(a.aspect)
+                    },
+                    point: { name: n1, position: p1[0] },
+                    toPoint: { name: n2, position: p2[0] },
+                    precision: String(a.orb ?? 0)
+                });
+            });
+            return out;
+        }
+
+        function wheelTransitData(horoscope, radixData) {
+            const planets = {};
+            Object.entries(currentTransits?.planets || {}).forEach(([key, p]) => {
+                const name = AC_POINT_BY_KEY[key.toLowerCase()];
+                if (!name || typeof p?.longitude !== 'number') return;
+                planets[name] = [p.longitude, p.isRetrograde ? -1 : 1];
+            });
+            // The transit ring is read against the NATAL houses — that is what a
+            // bi-wheel is for.
+            return { planets, cusps: radixData.cusps };
+        }
+
+        // Transit→natal aspect lines. The transiting end is name-prefixed
+        // "T_" so that decorateWheel can tell a transit line from a natal one:
+        // AstroChart writes both endpoints into data-point/data-toPoint, and
+        // without the marker "sun-mars" would be ambiguous between "natal Sun
+        // trine natal Mars" and "transiting Sun trine natal Mars" — two very
+        // different claims sharing one join key.
+        function wheelTransitAspects(horoscope, radixData, transitData) {
+            const out = [];
+            (currentTransits?.aspects || []).forEach(a => {
+                const tName = AC_POINT_BY_KEY[String(a.transitPlanet || '').toLowerCase()];
+                const nName = AC_POINT_BY_KEY[String(a.natalPlanet || '').toLowerCase()];
+                if (!tName || !nName) return;
+                const tPos = transitData.planets[tName];
+                const nPos = radixData.planets[nName];
+                if (!tPos || !nPos) return;
+                out.push({
+                    aspect: {
+                        name: a.aspect,
+                        degree: 0,
+                        orbit: Number(a.orb) || 0,
+                        color: wheelAspectColor(a.aspect)
+                    },
+                    point: { name: 'T_' + tName, position: tPos[0] },
+                    toPoint: { name: nName, position: nPos[0] },
+                    precision: String(a.orb ?? 0)
+                });
+            });
+            return out;
+        }
+
+        // ---- Render -------------------------------------------------------
 
         function renderChart(horoscope) {
             chartWheel.innerHTML = '';
             renderAstroWheel(horoscope);
+            renderChartPatterns(horoscope);
         }
 
         function renderAstroWheel(horoscope) {
-            const ascDegree = horoscope.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees || 0;
-            const mcDegree = horoscope.Midheaven?.ChartPosition?.Ecliptic?.DecimalDegrees || ((ascDegree + 270) % 360);
+            if (!window.astrochart?.Chart) {
+                console.error('[Astrology Viewer] AstroChart failed to load — wheel unavailable.');
+                chartWheel.innerHTML = '<p class="text-center py-10 text-sm" style="color:var(--v-muted)">'
+                    + 'The chart wheel could not load. The numbers below are unaffected.</p>';
+                return;
+            }
 
-            // Chart dimensions - expand if showing transits
-            const hasTransits = showTransits && currentTransits;
-            const size = hasTransits ? 560 : 500;
-            const cx = size / 2, cy = size / 2;
-            const transitR = hasTransits ? 260 : 0;  // Transit planets outer ring
-            const outerR = hasTransits ? 240 : 220;  // Outermost ring (zodiac signs)
-            const zodiacInnerR = hasTransits ? 200 : 180; // Inner edge of zodiac ring
-            const houseOuterR = hasTransits ? 198 : 178;  // Houses area outer
-            const planetR = hasTransits ? 160 : 140;      // Where natal planets are placed
-            const innerR = hasTransits ? 80 : 70;         // Center circle
+            const hasTransits = !!(showTransits && currentTransits);
+            const size = hasTransits ? 700 : 640;
 
-            // Convert ecliptic longitude to SVG angle
-            // ASC at 9 o'clock (180°), signs go COUNTER-CLOCKWISE
-            // When ecliptic degree increases, chart angle increases (counter-clockwise)
-            const toChartAngle = (eclipticDeg) => {
-                // Formula: ASC degree maps to 180° (left side)
-                // Higher ecliptic degrees go counter-clockwise (higher chart angles)
-                return (180 + eclipticDeg - ascDegree);
-            };
+            // AstroChart renders into a <div> it owns, so give it one INSIDE
+            // #chart-wheel: the `#chart-wheel svg` selector that the zoom
+            // transform, the focus CSS and captureActiveChartImage all rely on
+            // still matches, because it is a descendant selector.
+            chartWheel.innerHTML = '<div id="chart-wheel-paper"></div>';
 
-            const toRadians = (deg) => deg * Math.PI / 180;
+            const radixData = wheelRadixData(horoscope);
+            let radix;
+            try {
+                const chart = new astrochart.Chart('chart-wheel-paper', size, size, wheelSettings(hasTransits));
+                radix = chart.radix(radixData);
+                const axes = wheelAxes(horoscope);
+                if (axes) radix.addPointsOfInterest(axes);
+                radix.aspects(wheelRadixAspects(horoscope, radixData));
 
-            // Get x,y from angle and radius
-            const getPoint = (angleDeg, r) => {
-                const rad = toRadians(angleDeg);
-                return {
-                    x: cx + r * Math.cos(rad),
-                    y: cy - r * Math.sin(rad)  // Negative because SVG y is inverted
-                };
-            };
+                if (hasTransits) {
+                    // AstroChart's transit ring OWNS the aspect layer — drawing it
+                    // clears whatever the radix drew there. So the bi-wheel gets
+                    // ONE combined list: the natal web (which the pattern
+                    // highlights need to stay tappable) plus the transit→natal
+                    // lines. Both are drawn on the same inner circle, so the
+                    // geometry is consistent.
+                    const transitData = wheelTransitData(horoscope, radixData);
+                    radix.transit(transitData).aspects([
+                        ...wheelRadixAspects(horoscope, radixData),
+                        ...wheelTransitAspects(horoscope, radixData, transitData)
+                    ]);
+                }
+            } catch (e) {
+                console.error('[Astrology Viewer] wheel render failed', e);
+                chartWheel.innerHTML = '<p class="text-center py-10 text-sm" style="color:var(--v-muted)">'
+                    + 'The chart wheel could not be drawn. The numbers below are unaffected.</p>';
+                return;
+            }
 
-            // Create arc path for zodiac segments
-            const createArc = (startAngle, endAngle, innerRadius, outerRadius) => {
-                const start1 = getPoint(startAngle, outerRadius);
-                const end1 = getPoint(endAngle, outerRadius);
-                const start2 = getPoint(endAngle, innerRadius);
-                const end2 = getPoint(startAngle, innerRadius);
+            decorateWheel(horoscope);
 
-                // Calculate arc length accounting for wrap-around
-                let arcLength = (endAngle - startAngle + 360) % 360;
-                const largeArc = arcLength > 180 ? 1 : 0;
+            // Reset zoom when chart re-renders
+            chartScale = 1; chartPanX = 0; chartPanY = 0;
+        }
 
-                return `M ${start1.x} ${start1.y}
-                        A ${outerRadius} ${outerRadius} 0 ${largeArc} 0 ${end1.x} ${end1.y}
-                        L ${start2.x} ${start2.y}
-                        A ${innerRadius} ${innerRadius} 0 ${largeArc} 1 ${end2.x} ${end2.y}
-                        Z`;
-            };
+        // Re-label AstroChart's output in OUR vocabulary: the aspect lines get
+        // .aspect-line + data-planet1/data-planet2, the planet groups get
+        // .planet-clickable + data-planet-key. Everything downstream (focus
+        // dimming, the linked-views bus, the pattern highlight) then addresses
+        // the wheel by engine key without knowing AstroChart exists.
+        function decorateWheel(horoscope) {
+            const paper = document.getElementById('chart-wheel-paper');
+            if (!paper) return;
 
-            let svg = '';
+            paper.querySelectorAll('line[data-point][data-toPoint]').forEach(line => {
+                const raw1 = line.getAttribute('data-point');
+                const raw2 = line.getAttribute('data-toPoint');
 
-            // === ZODIAC RING (outer) ===
-            // Draw 12 zodiac sign segments
-            const signColors = {
-                'Fire': { bg: 'rgb(var(--v-fire-rgb) / 0.15)', text: 'rgb(var(--v-fire-rgb))' },
-                'Earth': { bg: 'rgb(var(--v-earth-rgb) / 0.15)', text: 'rgb(var(--v-earth-rgb))' },
-                'Air': { bg: 'rgb(var(--v-air-rgb) / 0.15)', text: 'rgb(var(--v-air-rgb))' },
-                'Water': { bg: 'rgb(var(--v-water-rgb) / 0.15)', text: 'rgb(var(--v-water-rgb))' }
-            };
+                // Transit→natal line (see wheelTransitAspects): a separate class
+                // and a separate vocabulary, never folded into the natal keys.
+                if (raw1.startsWith('T_') || raw2.startsWith('T_')) {
+                    const tKey = AC_KEY_BY_POINT[raw1.replace(/^T_/, '')];
+                    const nKey = AC_KEY_BY_POINT[raw2.replace(/^T_/, '')];
+                    if (!tKey || !nKey) return;
+                    line.classList.add('transit-aspect-line');
+                    line.dataset.transitPlanet = tKey;
+                    line.dataset.natalPlanet = nKey;
+                    line.setAttribute('stroke-dasharray', '4,3');
+                    return;
+                }
 
-            ZODIAC_SIGNS.forEach((sign, i) => {
-                const signStart = i * 30;  // Aries starts at 0°
-                const signEnd = (i + 1) * 30;
-
-                const chartStart = toChartAngle(signStart);
-                const chartEnd = toChartAngle(signEnd);
-
-                const colors = signColors[sign.element] || { bg: 'rgb(var(--v-accent-rgb) / 0.1)', text: 'var(--astro-gold)' };
-
-                // Draw segment (start to end, counter-clockwise)
-                svg += `<path d="${createArc(chartStart, chartEnd, zodiacInnerR, outerR)}"
-                              fill="${colors.bg}" stroke="rgb(var(--v-accent-rgb) / 0.3)" stroke-width="1"/>`;
-
-                // Sign symbol at midpoint
-                const midAngle = toChartAngle(signStart + 15);
-                const symbolPos = getPoint(midAngle, (outerR + zodiacInnerR) / 2);
-                svg += `<text x="${symbolPos.x}" y="${symbolPos.y}"
-                              text-anchor="middle" dominant-baseline="middle"
-                              fill="${colors.text}" font-size="18" font-family="serif">${sign.symbol}</text>`;
+                const k1 = AC_KEY_BY_POINT[raw1];
+                const k2 = AC_KEY_BY_POINT[raw2];
+                if (!k1 || !k2) return;
+                line.classList.add('aspect-line');
+                line.dataset.planet1 = k1;
+                line.dataset.planet2 = k2;
+                line.dataset.aspectKey = [k1, k2].sort().join('-');
             });
 
-            // === HOUSE CUSPS ===
-            let houseCusps = [];
-            if (horoscope.Houses && horoscope.Houses.length === 12) {
-                horoscope.Houses.forEach((house, i) => {
-                    const cusp = house.ChartPosition?.StartPosition?.Ecliptic?.DecimalDegrees;
-                    if (typeof cusp === 'number') {
-                        houseCusps.push({ num: i + 1, deg: cusp });
-                    }
-                });
-            }
-
-            // Fallback if houses not available
-            if (houseCusps.length !== 12) {
-                houseCusps = [];
-                for (let i = 0; i < 12; i++) {
-                    houseCusps.push({ num: i + 1, deg: (ascDegree + i * 30) % 360 });
-                }
-            }
-
-            // Draw house cusp lines and numbers
-            houseCusps.forEach((house, i) => {
-                const angle = toChartAngle(house.deg);
-                const inner = getPoint(angle, innerR);
-                const outer = getPoint(angle, zodiacInnerR);
-
-                // Angular houses (1, 4, 7, 10) get thicker lines
-                const isAngular = [1, 4, 7, 10].includes(house.num);
-                const strokeWidth = isAngular ? 2 : 1;
-                const strokeColor = isAngular ? 'rgb(var(--v-accent-rgb) / 0.7)' : 'var(--v-cusp-minor)';
-
-                svg += `<line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}"
-                              stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`;
-
-                // House number - place between this cusp and next
-                const nextCusp = houseCusps[(i + 1) % 12].deg;
-                let midDeg = house.deg + ((nextCusp - house.deg + 360) % 360) / 2;
-                if (nextCusp < house.deg) midDeg = house.deg + ((nextCusp + 360 - house.deg) / 2);
-
-                const numAngle = toChartAngle(midDeg);
-                const numPos = getPoint(numAngle, (innerR + zodiacInnerR) / 2 - 15);
-                svg += `<text x="${numPos.x}" y="${numPos.y}"
-                              text-anchor="middle" dominant-baseline="middle"
-                              fill="rgb(var(--v-wheel-violet-rgb) / 0.6)" font-size="12">${house.num}</text>`;
+            paper.querySelectorAll('g[id*="-transit-planets-"]').forEach(g => {
+                const key = AC_KEY_BY_POINT[g.id.split('-transit-planets-')[1]];
+                if (!key) return;
+                g.classList.add('transit-planet');
+                g.dataset.planetKey = key;
             });
 
-            // === ASPECT LINES ===
-            let planetPositions = {};
+            paper.querySelectorAll('g[id*="-radix-planets-"]').forEach(g => {
+                const name = g.id.split('-radix-planets-')[1];
+                const key = AC_KEY_BY_POINT[name];
+                if (!key) return;
+                g.classList.add('planet-clickable');
+                g.dataset.planetKey = key;
+                g.addEventListener('click', (e) => {
+                    if (isDragging) return; // a pan, not a tap
+                    e.stopPropagation();
+                    const body = horoscope.CelestialBodies?.[key];
+                    const planet = PLANETS[key] || { name: key, symbol: '⚫' };
+                    setChartSelection({ kind: 'planet', key }, 'wheel');
+                    if (body) showPlanetDetails(key, body, planet);
+                });
+            });
 
-            // First pass: calculate all planet positions
-            if (horoscope.CelestialBodies) {
-                const planetsList = Object.entries(horoscope.CelestialBodies)
-                    .filter(([k, v]) => v?.ChartPosition?.Ecliptic?.DecimalDegrees !== undefined)
-                    .map(([key, body]) => ({
-                        key,
-                        deg: body.ChartPosition.Ecliptic.DecimalDegrees,
-                        body
-                    }))
-                    .sort((a, b) => a.deg - b.deg);
+            // Tapping an aspect line selects that aspect across every view.
+            paper.querySelectorAll('line.aspect-line').forEach(line => {
+                line.style.cursor = 'pointer';
+                line.addEventListener('click', (e) => {
+                    if (isDragging) return;
+                    e.stopPropagation();
+                    setChartSelection({ kind: 'aspect', key: line.dataset.aspectKey }, 'wheel');
+                });
+            });
 
-                // Spread out planets that are too close
-                const minSeparation = 10;
-                let radiusOffsets = {};
+            // Empty space clears the selection.
+            const svgEl = paper.querySelector('svg');
+            if (svgEl) {
+                svgEl.addEventListener('click', (e) => {
+                    if (isDragging) return;
+                    if (e.target.closest('.planet-clickable') || e.target.closest('.aspect-line')) return;
+                    setChartSelection(null, 'wheel');
+                });
+            }
 
-                for (let i = 0; i < planetsList.length; i++) {
-                    radiusOffsets[planetsList[i].key] = 0;
-                    for (let j = 0; j < i; j++) {
-                        const diff = Math.abs(planetsList[i].deg - planetsList[j].deg);
-                        const minDiff = Math.min(diff, 360 - diff);
-                        if (minDiff < minSeparation && radiusOffsets[planetsList[j].key] === radiusOffsets[planetsList[i].key]) {
-                            radiusOffsets[planetsList[i].key] = radiusOffsets[planetsList[j].key] === 0 ? -20 : 0;
-                        }
+            // Re-apply whatever was selected before this re-render (a transit
+            // toggle or a theme change rebuilds the SVG from scratch).
+            applySelectionToWheel();
+        }
+
+        // ============================================================
+        // LINKED-VIEWS BUS
+        // ------------------------------------------------------------
+        // One selection, several views. Nobody in the astrology-software
+        // market coordinates views this way (the OSS survey checked); the
+        // house answer is the grammar-viewer's Eye pattern, and this is its
+        // chart-shaped sibling.
+        //
+        // The bus is trivial. The part worth naming is the JOIN KEY, which
+        // is the thing no library gives you:
+        //   planet  → the engine's lowercase key           e.g. "mars"
+        //   aspect  → the two planet keys, sorted, joined  e.g. "mars-sun"
+        //   pattern → "<type>:<member keys, sorted>"       e.g. "grand-trine:mars-sun-venus"
+        // Every view — wheel SVG, Planets list, Aspects list, pattern strip —
+        // addresses entities by those strings and nothing else.
+        // ============================================================
+
+        const ChartBus = (() => {
+            const subscribers = new Set();
+            return {
+                on(fn) { subscribers.add(fn); return () => subscribers.delete(fn); },
+                emit(payload) {
+                    subscribers.forEach(fn => {
+                        try { fn(payload); } catch (e) { console.error('[ChartBus]', e); }
+                    });
+                }
+            };
+        })();
+
+        // The current selection: { kind: 'planet'|'aspect'|'pattern', key } or null.
+        let chartSelection = null;
+
+        function setChartSelection(selection, source) {
+            const same = chartSelection && selection
+                && chartSelection.kind === selection.kind
+                && chartSelection.key === selection.key;
+            chartSelection = same ? null : selection;
+            ChartBus.emit({ selection: chartSelection, source: source || 'unknown' });
+        }
+
+        // Which planets / aspects a selection covers, as engine keys.
+        function selectionMembers(selection) {
+            if (!selection) return { planets: new Set(), aspects: new Set() };
+            if (selection.kind === 'planet') {
+                const planets = new Set([selection.key]);
+                const aspects = new Set();
+                document.querySelectorAll('#chart-wheel line.aspect-line').forEach(line => {
+                    if (line.dataset.planet1 === selection.key || line.dataset.planet2 === selection.key) {
+                        aspects.add(line.dataset.aspectKey);
+                        planets.add(line.dataset.planet1);
+                        planets.add(line.dataset.planet2);
+                    }
+                });
+                return { planets, aspects };
+            }
+            if (selection.kind === 'aspect') {
+                const parts = String(selection.key).split('-');
+                return { planets: new Set(parts), aspects: new Set([selection.key]) };
+            }
+            if (selection.kind === 'pattern') {
+                const pattern = chartPatterns.find(p => p.key === selection.key);
+                if (!pattern) return { planets: new Set(), aspects: new Set() };
+                return { planets: new Set(pattern.members), aspects: new Set(pattern.aspects || []) };
+            }
+            return { planets: new Set(), aspects: new Set() };
+        }
+
+        function applySelectionToWheel() {
+            const wheel = document.getElementById('chart-wheel');
+            if (!wheel) return;
+            const { planets, aspects } = selectionMembers(chartSelection);
+            wheel.classList.toggle('planet-focus', !!chartSelection);
+            wheel.querySelectorAll('line.aspect-line').forEach(line => {
+                line.classList.toggle('focused', aspects.has(line.dataset.aspectKey));
+            });
+            wheel.querySelectorAll('.planet-clickable').forEach(g => {
+                g.classList.toggle('focused', planets.has(g.dataset.planetKey));
+            });
+        }
+
+        // Subscriber 1 — the wheel.
+        ChartBus.on(applySelectionToWheel);
+
+        // Subscriber 2 — the Planets and Aspects lists.
+        ChartBus.on(({ selection, source }) => {
+            const { planets, aspects } = selectionMembers(selection);
+            const direct = selection && selection.kind === 'planet' ? selection.key : null;
+
+            document.querySelectorAll('#planets-list .planet-panel[data-planet-key]').forEach(row => {
+                row.classList.toggle('linked', planets.has(row.dataset.planetKey));
+            });
+            document.querySelectorAll('#aspects-list .planet-panel[data-aspect-key]').forEach(row => {
+                row.classList.toggle('linked', aspects.has(row.dataset.aspectKey));
+            });
+            document.querySelectorAll('#chart-patterns .pattern-pill').forEach(pill => {
+                pill.classList.toggle('linked',
+                    !!selection && selection.kind === 'pattern' && pill.dataset.patternKey === selection.key);
+            });
+
+            // Scroll the matching row into view only when the drive came from
+            // somewhere else — never yank the list under the finger that
+            // just tapped it.
+            if (source === 'list' || !selection) return;
+            const target = direct
+                ? document.querySelector(`#planets-list .planet-panel[data-planet-key="${CSS.escape(direct)}"]`)
+                : (selection.kind === 'aspect'
+                    ? document.querySelector(`#aspects-list .planet-panel[data-aspect-key="${CSS.escape(selection.key)}"]`)
+                    : null);
+            if (target) target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+
+        // ============================================================
+        // NAMED PATTERNS
+        // ------------------------------------------------------------
+        // Geometry, not prophecy: a Grand Trine is a computable predicate
+        // over the aspect graph the engine already produced, and the wheel
+        // highlight is a rendering of that predicate — never a claim about
+        // what it means.
+        //
+        // This is the minimal viewer-side set (Grand Trine / T-Square /
+        // Stellium) so the standalone page stands on its own. The flow app
+        // computes the full 21-pattern catalogue (lib/astro/pattern-engine.ts);
+        // Phase 3 hands it over wholesale via the contract below, at which
+        // point local detection is only the fallback.
+        //
+        //   CONTRACT — ASTROLOGY-SET-PATTERNS (parent → viewer)
+        //   window.postMessage({
+        //     type: 'astrology-set-patterns',
+        //     patterns: [{
+        //       type:    'Grand Trine',          // display name
+        //       members: ['sun','mars','neptune'],// engine planet keys
+        //       aspects: ['mars-sun', ...],       // optional; derived if absent
+        //       detail:  'Fire, orb 2.1°'         // optional subtitle
+        //     }]
+        //   }, '*')
+        //   Passing an empty array restores local detection on the next render.
+        // ============================================================
+
+        let chartPatterns = [];
+        let externalChartPatterns = null; // set by the parent; wins when present
+
+        const PATTERN_BODIES = ['sun', 'moon', 'mercury', 'venus', 'mars',
+            'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
+
+        function patternKeyFor(type, members) {
+            return String(type).toLowerCase().replace(/[^a-z]+/g, '-')
+                + ':' + [...members].sort().join('-');
+        }
+
+        function detectChartPatterns(horoscope) {
+            const found = [];
+            const bodies = horoscope?.CelestialBodies || {};
+            const present = PATTERN_BODIES.filter(k => typeof bodies[k]?.ChartPosition?.Ecliptic?.DecimalDegrees === 'number');
+
+            // Aspect lookup: "a-b" (sorted) → aspect name.
+            const byPair = new Map();
+            (Array.isArray(horoscope?.Aspects) ? horoscope.Aspects : []).forEach(a => {
+                const k1 = String(a.planet1 || '').toLowerCase();
+                const k2 = String(a.planet2 || '').toLowerCase();
+                if (!k1 || !k2) return;
+                byPair.set([k1, k2].sort().join('-'), String(a.aspect || '').toLowerCase());
+            });
+            const rel = (a, b) => byPair.get([a, b].sort().join('-'));
+            const pairKey = (a, b) => [a, b].sort().join('-');
+
+            // Grand Trine — three bodies, mutually trine.
+            for (let i = 0; i < present.length; i++) {
+                for (let j = i + 1; j < present.length; j++) {
+                    if (rel(present[i], present[j]) !== 'trine') continue;
+                    for (let k = j + 1; k < present.length; k++) {
+                        if (rel(present[i], present[k]) !== 'trine') continue;
+                        if (rel(present[j], present[k]) !== 'trine') continue;
+                        const members = [present[i], present[j], present[k]];
+                        found.push({
+                            type: 'Grand Trine',
+                            members,
+                            aspects: [pairKey(members[0], members[1]), pairKey(members[0], members[2]), pairKey(members[1], members[2])],
+                            detail: elementOfPlacements(members, bodies)
+                        });
                     }
                 }
-
-                planetsList.forEach(({ key, deg }) => {
-                    const angle = toChartAngle(deg);
-                    const r = planetR + (radiusOffsets[key] || 0);
-                    const pos = getPoint(angle, r);
-                    planetPositions[key] = { ...pos, deg, angle };
-                });
             }
 
-            // Draw aspects
-            if (horoscope.Aspects && Array.isArray(horoscope.Aspects)) {
-                horoscope.Aspects.forEach(aspect => {
-                    const p1 = planetPositions[aspect.planet1];
-                    const p2 = planetPositions[aspect.planet2];
-                    if (!p1 || !p2) return;
-
-                    let color, dash = '';
-                    switch(aspect.aspect) {
-                        case 'conjunction': color = 'rgb(var(--v-accent-rgb) / 0.6)'; break;
-                        case 'opposition': color = 'rgb(var(--v-danger-rgb) / 0.5)'; break;
-                        case 'trine': color = 'rgb(var(--v-success-rgb) / 0.5)'; break;
-                        case 'square': color = 'rgb(var(--v-danger-rgb) / 0.4)'; dash = '4,2'; break;
-                        case 'sextile': color = 'rgb(var(--v-info-rgb) / 0.5)'; break;
-                        default: color = 'var(--v-aspect-minor)'; dash = '2,2';
-                    }
-
-                    svg += `<line class="aspect-line" data-planet1="${aspect.planet1}" data-planet2="${aspect.planet2}"
-                                  x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}"
-                                  stroke="${color}" stroke-width="1" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
-                });
-            }
-
-            // === PLANETS ===
-            if (horoscope.CelestialBodies) {
-                Object.entries(planetPositions).forEach(([key, pos]) => {
-                    const planet = PLANETS[key.toLowerCase()] || { name: key, symbol: '⚫' };
-                    const body = horoscope.CelestialBodies[key];
-                    const isRetrograde = body?.isRetrograde;
-
-                    // Planet group with click handler
-                    svg += `<g class="planet-clickable" data-planet-key="${key}" style="cursor:pointer">`;
-                    svg += `<circle cx="${pos.x}" cy="${pos.y}" r="12"
-                                  fill="var(--v-chip-bg)" stroke="rgb(var(--v-accent-rgb) / 0.5)" stroke-width="1.5"/>`;
-                    svg += `<text x="${pos.x}" y="${pos.y}"
-                                  text-anchor="middle" dominant-baseline="middle"
-                                  fill="var(--astro-gold)" font-size="13" pointer-events="none">${planet.symbol}</text>`;
-
-                    // Retrograde indicator
-                    if (isRetrograde) {
-                        svg += `<text x="${pos.x + 10}" y="${pos.y - 8}"
-                                      fill="var(--v-danger)" font-size="8" pointer-events="none">R</text>`;
-                    }
-                    svg += `</g>`;
-                });
-            }
-
-            // === TRANSIT PLANETS (outer ring) ===
-            if (hasTransits && currentTransits?.planets) {
-                // Draw transit ring
-                svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 2}" fill="none" stroke="rgb(var(--v-teal-rgb) / 0.3)" stroke-width="1" stroke-dasharray="4,4"/>`;
-
-                const transitPlanetsList = Object.entries(currentTransits.planets)
-                    .map(([key, planet]) => ({
-                        key,
-                        deg: planet.longitude,
-                        planet
-                    }))
-                    .sort((a, b) => a.deg - b.deg);
-
-                // Spread out transit planets that are too close
-                let transitOffsets = {};
-                for (let i = 0; i < transitPlanetsList.length; i++) {
-                    transitOffsets[transitPlanetsList[i].key] = 0;
-                    for (let j = 0; j < i; j++) {
-                        const diff = Math.abs(transitPlanetsList[i].deg - transitPlanetsList[j].deg);
-                        const minDiff = Math.min(diff, 360 - diff);
-                        if (minDiff < 12 && transitOffsets[transitPlanetsList[j].key] === transitOffsets[transitPlanetsList[i].key]) {
-                            transitOffsets[transitPlanetsList[i].key] = transitOffsets[transitPlanetsList[j].key] === 0 ? 15 : 0;
-                        }
-                    }
-                }
-
-                transitPlanetsList.forEach(({ key, deg }) => {
-                    const planetData = PLANETS[key.toLowerCase()] || { symbol: '⚫' };
-                    const angle = toChartAngle(deg);
-                    const r = transitR + (transitOffsets[key] || 0);
-                    const pos = getPoint(angle, r);
-
-                    // Transit planet circle and symbol (teal color)
-                    svg += `<circle cx="${pos.x}" cy="${pos.y}" r="10"
-                                  fill="var(--v-chip-bg)" stroke="rgb(var(--v-teal-rgb) / 0.6)" stroke-width="1.5"/>`;
-                    svg += `<text x="${pos.x}" y="${pos.y}"
-                                  text-anchor="middle" dominant-baseline="middle"
-                                  fill="var(--astro-teal)" font-size="11">${planetData.symbol}</text>`;
-                });
-
-                // Draw transit-to-natal aspect lines
-                if (currentTransits.aspects) {
-                    currentTransits.aspects.forEach(aspect => {
-                        const natalPos = planetPositions[aspect.natalPlanet];
-                        if (!natalPos) return;
-
-                        const tAngle = toChartAngle(aspect.transitLon);
-                        const tPos = getPoint(tAngle, transitR);
-
-                        let color = 'rgb(var(--v-teal-rgb) / 0.3)';
-                        let dash = '3,3';
-                        if (aspect.aspect === 'conjunction') { color = 'rgb(var(--v-teal-rgb) / 0.5)'; dash = ''; }
-                        else if (aspect.aspect === 'trine') { color = 'rgb(var(--v-success-rgb) / 0.4)'; }
-                        else if (aspect.aspect === 'sextile') { color = 'rgb(var(--v-info-rgb) / 0.4)'; }
-                        else if (aspect.aspect === 'square' || aspect.aspect === 'opposition') { color = 'rgb(var(--v-danger-rgb) / 0.3)'; }
-
-                        svg += `<line x1="${natalPos.x}" y1="${natalPos.y}" x2="${tPos.x}" y2="${tPos.y}"
-                                      stroke="${color}" stroke-width="1" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
+            // T-Square — an opposition, both ends square the same third body.
+            for (let i = 0; i < present.length; i++) {
+                for (let j = i + 1; j < present.length; j++) {
+                    if (rel(present[i], present[j]) !== 'opposition') continue;
+                    present.forEach(apex => {
+                        if (apex === present[i] || apex === present[j]) return;
+                        if (rel(apex, present[i]) !== 'square') return;
+                        if (rel(apex, present[j]) !== 'square') return;
+                        const members = [present[i], present[j], apex];
+                        found.push({
+                            type: 'T-Square',
+                            members,
+                            aspects: [pairKey(present[i], present[j]), pairKey(apex, present[i]), pairKey(apex, present[j])],
+                            detail: 'apex ' + (PLANETS[apex]?.name || apex)
+                        });
                     });
                 }
             }
 
-            // === CENTER CIRCLE ===
-            svg += `<circle cx="${cx}" cy="${cy}" r="${innerR}"
-                          fill="var(--v-chip-bg)" stroke="rgb(var(--v-accent-rgb) / 0.6)" stroke-width="2"/>`;
-
-            // ASC indicator on left
-            const ascPos = getPoint(180, innerR + 5);
-            svg += `<text x="${ascPos.x - 20}" y="${ascPos.y}"
-                          text-anchor="middle" fill="var(--astro-gold)" font-size="11" font-weight="bold">ASC</text>`;
-
-            // MC indicator at top
-            const mcAngle = toChartAngle(mcDegree);
-            const mcPos = getPoint(mcAngle, innerR + 5);
-
-            // Center text
-            const ascSign = ZODIAC_SIGNS[Math.floor(ascDegree / 30)];
-            const ascDegInSign = ascDegree % 30;
-            svg += `<text x="${cx}" y="${cy - 12}" text-anchor="middle" fill="rgb(var(--v-accent-rgb) / 0.9)" font-size="11">Ascendant</text>`;
-            svg += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="var(--astro-gold)" font-size="14" font-weight="bold">${ascSign?.symbol || ''} ${Math.floor(ascDegInSign)}°${Math.floor((ascDegInSign % 1) * 60)}'</text>`;
-            svg += `<text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="rgb(var(--v-wheel-violet-rgb) / 0.7)" font-size="10">${ascSign?.name || ''}</text>`;
-
-            // === RENDER ===
-            chartWheel.innerHTML = `
-                <div class="text-center">
-                    <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="mx-auto" style="max-width: ${size}px; width: 100%; height: auto;">
-                        <defs>
-                            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                                <feMerge>
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                        </defs>
-
-                        <!-- Background -->
-                        <circle cx="${cx}" cy="${cy}" r="${outerR + 5}" fill="var(--v-wheel-bg)"/>
-
-                        <!-- Chart content -->
-                        ${svg}
-                    </svg>
-                </div>
-            `;
-
-            // Add click handlers for planets in wheel
-            chartWheel.querySelectorAll('.planet-clickable').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    if (isDragging) return; // Don't trigger click during pan
-                    const key = el.dataset.planetKey;
-                    const body = horoscope.CelestialBodies[key];
-                    const planet = PLANETS[key.toLowerCase()] || { name: key, symbol: '⚫' };
-                    if (body && planet) {
-                        setChartPlanetFocus(key);
-                        showPlanetDetails(key, body, planet);
+            // Stellium — three or more bodies in one sign.
+            const bySign = new Map();
+            present.forEach(key => {
+                const label = bodies[key]?.Sign?.label;
+                if (!label) return;
+                if (!bySign.has(label)) bySign.set(label, []);
+                bySign.get(label).push(key);
+            });
+            bySign.forEach((members, sign) => {
+                if (members.length < 3) return;
+                const aspects = [];
+                for (let i = 0; i < members.length; i++) {
+                    for (let j = i + 1; j < members.length; j++) {
+                        if (rel(members[i], members[j])) aspects.push(pairKey(members[i], members[j]));
                     }
-                });
+                }
+                found.push({ type: 'Stellium', members, aspects, detail: sign });
             });
 
-            // Click on empty chart area clears focus
-            const svgEl = chartWheel.querySelector('svg');
-            if (svgEl) {
-                svgEl.addEventListener('click', (e) => {
-                    if (e.target === svgEl || e.target.tagName === 'circle' && !e.target.closest('.planet-clickable')) {
-                        clearChartPlanetFocus();
-                    }
+            // Deduplicate (a symmetrical configuration can be found twice) and
+            // stamp the join key.
+            const seen = new Set();
+            return found.filter(p => {
+                p.key = patternKeyFor(p.type, p.members);
+                if (seen.has(p.key)) return false;
+                seen.add(p.key);
+                return true;
+            });
+        }
+
+        function elementOfPlacements(members, bodies) {
+            const elements = new Set(members.map(k => {
+                const label = bodies[k]?.Sign?.label;
+                return ZODIAC_SIGNS.find(s => s.name === label)?.element;
+            }).filter(Boolean));
+            return elements.size === 1 ? [...elements][0] : '';
+        }
+
+        function renderChartPatterns(horoscope) {
+            const strip = document.getElementById('chart-patterns');
+            if (!strip) return;
+
+            if (Array.isArray(externalChartPatterns) && externalChartPatterns.length) {
+                chartPatterns = externalChartPatterns.map(p => {
+                    const members = (p.members || []).map(m => String(m).toLowerCase());
+                    return {
+                        type: p.type || 'Pattern',
+                        members,
+                        aspects: Array.isArray(p.aspects) && p.aspects.length
+                            ? p.aspects
+                            : derivePatternAspects(members),
+                        detail: p.detail || '',
+                        key: p.key || patternKeyFor(p.type || 'Pattern', members)
+                    };
                 });
+            } else {
+                chartPatterns = detectChartPatterns(horoscope);
             }
 
-            // Reset zoom when chart re-renders
-            chartScale = 1; chartPanX = 0; chartPanY = 0;
+            strip.innerHTML = '';
+            if (!chartPatterns.length) {
+                strip.classList.add('hidden');
+                return;
+            }
+            strip.classList.remove('hidden');
+
+            chartPatterns.forEach(pattern => {
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.className = 'pattern-pill';
+                pill.dataset.patternKey = pattern.key;
+                const names = pattern.members.map(k => PLANETS[k]?.symbol || k).join(' ');
+                pill.innerHTML = `${pattern.type}<span class="pattern-members">${names}`
+                    + `${pattern.detail ? ' · ' + pattern.detail : ''}</span>`;
+                pill.title = pattern.members.map(k => PLANETS[k]?.name || k).join(', ');
+                pill.addEventListener('click', () => {
+                    setChartSelection({ kind: 'pattern', key: pattern.key }, 'patterns');
+                });
+                strip.appendChild(pill);
+            });
+
+            // A re-render drops the previous selection if its pattern is gone.
+            if (chartSelection?.kind === 'pattern' && !chartPatterns.some(p => p.key === chartSelection.key)) {
+                setChartSelection(null, 'patterns');
+            } else {
+                ChartBus.emit({ selection: chartSelection, source: 'patterns' });
+            }
+        }
+
+        // For externally supplied patterns that name members but not aspects:
+        // every drawn line between two members is part of the figure.
+        function derivePatternAspects(members) {
+            const set = new Set(members);
+            const aspects = new Set();
+            document.querySelectorAll('#chart-wheel line.aspect-line').forEach(line => {
+                if (set.has(line.dataset.planet1) && set.has(line.dataset.planet2)) {
+                    aspects.add(line.dataset.aspectKey);
+                }
+            });
+            return [...aspects];
         }
 
         function getElementColor(element) {
@@ -4883,7 +5263,14 @@
                     if (isCheckboxClick) {
                         e.stopPropagation();
                         togglePlanetSelection(key, planetData);
-                    } else if (isEmbedMode) {
+                        return;
+                    }
+
+                    // Linked views: highlight this planet and its aspects on the
+                    // wheel. The detail behaviour below is unchanged.
+                    setChartSelection({ kind: 'planet', key }, 'list');
+
+                    if (isEmbedMode) {
                         // Show detail in parent window
                         notifyParentOfItemDetail({
                             detailType: 'placement',
@@ -5260,7 +5647,13 @@
                     if (isCheckboxClick) {
                         e.stopPropagation();
                         toggleAspectSelection(aspectKey, aspectData);
-                    } else if (isEmbedMode) {
+                        return;
+                    }
+
+                    // Linked views: light this aspect's line up on the wheel.
+                    setChartSelection({ kind: 'aspect', key: aspectKey }, 'list');
+
+                    if (isEmbedMode) {
                         // Show detail in parent window
                         notifyParentOfItemDetail({
                             detailType: 'aspect',
@@ -6803,9 +7196,16 @@
             const toggleIcon = document.getElementById('toggle-form-icon');
 
             collapseToggle.classList.remove('hidden');
-            formCollapsible.classList.add('collapsed');
-            toggleText.textContent = 'Show Birth Info & Settings';
-            toggleIcon.textContent = '▼';
+
+            // ?form=open (cross-repo handoff, Aug 4 2026): flow appends this when
+            // it opens the viewer as its EDIT-CHART modal. There the whole point
+            // of the iframe is the form, so collapsing it the instant the chart
+            // renders hides the thing the user came to change. The toggle is
+            // still offered either way — this only decides the initial state.
+            const keepFormOpen = new URLSearchParams(location.search).get('form') === 'open';
+            formCollapsible.classList.toggle('collapsed', !keepFormOpen);
+            toggleText.textContent = keepFormOpen ? 'Hide Birth Info & Settings' : 'Show Birth Info & Settings';
+            toggleIcon.textContent = keepFormOpen ? '▲' : '▼';
         }
 
         // ============================================================
@@ -7043,50 +7443,17 @@
         });
 
         // === PLANET FOCUS MODE ===
-        let focusedPlanetKey = null;
-
+        // Superseded by the linked-views bus (see setChartSelection /
+        // applySelectionToWheel above), which does the same dimming for three
+        // selection kinds instead of one and drives the lists too. These two
+        // names are kept as thin adapters because the detail-modal navigation
+        // and the HD views still speak in terms of "focus a planet".
         function setChartPlanetFocus(key) {
-            const wheel = document.getElementById('chart-wheel');
-            if (!wheel) return;
-
-            // Toggle off if clicking same planet
-            if (focusedPlanetKey === key) {
-                clearChartPlanetFocus();
-                return;
-            }
-
-            focusedPlanetKey = key;
-            wheel.classList.add('planet-focus');
-
-            // Highlight the focused planet and any connected planets
-            const connectedPlanets = new Set([key]);
-            wheel.querySelectorAll('.aspect-line').forEach(line => {
-                const p1 = line.dataset.planet1;
-                const p2 = line.dataset.planet2;
-                if (p1 === key || p2 === key) {
-                    line.classList.add('focused');
-                    connectedPlanets.add(p1);
-                    connectedPlanets.add(p2);
-                } else {
-                    line.classList.remove('focused');
-                }
-            });
-
-            wheel.querySelectorAll('.planet-clickable').forEach(el => {
-                if (connectedPlanets.has(el.dataset.planetKey)) {
-                    el.classList.add('focused');
-                } else {
-                    el.classList.remove('focused');
-                }
-            });
+            setChartSelection({ kind: 'planet', key }, 'wheel');
         }
 
         function clearChartPlanetFocus() {
-            focusedPlanetKey = null;
-            const wheel = document.getElementById('chart-wheel');
-            if (!wheel) return;
-            wheel.classList.remove('planet-focus');
-            wheel.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
+            setChartSelection(null, 'wheel');
         }
 
         function formatDegree(decimal) {

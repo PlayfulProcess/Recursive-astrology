@@ -52,7 +52,20 @@ and are preserved by the copy:
   parent (source line ~3210).
 - **Step 3** — the wheel-image responder: on `{type:'astrology-request-chart-image'}` it
   serializes the wheel SVG → canvas → `toDataURL('image/png')` → replies
-  `{type:'astrology-chart-image', imageDataUrl}` (source ~2678).
+  `{type:'astrology-chart-image', imageDataUrl}` (source ~2678). Still true after the
+  AstroChart swap (Aug 4 2026): the library renders into a `<div>` inside `#chart-wheel`,
+  so the `#chart-wheel svg` selector this responder relies on still matches, and the
+  wheel's colours are CSS custom properties, which the responder already inlines.
+
+Two later additions to the same contract (Aug 4 2026):
+- **`?form=open`** — flow appends it when it opens the viewer as the *edit-chart* modal.
+  The viewer then skips its render-time form collapse; the toggle button is still offered.
+- **`{type:'astrology-set-patterns', patterns:[…]}`** (parent → viewer) — hands the viewer
+  named chart patterns computed by flow's `lib/astro/pattern-engine.ts`, replacing the
+  viewer's own three-figure detection. Each entry is
+  `{ type, members: [engine planet keys], aspects?: ['a-b', …], detail? }`; an empty array
+  hands detection back to the viewer. Tapping a pattern highlights it on the wheel and in
+  the Planets/Aspects lists. Full contract beside `renderChartPatterns()` in the viewer.
 
 ## What the port changed (surgical, low-risk)
 
