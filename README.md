@@ -169,6 +169,13 @@ beside it. It is vendored rather than installed because this is a static site wi
 It draws only; every position, house cusp and aspect it renders comes from our own Skyfield/DE421
 engine.
 
+The graphic ephemeris on the Transits tab uses **d3** (BSD-3-Clause), loaded from a CDN the first
+time that panel is opened rather than vendored, since it is the only view that needs it. Its form —
+time on one axis, the zodiac folded by a modulus on the other, natal positions as horizontal lines —
+follows standard graphic-ephemeris practice; `katelouie/stellium`'s `ephemeris.py` was read as a
+*specification* for the details (the wrap-around break, the station markers) and none of its
+AGPL code is used here.
+
 Third-party material referenced by the grammars carries its own status: the source texts
 (Ashmand's Ptolemy, Alan Leo, Proctor) and the illustrations are **public domain**, each recorded
 with its provenance in the item that uses it. Astronomical data comes from JPL's DE421 ephemeris.

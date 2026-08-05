@@ -1,5 +1,67 @@
 # Changelog — The Recursive Astrology
 
+## August 4, 2026 — Asking the sky about a stretch of time
+
+The chart endpoint answers "where is everything at this moment". Nothing here could answer the
+question people actually ask — *"things shifted about a month ago"* — because that question is
+about a **window**, and a wheel has no time axis. `api/transit_timeline.py` is the other half of
+the engine: give it a chart and two dates, and it returns every aspect that **perfects** in
+between, every **station**, and every **ingress** into a sign or into a natal house, in order,
+each with the instant it happens.
+
+**Exact means exact.** A hit is not "the day Mars was closest"; it is the second at which the
+geometry is true, root-found against the same Skyfield/DE421 positions the wheel is drawn from.
+Across the two-month test window the worst residual over 78 hits is **0.0001 arcseconds** — the
+answer is decided by the ephemeris, not by where the search stopped.
+
+**And checked from outside.** Every other test closes a loop with our own engine. Five do not:
+they compare against Astro-Seek, a Swiss Ephemeris front end, and they are now permanent
+regressions in `tests/test_transit_timeline.py`.
+
+| | Astro-Seek | Ours | Apart |
+|---|---|---|---|
+| Neptune stations retrograde | Jul 7 2026, 10:55 | 10:54:56 | 4 s |
+| Mercury stations direct | Jul 23 2026, 22:58 | 22:57:50 | 10 s |
+| Saturn stations retrograde | Jul 26 2026, 19:56 | 19:56:14 | 14 s |
+| Venus enters Virgo | Jul 9 2026, 17:23 | 17:22:07 | 53 s |
+| Saturn crosses 14°00′ Aries, all three times | Jun 26 / Aug 25 / Mar 9 | same three | ≤ 1.4 min |
+
+That last row is the hard case: three passes over one degree, two of them either side of a
+station where the curve is nearly flat and a root finder has least to grip.
+
+**A retrograde triple pass is one span with three dates, not three bars.** A planet that crosses
+the same degree three times without ever leaving the orb between crossings is doing one thing,
+and the response says so — `spanId`, `pass`, `passesInSpan` — so a timeline can draw one bar and
+mark three exact dates on it.
+
+**Fast enough to be a request.** The naive shape of this — step a day, ask the ephemeris, bisect —
+costs thousands of sequential calls. Skyfield takes vector times, so every stage is batched: one
+call builds a body's whole sample grid, crossings against *every* target longitude at once are
+pure numpy, and then a single vectorised bisection settles all of that body's roots together.
+The default two-month window is about 2 seconds; a full year with minor aspects, a thousand hits,
+about 7. Aspect degrees, orb edges, sign boundaries and natal cusps are all the same question —
+"the longitude equals this constant" — so they are all solved in that one pass.
+
+**The Moon is not in the default set,** and that is a judgement, not an oversight: it aspects
+everything every other day, and including it turns a season into 1,600 rows of noise. Ask for it
+(`includeMoon`) when the question is really about days.
+
+**A graphic ephemeris, on the Transits tab.** Collapsed by default, and d3 is only fetched when
+it is opened. Time runs left to right; the zodiac runs up the side folded by 360°, 90°, 45° or
+30°, so at a 90° fold every conjunction, square and opposition lands on the same line and a
+transit perfecting one *is* a crossing. Natal positions are dashed horizontals labelled `n☉`,
+`nMC`; retrograde stretches are dashed; stations are circles, filled for turning retrograde.
+Beside it, the same events as a list — and the two are wired to each other, so touching a
+crossing lights its row and touching a row lights its crossing. Changing the fold is a
+re-projection of data already in hand and asks the server nothing.
+
+**One real defect fixed on the way.** Positions now truncate minutes rather than rounding them.
+Rounding 29° 59.7′ of Leo produced "30° Leo 00′" — a degree that does not exist, and which reads
+as Virgo.
+
+Nothing here forecasts. It is a calendar of geometry: when the angles are true, and nothing about
+what that is supposed to mean or what anyone should do about it.
+
 ## August 4, 2026 — A shared wheel, and every view pointing at the same thing
 
 The wheel is no longer ours. It is [AstroChart](https://github.com/AstroDraw/AstroChart)

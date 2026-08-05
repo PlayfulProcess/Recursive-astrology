@@ -1660,6 +1660,137 @@
         }
         [class*="from-yellow-900"] { --tw-gradient-from: rgb(var(--v-air-rgb) / 0.25) var(--tw-gradient-from-position) !important; }
         [class*="to-orange-900"] { --tw-gradient-to: rgb(var(--v-air-rgb) / 0.12) var(--tw-gradient-to-position) !important; }
+
+        /* ============================================================
+           GRAPHIC EPHEMERIS — the expert view on the Transits tab.
+           Time runs left to right, the zodiac runs up the side folded by
+           a modulus, natal positions are horizontal lines, and a transit
+           meeting one is a crossing. Every colour is a theme token; the
+           SVG is drawn by d3 (lazy-loaded on first open) into #ephemeris-svg.
+           ============================================================ */
+        .ephemeris-panel {
+            border: 1px solid var(--v-line);
+            border-radius: 10px;
+            background: var(--v-surface-2);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .ephemeris-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--v-ink);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: left;
+        }
+        .ephemeris-toggle:hover { background: rgb(var(--v-accent-rgb) / 0.08); }
+        .ephemeris-toggle .ephemeris-chevron {
+            color: var(--v-muted);
+            transition: transform 0.18s;
+            font-size: 0.75rem;
+        }
+        .ephemeris-toggle[aria-expanded="true"] .ephemeris-chevron { transform: rotate(90deg); }
+        .ephemeris-body { padding: 0 1rem 1rem; border-top: 1px solid var(--v-line-soft); }
+        .ephemeris-note {
+            font-size: 0.75rem;
+            color: var(--v-muted);
+            line-height: 1.55;
+            margin: 0.75rem 0;
+        }
+        .ephemeris-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 0.6rem;
+            margin-bottom: 0.75rem;
+        }
+        .ephemeris-controls label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            font-size: 0.7rem;
+            color: var(--v-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .ephemeris-controls select {
+            background: var(--v-surface);
+            color: var(--v-ink);
+            border: 1px solid var(--v-line);
+            border-radius: 6px;
+            padding: 0.3rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .ephemeris-status { font-size: 0.75rem; color: var(--v-muted); margin-bottom: 0.5rem; }
+        .ephemeris-status.error { color: var(--v-danger); }
+        /* Stacked, not side by side. The panel is often inside a narrow embed,
+           and splitting it two ways left the graph at ~370 px — narrower than
+           it can be drawn — while the list had room to spare. Full width for
+           the graph, the linked list underneath; hovering a crossing still
+           scrolls its row into view, so the bus does not need them adjacent. */
+        .ephemeris-layout { display: flex; flex-direction: column; gap: 0.6rem; }
+        /* The graph scrolls inside its own box rather than pushing the page
+           sideways: on a phone the fold is still readable at 620 px wide. */
+        .ephemeris-canvas {
+            min-width: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border: 1px solid var(--v-line-soft);
+            border-radius: 8px;
+            background: var(--v-wheel-bg);
+        }
+        .ephemeris-canvas svg { display: block; min-width: 620px; }
+        .ephemeris-hits {
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid var(--v-line-soft);
+            border-radius: 8px;
+            background: var(--v-surface);
+            padding: 0.4rem;
+        }
+        .ephemeris-hit {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.35rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--v-ink-soft);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .ephemeris-hit:hover, .ephemeris-hit.linked {
+            background: rgb(var(--v-accent-rgb) / 0.14);
+            border-color: rgb(var(--v-accent-rgb) / 0.45);
+            color: var(--v-ink);
+        }
+        .ephemeris-hit .eph-when { color: var(--v-muted); white-space: nowrap; }
+        .ephemeris-hit .eph-glyphs {
+            font-size: 0.95rem;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+            flex: 0 0 auto;
+            min-width: 3.4rem;
+        }
+        .ephemeris-hit.eph-station { color: var(--v-violet); }
+        .ephemeris-hit.eph-ingress { color: rgb(var(--v-teal-rgb)); }
+        .ephemeris-empty { font-size: 0.75rem; color: var(--v-muted); padding: 0.75rem; text-align: center; }
+        #ephemeris-svg .eph-natal-line { stroke-dasharray: 6 4; opacity: 0.75; }
+        #ephemeris-svg .eph-grid { stroke: var(--v-line-soft); stroke-width: 1; }
+        #ephemeris-svg .eph-axis-text { fill: var(--v-muted); font-size: 10px; }
+        #ephemeris-svg .eph-natal-label { fill: var(--v-ink-soft); font-size: 10px; }
+        #ephemeris-svg .eph-track { fill: none; stroke-width: 1.6; }
+        #ephemeris-svg .eph-track.retro { stroke-dasharray: 3 3; }
+        #ephemeris-svg .eph-marker { cursor: pointer; }
+        #ephemeris-svg .eph-marker.linked { stroke: var(--v-ink); stroke-width: 2; }
+        #ephemeris-svg .eph-today { stroke: var(--v-danger); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0.8; }
     </style>
     <script>
         // Detect iframe and add class to body when DOM is ready
@@ -2151,6 +2282,68 @@
                             <div class="mb-4 p-3 bg-purple-900 bg-opacity-20 rounded-lg border border-purple-800">
                                 <p class="text-sm text-gray-300">Current planetary positions and their aspects to your natal chart.</p>
                             </div>
+
+                            <!-- Graphic ephemeris — the expert view. Collapsed by
+                                 default, and d3 is only fetched when it is opened,
+                                 so the page costs nothing for the people who never
+                                 want it. Everything it draws comes from
+                                 /api/transit-timeline, which root-finds the exact
+                                 crossings rather than sampling and guessing. -->
+                            <div id="ephemeris-panel" class="ephemeris-panel">
+                                <button type="button" class="ephemeris-toggle" id="ephemeris-toggle"
+                                        aria-expanded="false" aria-controls="ephemeris-body"
+                                        onclick="toggleEphemerisPanel()">
+                                    <span>Graphic ephemeris — the window, folded</span>
+                                    <span class="ephemeris-chevron" aria-hidden="true">▶</span>
+                                </button>
+                                <div id="ephemeris-body" class="ephemeris-body" hidden>
+                                    <p class="ephemeris-note">
+                                        Time runs left to right. The zodiac runs up the side, <em>folded</em> by the
+                                        modulus you choose, so a 90° fold puts every conjunction, square and opposition
+                                        onto the same line — which is why a transit perfecting one of them appears as a
+                                        crossing. Dashed horizontals are your natal positions; dashed stretches of a
+                                        planet's track are retrograde; circles are stations (filled = turning
+                                        retrograde). This is a calendar of geometry, not a forecast.
+                                    </p>
+                                    <div class="ephemeris-controls">
+                                        <label>Window
+                                            <select id="ephemeris-window">
+                                                <option value="past-month">Past month</option>
+                                                <option value="around-now" selected>Past + next month</option>
+                                                <option value="next-3-months">Next 3 months</option>
+                                                <option value="past-3-months">Past 3 months</option>
+                                                <option value="next-year">Next year</option>
+                                            </select>
+                                        </label>
+                                        <label>Fold
+                                            <select id="ephemeris-modulus">
+                                                <option value="360">360° — whole zodiac</option>
+                                                <option value="90" selected>90° — hard aspects</option>
+                                                <option value="45">45° — Ebertin's dial</option>
+                                                <option value="30">30° — one sign</option>
+                                            </select>
+                                        </label>
+                                        <label>Orb
+                                            <select id="ephemeris-orb">
+                                                <option value="0.5">0.5°</option>
+                                                <option value="1" selected>1°</option>
+                                                <option value="2">2°</option>
+                                            </select>
+                                        </label>
+                                        <button type="button" id="ephemeris-draw" class="btn-primary text-xs py-1.5 px-3"
+                                                onclick="loadGraphicEphemeris()">Draw</button>
+                                    </div>
+                                    <div id="ephemeris-status" class="ephemeris-status"></div>
+                                    <div class="ephemeris-layout">
+                                        <div class="ephemeris-canvas"><svg id="ephemeris-svg" role="img"
+                                             aria-label="Graphic ephemeris: transiting planet tracks folded by modulus, crossing natal position lines"></svg></div>
+                                        <div class="ephemeris-hits" id="ephemeris-hits">
+                                            <p class="ephemeris-empty">Draw the graph to list what perfects in the window.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="transits-list" class="space-y-2"></div>
                         </div>
 
@@ -2267,6 +2460,13 @@
         const CHART_API_URL = '/api/calculate-chart'; // self-hosted (Jul 23 2026): this repo's own Vercel
         // Python function (api/calculate_chart.py, Skyfield/DE421) serves the math same-origin —
         // no CORS, no dependency on recursive.eco. Rewrite in vercel.json maps the public path.
+
+        // The other half of the same engine: /api/transit-timeline
+        // (api/transit_timeline.py) answers about a STRETCH of time rather than
+        // a moment — every exact hit, station and natal-house ingress in a
+        // window, root-found against the same positions. Used by the graphic
+        // ephemeris below, and by recursive.eco's transit_timeline chat tool.
+        const TRANSIT_TIMELINE_API_URL = '/api/transit-timeline';
 
         // Defensive check for Supabase (CDN might fail to load)
         if (!window.supabase) {
@@ -5191,6 +5391,408 @@
             updateTransitSelectionUI();
             updateTransitPlanetSelectionUI();
         }
+
+        // ============================================================
+        // GRAPHIC EPHEMERIS (expert view on the Transits tab)
+        //
+        // The wheel answers "where is everything now". The Transits tab
+        // answers "and what is it touching now". Neither can be asked about a
+        // STRETCH of time — which is the question that actually gets asked
+        // ("things shifted a month ago"). This is the form that can: time
+        // along one axis, the zodiac folded by a modulus along the other, so
+        // an aspect perfecting is a line crossing a line.
+        //
+        // The maths is not done here. /api/transit-timeline root-finds every
+        // exact crossing, station and ingress in the window against the same
+        // Skyfield positions the chart is drawn from, and also returns a
+        // sampled track per body to draw. Reading crossings off a sampled
+        // curve — the obvious shortcut — would put every date up to half a
+        // sample step out, which for Saturn is a fortnight.
+        //
+        // Built against the API described in katelouie/stellium's
+        // ephemeris.py, which is AGPL and was read as a SPECIFICATION only:
+        // the folding rule, the wrap-around break, the natal overlay and the
+        // station markers are all standard graphic-ephemeris practice going
+        // back to Ebertin, and none of its code is here. d3 is the same
+        // dependency viewers/timeline.html already uses.
+        // ============================================================
+
+        let ephemerisData = null;         // last /api/transit-timeline response
+        let ephemerisLoading = false;
+        let ephemerisD3Promise = null;
+        let ephemerisResizeTimer = null;
+
+        // Track colours are theme tokens, applied through .style() rather than
+        // .attr() — an SVG XML attribute does not resolve var(), a CSS
+        // property does. That is what lets the graph follow the light/dark
+        // toggle with no redraw.
+        const EPHEMERIS_COLORS = {
+            sun: 'rgb(var(--v-air-rgb))',
+            moon: 'var(--v-faint)',
+            mercury: 'rgb(var(--v-info-rgb))',
+            venus: 'rgb(var(--v-success-rgb))',
+            mars: 'rgb(var(--v-danger-rgb))',
+            jupiter: 'rgb(var(--v-violet-rgb))',
+            saturn: 'var(--v-ink-soft)',
+            uranus: 'rgb(var(--v-hd-rgb))',
+            neptune: 'rgb(var(--v-water-rgb))',
+            pluto: 'rgb(var(--v-earth-rgb))',
+            northnode: 'var(--v-muted)',
+            southnode: 'var(--v-muted)'
+        };
+
+        const ASPECT_GLYPHS = {
+            conjunction: '☌', sextile: '⚹', square: '□', trine: '△',
+            opposition: '☍', semisextile: '⚺', semisquare: '∠',
+            sesquiquadrate: '⚼', quincunx: '⚻', quintile: 'Q', biquintile: 'bQ'
+        };
+
+        function ephemerisGlyph(key) {
+            return (PLANETS[String(key).toLowerCase()] || {}).symbol
+                || (key === 'ascendant' ? 'ASC' : key === 'midheaven' ? 'MC' : key);
+        }
+
+        function ephemerisLabel(key) {
+            return (PLANETS[String(key).toLowerCase()] || {}).name
+                || (key === 'ascendant' ? 'Ascendant' : key === 'midheaven' ? 'Midheaven' : key);
+        }
+
+        function toggleEphemerisPanel() {
+            const body = document.getElementById('ephemeris-body');
+            const toggle = document.getElementById('ephemeris-toggle');
+            if (!body || !toggle) return;
+            const opening = body.hasAttribute('hidden');
+            if (opening) body.removeAttribute('hidden'); else body.setAttribute('hidden', '');
+            toggle.setAttribute('aria-expanded', String(opening));
+            // Draw on first open rather than making the user find the button.
+            if (opening && !ephemerisData && !ephemerisLoading) loadGraphicEphemeris();
+        }
+
+        // d3 is ~280 KB and only this one view needs it, so it is fetched the
+        // first time the panel is opened rather than on every page load.
+        function ensureD3() {
+            if (window.d3) return Promise.resolve(window.d3);
+            if (!ephemerisD3Promise) {
+                ephemerisD3Promise = new Promise((resolve, reject) => {
+                    const s = document.createElement('script');
+                    s.src = 'https://cdn.jsdelivr.net/npm/d3@7';
+                    s.onload = () => window.d3 ? resolve(window.d3)
+                        : reject(new Error('d3 loaded but did not define d3'));
+                    s.onerror = () => { ephemerisD3Promise = null; reject(new Error('could not load d3')); };
+                    document.head.appendChild(s);
+                });
+            }
+            return ephemerisD3Promise;
+        }
+
+        // The natal half of the request, taken from the chart already on
+        // screen. Sending it precomputed rather than re-sending birth data
+        // means the timeline is guaranteed to be about the SAME chart the
+        // wheel is drawing, down to the last decimal.
+        function ephemerisNatalPayload() {
+            const h = currentChart?.horoscope;
+            if (!h?.CelestialBodies) return null;
+            const points = {};
+            Object.entries(h.CelestialBodies).forEach(([key, body]) => {
+                const lon = body?.ChartPosition?.Ecliptic?.DecimalDegrees;
+                if (typeof lon === 'number') points[key] = lon;
+            });
+            const asc = h.Ascendant?.ChartPosition?.Ecliptic?.DecimalDegrees;
+            const mc = h.Midheaven?.ChartPosition?.Ecliptic?.DecimalDegrees;
+            if (typeof asc === 'number') points.ascendant = asc;
+            if (typeof mc === 'number') points.midheaven = mc;
+            if (!Object.keys(points).length) return null;
+
+            const cusps = (h.Houses || [])
+                .map(x => x?.ChartPosition?.StartPosition?.Ecliptic?.DecimalDegrees)
+                .filter(v => typeof v === 'number');
+
+            const natal = { points, zodiac: zodiacSystem };
+            if (cusps.length === 12) natal.houses = cusps;
+            if (zodiacSystem === 'sidereal') natal.ayanamsa = getSelectedAyanamsa();
+            return natal;
+        }
+
+        function setEphemerisStatus(text, isError) {
+            const el = document.getElementById('ephemeris-status');
+            if (!el) return;
+            el.textContent = text || '';
+            el.classList.toggle('error', !!isError);
+        }
+
+        async function loadGraphicEphemeris() {
+            if (ephemerisLoading) return;
+            const natal = ephemerisNatalPayload();
+            if (!natal) {
+                setEphemerisStatus('Calculate or load a chart first — the graph is drawn against its natal positions.', true);
+                return;
+            }
+            const preset = document.getElementById('ephemeris-window')?.value || 'around-now';
+            const orb = parseFloat(document.getElementById('ephemeris-orb')?.value || '1');
+
+            ephemerisLoading = true;
+            const drawBtn = document.getElementById('ephemeris-draw');
+            if (drawBtn) drawBtn.disabled = true;
+            setEphemerisStatus('Solving the window…');
+
+            try {
+                const [d3lib, response] = await Promise.all([
+                    ensureD3(),
+                    fetch(TRANSIT_TIMELINE_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            natal,
+                            preset,
+                            orb,
+                            includeSeries: true,
+                            seriesPoints: 200
+                        })
+                    })
+                ]);
+                const result = await response.json();
+                if (!response.ok || result.error) {
+                    throw new Error(result.error || `Timeline request failed (${response.status})`);
+                }
+                ephemerisData = result;
+                const c = result.counts;
+                setEphemerisStatus(
+                    `${result.window.start.slice(0, 10)} → ${result.window.end.slice(0, 10)} · ` +
+                    `${c.hits} exact hit${c.hits === 1 ? '' : 's'} within ${result.config.orb}°, ` +
+                    `${c.stations} station${c.stations === 1 ? '' : 's'}, ${c.ingresses} ingresses.`
+                );
+                drawGraphicEphemeris();
+                renderEphemerisEventList();
+            } catch (error) {
+                console.error('Graphic ephemeris failed:', error);
+                setEphemerisStatus(error.message || 'Could not build the timeline.', true);
+            } finally {
+                ephemerisLoading = false;
+                if (drawBtn) drawBtn.disabled = false;
+            }
+        }
+
+        function drawGraphicEphemeris() {
+            const d3lib = window.d3;
+            const data = ephemerisData;
+            const svgEl = document.getElementById('ephemeris-svg');
+            if (!d3lib || !data || !data.series || !svgEl) return;
+
+            const modulus = parseFloat(document.getElementById('ephemeris-modulus')?.value || '90');
+            const margin = { top: 12, right: 58, bottom: 24, left: 40 };
+            const available = (svgEl.parentElement?.clientWidth || 700) - 2;
+            const width = Math.max(640, available);
+            const height = 380;
+            const innerW = width - margin.left - margin.right;
+            const innerH = height - margin.top - margin.bottom;
+
+            const svg = d3lib.select(svgEl)
+                .attr('width', width).attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`);
+            svg.selectAll('*').remove();
+            const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const times = data.series.datetimes.map(s => new Date(s));
+            const x = d3lib.scaleTime()
+                .domain([new Date(data.window.start), new Date(data.window.end)])
+                .range([0, innerW]);
+            const y = d3lib.scaleLinear().domain([0, modulus]).range([innerH, 0]);
+
+            // --- grid and axes
+            const yTicks = y.ticks(modulus === 360 ? 12 : 6);
+            g.selectAll('line.eph-h').data(yTicks).enter().append('line')
+                .attr('class', 'eph-grid')
+                .attr('x1', 0).attr('x2', innerW)
+                .attr('y1', d => y(d)).attr('y2', d => y(d));
+            g.append('g').attr('transform', `translate(0,${innerH})`)
+                .call(d3lib.axisBottom(x).ticks(Math.max(3, Math.round(innerW / 110)))
+                    .tickFormat(d3lib.timeFormat('%d %b')))
+                .call(sel => sel.selectAll('text').attr('class', 'eph-axis-text'))
+                .call(sel => sel.selectAll('line,path').style('stroke', 'var(--v-line)'));
+            g.append('g')
+                .call(d3lib.axisLeft(y).tickValues(yTicks).tickFormat(d => `${d}°`))
+                .call(sel => sel.selectAll('text').attr('class', 'eph-axis-text'))
+                .call(sel => sel.selectAll('line,path').style('stroke', 'var(--v-line)'));
+
+            // --- today, when it falls inside the window
+            const now = new Date();
+            if (now >= x.domain()[0] && now <= x.domain()[1]) {
+                g.append('line').attr('class', 'eph-today')
+                    .attr('x1', x(now)).attr('x2', x(now)).attr('y1', 0).attr('y2', innerH);
+                g.append('text').attr('class', 'eph-axis-text')
+                    .attr('x', x(now) + 3).attr('y', 10).text('now');
+            }
+
+            // --- natal positions as horizontal lines, glyph in the right margin
+            Object.entries(data.natal.points).forEach(([key, point]) => {
+                const folded = ((point.longitude % modulus) + modulus) % modulus;
+                g.append('line')
+                    .attr('class', 'eph-natal-line')
+                    .attr('x1', 0).attr('x2', innerW)
+                    .attr('y1', y(folded)).attr('y2', y(folded))
+                    .style('stroke', EPHEMERIS_COLORS[key] || 'var(--v-muted)');
+                g.append('text')
+                    .attr('class', 'eph-natal-label')
+                    .attr('x', innerW + 4).attr('y', y(folded) + 3.5)
+                    .text('n' + ephemerisGlyph(key))
+                    .append('title').text(`Natal ${ephemerisLabel(key)} — ${point.position}`);
+            });
+
+            // --- one track per transiting body, broken at the fold seam
+            const line = d3lib.line()
+                .defined(d => d.v !== null)
+                .x(d => x(d.t)).y(d => y(d.v));
+
+            Object.entries(data.series.bodies).forEach(([body, track]) => {
+                const points = [];
+                let previous = null;
+                track.longitude.forEach((lon, i) => {
+                    const folded = ((lon % modulus) + modulus) % modulus;
+                    // Without this break the path would run a phantom vertical
+                    // line across the whole graph every time a planet leaves
+                    // one fold segment and re-enters at the other edge.
+                    if (previous !== null && Math.abs(folded - previous) > modulus / 2) {
+                        points.push({ t: times[i], v: null });
+                    }
+                    points.push({ t: times[i], v: folded });
+                    previous = folded;
+                });
+                g.append('path')
+                    .attr('class', 'eph-track')
+                    .attr('d', line(points))
+                    .style('stroke', EPHEMERIS_COLORS[body] || 'var(--v-ink-soft)')
+                    .append('title').text(ephemerisLabel(body));
+            });
+
+            // --- crossings: every exact hit the endpoint solved
+            const markers = g.append('g');
+            (data.hits || []).forEach((hit, index) => {
+                const folded = ((hit.transitingLongitude % modulus) + modulus) % modulus;
+                markers.append('circle')
+                    .attr('class', 'eph-marker')
+                    .attr('data-eph-key', 'hit-' + index)
+                    .attr('cx', x(new Date(hit.exact))).attr('cy', y(folded)).attr('r', 3.6)
+                    .style('fill', EPHEMERIS_COLORS[hit.transiting] || 'var(--v-ink)')
+                    .style('fill-opacity', 0.85)
+                    .on('mouseenter', () => setEphemerisLink('hit-' + index, true))
+                    .on('mouseleave', () => setEphemerisLink('hit-' + index, false))
+                    .on('click', () => setEphemerisLink('hit-' + index, true, true))
+                    .append('title')
+                    .text(`${hit.label} — exact ${hit.exact.slice(0, 16).replace('T', ' ')} UT`);
+            });
+
+            // --- stations: filled turning retrograde, hollow turning direct
+            (data.stations || []).forEach((station, index) => {
+                const folded = ((station.longitude % modulus) + modulus) % modulus;
+                const colour = EPHEMERIS_COLORS[station.transiting] || 'var(--v-ink)';
+                markers.append('circle')
+                    .attr('class', 'eph-marker')
+                    .attr('data-eph-key', 'station-' + index)
+                    .attr('cx', x(new Date(station.datetime))).attr('cy', y(folded)).attr('r', 5)
+                    .style('fill', station.station === 'retrograde' ? colour : 'none')
+                    .style('stroke', colour).style('stroke-width', 1.5)
+                    .on('mouseenter', () => setEphemerisLink('station-' + index, true))
+                    .on('mouseleave', () => setEphemerisLink('station-' + index, false))
+                    .on('click', () => setEphemerisLink('station-' + index, true, true))
+                    .append('title').text(station.label);
+            });
+        }
+
+        // The linked bus: one key identifies a crossing on the graph and its
+        // row in the list beside it, so touching either lights both. Same
+        // pattern as the grammar viewer's Eye — coordinated views, one
+        // selection, no duplicate state.
+        function setEphemerisLink(key, on, scrollIntoView) {
+            document.querySelectorAll('#ephemeris-svg .eph-marker.linked')
+                .forEach(el => { if (!on || el.getAttribute('data-eph-key') !== key) el.classList.remove('linked'); });
+            document.querySelectorAll('#ephemeris-hits .ephemeris-hit.linked')
+                .forEach(el => { if (!on || el.dataset.ephKey !== key) el.classList.remove('linked'); });
+            if (!on) return;
+            const marker = document.querySelector(`#ephemeris-svg .eph-marker[data-eph-key="${key}"]`);
+            const row = document.querySelector(`#ephemeris-hits .ephemeris-hit[data-eph-key="${key}"]`);
+            if (marker) marker.classList.add('linked');
+            if (row) {
+                row.classList.add('linked');
+                if (scrollIntoView) row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+        }
+
+        function renderEphemerisEventList() {
+            const container = document.getElementById('ephemeris-hits');
+            const data = ephemerisData;
+            if (!container || !data) return;
+            container.innerHTML = '';
+
+            const rows = [];
+            (data.hits || []).forEach((hit, index) => rows.push({
+                key: 'hit-' + index,
+                jd: hit.exactJd,
+                cls: '',
+                when: hit.exact.slice(5, 16).replace('T', ' '),
+                glyphs: `${ephemerisGlyph(hit.transiting)} ${ASPECT_GLYPHS[hit.aspect] || ''} ${ephemerisGlyph(hit.natal)}`,
+                text: `${ephemerisLabel(hit.transiting)} ${hit.aspect} natal ${ephemerisLabel(hit.natal)}`
+                    + (hit.passesInSpan > 1 ? ` (pass ${hit.pass}/${hit.passesInSpan})` : '')
+                    + (hit.retrograde ? ' ℞' : '')
+            }));
+            (data.stations || []).forEach((station, index) => rows.push({
+                key: 'station-' + index,
+                jd: station.jd,
+                cls: 'eph-station',
+                when: station.datetime.slice(5, 16).replace('T', ' '),
+                glyphs: `${ephemerisGlyph(station.transiting)} ${station.station === 'retrograde' ? '℞' : 'D'}`,
+                text: station.label
+            }));
+            (data.ingresses || []).forEach((ingress, index) => rows.push({
+                key: 'ingress-' + index,
+                jd: ingress.jd,
+                cls: 'eph-ingress',
+                when: ingress.datetime.slice(5, 16).replace('T', ' '),
+                glyphs: ephemerisGlyph(ingress.transiting) + ' →',
+                text: ingress.label
+            }));
+            rows.sort((a, b) => a.jd - b.jd);
+
+            if (!rows.length) {
+                container.innerHTML = '<p class="ephemeris-empty">Nothing perfects in this window at this orb. That is a real answer — try a wider orb or a longer window.</p>';
+                return;
+            }
+
+            rows.forEach(row => {
+                const el = document.createElement('div');
+                el.className = 'ephemeris-hit ' + row.cls;
+                el.dataset.ephKey = row.key;
+                el.innerHTML = `
+                    <span class="eph-glyphs">${row.glyphs}</span>
+                    <span style="flex:1 1 auto">${row.text}</span>
+                    <span class="eph-when">${row.when} UT</span>
+                `;
+                el.addEventListener('mouseenter', () => setEphemerisLink(row.key, true));
+                el.addEventListener('mouseleave', () => setEphemerisLink(row.key, false));
+                el.addEventListener('click', () => setEphemerisLink(row.key, true, true));
+                container.appendChild(el);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ['ephemeris-window', 'ephemeris-orb'].forEach(id => {
+                document.getElementById(id)?.addEventListener('change', () => {
+                    if (ephemerisData) loadGraphicEphemeris();
+                });
+            });
+            // The fold is a pure re-projection of data already in hand, so it
+            // redraws without asking the server anything.
+            document.getElementById('ephemeris-modulus')?.addEventListener('change', () => {
+                if (ephemerisData) { drawGraphicEphemeris(); renderEphemerisEventList(); }
+            });
+            window.addEventListener('resize', () => {
+                clearTimeout(ephemerisResizeTimer);
+                ephemerisResizeTimer = setTimeout(() => {
+                    if (ephemerisData && !document.getElementById('ephemeris-body')?.hasAttribute('hidden')) {
+                        drawGraphicEphemeris();
+                    }
+                }, 200);
+            });
+        });
 
         // ============================================================
         // DETAILS PANELS
