@@ -117,3 +117,10 @@ primitives instead of the current busy rendering:
 `ids.json` UUIDs; the grammar/library side; recursive-eco (read-only). Secondary in-page
 links to `grammar-viewer.html` still point at flow-relative paths — fine inside the embed,
 flagged for a follow-up if the page is used standalone.
+
+## Deploy topology (recorded 2026-08-06 — this cost a session to rediscover)
+
+- **astro.recursive.eco** = GitHub Pages (this repo, main, legacy deploy-from-branch) — the LIBRARY site (index, lenses, viewers).
+- **chart.recursive.eco** = Vercel project `recursive-astrology` — the CALCULATOR (viewer/astrology-viewer.html) + the Python API (api/calculate_chart.py, api/transit_timeline.py).
+- One push to main deploys BOTH (Pages directly; Vercel via its Git integration).
+
