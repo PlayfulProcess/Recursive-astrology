@@ -99,10 +99,11 @@
            aspect/element legend colors (red/green/blue/violet/yellow), which
            keep their hue since they're domain content, not chrome — only
            their shade changes per theme for readability.
-           NOTE: the Human Design bodygraph sub-view (search "Human Design
-           Bodygraph" below) intentionally keeps a fixed dark "instrument
-           panel" look in both themes — its raw SVG fills are out of scope
-           for this pass; everything else in the viewer is theme-aware.
+           NOTE: the Human Design drawings (bodygraph and mandala) carry a
+           second, smaller palette of their own — the --bgc-* tokens at the
+           foot of this file — because activation hue is chart data rather
+           than chrome. It follows [data-theme] like everything else here;
+           the old "fixed dark instrument panel" exemption ended Aug 6 2026.
            ============================================================ */
         :root {
             color-scheme: light;
@@ -442,29 +443,83 @@
             border-color: var(--astro-gold);
             box-shadow: inset 3px 0 0 var(--astro-gold);
         }
-        .hd-focus .hd-gate,
-        .hd-focus .hd-channel,
-        .hd-focus .hd-center {
-            opacity: 0.16;
-            transition: opacity 0.2s;
+        /* ------------------------------------------------------------
+           THE TWO LAYERS OF AN HD DRAWING (rewritten Aug 6 2026)
+
+           LAYER 1 — ACTIVATION, carried as HUE. Which side of the chart
+           switched a gate on (Design red / Personality accent / both
+           gold), and whether a channel or a centre is defined. The
+           renderers paint it as fills and strokes and tag it on the
+           element: data-act="design|personality|both|none" on every gate,
+           data-def="1|0" on every channel and centre. It is a fact about
+           the chart, so nothing here is ever allowed to remove it.
+
+           LAYER 2 — SELECTION, carried as STRENGTH. What the reader has
+           tapped. The host takes .hd-focus, the members take .focused,
+           and the rest of the board recedes — recedes, not disappears.
+           An activated gate outside the selection keeps its hue at half
+           strength and keeps a legible number; a defined channel keeps
+           its full weight at a third strength; only the dormant
+           background falls away to almost nothing.
+
+           What this replaces: a single flat `opacity: 0.16` on every
+           gate, channel and centre. It multiplied over fills that
+           already carried their own alpha (the mandala's do), it hid
+           the white numerals on activated gates completely, and it
+           flattened defined and undefined channels onto the same value —
+           so the unselected remainder read as a scatter of coloured
+           smudges with no rule behind it (builder report, Aug 6 2026).
+           ------------------------------------------------------------ */
+
+        /* --- outside the selection: recede by class, never by hue --- */
+        .hd-focus .hd-gate:not(.focused)[data-act="none"] { opacity: 0.1; }
+        .hd-focus .hd-gate:not(.focused):not([data-act="none"]) { opacity: 0.5; }
+        .hd-focus .hd-center:not(.focused)[data-def="0"] { opacity: 0.12; }
+        .hd-focus .hd-center:not(.focused)[data-def="1"] { opacity: 0.34; }
+        .hd-focus .hd-channel:not(.focused)[data-def="0"] { opacity: 0.07; }
+        .hd-focus .hd-channel:not(.focused)[data-def="1"] { opacity: 0.34; }
+
+        /* A washed disc cannot carry white type. The numeral on a receded
+           but activated gate switches to ink rather than vanishing —
+           which is what made the dimmed remainder unreadable before. */
+        .hd-focus text.hd-gate:not(.focused):not([data-act="none"]) {
+            fill: var(--bgc-ink-dim);
         }
+
+        /* --- inside the selection: full strength, hue untouched --- */
         .hd-focus .hd-gate.focused,
-        .hd-focus .hd-center.focused {
-            opacity: 1;
-        }
-        .hd-focus .hd-channel.focused {
-            opacity: 1;
-            stroke: var(--astro-gold);
-            stroke-width: 4.4;
-        }
+        .hd-focus .hd-center.focused,
+        .hd-focus .hd-channel.focused { opacity: 1; }
+
         .hd-focus circle.hd-gate.focused,
         .hd-focus polygon.hd-center.focused {
             stroke: var(--astro-gold);
             stroke-width: 2.4;
         }
+        .hd-focus path.hd-gate.focused {   /* the mandala's ring segments */
+            stroke: var(--astro-gold);
+            stroke-width: 1.6;
+        }
+        /* Being selected does not make an undefined channel defined: the
+           selection colour marks it either way, the weight still says
+           which it is, and a dash says "this channel exists in the
+           structure but your chart has not lit it". */
+        .hd-focus .hd-channel.focused { stroke: var(--astro-gold); }
+        .hd-focus .hd-channel.focused[data-def="1"] { stroke-width: 4.4; }
+        .hd-focus .hd-channel.focused[data-def="0"] {
+            stroke-width: 2;
+            stroke-dasharray: 5 4;
+        }
+
         /* The fat transparent tap targets must never dim or they stop
            being tappable in some engines. */
         .hd-focus .hd-hit { opacity: 1; }
+
+        /* The legend's second row explains the selection layer, so it is on
+           screen exactly when that layer is doing something. Drawn always,
+           shown by class, so tapping a gate never rebuilds the drawing. */
+        .hd-legend-sel { display: none; }
+        .hd-focus .hd-legend-sel { display: inline; }
 
         .hd-selection-strip {
             display: flex;
@@ -894,9 +949,9 @@
             color: var(--v-on-accent);
         }
 
-        /* Bodygraph Legend Toggle — the HD bodygraph sub-view (below) keeps a
-           fixed dark "instrument panel" look in both themes, out of scope for
-           this pass; this toggle button itself still follows the page theme. */
+        /* Bodygraph Legend Toggle — picks which reading of the ACTIVATION
+           layer the board shows (by side, or by centre). It has nothing to
+           do with the selection layer, which is always on. */
         .bodygraph-legend-btn {
             background: rgb(var(--v-wash-rgb) / 0.08);
             border-color: var(--v-line);
@@ -913,42 +968,29 @@
             color: var(--v-hd);
         }
 
-        /* Human Design Bodygraph — raw SVG fills, intentionally NOT theme-aware
-           (fixed dark instrument panel in both light and dark mode; see notes
-           at the top of the THEME TOKENS block). */
+        /* Human Design bodygraph / mandala — structural rules only. The
+           colours live in the --bgc-* palette at the foot of this file and
+           follow the page theme.
+
+           Aug 6 2026: this block used to carry a set of rules left over from
+           a renderer that no longer exists — .hd-center.defined/.undefined,
+           .hd-channel.defined/.undefined, .hd-gate-label.*, .hd-gate-circle —
+           on classes nothing has emitted for months. One of them was not
+           merely dead but actively wrong: `.hd-channel { stroke-width: 3 }`
+           beat the renderer's own stroke-width presentation attribute (a CSS
+           declaration always outranks a presentation attribute), so every
+           channel drew at 3px and the deliberate 3.4-vs-1.2 weight that says
+           "defined" was never on screen. Removed; the renderer's numbers now
+           reach the glass. */
         .hd-center {
-            transition: all 0.3s;
+            transition: opacity 0.2s, stroke 0.2s, stroke-width 0.2s;
             cursor: pointer;
-        }
-
-        .hd-center.defined { fill: rgba(6, 182, 212, 0.5); }
-        .hd-center.undefined { fill: rgba(255, 255, 255, 0.08); }
-        .hd-center:hover { filter: brightness(1.3); }
-
-        /* Gate circle hover effects */
-        .hd-gate-circle:hover {
-            transform-origin: center;
-            filter: brightness(1.4) drop-shadow(0 0 6px currentColor);
         }
 
         .hd-channel {
-            stroke-width: 3;
-            transition: all 0.3s;
+            transition: opacity 0.2s, stroke 0.2s, stroke-width 0.2s;
             cursor: pointer;
         }
-
-        .hd-channel.defined { stroke: #d4af37; }
-        .hd-channel.undefined { stroke: rgba(255, 255, 255, 0.1); }
-
-        .hd-gate-label {
-            font-size: 9px;
-            fill: #fff;
-            cursor: pointer;
-        }
-
-        .hd-gate-label.personality { fill: #1a1a2e; font-weight: bold; }
-        .hd-gate-label.design { fill: #ef4444; }
-        .hd-gate-label.both { fill: #d4af37; font-weight: bold; }
 
         /* Gate Panel (HD) — panel chrome follows the page theme; the left-border
            accent keeps its fixed identity hue (personality/design/both) rather
@@ -969,9 +1011,14 @@
             background: rgb(var(--v-hd-rgb) / 0.06);
         }
 
-        .gate-panel.personality { border-left: 3px solid #8b5cf6; }
-        .gate-panel.design { border-left: 3px solid #ef4444; }
-        .gate-panel.both { border-left: 3px solid var(--astro-gold); }
+        /* The activation layer again, on the list side. These three took
+           #8b5cf6 / #ef4444 / --astro-gold, and --astro-gold is a CHROME
+           token whose value is blue — so a both-sides gate was marked blue
+           in the list and ochre on the board. Same tokens as the drawings
+           now: one activation, one colour, wherever it is shown. */
+        .gate-panel.personality { border-left: 3px solid var(--bgc-accent); }
+        .gate-panel.design { border-left: 3px solid var(--bgc-design); }
+        .gate-panel.both { border-left: 3px solid var(--bgc-both); }
 
         /* HD Filter Buttons */
         .hd-filter-btn {
@@ -5068,6 +5115,20 @@
                     el.classList.toggle('focused', channels.has(el.dataset.hdChannel)));
                 host.querySelectorAll('[data-hd-center]').forEach(el =>
                     el.classList.toggle('focused', centers.has(el.dataset.hdCenter)));
+
+                // SVG has no z-index: a shape is above another only by being
+                // later in the document. A selected channel drawn early could
+                // therefore sit *under* a defined channel drawn later in the
+                // same pass, which is one of the ways the highlight looked
+                // arbitrary. Lift the selected channels to the end of their
+                // own layer — still under the centres and gates, which are
+                // separate later groups, so nothing else moves.
+                const layer = host.querySelector('.hd-layer-channels');
+                if (layer && on) {
+                    layer.querySelectorAll('g.hd-ch').forEach(g => {
+                        if (channels.has(g.dataset.ch)) layer.appendChild(g);
+                    });
+                }
             });
 
             document.querySelectorAll('#hd-gates-list [data-hd-gate]').forEach(row =>
@@ -8229,7 +8290,7 @@
                 } else if (hdViewMode === 'hd-bodygraph') {
                     const bodygraph = document.getElementById('hd-bodygraph');
                     if (bodygraph) {
-                        bodygraph.style.maxWidth = 'min(92vw, calc(85vh * 0.69))'; // aspect 400/580 ≈ 0.69
+                        bodygraph.style.maxWidth = 'min(92vw, calc(85vh * 0.58))'; // aspect 400/692 ≈ 0.58
                         bodygraph.style.height = 'auto';
                     }
                 } else {
@@ -9396,6 +9457,32 @@
             renderHDMandala();
         }
 
+        // ------------------------------------------------------------
+        // The ACTIVATION layer, in one place (Aug 6 2026).
+        //
+        // Both drawings and both list views ask the same question of a
+        // gate — which side of the chart switched it on — and each used
+        // to answer it with its own inline ternary and its own colours.
+        // One function, one vocabulary: 'design' | 'personality' |
+        // 'both' | 'none'. It goes onto every gate element as data-act,
+        // which is what the selection CSS reads to know how far a thing
+        // is allowed to recede.
+        // ------------------------------------------------------------
+        function hdGateActivation(g) {
+            const a = hdChart && hdChart.activatedGates && hdChart.activatedGates.get
+                ? hdChart.activatedGates.get(g) : null;
+            if (!a) return 'none';
+            if (a.personality && a.design) return 'both';
+            if (a.design) return 'design';
+            return 'personality';
+        }
+        const HD_ACT_WORDS = {
+            both: ' — Design and Personality',
+            design: ' — Design',
+            personality: ' — Personality',
+            none: ''
+        };
+
         function renderHDMandala() {
             if (!hdChart) return;
             const container = document.getElementById('hd-mandala');
@@ -9428,8 +9515,9 @@
 
             let svg = `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">`;
 
-            // Background
-            svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 25}" fill="rgba(10,10,20,0.3)"/>`;
+            // Background. Was a flat rgba(10,10,20,0.3), i.e. a dark hole on
+            // the light plate that turned the whole gate ring into grey mush.
+            svg += `<circle cx="${cx}" cy="${cy}" r="${outerR + 25}" fill="var(--bgc-plate)"/>`;
 
             // Zodiac sign segments (outer ring)
             ZODIAC_SIGNS.forEach((sign, i) => {
@@ -9459,8 +9547,8 @@
             });
 
             // Gate ring circles
-            svg += `<circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>`;
-            svg += `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>`;
+            svg += `<circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="var(--bgc-dim)" stroke-width="1"/>`;
+            svg += `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="var(--bgc-dim)" stroke-width="1"/>`;
 
             // Gate segments
             HD_GATE_SEQUENCE.forEach((gate, i) => {
@@ -9472,11 +9560,20 @@
                 const isActivated = hdChart.activatedGates.has(gate.gate);
                 const gd = hdChart.activatedGates.get(gate.gate);
 
-                let fill = 'rgba(255,255,255,0.05)';
+                // ACTIVATION layer, in the same three hues and the same tokens
+                // the bodygraph uses. Until Aug 6 2026 the mandala mixed its own
+                // literal rgba() — a different red, a different gold, a different
+                // purple — and baked the transparency into the colour, so when the
+                // selection layer put its opacity on top the two multiplied and a
+                // 0.4 fill became 0.06. Hue and strength are separate properties
+                // now: fill-opacity carries the wash, opacity is left free for
+                // the selection layer alone.
+                const act = hdGateActivation(gate.gate);
+                let fill = 'var(--bgc-surface)', fillOp = 1;
                 if (isActivated) {
-                    if (gd.personality && gd.design) fill = 'rgba(212,175,55,0.5)';
-                    else if (gd.design) fill = 'rgba(239,68,68,0.4)';
-                    else fill = 'rgba(139,92,246,0.4)';
+                    fill = act === 'both' ? 'var(--bgc-both)'
+                         : act === 'design' ? 'var(--bgc-design)' : 'var(--bgc-accent)';
+                    fillOp = 0.62;
                 }
 
                 const x1 = cx + innerR * Math.cos(startAngle), y1 = cy + innerR * Math.sin(startAngle);
@@ -9484,14 +9581,16 @@
                 const x3 = cx + outerR * Math.cos(endAngle), y3 = cy + outerR * Math.sin(endAngle);
                 const x4 = cx + innerR * Math.cos(endAngle), y4 = cy + innerR * Math.sin(endAngle);
 
-                svg += `<path class="hd-gate" data-hd-gate="${gate.gate}" d="M${x1},${y1} L${x2},${y2} A${outerR},${outerR} 0 0 1 ${x3},${y3} L${x4},${y4} A${innerR},${innerR} 0 0 0 ${x1},${y1}" fill="${fill}" stroke="rgba(139,92,246,0.3)" stroke-width="0.5" style="cursor:pointer" onclick="selectHDGate(${gate.gate}, 'mandala')"/>`;
+                svg += `<path class="hd-gate" data-hd-gate="${gate.gate}" data-act="${act}" d="M${x1},${y1} L${x2},${y2} A${outerR},${outerR} 0 0 1 ${x3},${y3} L${x4},${y4} A${innerR},${innerR} 0 0 0 ${x1},${y1}" fill="${fill}" fill-opacity="${fillOp}" stroke="var(--bgc-line)" stroke-width="0.5" style="cursor:pointer" onclick="selectHDGate(${gate.gate}, 'mandala')"><title>Gate ${gate.gate}${isActivated ? HD_ACT_WORDS[act] : ' — not activated'}</title></path>`;
 
                 const midAngle = startAngle + (HD_GATE_ARC / 2 * Math.PI / 180);
                 const tx = cx + gateR * Math.cos(midAngle), ty = cy + gateR * Math.sin(midAngle);
                 // #555 on this plate was below the floor of legibility for the
                 // 40-odd gates a chart does not activate — they are the context
-                // the activated ones are read against, so they have to be visible
-                svg += `<text class="hd-gate" data-hd-gate="${gate.gate}" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" fill="${isActivated ? '#fff' : '#8b86a0'}" font-size="9" font-weight="${isActivated ? 'bold' : 'normal'}" style="cursor:pointer" onclick="selectHDGate(${gate.gate}, 'mandala')">${gate.gate}</text>`;
+                // the activated ones are read against, so they have to be visible.
+                // The activated numeral sits on a 0.62 wash, so it takes the same
+                // ink the bodygraph's discs take rather than a hard-coded white.
+                svg += `<text class="hd-gate" data-hd-gate="${gate.gate}" data-act="${act}" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" fill="${isActivated ? (act === 'design' ? '#ffffff' : (act === 'both' ? 'var(--bgc-gate-on-text-warm)' : 'var(--bgc-gate-on-text)')) : 'var(--bgc-mut)'}" font-size="9" font-weight="${isActivated ? 'bold' : 'normal'}" style="cursor:pointer" onclick="selectHDGate(${gate.gate}, 'mandala')">${gate.gate}</text>`;
             });
 
             // Inner zodiac ring (inside the gate wheel)
@@ -9540,7 +9639,7 @@
                         lon: body.ChartPosition.Ecliptic.DecimalDegrees,
                         symbol: planetData.symbol,
                         type: 'personality',
-                        color: '#a78bfa'
+                        color: 'var(--bgc-accent)'
                     });
                 });
 
@@ -9554,7 +9653,7 @@
                             lon: data.longitude,
                             symbol: planetData.symbol,
                             type: 'design',
-                            color: '#ef4444'
+                            color: 'var(--bgc-design)'
                         });
                     });
                 }
@@ -9607,7 +9706,7 @@
                         const tx = cx + (innerZodiacInnerR - 3) * Math.cos(trueAngle);
                         const ty = cy + (innerZodiacInnerR - 3) * Math.sin(trueAngle);
                         svg += `<line x1="${px}" y1="${py}" x2="${tx}" y2="${ty}" stroke="${p.color}" stroke-width="0.7" opacity="0.35"/>`;
-                        svg += `<circle cx="${px}" cy="${py}" r="10" fill="rgba(10,10,15,0.95)" stroke="${p.color}" stroke-width="2"/>`;
+                        svg += `<circle cx="${px}" cy="${py}" r="10" fill="var(--bgc-surface)" stroke="${p.color}" stroke-width="2"/>`;
                         svg += `<text x="${px}" y="${py}" text-anchor="middle" dominant-baseline="middle" fill="${p.color}" font-size="11" font-weight="bold">${p.symbol}</text>`;
                     });
                 });
@@ -9616,19 +9715,22 @@
             svg += '</svg>';
 
             // Add legend and zodiac toggle below the mandala
+            // The three swatches take the same tokens the ring itself takes.
+            // They used to be Tailwind's purple-500 / red-500 / yellow-500,
+            // which named three colours the drawing above them never used.
             const legendHtml = `
-                <div class="flex justify-center gap-4 mt-3 text-xs flex-wrap">
+                <div class="flex justify-center gap-4 mt-3 text-xs flex-wrap" style="color: var(--bgc-mut)">
                     <div class="flex items-center gap-1.5">
-                        <div class="w-3 h-3 rounded-full bg-purple-500"></div>
-                        <span class="text-purple-400">Personality (Birth)</span>
+                        <div class="w-3 h-3 rounded-full" style="background: var(--bgc-accent)"></div>
+                        <span>Personality (Birth)</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                        <span class="text-red-400">Design (88° before)</span>
+                        <div class="w-3 h-3 rounded-full" style="background: var(--bgc-design)"></div>
+                        <span>Design (88° before)</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <span class="text-yellow-400">Both</span>
+                        <div class="w-3 h-3 rounded-full" style="background: var(--bgc-both)"></div>
+                        <span>Both</span>
                     </div>
                 </div>
                 <div class="flex justify-center mt-2">
@@ -9650,7 +9752,11 @@
             // ---- Harmony renderer: orderly gates on each centre, curved channels, two colours ----
             // The extra 30 units of height are the legend's own strip: it used to
             // sit at y=614 and run straight across the Root centre and its gates.
-            const VB_W = 400, VB_H = 668;
+            // A further 24 hold the selection legend's second line. That row is
+            // only drawn while something is selected, but the box is the same
+            // height either way — a viewBox that grew on tap would resize the
+            // whole board under the finger that tapped it.
+            const VB_W = 400, VB_H = 692;
 
             // Centre layout (standard vertical bodygraph). Gates come from HD_CENTERS[id].gates.
             // Sizes went up a notch (the Throat carries eleven gates, the G eight):
@@ -9771,6 +9877,11 @@
                 + `onclick="setChartSelection(null, 'bodygraph')"/>`;
 
             // ---- 1. channels as gently bowed curves. Undefined first (faint), defined on top. ----
+            // Each channel is one <g class="hd-ch"> holding its tap target and
+            // its visible stroke, so applySelectionToHD() can lift a selected
+            // channel to the top of the layer as a unit — a 4.4px selected
+            // stroke used to be able to sit *under* a defined channel drawn
+            // later in the same pass.
             function channelPath(id){
                 const [g1,g2] = id.split('-').map(Number);
                 const p1 = GP[g1], p2 = GP[g2]; if(!p1||!p2) return '';
@@ -9787,16 +9898,20 @@
                 // Two paths per channel: the visible stroke, and a fat
                 // transparent one behind it so a 1.2px hairline is still
                 // tappable with a thumb (join key = the gate pair).
-                return `<path class="hd-hit" d="${d}" fill="none" stroke="transparent" stroke-width="14" `
+                return `<g class="hd-ch" data-ch="${id}">`
+                    + `<path class="hd-hit" d="${d}" fill="none" stroke="transparent" stroke-width="14" `
                         + `style="cursor:pointer" onclick="selectHDChannel('${id}', 'bodygraph')">`
-                        + `<title>${id} — ${HD_CHANNELS[id].name}${def?' (defined)':''}</title></path>`
-                    + `<path class="hd-channel" data-hd-channel="${id}" d="${d}" fill="none" `
+                        + `<title>${id} — ${HD_CHANNELS[id].name}${def?' (defined)':' (not defined in this chart)'}</title></path>`
+                    + `<path class="hd-channel" data-hd-channel="${id}" data-def="${def?1:0}" d="${d}" fill="none" `
                     + `stroke="${def?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${def?3.4:1.2}" `
-                    + `stroke-linecap="round" opacity="${def?1:0.3}" style="pointer-events:none"/>`;
+                    + `stroke-linecap="round" opacity="${def?1:0.32}" style="pointer-events:none"/>`
+                    + `</g>`;
             }
             const chIds = Object.keys(HD_CHANNELS);
+            svg += `<g class="hd-layer-channels">`;
             chIds.forEach(id => { if(!defChSet.has(id)) svg += channelPath(id); });
             chIds.forEach(id => { if(defChSet.has(id)) svg += channelPath(id); });
+            svg += `</g>`;
 
             // ---- 2. centres (rounded), clickable ----
             Object.keys(LAY).forEach(id => {
@@ -9805,7 +9920,7 @@
                 // an open centre outlined in --bgc-line was all but invisible on the
                 // dark plate — the nine shapes are the frame of the whole drawing,
                 // so an open one is drawn in --bgc-dim and still reads as empty
-                svg += `<polygon class="hd-center" data-hd-center="${id}" points="${pts}" fill="${def?'var(--bgc-accent-soft)':'var(--bgc-surface)'}" `
+                svg += `<polygon class="hd-center" data-hd-center="${id}" data-def="${def?1:0}" points="${pts}" fill="${def?'var(--bgc-accent-soft)':'var(--bgc-surface)'}" `
                     + `stroke="${def?'var(--bgc-accent)':'var(--bgc-dim)'}" stroke-width="${def?2.4:1.6}" `
                     + `stroke-linejoin="round" style="cursor:pointer" onclick="selectHDCenter('${id}', 'bodygraph')">`
                     + `<title>${(HD_CENTERS[id]&&HD_CENTERS[id].name)||id}${def?' — defined':' — open'}</title></polygon>`;
@@ -9820,43 +9935,46 @@
             // colouring and reads the board as nine centres: every active gate in
             // the one accent, so what stands out is which centres are lit.
             const byActivation = bodygraphLegendMode === 'activation';
-            function gateFill(g) {
+            function gateFill(act) {
                 if (!byActivation) return 'var(--bgc-accent)';
-                const a = hdChart.activatedGates.get ? hdChart.activatedGates.get(g) : null;
-                if (a?.personality && a?.design) return 'var(--bgc-both)';
-                if (a?.design) return 'var(--bgc-design)';
+                if (act === 'both') return 'var(--bgc-both)';
+                if (act === 'design') return 'var(--bgc-design)';
                 return 'var(--bgc-accent)';
             }
-            function gateInk(g) {
+            function gateInk(act) {
                 if (!byActivation) return 'var(--bgc-gate-on-text)';
-                const a = hdChart.activatedGates.get ? hdChart.activatedGates.get(g) : null;
-                if (a?.personality && a?.design) return 'var(--bgc-gate-on-text-warm)';
-                if (a?.design) return '#ffffff';
+                if (act === 'both') return 'var(--bgc-gate-on-text-warm)';
+                if (act === 'design') return '#ffffff';
                 return 'var(--bgc-gate-on-text)';
-            }
-            function gateWhence(g) {
-                const a = hdChart.activatedGates.get ? hdChart.activatedGates.get(g) : null;
-                if (!a) return '';
-                if (a.personality && a.design) return ' — Design and Personality';
-                if (a.design) return ' — Design';
-                return ' — Personality';
             }
             for (let g=1; g<=64; g++){
                 const p = GP[g]; if(!p) continue;
                 const on = gateActive(g);
                 const cen = GCEN[g];
-                const fill = on ? gateFill(g) : 'var(--bgc-surface)';
+                // BY CENTRE drops the by-side hue on purpose — that reading is
+                // about which centres are lit. data-act carries the true
+                // activation either way, because the selection layer has to
+                // recede a dormant gate further than an activated one in BOTH
+                // readings, and it cannot tell them apart from the fill alone.
+                const act = hdGateActivation(g);
+                const fill = on ? gateFill(act) : 'var(--bgc-surface)';
                 // r 8 / 7.5px type left the numbers at four or five screen pixels
                 // once the 400-wide board was scaled into the panel — unreadable
-                svg += `<circle class="hd-gate" data-hd-gate="${g}" cx="${p[0]}" cy="${p[1]}" r="9.6" fill="${fill}" `
+                svg += `<circle class="hd-gate" data-hd-gate="${g}" data-act="${act}" cx="${p[0]}" cy="${p[1]}" r="9.6" fill="${fill}" `
                     + `stroke="${on?fill:'var(--bgc-dim)'}" stroke-width="${on?0:1.4}" `
                     + `style="cursor:pointer" onclick="selectHDGate(${g}, 'bodygraph')">`
-                    + `<title>Gate ${g}${HD_GATE_MEANINGS[g]?(' — '+HD_GATE_MEANINGS[g].name):''} (${(HD_CENTERS[cen]&&HD_CENTERS[cen].name)||''})${on?gateWhence(g):''}</title></circle>`;
-                svg += `<text class="hd-gate" data-hd-gate="${g}" x="${p[0]}" y="${p[1]+3.4}" text-anchor="middle" font-size="9.5" font-weight="700" `
-                    + `font-family="ui-monospace,Menlo,monospace" fill="${on?gateInk(g):'var(--bgc-mut)'}" style="pointer-events:none">${g}</text>`;
+                    + `<title>Gate ${g}${HD_GATE_MEANINGS[g]?(' — '+HD_GATE_MEANINGS[g].name):''} (${(HD_CENTERS[cen]&&HD_CENTERS[cen].name)||''})${HD_ACT_WORDS[act]}</title></circle>`;
+                svg += `<text class="hd-gate" data-hd-gate="${g}" data-act="${act}" x="${p[0]}" y="${p[1]+3.4}" text-anchor="middle" font-size="9.5" font-weight="700" `
+                    + `font-family="ui-monospace,Menlo,monospace" fill="${on?gateInk(act):'var(--bgc-mut)'}" style="pointer-events:none">${g}</text>`;
             }
 
-            // ---- 4. compact legend (says whatever the board is currently saying) ----
+            // ---- 4. compact legend ----
+            // Line one is the ACTIVATION layer, in whichever reading the pills
+            // have chosen. Line two names the SELECTION layer and is shown only
+            // while something is selected — otherwise the reader is left to
+            // infer the dimming rule from the dimming itself. It is always
+            // emitted and hidden in CSS off .hd-focus, so a selection change
+            // never has to rebuild the drawing.
             svg += `<line x1="24" y1="638" x2="376" y2="638" stroke="var(--bgc-line)" stroke-width="1"/>`;
             svg += `<g transform="translate(${byActivation ? 42 : 58}, 657)" font-family="-apple-system,Segoe UI,sans-serif" font-size="11" fill="var(--bgc-mut)">`;
             if (byActivation) {
@@ -9866,10 +9984,20 @@
                     + `<line x1="212" y1="-3.5" x2="232" y2="-3.5" stroke="var(--bgc-accent)" stroke-width="3.4" stroke-linecap="round"/><text x="239" y="0">Defined channel</text>`;
             } else {
                 svg += `<line x1="0" y1="-3.5" x2="20" y2="-3.5" stroke="var(--bgc-accent)" stroke-width="3.4" stroke-linecap="round"/><text x="27" y="0">Defined</text>`
-                    + `<line x1="94" y1="-3.5" x2="114" y2="-3.5" stroke="var(--bgc-dim)" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/><text x="121" y="0">Undefined</text>`
+                    + `<line x1="94" y1="-3.5" x2="114" y2="-3.5" stroke="var(--bgc-dim)" stroke-width="1.2" stroke-linecap="round" opacity="0.32"/><text x="121" y="0">Undefined</text>`
                     + `<circle cx="216" cy="-3.5" r="5.5" fill="var(--bgc-accent)"/><text x="227" y="0">Active gate</text>`;
             }
             svg += `</g>`;
+            svg += `<g class="hd-legend-sel" transform="translate(30, 678)" font-family="-apple-system,Segoe UI,sans-serif" font-size="11" fill="var(--bgc-mut)">`
+                + `<circle cx="0" cy="-3.5" r="5.5" fill="var(--bgc-accent)" stroke="var(--astro-gold)" stroke-width="2.4"/>`
+                + `<text x="12" y="0">Selected</text>`
+                + `<circle cx="74" cy="-3.5" r="5.5" fill="var(--bgc-accent)" opacity="0.5"/>`
+                + `<text x="86" y="0">Activated</text>`
+                + `<circle cx="152" cy="-3.5" r="5.5" fill="var(--bgc-surface)" stroke="var(--bgc-dim)" stroke-width="1.4" opacity="0.35"/>`
+                + `<text x="164" y="0">Dormant</text>`
+                + `<line x1="216" y1="-3.5" x2="234" y2="-3.5" stroke="var(--astro-gold)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>`
+                + `<text x="241" y="0">Selected, undefined</text>`
+                + `</g>`;
 
             svg += '</svg>';
             container.innerHTML = svg;
@@ -11235,15 +11363,31 @@
 
 
 <style id="astro-embed-theme">
-/* Bodygraph palette — two colours, theme-aware (dark default, light overrides). */
+/* Bodygraph + mandala palette — the ACTIVATION layer's hues, theme-aware.
+   Design red, Personality the plate's own accent, both-sides gold; matched
+   by the gates LIST rows so one activation means one colour everywhere.
+
+   Aug 6 2026 — WHICH THEME THESE FOLLOW. The light values used to hang off
+   `body.theme-light`, a class only the `?theme=light` embed adds. The viewer
+   resolves its own theme onto `html[data-theme]` (URL param, then
+   prefers-color-scheme, then light), so a plain visit to the standalone page
+   left the dark instrument palette — near-black centres, near-black dormant
+   gates — sitting on a light plate. Bound to [data-theme] now, with the old
+   body class kept alongside it so the embed keeps working either way. */
 :root{ --bgc-accent:#a99bf5; --bgc-accent-soft:#2b2748; --bgc-dim:#3a3947;
   --bgc-surface:#1a1922; --bgc-line:#2a2933; --bgc-mut:#8f8aa0; --bgc-gate-on-text:#141225;
-  /* By-activation colouring: Design red, Personality the plate's own accent,
-     both-sides gold. Matches the red/purple the gates LIST already uses. */
-  --bgc-design:#e8615f; --bgc-both:#e0b84c; --bgc-gate-on-text-warm:#241a05; }
-body.theme-light{ --bgc-accent:#6d5bd0; --bgc-accent-soft:#e7e2fa; --bgc-dim:#d5cfc4;
+  --bgc-design:#e8615f; --bgc-both:#e0b84c; --bgc-gate-on-text-warm:#241a05;
+  /* Ink for a numeral sitting on a gate that has been washed back by the
+     selection layer — must read against the page, not against the disc. */
+  --bgc-ink-dim:#cfc9dd;
+  /* The mandala's own plate: a hair off the page, never a dark hole. */
+  --bgc-plate:#141320; }
+:root[data-theme="light"], body.theme-light{
+  --bgc-accent:#6d5bd0; --bgc-accent-soft:#e7e2fa; --bgc-dim:#d5cfc4;
   --bgc-surface:#fffdf9; --bgc-line:#e7e1d6; --bgc-mut:#8a8496; --bgc-gate-on-text:#ffffff;
-  --bgc-design:#c62f2d; --bgc-both:#a9791a; --bgc-gate-on-text-warm:#ffffff; }
+  --bgc-design:#c62f2d; --bgc-both:#a9791a; --bgc-gate-on-text-warm:#ffffff;
+  --bgc-ink-dim:#4a4458;
+  --bgc-plate:#faf7f0; }
 /* honor ?theme=light in the flow embed: light surfaces, dark text */
 body.theme-light{background:#f7f5fb!important;color:#2b2735!important}
 body.theme-light .text-white{color:#2b2735!important}

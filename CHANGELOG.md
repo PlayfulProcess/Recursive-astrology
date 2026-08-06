@@ -1,5 +1,67 @@
 # Changelog — The Recursive Astrology
 
+## August 6, 2026 — Two layers, and only two, on the bodygraph
+
+Tapping a gate turned the rest of the board into a scatter of coloured smudges. Red, gold and
+lavender dots at seemingly arbitrary strengths, some activated and some not, numbers gone, and no
+rule a reader could infer. The reported symptom was "the highlights are inconsistent"; the cause
+was that **two different facts were being written into the same visual property.**
+
+A bodygraph says two things at once, and they are independent:
+
+- **Activation** — which side of the chart switched a gate on (Design red, Personality accent,
+  both sides gold), and whether a channel or a centre is defined. This is a fact about the chart.
+- **Selection** — what the reader has just tapped. This is a fact about the reader.
+
+Activation is now carried **only as hue**, and it is never removed. Selection is carried **only as
+strength**, and it never changes a hue. Every gate is tagged `data-act`, every channel and centre
+`data-def`, and one small block of CSS decides how far each class is allowed to recede. Outside the
+selection an **activated gate keeps its colour at half strength and swaps its numeral to ink** so it
+stays readable; a **defined channel keeps its full weight** at a third strength; only the **dormant
+background falls away** to a tenth. Inside the selection everything is at full strength with its
+true colours intact.
+
+What was there before was a single flat `opacity: 0.16` on every gate, channel and centre — which
+is why nothing could be told apart.
+
+### Four defects behind it
+
+- **The dimming multiplied.** The mandala's gate fills carried their own alpha (`rgba(…,0.4)`), so
+  the selection layer's `0.16` landed on top of them and a 0.4 fill became **0.064**. Hue and
+  transparency are separate properties now: `fill-opacity` carries the wash, `opacity` is left free
+  for the selection layer alone.
+- **The numerals disappeared.** An activated gate's number is white, correct on a saturated disc.
+  Dimmed to 0.16, white on cream is nothing at all. The receded numeral now switches to ink.
+- **A dead rule was overriding a live one.** `.hd-channel { stroke-width: 3 }`, left behind by a
+  renderer that no longer exists, outranked the presentation attribute the current renderer
+  writes — a CSS declaration always beats a presentation attribute — so **every channel drew at
+  3px** and the deliberate 3.4-vs-1.2 weight that says "defined" had never once reached the glass.
+  Removed along with the rest of the dead block.
+- **Selecting an undefined channel made it look defined.** Every selected channel was painted the
+  same thick solid line. A selected channel your chart has *not* lit is now **dashed** — the
+  selection marks it either way, but it cannot claim a definition the chart does not have.
+
+### The drawings and the page now agree about the theme
+
+The bodygraph palette hung off `body.theme-light`, a class only the `?theme=light` embed adds. The
+viewer resolves its own theme onto `html[data-theme]`. So a plain visit to the standalone page drew
+the **dark instrument palette on a light plate** — near-black centres, near-black dormant gates.
+Bound to `[data-theme]` now, with the old class kept alongside for the embed.
+
+The mandala was retinted to the same three tokens (it had been mixing its own red, its own gold and
+its own purple), lost its dark backdrop circle, and its legend swatches — Tailwind's purple-500,
+red-500, yellow-500 — now show the colours the ring above them actually uses. The gates list had
+the same drift: a both-sides row was marked with `--astro-gold`, a *chrome* token whose value is
+blue. One activation, one colour, wherever it is shown.
+
+### Verified, cell by cell
+
+Every combination of {no selection · gate · channel · centre} × {By Activation · By Center} was
+walked in the browser against a real chart, and every rendered gate's activation class was checked
+against the API's own activation list: **zero mismatches**, on both the bodygraph and the mandala.
+The legend gained a second row that appears only while something is selected and names the
+selection layer, so the dimming rule no longer has to be guessed from the dimming.
+
 ## August 5, 2026 — The Human Design words are ours now
 
 The structure was always public record: 64 gates on the King Wen hexagram sequence, 36 channels,
