@@ -1,5 +1,79 @@
 # Changelog — The Recursive Astrology
 
+## August 5, 2026 — The Human Design words are ours now
+
+The structure was always public record: 64 gates on the King Wen hexagram sequence, 36 channels,
+nine centres, and arithmetic rules that turn a chart into a type, an authority and a profile. Any
+two correct implementations agree about all of it, the way two ephemerides agree. **The prose was
+not.** Until today the viewer shipped Jovian Archive's gate-name list and channel-name list more or
+less verbatim — *The Creative*, *The Money Line*, *Perfected Form* — in a public repository. That is
+Ra Uru Hu's writing, and it is his.
+
+Worse, in one place it broke the creed as well as the licence. The strategies read **"Wait to
+respond"**, **"Inform before acting"**. Those are commands. This site's one hard floor is that a
+chart is a mirror and a calendar, never an instruction.
+
+**Everything descriptive is rewritten.** 311 pieces of prose:
+
+| | rewritten |
+|---|---|
+| Gate name + keynote + description | 64 × 3 = 192 |
+| Channel name + description | 36 × 2 = 72 |
+| Centre label + description | 9 × 2 = 18 |
+| Line themes (new — the built-in path had nothing to say about a line) | 6 × 2 = 12 |
+| Type strategy + note | 5 × 2 = 10 |
+| Authority notes (new) | 7 |
+
+**Anchored, not invented.** Each gate now carries its I Ching hexagram — Chinese title and pinyin
+read from the Zhouyi grammar in the sibling `recursive-iching` repo, whose English reference is
+James Legge's 1882 translation, public domain — and the description is written *from* that
+hexagram and from the centre the gate sits in. Gate 42 is 益 *yì*, increase, so it reads "energy for
+finishing what was begun, and impatience with things left half-done." A reader who distrusts us can
+go to a source older and freer than any of us and check.
+
+**The register is reporting, not prophecy.** "People with this configuration often report…", never
+"you are…" or "you must…". The strategy line is now labelled in the interface as *an experiment
+worth running, not an instruction*, and phrased as a noun: "letting something show up to respond
+to."
+
+**One provenance note**, under the Human Design tab row, says all of this in the open: what is
+structure and what is authorship, that the system was synthesised by Ra Uru Hu from 1987 onward,
+that no description here is quoted or adapted from Human Design publications, and that the whole
+section is to be read as a mirror.
+
+### The bodygraph joined the bus
+
+Phase 2 built a linked-views bus for the wheel — tap a planet, its aspects light up in every view.
+The bodygraph now rides the same bus, with the join keys the structure already provides: a gate is
+its number, a channel is its gate pair (`20-34`), a centre is its id. Tap a gate on the bodygraph
+or the mandala and it dims everything else, lights the gate, its partner gates, the channels it can
+complete and the centres at both ends, switches to the matching list and scrolls the row into view.
+Tap a row in Gates, Channels or Centers and the drawing lights up the same way.
+
+A **selection strip** under the drawing names what is selected — *Gate 42 · Completion · Sacral ·
+1 channel* — and carries the way into the full card. A first tap on the drawing selects; a second
+tap on the same thing, or the strip's button, opens the card. Tapping the empty board clears.
+
+The gate card gained a **Channels this gate belongs to** section, each one saying whether it is
+completed in this chart or waiting on its partner gate, and each one tappable onto the bus.
+
+### Smaller
+
+- **Ayanamsa, confirmed.** The mandala's sidereal ring asks the engine for the real figure at the
+  chart's own moment (23.6535° for a 1985 chart, verified in the browser). The only surviving
+  `24.1` is the named fallback constant used when no chart is loaded at all.
+- **Two hardcoded arcs removed.** The mandala drew gate segments with literal `5.625` and `2.8125`
+  instead of `HD_GATE_ARC`. Same numbers; now nothing in the file can disagree with the constant.
+- **As / Ds / Mc / Ic are back in bi-wheel mode.** AstroChart deliberately deletes the radix axis
+  group when a transit ring is added — the ring is drawn over the band the labels occupied — so
+  switching transits on used to remove the one mark that says which way up the chart is. Rather
+  than fork the vendored file, the viewer now draws its own four labels outside the transit ring,
+  reading cx/cy/radius/shift straight off the Radix instance so the geometry is AstroChart's own,
+  not a second guess at it. The transit-mode margin grew to hold them.
+- **A centre card told a small lie.** It said activated gates were "making it defined". Definition
+  comes from a *completed channel*; a centre with four lit gates and no channel is open. It now
+  says which.
+
 ## August 4, 2026 — Asking the sky about a stretch of time
 
 The chart endpoint answers "where is everything at this moment". Nothing here could answer the
